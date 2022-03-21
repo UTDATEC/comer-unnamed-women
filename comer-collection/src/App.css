@@ -1,6 +1,16 @@
+.header {
+  padding: 80px;
+  text-align: left;
+  color: white;
+  background-color: #282c34;
+  font-size: 40px;
+  font-family: sans-serif
+}
+
 .App {
   text-align: center;
 }
+
 
 .App-logo {
   height: 40vmin;
