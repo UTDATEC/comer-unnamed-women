@@ -1,16 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import DataInputForm from './DataInputForm';
+
+const btn = document.getElementById('btn');
+
+function submitMessage()
+{
+  alert('Submitted Successfully!')
+  //btn.style.backgroundColor = 'salmon';
+  //btn.style.color = 'white';
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="header">
-        <p>
-         My Test Text
-        </p>
-      </header>
-      <header className="App-header">
-      </header>
+      <DataInputForm />
     </div>
   );
 }

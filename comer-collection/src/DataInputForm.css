@@ -1,0 +1,44 @@
+.dataInputForm {
+
+  }
+  .dataInputForm label {
+    text-align: left;
+    display: block;
+    font-size: 20px;
+  }
+  .dataInputForm h2 {
+    font-size: 35px;
+    color: black;
+    margin-bottom: 30px;
+  }
+  .dataInputForm input, .dataInputForm textarea, .dataInputForm select {
+    width: 100%;
+    padding: 9px 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: block;
+  }
+ 
+  .dataInputForm button {
+	box-shadow:inset 0px 1px 3px 0px #484848;
+	background-color:#000000;
+	border-radius:5px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:11px 23px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #2b665e;
+}
+.dataInputForm button:hover {
+	background-color:#6c7c7c;
+}
+.dataInputForm button:active {
+	position:relative;
+	top:1px;
+}
