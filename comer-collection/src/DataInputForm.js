@@ -37,6 +37,12 @@ const DataInputForm = () => {
           type="text" 
           required 
         />
+        {/* <Grid item xs={5} sm={5}>
+        <label>Tags</label>
+        <input 
+          type="text" 
+          required 
+        /> */}
         </Grid>
         <Grid item xs={5} sm={5}>
         <label>Inscriptions</label>
