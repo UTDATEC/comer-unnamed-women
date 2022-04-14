@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 // import logo from './utd.svg';
 import './App.css';
 import ButtonAppBar from './ButtonAppBar'
 import TitlebarGridList from './Cards'
 
-class App extends Component {
-  render() {
+export default function App() {
+  
+
     return(
       <div>
         <ButtonAppBar />
         <TitlebarGridList />
       </div>
+      
     );
-  }
 }
 
-export default App;
+//export default App;
 
 // function App() {
 //   return (

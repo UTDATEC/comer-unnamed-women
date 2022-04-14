@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TitlebarGridList() {
   const classes = useStyles();
+
+  let [users, setUsers] = useState([])
+
+  useEffect(() => {
+    fetch("/api/reminders")
+      .then((response) => response.json())
+      .then((json) => setUsers(json))
+  }, [])
 
   return (
     <div className={classes.root}>
