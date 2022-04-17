@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 export default function TitlebarGridList() {
   const classes = useStyles();
 
-  let [users, setUsers] = useState([])
-
-  useEffect(() => {
-    fetch("/api/reminders")
-      .then((response) => response.json())
-      .then((json) => setUsers(json))
-  }, [])
+  // let [users, setUsers] = useState([])
+  //
+  // useEffect(() => {
+  //   fetch("/api/reminders")
+  //     .then((response) => response.json())
+  //     .then((json) => setUsers(json))
+  // }, [])
 
   return (
     <div className={classes.root}>
