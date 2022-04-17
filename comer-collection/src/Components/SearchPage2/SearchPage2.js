@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 //import logo from './logo.png';
-import '../App/App.css';
+import './SearchPage2.css';
 //import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
