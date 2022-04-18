@@ -48,7 +48,7 @@ export default function TitlebarGridList() {
         </GridListTile>
         {tileData.map((tile) => (
           <GridListTile key={tile.img}>
-            <img src={tile.img} alt={tile.title} />
+            <a href="http://localhost:3000/searchpage"> <img src={tile.img} alt={tile.title} /> </a>
             <GridListTileBar
               title={tile.title}
               actionIcon={
