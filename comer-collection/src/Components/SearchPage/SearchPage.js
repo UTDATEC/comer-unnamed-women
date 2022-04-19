@@ -4,6 +4,7 @@ import '../App/App.css';
 import ButtonAppBar from './ButtonAppBar'
 import TitlebarGridList from './Cards'
 
+
 export default function SearchPage() {
     return(
       <div>
