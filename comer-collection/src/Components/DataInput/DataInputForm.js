@@ -19,7 +19,8 @@ export default class DataInputForm extends Component {
     this.state = {
       title: '',
       artist: '',
-      inscriptions: ''
+      inscriptions: '',
+      apiResponse: ""
   };
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,12 +62,21 @@ export default class DataInputForm extends Component {
     //console.log(myDataObj)
 
     // Make post request, passing in state parameters
-    fetch('/api/post', {
-      // Maye done need method or headers
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(myDataObj)
-    })
+    // fetch('/api/post', {
+    //   // Maye done need method or headers
+    //   method: 'POST',
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(myDataObj)
+    // })
+
+
+    
+      fetch("http://localhost:9000/testAPI")
+          .then(res => res.text())
+          .then(res => this.setState({ apiResponse: res }))
+
+      //console.log(this.state.apiResponse)
+
 
 
     //alert('A name was submitted: ' + this.state.title);
