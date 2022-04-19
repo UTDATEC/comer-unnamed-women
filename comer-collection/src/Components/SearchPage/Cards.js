@@ -48,12 +48,12 @@ export default function TitlebarGridList() {
         </GridListTile>
         {tileData.map((tile) => (
           <GridListTile key={tile.img}>
-            <a href="http://localhost:3000/searchpage"> <img src={tile.img} alt={tile.title} /> </a>
+             <img src={tile.img} alt={tile.title} />
             <GridListTileBar
               title={tile.title}
               actionIcon={
                 <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                  <InfoIcon />
+                  <a href="http://localhost:3000/searchpage2"> <InfoIcon /></a>
                 </IconButton>
               }
             />
