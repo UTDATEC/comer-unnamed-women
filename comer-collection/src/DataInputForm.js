@@ -19,7 +19,7 @@ export default class DataInputForm extends Component {
     this.state = {
       title: '',
       artist: '',
-      tags: ''
+      inscriptions: ''
   };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,7 +36,7 @@ export default class DataInputForm extends Component {
     //const value = target.type === 'checkbox' ? target.checked : target.value;
     const value = target.value;
     const name = target.name;
-    console.log(target.name)
+    //console.log(target.name)
 
     this.setState({
       [name]: value
@@ -47,14 +47,14 @@ export default class DataInputForm extends Component {
     // Put this at end also works
     event.preventDefault();
 
-    const dataObj = function(myTitle, myArtist, myTags) {
+    const dataObj = function(myTitle, myArtist, myInscriptions) {
       const title = myTitle;
       const artist = myArtist;
-      const tags = myTags;
-      return { title, artist, tags };
+      const inscriptions = myInscriptions;
+      return { title, artist, inscriptions };
   };
   
-  const myDataObj = dataObj(this.state.title, this.state.artist, this.state.tags);
+  const myDataObj = dataObj(this.state.title, this.state.artist, this.state.inscriptions);
 
     // Might need this.state.title?
     //const dataObj = { title }  
@@ -103,10 +103,10 @@ export default class DataInputForm extends Component {
       />
       </Grid>
       <Grid item xs={5} sm={5}>
-      <label>Tags</label>
+      <label>Inscriptions</label>
       <input 
         type="text" 
-        name="tags"
+        name="inscriptions"
         value={this.state.value} 
         onChange={this.handleChange}
         required 
@@ -120,7 +120,7 @@ export default class DataInputForm extends Component {
       /> */}
       </Grid>
       <Grid item xs={5} sm={5}>
-      <label>Inscriptions</label>
+      <label>Tags</label>
       <input 
         type="text" 
          
