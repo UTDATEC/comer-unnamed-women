@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 export default function TitlebarGridList() {
   const classes = useStyles();
 
-  let [users, setUsers] = useState([])
-
-  useEffect(() => {
-    fetch("/api/reminders")
-      .then((response) => response.json())
-      .then((json) => setUsers(json))
-  }, [])
+  // let [users, setUsers] = useState([])
+  //
+  // useEffect(() => {
+  //   fetch("/api/reminders")
+  //     .then((response) => response.json())
+  //     .then((json) => setUsers(json))
+  // }, [])
 
   return (
     <div className={classes.root}>
@@ -48,12 +48,12 @@ export default function TitlebarGridList() {
         </GridListTile>
         {tileData.map((tile) => (
           <GridListTile key={tile.img}>
-            <img src={tile.img} alt={tile.title} />
+             <img src={tile.img} alt={tile.title} />
             <GridListTileBar
               title={tile.title}
               actionIcon={
                 <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                  <InfoIcon />
+                  <a href="http://localhost:3000/searchpage2"> <InfoIcon /></a>
                 </IconButton>
               }
             />
