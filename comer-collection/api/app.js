@@ -8,6 +8,54 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require('./routes/testAPI');
 
+const Sequelize = require('sequelize');
+
+//const myPath = 'mysql://root:root@localhost:3306/comerDb';
+//const sequelize = new Sequelize(myPath, { operatorsAliases: false });
+// const sequelize = new Sequelize({
+//     HOST: "127.0.0.1",
+//     USER: "new_user",
+//     PASSWORD: "password",
+//     DB: "Comer",
+//     dialect: "mysql",
+//     PORT: 3306,
+// });
+
+// const sequelize = new Sequelize('comerDb','root','MyNewPass', { 
+//     dialect: 'mysql',
+//     host:'localhost'
+
+// });
+
+const db = require("./sequelize.js");
+db.sequelize.sync().then(() => {
+  console.log(`Database & tables created!`);
+});
+
+
+
+// const Note = sequelize.define('notes', { note: Sequelize.TEXT, tag: Sequelize.STRING });
+
+// sequelize
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connection has been established successfully.');
+//   })
+//   .catch(err => {
+//     console.error('Unable to connect to the database:', err);
+//   });
+
+// sequelize.sync({ })
+//   .then(() => {
+//     console.log(`Database & tables created!`);
+
+//       return Note.findAll().then(function(notes) {
+//       console.log(notes);
+//     });
+//   });
+
+
+
 var app = express();
 
 // view engine setup
@@ -39,5 +87,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
