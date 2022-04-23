@@ -62,18 +62,18 @@ export default class DataInputForm extends Component {
     //console.log(myDataObj)
 
     // Make post request, passing in state parameters
-    // fetch('/api/post', {
-    //   // Maye done need method or headers
-    //   method: 'POST',
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(myDataObj)
-    // })
+    fetch("http://localhost:9000/post", {
+      // Maye done need method or headers
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(myDataObj)
+    })
 
 
-    
-      fetch("http://localhost:9000/testAPI")
-          .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }))
+      // WORKING GET FROM TESTAPI
+      // fetch("http://localhost:9000/testAPI")
+      //     .then(res => res.text())
+      //     .then(res => this.setState({ apiResponse: res }))
 
       //console.log(this.state.apiResponse)
 
