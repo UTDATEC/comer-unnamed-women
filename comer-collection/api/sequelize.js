@@ -1,6 +1,3 @@
-
-
-
 const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize('comerDb','root','MyNewPass', { 

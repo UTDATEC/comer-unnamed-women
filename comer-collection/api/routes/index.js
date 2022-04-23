@@ -29,19 +29,21 @@ const Tutorial = db.tutorials;
 // });
 
 router.post('/post', function(req, res, next) {
+  console.log("WHATEVER")
   // Validate request
-  if (!req.body.title) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
+  // if (!req.body.title) {
+  //   res.status(400).send({
+  //     message: "Content can not be empty!"
+  //   });
+  //   return;
+  // }
+  //console.log(req)
 
   // Create a Tutorial
   const tutorial = {
     title: req.body.title,
     description: req.body.artist,
-    published: true
+    data: req.body.data
   };
 
   // Save Tutorial in the database
