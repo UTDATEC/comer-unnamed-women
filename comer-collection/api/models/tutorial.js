@@ -7,9 +7,12 @@ module.exports = (sequelize, Sequelize) => {
       description: {
         type: Sequelize.STRING
       },
-      // data: {
-      //   type: Sequelize.BLOB("long"),
-      // }
+      // path: {
+      //   type: Sequelize.STRING
+      // },
+      data: {
+        type: Sequelize.BLOB("long"),
+      }
     });
 
 

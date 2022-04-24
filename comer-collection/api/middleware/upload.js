@@ -1,8 +1,9 @@
 const multer = require("multer");
 
-// Might not need, may have different files
+
 console.log("upload middleware")
 
+// Might not need, may have different files
 const imageFilter = (req, file, cb) => {
   console.log(file)
   if (file.mimetype.startsWith("image")) {
@@ -13,7 +14,7 @@ const imageFilter = (req, file, cb) => {
 };
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __basedir + "/resources/uploads/");
+    cb(null, "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/uploads");
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-comer-${file.originalname}`);
