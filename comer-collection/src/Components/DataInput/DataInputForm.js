@@ -22,20 +22,20 @@ export default class DataInputForm extends Component {
   }
 
   onFileChange(e) {
-    //this.setState({ data: e.target.files[0] })
-    console.log(e);
+    this.setState({ data: e.target.files[0] })
+    //console.log(e);
   }
 
 
-  state = {
+  // state = {
 
-    // Initially, no file is selected
-    selectedFile: null
-    };
-    onFileChange = event => {
-    // Update the state
-    this.setState({ selectedFile: event.target.files[0] });
-    };
+  //   // Initially, no file is selected
+  //   selectedFile: null
+  //   };
+  //   onFileChange = event => {
+  //   // Update the state
+  //   this.setState({ selectedFile: event.target.files[0] });
+  //   };
 
   // handleChange(event) {
   //   this.setState({title: event.target.value});
@@ -58,11 +58,13 @@ export default class DataInputForm extends Component {
     // Put this at end also works
     event.preventDefault();
 
+    console.log(this.state)
+
     const formData = new FormData()
-    // formData.append('title', this.state.title)
-    // formData.append('artist', this.state.artist)
-    // formData.append('data', this.state.data)
-    formData.append('file', "steph")
+    formData.append('title', this.state.title)
+    formData.append('artist', this.state.artist)
+    formData.append('file', this.state.data)
+    //formData.append('file', )
     // fetch("http://localhost:9000/post", {
     //   // Maye done need method or headers
     //   method: 'POST',
@@ -84,13 +86,13 @@ export default class DataInputForm extends Component {
 
 
 
-    const dataObj = function(myTitle, myArtist, myData) {
-      const title = myTitle;
-      const artist = myArtist;
-      const data = myData;
-      return { title, artist, data };
-  };
-  const myDataObj = dataObj(this.state.title, this.state.artist, this.state.data);
+  //   const dataObj = function(myTitle, myArtist, myData) {
+  //     const title = myTitle;
+  //     const artist = myArtist;
+  //     const data = myData;
+  //     return { title, artist, data };
+  // };
+  // const myDataObj = dataObj(this.state.title, this.state.artist, this.state.data);
 
     // Might need this.state.title?
     //const dataObj = { title }  
@@ -162,11 +164,10 @@ export default class DataInputForm extends Component {
       <Grid item xs={5} sm={5}>
       <label>Inscriptions</label>
       <input 
-        type="file" 
-        name="file"
-        id="file"
-        value={this.state.value} 
-        onChange={this.onFileChange}
+       type="text" 
+       name="inscriptions"
+       value={this.state.value} 
+       onChange={this.handleChange}
          
       />
       {/* <Grid item xs={5} sm={5}>
@@ -232,14 +233,14 @@ export default class DataInputForm extends Component {
          
       />
       </Grid>
-      <Grid item xs={5}sm={5}>
-        <label>Image Upload</label>
-        <div>
-        <div>
-        <input type="file" onChange={this.onFileChange} />
-        </div>
-        </div>
-        </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Image Upload</label>
+      <input 
+        type="file" 
+        name="file"
+        onChange={this.onFileChange}
+      />
+      </Grid>
       </Grid>
       <button>Submit</button>
     </form>

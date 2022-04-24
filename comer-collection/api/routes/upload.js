@@ -13,15 +13,18 @@ const uploadFiles = async (req, res) => {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
+    console.log("almost at create!")
     Image.create({
-      title: req.file.mimetype,
-      description: req.file.originalname,
+      title: req.body.title,
+      description: req.body.artist,
+      //path: req.file.path,
       data: fs.readFileSync(
-        __basedir + "/resources/uploads/" + req.file.filename
+        "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/uploads/" + req.file.filename
       ),
     }).then((image) => {
+      console.log(image)
       fs.writeFileSync(
-        __basedir + "/resources/tmp/" + image.name,
+        "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/tmp/" + image.name,
         image.data
       );
       return res.send(`File has been uploaded.`);
