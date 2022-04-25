@@ -1,18 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
 
-    const Tutorial = sequelize.define("imageTest", {
+    const Tutorial = sequelize.define("imagePathTestNoData", {
       title: {
         type: Sequelize.STRING
       },
       description: {
         type: Sequelize.STRING
       },
-      // path: {
-      //   type: Sequelize.STRING
-      // },
-      data: {
-        type: Sequelize.BLOB("long"),
-      }
+      // This should be called name not path
+      path: {
+        type: Sequelize.STRING
+      },
     });
 
 

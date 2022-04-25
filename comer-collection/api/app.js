@@ -76,6 +76,14 @@ app.use('/users', usersRouter);
 app.use("/upload", uploadRouter);
 app.use("/testAPI", testAPIRouter);
 
+// app.use('/Images', express.static("/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/uploads"))
+//app.use('/Images', express.static("../public/images"))
+
+// this works when you copy and put in the relative path into the 9000 server localhost endpoint
+//app.use(express.static('public'))
+
+//app.use(express.static('./resources'))
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

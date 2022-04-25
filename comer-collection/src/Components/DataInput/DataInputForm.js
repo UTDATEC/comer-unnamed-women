@@ -64,59 +64,29 @@ export default class DataInputForm extends Component {
     formData.append('title', this.state.title)
     formData.append('artist', this.state.artist)
     formData.append('file', this.state.data)
-    //formData.append('file', )
-    // fetch("http://localhost:9000/post", {
-    //   // Maye done need method or headers
-    //   method: 'POST',
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData)
-    // })
-
-    // axios.post("http://localhost:4000/api/user-profile", formData, {
-    // }).then(res => {
-    //     console.log(res)
-    // })
-
-    // fetch("http://localhost:9000/post", {
-    //   // Maye done need method or headers
-    //   method: 'POST',
-    //   headers: { "Content-Type": "application/json" },
-    //   body: formData
-    // })
 
 
-
-  //   const dataObj = function(myTitle, myArtist, myData) {
-  //     const title = myTitle;
-  //     const artist = myArtist;
-  //     const data = myData;
-  //     return { title, artist, data };
-  // };
-  // const myDataObj = dataObj(this.state.title, this.state.artist, this.state.data);
-
-    // Might need this.state.title?
-    //const dataObj = { title }  
-    //console.log(myDataObj)
-
-    //console.log(formData)
-
-    //Make post request, passing in state parameters
-    // fetch("http://localhost:9000/upload", {
-    //   // Maye done need method or headers
-    //   method: 'POST',
-    //   //headers: { "Content-Type": "multipart/form-data" },
-    //   headers: { "Content-Type": "multipart/form-data" },
-    //   body: formData
-    // }).then(response => {
-    //   console.log(response)
-    // }).catch(err => {
-    //   console.log(err)
-    // }) 
-
+    // Working Post
     axios.post("http://localhost:9000/upload", formData, {
         }).then(res => {
             console.log(res)
         })
+
+    //const { testGetData } = await axios.get("http://localhost:9000/testAPI")
+  // const testGetData = axios.get("http://localhost:9000/testAPI")
+  // console.log(testGetData)
+  // This method below passes in response obj and populates your fields that you will pass in as props
+  //setProducts(data)
+  //getProductsData()
+
+//   const getProductsData = async () => {
+//     const { data } = await axios.get("http://localhost:9000/testAPI")
+//     console.log(data)
+//     //setProducts(data)
+// }
+// getProductsData()
+
+    
 
 
       // WORKING GET FROM TESTAPI
@@ -244,6 +214,23 @@ export default class DataInputForm extends Component {
       </Grid>
       <button>Submit</button>
     </form>
+
+    {/* <Container  className="justify-content-center p-2">
+               <h1 className='text-center'>Show All Products</h1>
+               <hr />
+
+               <Row>
+                    {
+                        products.map(product => {
+                            return <Col md={6} lg={4} sm={12} key={product.id}>
+                                <ProductCard product={product} />
+                            </Col>
+                        })
+                    }
+               </Row>
+
+
+           </Container> */}
 
     {/* <div className="container">
                 <div className="row">

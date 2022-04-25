@@ -6,6 +6,8 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import axios from 'axios';
+
 import tileData from './tileData';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,8 +42,26 @@ export default function TitlebarGridList() {
   //     .then((json) => setUsers(json))
   // }, [])
 
+  const [products, setProducts] = useState([])
+
+  // const { images } = await axios.get("http://localhost:9000/testAPI")
+  // console.log(images)
+
+    useEffect(() => {
+        const getProductsData = async () => {
+            const { data } = await axios.get("http://localhost:9000/testAPI")
+            console.log(data)
+            setProducts(data)
+            console.log(products)
+        }
+        getProductsData()
+        console.log(products)
+    }, [])
+
   return (
     <div className={classes.root}>
+    {/* <img src={`http://localhost:3000/${products[0].path}`} /> */}
+    <img src={`http://localhost:9000/images/${products[6].path}`} />
       <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>
