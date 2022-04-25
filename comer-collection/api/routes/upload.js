@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const db = require("../sequelize.js");
 const Image = db.tutorials;
-const upload = require("../middleware/upload");
+const upload = require("../middleware.js");
 
 const uploadFiles = async (req, res) => {
   console.log("121")
@@ -17,16 +17,17 @@ const uploadFiles = async (req, res) => {
     Image.create({
       title: req.body.title,
       description: req.body.artist,
-      //path: req.file.path,
-      data: fs.readFileSync(
-        "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/uploads/" + req.file.filename
-      ),
+      // This should be called name not path
+      path: req.file.filename,
+      // data: fs.readFileSync(
+      //   __dirname + '/public/images' + req.file.filename
+      // ),
     }).then((image) => {
       console.log(image)
-      fs.writeFileSync(
-        "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/tmp/" + image.name,
-        image.data
-      );
+      // fs.writeFileSync(
+      //   "/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/tmp/" + image.name,
+      //   image.data
+      // );
       return res.send(`File has been uploaded.`);
     });
   } catch (error) {

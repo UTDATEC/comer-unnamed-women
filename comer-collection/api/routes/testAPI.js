@@ -5,16 +5,6 @@ const db = require("../sequelize.js");
 const Tutorial = db.tutorials;
 //const Op = db.Sequelize.Op;
 
-// const Sequelize = require('sequelize');
-// const sequelize = new Sequelize({
-//     HOST: "127.0.0.1",
-//     USER: "root",
-//     PASSWORD: "monktamm123",
-//     DB: "Comer",
-//     dialect: "mysql",
-//     operatorsAliases: false,
-// });
-
 // sequelize
 //   .authenticate()
 //   .then(() => {
