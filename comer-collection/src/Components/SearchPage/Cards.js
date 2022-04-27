@@ -42,37 +42,37 @@ export default function TitlebarGridList() {
   //     .then((json) => setUsers(json))
   // }, [])
 
-  const [products, setProducts] = useState([])
+  const [images, setImages] = useState([])
 
   // const { images } = await axios.get("http://localhost:9000/testAPI")
   // console.log(images)
 
     useEffect(() => {
-        const getProductsData = async () => {
+        const getImagesData = async () => {
             const { data } = await axios.get("http://localhost:9000/testAPI")
             console.log(data)
-            setProducts(data)
-            console.log(products)
+            setImages(data)
+            console.log(images)
         }
-        getProductsData()
-        console.log(products)
+        getImagesData()
+        console.log(images)
     }, [])
 
   return (
     <div className={classes.root}>
     {/* <img src={`http://localhost:3000/${products[0].path}`} /> */}
-    <img src={`http://localhost:9000/images/${products[6].path}`} />
+    {/* <img src={`http://localhost:9000/images/${products[6].path}`} /> */}
       <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>
         </GridListTile>
-        {tileData.map((tile) => (
-          <GridListTile key={tile.img}>
-             <img src={tile.img} alt={tile.title} />
+        {images.map((image) => (
+          <GridListTile key={image.img}>
+             <img src={`http://localhost:9000/images/${image.path}`} alt={image.title} />
             <GridListTileBar
-              title={tile.title}
+              title={image.title}
               actionIcon={
-                <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
+                <IconButton aria-label={`info about ${image.title}`} className={classes.icon}>
                   <a href="http://localhost:3000/searchpage2"> <InfoIcon /></a>
                 </IconButton>
               }
