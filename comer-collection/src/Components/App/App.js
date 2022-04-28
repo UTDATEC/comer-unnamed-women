@@ -11,8 +11,8 @@ function App() {
     <div className="wrapper">
       <BrowserRouter>
         <Switch>
-          <Route path="/searchpage">
-            <SearchPage/>
+          <Route path="/searchBy">
+            <SearchBy/>
           </Route>
           <Route path="/searchpage2">
             <SearchPage2/>
@@ -21,7 +21,7 @@ function App() {
             <DataInput/>
           </Route>
           <Route path="/">
-            <SearchBy/>
+            <SearchPage/>
           </Route>
         </Switch>
       </BrowserRouter>

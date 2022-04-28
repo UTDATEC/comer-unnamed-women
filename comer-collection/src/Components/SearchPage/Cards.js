@@ -60,14 +60,13 @@ export default function TitlebarGridList() {
 
   return (
     <div className={classes.root}>
-    {/* <img src={`http://localhost:3000/${products[0].path}`} /> */}
-    {/* <img src={`http://localhost:9000/images/${products[6].path}`} /> */}
       <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>
         </GridListTile>
         {images.map((image) => (
           <GridListTile key={image.img}>
+          {/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
              <img src={`http://localhost:9000/images/${image.path}`} alt={image.title} />
             <GridListTileBar
               title={image.title}

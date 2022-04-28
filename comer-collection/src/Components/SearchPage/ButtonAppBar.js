@@ -37,7 +37,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Search Results Page
           </Typography>
-          <Button class = "myButton" onClick={() => history.goBack()}>Go Back</Button>
+          <Button class = "myButton" onClick={() => history.push('/searchBy')}>Search</Button>
         </Toolbar>
       </AppBar>
     </div>

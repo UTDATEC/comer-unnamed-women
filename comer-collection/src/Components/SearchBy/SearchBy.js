@@ -8,138 +8,170 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useHistory } from 'react-router-dom';
+//import './DataInputForm.css';
+import Grid from '@material-ui/core/Grid'
+import { Component } from 'react';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  abRoot: {
-  backgroundColor: '#e87500',
-  },
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  input1: {
-    height: 50
-  },
-}));
 
 function errorMessage()
 {
   alert('Searching...')
 }
 
-function SearchBy() {
-  const classes = useStyles();
-  const history = useHistory();
+class SearchBy extends Component {
+  push = () => {
+    this.props.history.push("/searchpage");
+  };
 
-  return (
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: '',
+      artist: '',
+      data: '',
+      file: '',
+      apiResponse: ""
+  };
 
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    //this.handleClick = this.handleClick.bind(this);
+  }
 
-    <div className="App">
-      <AppBar position="fixed" classes={{ root: classes.abRoot}}>
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color= "inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Search By Page
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
+handleChange(event) {
+  const target = event.target;
+  //const value = target.type === 'checkbox' ? target.checked : target.value;
+  const value = target.value;
+  const name = target.name;
+  //console.log(target.name)
 
-
-      <a class="align1">
-      <text>
-      <br /><br /><br /><br /><br /><br />Title<br />
-      </text>
-      <TextField id="filled-basic" label="Title" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      <text>
-      <br /><br />Artist<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Artist" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Tags<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Tags" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Inscriptions<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Inscriptions" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Date Created<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Date Created" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      </a>
-      <a class="align2">
-      <text>
-      <br /><br /><br /><br /><br /><br />Medium<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Medium" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br />Dimensions<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Dimensions" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Accession Number<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Accession Number" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Copyright<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Copyright" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      <text>
-      <br /><br />Subject<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Subject" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      </a>
-      <a className = "align3">
-      <text>
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />Collection Location<br />
-      </text>
-      <div>
-      <TextField id="filled-basic" label="Collection Location" variant="filled" margin="normal" style = {{width: 500}} InputProps={{ classes: { input: classes.input1 } }}/>
-      </div>
-      </a>
-      <a className = "align4">
-      <text>
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-      </text>
-      <button class = "myButton" onClick={() => history.push('/searchpage')}>
-        Search
-      </button>
-      <text>
-        <br /><br /><br /><br /><br /><br />
-      </text>
-      </a>
-
-    </div>
-  );
+  this.setState({
+    [name]: value
+  });
 }
 
-export default SearchBy;
+handleSubmit(event) {
+  // Put this at end also works
+  event.preventDefault();
+  this.push()
+}
+
+
+  
+
+  render() {
+    return (
+    <div className="App">
+      <div>
+        <AppBar position="fixed" className= "abRoot" style = {{background : "#e87500"}}>
+          <Toolbar>
+            <IconButton edge="start" className="menuButton" color= "inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className="title">
+              Search By Page
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+      <div className="dataInputForm">
+   <form onSubmit={this.handleSubmit}>
+     <Grid container spacing={3}>
+     <Grid item xs={5} sm={5}>
+     <label>Title</label>
+     <input 
+       type="text" 
+       name="title"
+       value={this.state.value} 
+       onChange={this.handleChange}
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Artist</label>
+     <input 
+       type="text" 
+       name="artist"
+       value={this.state.value} 
+       onChange={this.handleChange}
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Inscriptions</label>
+     <input 
+      type="text" 
+      name="inscriptions"
+      value={this.state.value} 
+      onChange={this.handleChange}
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Tags</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Date</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Medium</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Dimensions</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Accession Number</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Copyright</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Subject</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     <Grid item xs={5} sm={5}>
+     <label>Collection Location</label>
+     <input 
+       type="text" 
+        
+     />
+     </Grid>
+     </Grid>
+     <button> Submit</button>
+   </form>
+  </div>
+     </div>
+  );
+    }
+}
+
+export default withRouter(SearchBy);
