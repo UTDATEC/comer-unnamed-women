@@ -55,6 +55,11 @@ handleChange(event) {
 handleSubmit(event) {
   // Put this at end also works
   event.preventDefault();
+  // this.props.titleSetter(this.state.title)
+  this.props.imageSetter({ 
+    title: this.state.title,
+    artist: this.state.artist
+   } )
   this.push()
 }
 
