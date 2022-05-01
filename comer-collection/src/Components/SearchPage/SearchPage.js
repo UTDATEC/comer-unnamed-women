@@ -5,11 +5,12 @@ import ButtonAppBar from './ButtonAppBar'
 import TitlebarGridList from './Cards'
 
 
-export default function SearchPage() {
+export default function SearchPage(props) {
     return(
       <div>
+        {/* {console.log(props)} */}
         <ButtonAppBar />
-        <TitlebarGridList />
+        <TitlebarGridList images={props}/>
       </div>
     );
 }

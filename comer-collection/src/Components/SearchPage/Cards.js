@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TitlebarGridList() {
+export default function TitlebarGridList(props) {
   const classes = useStyles();
 
   // let [users, setUsers] = useState([])
@@ -49,17 +49,22 @@ export default function TitlebarGridList() {
 
     useEffect(() => {
         const getImagesData = async () => {
-            const { data } = await axios.get("http://localhost:9000/testAPI")
-            console.log(data)
+            // const { data } = await axios.get("http://localhost:9000/testAPI")
+            const { data } = await axios.get("http://localhost:9000/testAPI", {params: { 
+              title: props.images.image.title,
+              artist: props.images.image.artist
+           }})
+            // console.log(data)
             setImages(data)
-            console.log(images)
+            // console.log(images)
         }
         getImagesData()
-        console.log(images)
+        // console.log(images)
     }, [])
 
   return (
     <div className={classes.root}>
+    {console.log(props.images.image.artist)}
       <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>

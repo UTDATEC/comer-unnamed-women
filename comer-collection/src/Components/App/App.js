@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import SearchPage from '../SearchPage/SearchPage'
@@ -7,12 +7,16 @@ import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
 
 function App() {
+  const [image, setImage] = useState({
+    title: "",
+    artist: ""
+  });
   return (
     <div className="wrapper">
       <BrowserRouter>
         <Switch>
           <Route path="/searchBy">
-            <SearchBy/>
+            <SearchBy imageSetter={setImage}/>
           </Route>
           <Route path="/searchpage2">
             <SearchPage2/>
@@ -21,7 +25,7 @@ function App() {
             <DataInput/>
           </Route>
           <Route path="/">
-            <SearchPage/>
+            <SearchPage image={image}/>
           </Route>
         </Switch>
       </BrowserRouter>
