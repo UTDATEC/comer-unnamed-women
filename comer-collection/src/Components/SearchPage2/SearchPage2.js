@@ -65,11 +65,11 @@ function SearchPage2(props) {
 
     <div className="align-center">
       {/* <DashboardIcon className="navLinkHolder" /> */}
-      <img className="img" src={`http://localhost:9000/images/${props.selectedImage.path}`} />
+      <img className="img" src={`http://localhost:9000/images/${props.selectedImage.fileName}`} />
       <div className = "details">
       {/* {console.log(props.location.state.title)} */}
         Title: {props.selectedImage.title}
-        Artist: {props.selectedImage.description}
+        Artist: {props.selectedImage.artist}
       </div>
     </div>
 

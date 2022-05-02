@@ -4,60 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var uploadRouter = require('./routes/upload');
 var testAPIRouter = require('./routes/testAPI');
 
 global.__basedir = __dirname;
 
-const Sequelize = require('sequelize');
-
-//const myPath = 'mysql://root:root@localhost:3306/comerDb';
-//const sequelize = new Sequelize(myPath, { operatorsAliases: false });
-// const sequelize = new Sequelize({
-//     HOST: "127.0.0.1",
-//     USER: "new_user",
-//     PASSWORD: "password",
-//     DB: "Comer",
-//     dialect: "mysql",
-//     PORT: 3306,
-// });
-
-// const sequelize = new Sequelize('comerDb','root','MyNewPass', { 
-//     dialect: 'mysql',
-//     host:'localhost'
-
-// });
-
 const db = require("./sequelize.js");
 db.sequelize.sync().then(() => {
-  console.log(`Database & tables created!`);
+  console.log(`Database & tables created! (unless table already existed)`);
 });
-
-
-
-// const Note = sequelize.define('notes', { note: Sequelize.TEXT, tag: Sequelize.STRING });
-
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
-// sequelize.sync({ })
-//   .then(() => {
-//     console.log(`Database & tables created!`);
-
-//       return Note.findAll().then(function(notes) {
-//       console.log(notes);
-//     });
-//   });
-
-
 
 var app = express();
 
@@ -71,18 +26,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use("/upload", uploadRouter);
 app.use("/testAPI", testAPIRouter);
-
-// app.use('/Images', express.static("/Users/jordantamm/Desktop/Node/comer-unnamed-women/comer-collection/resources/uploads"))
-//app.use('/Images', express.static("../public/images"))
-
-// this works when you copy and put in the relative path into the 9000 server localhost endpoint
-//app.use(express.static('public'))
-
-//app.use(express.static('./resources'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

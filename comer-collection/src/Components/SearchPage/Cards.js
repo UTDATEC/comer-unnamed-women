@@ -53,7 +53,6 @@ export default function TitlebarGridList(props) {
     useEffect(() => {
         const getImagesData = async () => {
           console.log(props)
-            // const { data } = await axios.get("http://localhost:9000/testAPI")
             const { data } = await axios.get("http://localhost:9000/testAPI", {params: { 
               title: props.appProps.searchParams.title,
               artist: props.appProps.searchParams.artist
@@ -76,7 +75,7 @@ export default function TitlebarGridList(props) {
         {images.map((image) => (
           <GridListTile key={image.img}>
           {/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
-             <img src={`http://localhost:9000/images/${image.path}`} alt={image.title} />
+             <img src={`http://localhost:9000/images/${image.fileName}`} alt={image.title} />
             <GridListTileBar
               title={image.title}
               actionIcon={
