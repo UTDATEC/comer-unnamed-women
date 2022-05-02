@@ -9,14 +9,33 @@ import DataInput from '../DataInput/DataInputForm'
 function App() {
   const [searchParams, setSearchParams] = useState({
     title: "",
+    inscriptions: "",
+    medium: "",
+    subject: "",
+    tags: "",
+    title: "",
+    dateCreated: "",
+    dimensions: "",
+    accessionNumber: "",
+    collectionLocation: "",
+    copyright: "",
     artist: ""
   });
 
   const [selectedImage, setSelectedImage] = useState({
+    accessionNumber: "",
+    artist: "",
+    collectionLocation: "",
+    copyright: "",
     createdAt: "",
-    description: "",
+    dateCreated: "",
+    dimensions: "",
+    fileName: "",
     id: -1,
-    path: "",
+    inscriptions: "",
+    medium: "",
+    subject: "",
+    tags: "",
     title: "",
     updatedAt: ""
   });

@@ -30,9 +30,15 @@ class SearchBy extends Component {
     this.state = {
       title: '',
       artist: '',
-      data: '',
-      file: '',
-      apiResponse: ""
+      tags: '',
+      inscriptions: '',
+      medium: '',
+      dimensions: '',
+      accessionNumber: '',
+      copyright: '',
+      subject: '',
+      collectionLocation: '',
+      dateCreated: '',
   };
 
     this.handleChange = this.handleChange.bind(this);
@@ -42,10 +48,8 @@ class SearchBy extends Component {
 
 handleChange(event) {
   const target = event.target;
-  //const value = target.type === 'checkbox' ? target.checked : target.value;
   const value = target.value;
   const name = target.name;
-  //console.log(target.name)
 
   this.setState({
     [name]: value
@@ -53,12 +57,19 @@ handleChange(event) {
 }
 
 handleSubmit(event) {
-  // Put this at end also works
   event.preventDefault();
-  // this.props.titleSetter(this.state.title)
   this.props.paramSetter({ 
     title: this.state.title,
-    artist: this.state.artist
+    artist: this.state.artist,
+    medium: this.state.medium,
+    inscriptions: this.state.inscriptions,
+    dateCreated: this.state.dateCreated,
+    subject: this.state.subject,
+    collectionLocation: this.state.collectionLocation,
+    accessionNumber: this.state.accessionNumber,
+    dimensions: this.state.dimensions,
+    copyright: this.state.copyright,
+    tags: this.state.tags
    } )
   this.push()
 }
@@ -104,72 +115,88 @@ handleSubmit(event) {
         
      />
      </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Inscriptions</label>
-     <input 
-      type="text" 
-      name="inscriptions"
-      value={this.state.value} 
-      onChange={this.handleChange}
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Tags</label>
-     <input 
+      <Grid item xs={5} sm={5}>
+      <label>Inscriptions</label>
+      <input 
        type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Date</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Medium</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Dimensions</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Accession Number</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Copyright</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Subject</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Collection Location</label>
-     <input 
-       type="text" 
-        
-     />
-     </Grid>
+       name="inscriptions"
+       value={this.state.value} 
+       onChange={this.handleChange}
+         
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Tags</label>
+      <input 
+        type="text" 
+        name="tags"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Date</label>
+      <input 
+        type="text" 
+        name="dateCreated"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Medium</label>
+      <input 
+        type="text" 
+        name="medium"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Dimensions</label>
+      <input 
+        type="text" 
+        name="dimensions"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Accession Number</label>
+      <input 
+        type="text" 
+        name="accessionNumber"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Copyright</label>
+      <input 
+        type="text" 
+        name="copyright"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Subject</label>
+      <input 
+        type="text" 
+        name="subject"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
+      <Grid item xs={5} sm={5}>
+      <label>Collection Location</label>
+      <input 
+        type="text" 
+        name="collectionLocation"
+        value={this.state.value} 
+        onChange={this.handleChange}
+      />
+      </Grid>
      </Grid>
      <button> Submit</button>
    </form>

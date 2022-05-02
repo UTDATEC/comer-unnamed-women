@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 // import logo from './utd.svg';
 import '../App/App.css';
 import ButtonAppBar from './ButtonAppBar'
-import TitlebarGridList from './Cards'
+import Cards from './Cards'
 
 
 export default function SearchPage(props) {
@@ -10,7 +10,7 @@ export default function SearchPage(props) {
       <div>
         {/* {console.log(props)} */}
         <ButtonAppBar />
-        <TitlebarGridList appProps={props}/>
+        <Cards appProps={props}/>
       </div>
     );
 }

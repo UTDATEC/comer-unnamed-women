@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -35,13 +35,6 @@ const useStyles = makeStyles((theme) => ({
 export default function TitlebarGridList(props) {
   const classes = useStyles();
   const history = useHistory();
-  // let [users, setUsers] = useState([])
-  //
-  // useEffect(() => {
-  //   fetch("/api/reminders")
-  //     .then((response) => response.json())
-  //     .then((json) => setUsers(json))
-  // }, [])
 
   const [images, setImages] = useState([])
 
@@ -55,14 +48,23 @@ export default function TitlebarGridList(props) {
           console.log(props)
             const { data } = await axios.get("http://localhost:9000/testAPI", {params: { 
               title: props.appProps.searchParams.title,
-              artist: props.appProps.searchParams.artist
+              artist: props.appProps.searchParams.artist,
+              medium: props.appProps.searchParams.medium,
+              inscriptions: props.appProps.searchParams.inscriptions,
+              dateCreated: props.appProps.searchParams.dateCreated,
+              subject: props.appProps.searchParams.subject,
+              collectionLocation: props.appProps.searchParams.collectionLocation,
+              dimensions: props.appProps.searchParams.dimensions,
+              accessionNumber: props.appProps.searchParams.accessionNumber,
+              copyright: props.appProps.searchParams.copyright,
+              tags: props.appProps.searchParams.tags
            }})
-            // console.log(data)
+            console.log(data)
             setImages(data)
-            // console.log(images)
+            console.log(images)
         }
         getImagesData()
-        // console.log(images)
+        console.log(images)
     }, [])
 
 
