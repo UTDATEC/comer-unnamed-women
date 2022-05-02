@@ -9,5 +9,5 @@ const sequelize = new Sequelize('comerDb','root','MyNewPass', {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.tutorials = require("./models/tutorial.js")(sequelize, Sequelize);
+db.tutorials = require("./models/image.js")(sequelize, Sequelize);
 module.exports = db;

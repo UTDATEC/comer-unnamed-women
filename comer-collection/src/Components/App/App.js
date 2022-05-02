@@ -7,25 +7,35 @@ import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
 
 function App() {
-  const [image, setImage] = useState({
+  const [searchParams, setSearchParams] = useState({
     title: "",
     artist: ""
   });
+
+  const [selectedImage, setSelectedImage] = useState({
+    createdAt: "",
+    description: "",
+    id: -1,
+    path: "",
+    title: "",
+    updatedAt: ""
+  });
+
   return (
     <div className="wrapper">
       <BrowserRouter>
         <Switch>
           <Route path="/searchBy">
-            <SearchBy imageSetter={setImage}/>
+            <SearchBy paramSetter={setSearchParams}/>
           </Route>
           <Route path="/searchpage2">
-            <SearchPage2/>
+            <SearchPage2 selectedImage={selectedImage}/>
           </Route>
           <Route path="/DataInputForm">
             <DataInput/>
           </Route>
           <Route path="/">
-            <SearchPage image={image}/>
+            <SearchPage searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
         </Switch>
       </BrowserRouter>

@@ -10,7 +10,7 @@ export default function SearchPage(props) {
       <div>
         {/* {console.log(props)} */}
         <ButtonAppBar />
-        <TitlebarGridList images={props}/>
+        <TitlebarGridList appProps={props}/>
       </div>
     );
 }
