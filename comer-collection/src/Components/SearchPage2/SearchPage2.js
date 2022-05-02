@@ -48,106 +48,49 @@ function errorMessage()
 
 
 
-function SearchPage2() {
+function SearchPage2(props) {
   const classes = useStyles();
   const history = useHistory();
 
   return (
-    <div className="App">
-      <AppBar position="fixed" classes={{ root: classes.abRoot}}>
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Search Results Page
-          </Typography>
-          <Button class = "myButton" onClick={() => history.goBack()}>Go Back</Button>
-        </Toolbar>
-      </AppBar>
+  <div className="App">
+    <AppBar position="fixed" classes={{ root: classes.abRoot}}>
+      <Toolbar>
+        <Typography variant="h6" className={classes.title}>
+          Search Results Page
+        </Typography>
+        <Button class = "myButton" onClick={() => history.goBack()}>Go Back</Button>
+      </Toolbar>
+    </AppBar> 
 
-
-
-
-     <a class="align-search">
-       <text>
-         <br></br> <br></br> <br></br> <br></br>
-       </text>
-      <TextField
-      id="filled-basic"
-  variant="filled"
-  margin="normal"
-  label="Terms that were searched"
-  style={{width:750}}
-  InputProps={{
-    endAdornment: (
-      <InputAdornment position="start">
-        <SearchIcon />
-      </InputAdornment>
-
-
-    )
-
-  }}
-
-
-/>
-</a>
-
-
-
-
-<a class="align-left">
-<text>
-         <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br>
-       </text>
-    <ul className="nav-links">
-    <li>
-      <div className="divHover">
-        <a href="#">
-          <DashboardIcon className="navLinkHolder" height={500} style={{width:900}} />
-          <div class="container">Title: Sarah in the Jungle</div>
-          <div class="container">Artist: Stephanie Joseph</div>
-        </a>
+    <div className="align-center">
+      {/* <DashboardIcon className="navLinkHolder" /> */}
+      <img className="img" src={`http://localhost:9000/images/${props.selectedImage.path}`} />
+      <div className = "details">
+      {/* {console.log(props.location.state.title)} */}
+        Title: {props.selectedImage.title}
+        Artist: {props.selectedImage.description}
       </div>
-    </li>
-  </ul>
-
-  </a>
-
-
-<a class="align-right">
-<text>
-<br></br> <br></br> <br></br> <br></br><br></br> <br></br> <br></br> <br></br><br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br>
-       </text>
-  <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
-        ADD TO AN EXHIBITION
-      </button>
-
-
-<text>
-         <br></br> <br></br> <br></br> <br></br>
-       </text>
-      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
-        EDIT TAGS
-      </button>
-
-
-
-
-      <text>
-          <br></br> <br></br> <br></br> <br></br>
-       </text>
-      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
-        GET JSON OBJECT
-      </button>
-      </a>
-
-
-
-
     </div>
 
 
 
-  );
+
+    <div class="align-right">
+      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
+        ADD TO AN EXHIBITION
+      </button>
+
+      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
+        EDIT TAGS
+      </button>
+
+      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
+        GET JSON OBJECT
+      </button>
+    </div>
+</div>
+);
 }
 
 export default SearchPage2;

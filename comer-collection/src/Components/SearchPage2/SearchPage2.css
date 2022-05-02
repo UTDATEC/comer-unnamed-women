@@ -83,17 +83,29 @@ a:hover {
 }
 
 .align-right {
-  margin-left: 0px;
+  padding-top: 20%;
 }
 
-.align-left{
-  margin-left: -900px;
+.details{
+  width: 100%;
+  padding: 9px 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
+.align-center{
+  padding-left: 25%;
+  padding-top: 10%;
 }
 
-.align-search{
-  margin-left: 400px;
-}
-
+.img { 
+  display: block; 
+  max-width:600px;
+   max-height:600px; 
+   width: auto; 
+   height: auto; 
+  }
 
 
 

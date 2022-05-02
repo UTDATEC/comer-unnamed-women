@@ -7,6 +7,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 import tileData from './tileData';
 
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TitlebarGridList(props) {
   const classes = useStyles();
-
+  const history = useHistory();
   // let [users, setUsers] = useState([])
   //
   // useEffect(() => {
@@ -44,15 +45,18 @@ export default function TitlebarGridList(props) {
 
   const [images, setImages] = useState([])
 
-  // const { images } = await axios.get("http://localhost:9000/testAPI")
-  // console.log(images)
+  function handleClick(image) {
+    props.appProps.setSelectedImage(image)
+    history.push("/searchpage2")
+  }
 
     useEffect(() => {
         const getImagesData = async () => {
+          console.log(props)
             // const { data } = await axios.get("http://localhost:9000/testAPI")
             const { data } = await axios.get("http://localhost:9000/testAPI", {params: { 
-              title: props.images.image.title,
-              artist: props.images.image.artist
+              title: props.appProps.searchParams.title,
+              artist: props.appProps.searchParams.artist
            }})
             // console.log(data)
             setImages(data)
@@ -62,13 +66,13 @@ export default function TitlebarGridList(props) {
         // console.log(images)
     }, [])
 
+
   return (
     <div className={classes.root}>
-    {console.log(props.images.image.artist)}
       <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>
-        </GridListTile>
+        </GridListTile>.getImagesData
         {images.map((image) => (
           <GridListTile key={image.img}>
           {/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
@@ -76,8 +80,8 @@ export default function TitlebarGridList(props) {
             <GridListTileBar
               title={image.title}
               actionIcon={
-                <IconButton aria-label={`info about ${image.title}`} className={classes.icon}>
-                  <a href="http://localhost:3000/searchpage2"> <InfoIcon /></a>
+                <IconButton aria-label={`info about ${image.title}`} className={classes.icon} onClick={() => handleClick(image)}>
+                   <InfoIcon />
                 </IconButton>
               }
             />

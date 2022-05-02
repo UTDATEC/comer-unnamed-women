@@ -2,42 +2,9 @@ var express = require("express");
 var router = express.Router();
 
 const db = require("../sequelize.js");
-const Tutorial = db.tutorials;
-//const Op = db.Sequelize.Op;
-
-// const Sequelize = require('sequelize');
-// const sequelize = new Sequelize({
-//     HOST: "127.0.0.1",
-//     USER: "root",
-//     PASSWORD: "monktamm123",
-//     DB: "Comer",
-//     dialect: "mysql",
-//     operatorsAliases: false,
-// });
-
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
-// router.get("/", function(req, res, next) {
-//     res.send("API WORKING");
-// });
+const Tutorial = db.image;
 
 router.post('/post', function(req, res, next) {
-  console.log("WHATEVER")
-  // Validate request
-  // if (!req.body.title) {
-  //   res.status(400).send({
-  //     message: "Content can not be empty!"
-  //   });
-  //   return;
-  // }
-  //console.log(req)
 
   // Create a Tutorial
   const tutorial = {
