@@ -41,8 +41,6 @@ const btn = document.getElementById('btn');
 function errorMessage()
 {
   alert('Error')
-  //btn.style.backgroundColor = 'salmon';
-  //btn.style.color = 'white';
 }
 
 
@@ -64,12 +62,16 @@ function SearchPage2(props) {
     </AppBar> 
 
     <div className="align-center">
-      {/* <DashboardIcon className="navLinkHolder" /> */}
       <img className="img" src={`http://localhost:9000/images/${props.selectedImage.fileName}`} />
       <div className = "details">
-      {/* {console.log(props.location.state.title)} */}
         Title: {props.selectedImage.title}
         Artist: {props.selectedImage.artist}
+        Medium: {props.selectedImage.medium}
+        Date: {props.selectedImage.dateCreated}
+        Collection Location: {props.selectedImage.collectionLocation}
+        Tags: {props.selectedImage.tags}
+        Inscriptions: {props.selectedImage.inscriptions}
+        Copyrights Holder: {props.selectedImage.copyright}
       </div>
     </div>
 
@@ -83,10 +85,6 @@ function SearchPage2(props) {
 
       <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
         EDIT TAGS
-      </button>
-
-      <button class = "myButton" onClick = {errorMessage} style={{width:300}}>
-        GET JSON OBJECT
       </button>
     </div>
 </div>

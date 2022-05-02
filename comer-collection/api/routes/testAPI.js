@@ -14,6 +14,33 @@ router.get('/', function(req, res, next) {
         artist: {
           [Op.like]: '%' + req.query.artist + '%'
         },
+        tags: {
+          [Op.like]: '%' + req.query.tags + '%'
+        },
+        medium: {
+          [Op.like]: '%' + req.query.medium + '%'
+        },
+        inscriptions: {
+          [Op.like]: '%' + req.query.inscriptions + '%'
+        },
+        dateCreated: {
+          [Op.like]: '%' + req.query.dateCreated + '%'
+        },
+        dimensions: {
+          [Op.like]: '%' + req.query.dimensions + '%'
+        },
+        copyright: {
+          [Op.like]: '%' + req.query.copyright + '%'
+        },
+        collectionLocation: {
+          [Op.like]: '%' + req.query.collectionLocation + '%'
+        },
+        accessionNumber: {
+          [Op.like]: '%' + req.query.accessionNumber + '%'
+        },
+        subject: {
+          [Op.like]: '%' + req.query.subject + '%'
+        }
       }
     })
       .then(data => {
