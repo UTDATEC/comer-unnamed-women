@@ -49,7 +49,7 @@ export default class DataInputForm extends Component {
 
   handleSubmit(event) {
     // Put this at end also works
-    event.preventDefault();
+    // event.preventDefault();
 
     console.log(this.state)
 

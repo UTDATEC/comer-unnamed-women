@@ -70,7 +70,7 @@ a:hover {
 	padding:11px 23px;
 	text-decoration:none;
 	text-shadow:0px -1px 0px #2b665e;
-  
+
 }
 .myButton:hover {
 	background-color:#6c7c7c;
@@ -87,12 +87,9 @@ a:hover {
 }
 
 .details{
-  width: 100%;
-  padding: 9px 12px;
+  width: 1000px;
   margin: 10px 0;
   border: 1px solid #ddd;
-  box-sizing: border-box;
-  display: block;
 }
 .align-center{
   padding-left: 25%;
@@ -106,7 +103,20 @@ a:hover {
    width: auto; 
    height: auto; 
   }
+  
+  .demo {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    padding: 25px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+  }
 
+  .demo span {
+    display: table-cell;
+    text-align: center;
+  }
 
 
 
