@@ -24,6 +24,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// This line allows the public files to be read from/rendered by path in the front end
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/upload", uploadRouter);

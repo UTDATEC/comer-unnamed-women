@@ -10,6 +10,7 @@ const uploadFiles = async (req, res) => {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
+    // Creates new SQL row with data passed in from post request
     Image.create({
       title: req.body.title,
       artist: req.body.artist,
@@ -32,7 +33,7 @@ const uploadFiles = async (req, res) => {
   }
 };
 
-
+// Use multer middleware to save file in file system
 router.post('/', upload.single("file"), uploadFiles);
 
 
