@@ -1,5 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-
+    // This file defines the fields (columns) of the table that will be added to the mySQL database
+    // the name (comerCollection2) is the name of the table in mySQL (will create a new one if the name does not exist)
     const Image = sequelize.define("comerCollection2", {
       title: {
         type: Sequelize.STRING

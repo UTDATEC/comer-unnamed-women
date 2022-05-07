@@ -5,6 +5,8 @@ const db = require("../sequelize.js");
 const Image = db.image;
 const Op = db.Sequelize.Op;
 
+
+// Search: uses all query parameter strings to find if the column has that string ANYWHERE in it
 router.get('/', function(req, res, next) {
     Image.findAll({
       where: {
