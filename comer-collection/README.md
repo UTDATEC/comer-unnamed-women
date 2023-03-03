@@ -1,3 +1,6 @@
+# comer collection web interface
+This project has a reactjs frontend and runs an express server (which requires its own install in the api directory
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
