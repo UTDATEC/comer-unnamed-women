@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './Components/App/App';
 import reportWebVitals from './reportWebVitals';
-// import { makeServer } from './server';
+import { makeServer } from './server';
 
-// if (process.env.NODE_ENV === 'development') {
-//   makeServer({ environment: 'development' });
-// }
+if (process.env.NODE_ENV === 'development') {
+  console.log("making server");
+  makeServer({ environment: 'development' }); 
+}
 
 
 ReactDOM.render(

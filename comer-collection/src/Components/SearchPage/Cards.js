@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ImageList from '@material-ui/core/ImageList';
+import ImageListItem from '@material-ui/core/ImageListItem';
+import ImageListTileBar from '@material-ui/core/ImageListItemBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
@@ -70,15 +70,15 @@ export default function TitlebarGridList(props) {
 
   return (
     <div className={classes.root}>
-      <GridList cellHeight={300}  spacing={30} className={classes.gridList}>
-        <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
+      <ImageList rowHeight={300}  gap={30} className={classes.gridList}>
+        <ImageListItem key="Subheader" cols={4} style={{ height: 'auto' }}>
           <ListSubheader component="div"></ListSubheader>
-        </GridListTile>.getImagesData
+        </ImageListItem>.getImagesData
         {images.map((image) => (
-          <GridListTile key={image.img}>
+          <ImageListItem key={image.img}>
           {/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
              <img src={`http://localhost:9000/images/${image.fileName}`} alt={image.title} />
-            <GridListTileBar
+            <ImageListItemBar
               title={image.title}
               actionIcon={
                 <IconButton aria-label={`info about ${image.title}`} className={classes.icon} onClick={() => handleClick(image)}>
@@ -86,9 +86,9 @@ export default function TitlebarGridList(props) {
                 </IconButton>
               }
             />
-          </GridListTile>
+          </ImageListItem>
         ))}
-      </GridList>
+      </ImageList>
     </div>
   );
 }
