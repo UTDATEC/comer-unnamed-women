@@ -2,16 +2,16 @@ module.exports = (sequelize, Sequelize) => {
     // This file defines the fields (columns) of the table that will be added to the mySQL database
     // the name (comerCollection2) is the name of the table in mySQL (will create a new one if the name does not exist)
     const Image = sequelize.define("comerCollection2", {
-      title: {
+      accession_number: {
         type: Sequelize.STRING
       },
       artist: {
         type: Sequelize.STRING
       },
-      tags: {
+      title: {
         type: Sequelize.STRING
       },
-      inscriptions: {
+      date: {
         type: Sequelize.STRING
       },
       medium: {
@@ -20,22 +20,52 @@ module.exports = (sequelize, Sequelize) => {
       dimensions: {
         type: Sequelize.STRING
       },
-      accessionNumber: {
+      edition: {
         type: Sequelize.STRING
       },
+      matsize: {
+        type: Sequelize.STRING
+      },
+      location: {
+        type: Sequelize.STRING
+      },
+      notes: {
+        type: Sequelize.STRING
+      },
+      photo: {
+        type: Sequelize.STRING
+      },
+      condition: {
+        type: Sequelize.STRING
+      },
+      value: {
+        type: Sequelize.STRING
+      },
+      source: {
+        type: Sequelize.STRING
+      },
+      reference: {
+        type: Sequelize.STRING
+      },
+      webfinsite: {
+        type: Sequelize.STRING
+      },
+      
+      tags: {
+        type: Sequelize.STRING
+      },
+      inscriptions: {
+        type: Sequelize.STRING
+      },
+      
       copyright: {
         type: Sequelize.STRING
       },
       subject: {
         type: Sequelize.STRING
       },
-      collectionLocation: {
-        type: Sequelize.STRING
-      },
-      dateCreated: {
-        type: Sequelize.STRING
-      },
-      fileName: {
+      
+      image_file_name: {
         type: Sequelize.STRING
       },
     });
