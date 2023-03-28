@@ -5,6 +5,7 @@ import SearchPage from '../SearchPage/SearchPage'
 import SearchPage2 from '../SearchPage2/SearchPage2'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
+import ExhibitMain from '../Exhibit/ExhibitMain'
 
 function App() {
   const [searchParams, setSearchParams] = useState({
@@ -46,6 +47,9 @@ function App() {
         <Switch>
           <Route path="/searchBy">
             <SearchBy paramSetter={setSearchParams}/>
+          </Route>
+          <Route path="/exhibitmain">
+            <ExhibitMain paramSetter={setSearchParams}/>
           </Route>
           <Route path="/searchpage2">
             <SearchPage2 selectedImage={selectedImage}/>
