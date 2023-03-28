@@ -1,21 +1,25 @@
+<<<<<<< HEAD
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {useState} from 'react';
+=======
+>>>>>>> 49bbe6411372c9982f24eb4c18f43744457cd725
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import SearchPage from '../SearchPage/SearchPage'
-import SearchPage2 from '../SearchPage2/SearchPage2'
+import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
+import NavBar from '../NavBar/NavBar'
+import React, { Component, useEffect, useState } from 'react';
 
-function App() {
+export default function App() {
   const [searchParams, setSearchParams] = useState({
     title: "",
     inscriptions: "",
     medium: "",
     subject: "",
     tags: "",
-    title: "",
     dateCreated: "",
     dimensions: "",
     accessionNumber: "",
@@ -43,14 +47,15 @@ function App() {
   });
 
   return (
-    <div className="wrapper">
-      <BrowserRouter>
+
+      <div className="wrapper">
+        <BrowserRouter>
         <Switch>
           <Route path="/searchBy">
             <SearchBy paramSetter={setSearchParams}/>
           </Route>
-          <Route path="/searchpage2">
-            <SearchPage2 selectedImage={selectedImage}/>
+          <Route path="/expandedView">
+            <ExpandedView selectedImage={selectedImage}/>
           </Route>
           <Route path="/DataInputForm">
             <DataInput/>
@@ -64,4 +69,15 @@ function App() {
   );
 }
 
-export default App;
+//export default App;
+/*
+export default function MyApp() {
+  return(
+      <div>
+
+        <NavBar />
+        <App />
+      </div>
+  )
+};
+ */
