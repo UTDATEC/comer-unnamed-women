@@ -1,10 +1,4 @@
-<<<<<<< HEAD:comer-collection/src/Components/SearchPage2/SearchPage2.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './SearchPage2.css';
-=======
 import './ExpandedView.css';
->>>>>>> 49bbe6411372c9982f24eb4c18f43744457cd725:comer-collection/src/Components/ExpandedView/ExpandedView.js
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
