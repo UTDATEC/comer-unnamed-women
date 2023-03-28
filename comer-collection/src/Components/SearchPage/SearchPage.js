@@ -8,7 +8,6 @@ import Cards from './Cards'
 export default function SearchPage(props) {
     return(
       <div>
-        {/* {console.log(props)} */}
         <ButtonAppBar />
         <Cards appProps={props}/>
       </div>

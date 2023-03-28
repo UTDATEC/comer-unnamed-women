@@ -10,7 +10,7 @@ const fs = require('node:fs');
 });*/
 //import cCert from 'raw-loadeer!ls /Users/dwm160130/Library/Application\ Support/MySQL/Workbench/certificates/5B407BCB-CA91-49DD-8A10-9C2B437C6A75/client-key.pem';
 //import cKey from 'raw-loadeer!ls /Users/dwm160130/Library/Application\ Support/MySQL/Workbench/certificates/5B407BCB-CA91-49DD-8A10-9C2B437C6A75/client-key.pem';
-const sequelize = new Sequelize('atc_sandbox','atc_sandbox_app','ATECInfrastructur3', {
+const sequelize = new Sequelize('atc_sandbox','atc_sandbox_app','ATECInfrastructur3!', {
         //const sequelize = new Sequelize('atc_sandbox','yourname','yourpassword', {
         dialect: 'mysql',
         dialectOptions: {
@@ -20,8 +20,8 @@ const sequelize = new Sequelize('atc_sandbox','atc_sandbox_app','ATECInfrastruct
               
             }
           },
-        host: 'oitdb537t.utdallas.edu',
-        port: '2444',
+        host: 'oitdbaatect.utdallas.edu',
+        port: '2445',
 }
 );
 sequelize.authenticate().then(() => {
