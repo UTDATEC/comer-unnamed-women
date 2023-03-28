@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {useState} from 'react';
-=======
->>>>>>> 49bbe6411372c9982f24eb4c18f43744457cd725
+//import React from 'react';
+//import ReactDOM from 'react-dom';
+//import {useState} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import SearchPage from '../SearchPage/SearchPage'
