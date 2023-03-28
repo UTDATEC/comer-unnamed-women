@@ -16,6 +16,12 @@ db.sequelize.sync().then(() => {
 
 var app = express();
 
+var corsOptions = {
+  origin: "http://localhost:9000"
+};
+
+app.use(cors(corsOptions));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -45,8 +51,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 // module.exports = app;
 app.set('port', process.env.PORT || 9000);
