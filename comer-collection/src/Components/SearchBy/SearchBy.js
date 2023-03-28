@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid'
 import { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import NavBar from "../NavBar/NavBar";
 
 function errorMessage()
 {
@@ -76,12 +77,12 @@ handleSubmit(event) {
 }
 
 
-  
+
 
   render() {
     return (
     <div className="App">
-      <div>
+        {/*<div>
         <AppBar position="fixed" className= "abRoot" style = {{background : "#e87500"}}>
           <Toolbar>
             <IconButton edge="start" className="menuButton" color= "inherit" aria-label="menu">
@@ -93,7 +94,8 @@ handleSubmit(event) {
             <Button color="inherit">Login</Button>
           </Toolbar>
         </AppBar>
-      </div>
+      </div>*/}
+        <NavBar />
       <div className="dataInputForm">
    <form onSubmit={this.handleSubmit}>
      <Grid container spacing={3}>
