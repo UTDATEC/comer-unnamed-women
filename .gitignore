@@ -351,3 +351,4 @@ MigrationBackup/
 *.jpg
 comer-collection/api/public/images/1650907619013-comer-Screen Shot 2021-10-14 at 4.20.01 PM.png
 *.jpeg
+imageUtils/images/*

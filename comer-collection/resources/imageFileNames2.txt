@@ -1,0 +1,1275 @@
+./Burkholder/Turtle in Church/Images/Turtle in Church.tif
+./Burkholder/Turtle in Church/Images/RAW Images/DSC_0001.NEF
+./Burkholder/Turtle in Church/Images/RAW Images/DSC_0003.NEF
+./Burkholder/Turtle in Church/Images/RAW Images/DSC_0002.NEF
+./Burkholder/Turtle in Church/Images/Turtle in Church Back.tif
+./Burkholder/Turtle in Church/Images/Turtle in Church Uncropped.tif
+./Klett/Images/Solitario Mtns.jpg
+./Klett/Images/RAW Images/DSC_0021.NEF
+./Klett/Images/RAW Images/klett.psd
+./Klett/Images/RAW Images/DSC_0023.NEF
+./Klett/Images/RAW Images/DSC_0038.NEF
+./Klett/Images/Solitario Mtns.tif
+./Klett/Images/Solitario Mtns Back.tif
+./Klett/Images/Solitario Mtns Uncropped.tif
+./Welling/Images/Tile Photograph Back.tif
+./Welling/Images/Tile Photograph.tif
+./Stackpole/Images/Golden Gate.tif
+./Stackpole/Images/RAW Images/DSC_0033.NEF
+./Stackpole/Images/RAW Images/DSC_0032.NEF
+./Stackpole/Images/RAW Images/DSC_0031.NEF
+./Stackpole/Images/Golden Gate.jpg
+./Balog/Images/RAW Images/DSC_0012.NEF
+./Balog/Images/RAW Images/DSC_0014.NEF
+./Balog/Images/RAW Images/Chimp with Curtain RAW.NEF
+./Balog/Images/Chimp with Curtain.jpg
+./Balog/Images/Chimp with Curtain.tif
+./Lizette/Images/Unknown.tif
+./Lizette/Images/Unknown Back.tif
+./Calfee/Images/Cricket & Joy Back.tif
+./Calfee/Images/RAW Images/calfee_laura_final.psd
+./Calfee/Images/RAW Images/_DSC0003.NEF
+./Calfee/Images/RAW Images/_DSC0002.NEF
+./Calfee/Images/RAW Images/calfee_laura.psd
+./Calfee/Images/RAW Images/calfee_laura_large.psd
+./Calfee/Images/Cricket & Joy Uncropped.tif
+./Calfee/Images/Cricket & Joy.jpg
+./Calfee/Images/Cricket & Joy.tif
+./Haas/Times Square/Images/Times Square.jpg
+./Haas/Times Square/Images/RAW Images/DSC_0006.NEF
+./Haas/Times Square/Images/RAW Images/DSC_0005.NEF
+./Haas/Times Square/Images/RAW Images/DSC_0004.NEF
+./Haas/Times Square/Images/Times Square.TIF
+./Haas/Times Square/Images/Times Square Uncropped.tif
+./Haas/Times Square/Images/Times Square Back.tif
+./Haas/Homecoming Prisoner/Images/Homecoming Prisoner.jpg
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0032.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0030.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0037.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0039.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0038.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0028.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0029.NEF
+./Haas/Homecoming Prisoner/Images/RAW Images/DSC_0029.psd
+./Haas/Homecoming Prisoner/Images/Homecoming Prisoner Uncropped.tif
+./Haas/Homecoming Prisoner/Images/Homecoming Prisoner.tif
+./Haas/Homecoming Prisoner/Images/Homecoming Prisoner Back.tif
+./image_coming_soon.jpg
+./Fitch/Images/Dorothy Back.tif
+./Fitch/Images/Dorothy.tif
+./Chervinsky/Images/Analysis Uncropped.tif
+./Chervinsky/Images/Analysis Back.tif
+./Chervinsky/Images/Analysis.tif
+./Chervinsky/Images/Analysis RAW.NEF
+./George, Ann/Images/Soul Search Back.tif
+./George, Ann/Images/Soul Search.tif
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0047.NEF
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0046.NEF
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0012.NEF
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0015.NEF
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0016.NEF
+./Morath/Encounter on Times Square/Images/RAW Images/DSC_0048.NEF
+./Morath/Encounter on Times Square/Images/Encounter on Times Square.TIF
+./Morath/Encounter on Times Square/Images/Encounter on Times Square.jpg
+./Morath/Eleanor Roosevelt and Adlai Stevenson/Images/Eleanor Roosevelt and Adlai Stevenson.tif
+./Morath/Eleanor Roosevelt and Adlai Stevenson/Images/Eleanor Roosevelt and Adlai Stevenson Back.tif
+./Hatfield/Images/Hi Ho Silver RAW.NEF
+./Hatfield/Images/Hi Ho Silver.tif
+./Ohringer/Images/Labios Ardientes.tif
+./Ohringer/Images/Labios Ardientes Back.tif
+./Ohringer/Images/RAW Images/DSC_0018.NEF
+./Ohringer/Images/RAW Images/DSC_0017.NEF
+./Ohringer/Images/RAW Images/DSC_0016.NEF
+./Gray/Images/Michael Jackson.tif
+./Brown, Patricia/Images/Bench Back.tif
+./Brown, Patricia/Images/Bench.tif
+./Seaman/Images/Christmas Day.tif
+./Nibblink/Images/Comparisons.tif
+./Nibblink/Images/Comparisons Back.tif
+./Martin, I./Images/Shanty Home.tif
+./Martin, I./Images/Shanty Home Back.tif
+./Kirby/Images/Ghost Forest OR.tif
+./Michaels/Good Morning Glory/Images/Good Morning Glory.tif
+./Michaels/Good Morning Glory/Images/Good Morning Glory Back.tif
+./Michaels/New York (rain)/Images/RAW Images/DSC_0033.NEF
+./Michaels/New York (rain)/Images/RAW Images/michaels.psd
+./Michaels/New York (rain)/Images/New York (rain).tif
+./Michaels/New York (rain)/Images/New York (rain).jpg
+./Agrons/Images/Xenharmonic.tif
+./Agrons/Images/Xenharmonic Back.tif
+./Muholi/Images/Lerato Dumse.tif
+./Muholi/Images/Lerato Dumse.jpg
+./Muholi/Images/Lerato Dumse Back.tif
+./Wilson/Images/Glacier Sky Back Edited.tif
+./Wilson/Images/Glacier Sky Front Edited.tif
+./Wilson/Images/Glacier Sky Back.tif
+./Wilson/Images/Glacier Sky Front.tif
+./Conant/At Sea/Images/RAW Images/DSC_0026.psd
+./Conant/At Sea/Images/RAW Images/DSC_0027.NEF
+./Conant/At Sea/Images/RAW Images/DSC_0026.NEF
+./Conant/At Sea/Images/RAW Images/DSC_0025.NEF
+./Conant/At Sea/Images/RAW Images/DSC_0028.NEF
+./Conant/At Sea/Images/At Sea Back.tif
+./Conant/At Sea/Images/At Sea.tif
+./Conant/At Sea/Images/At Sea Uncropped.tif
+./Conant/At Sea/Images/At Sea.jpg
+./Lender/Images/Untitled.tif
+./Lender/Images/Untitled Back.tif
+./Weston, K./Images/Ballet.tif
+./Reynolds/Images/Big Bend.tif
+./Reynolds/Images/RAW Images/_DSC0058.NEF
+./Reynolds/Images/RAW Images/Big Bend RAW.NEF
+./Reynolds/Images/RAW Images/_DSC0056.NEF
+./Reynolds/Images/RAW Images/_DSC0057.NEF
+./Harvey/Harvey Permission Form.JPG
+./Bacon-Kidwell/Images/Memories of Two.tif
+./Bacon-Kidwell/Images/Memories of Two Back.tif
+./Grenon/Images/Martin "Topo" Uncropped.tif
+./Grenon/Images/Martin "Topo".tif
+./Leivick/Images/RAW Images/DSC_0026.NEF
+./Leivick/Images/RAW Images/DSC_0030.NEF
+./Leivick/Images/RAW Images/DSC_0028.NEF
+./Leivick/Images/RAW Images/DSC_0029.NEF
+./Leivick/Images/Underground Quarry.tif
+./Buxton/Images/Lily Belle Back.tif
+./Buxton/Images/Lily Belle.tif
+./Callis/Images/Angel.tif
+./Callis/Images/RAW Images/DSC_0050.NEF
+./Callis/Images/RAW Images/DSC_0051.NEF
+./Callis/Images/RAW Images/DSC_0001.NEF
+./Callis/Images/RAW Images/DSC_0049.NEF
+./Bankhead/Images/Woman with Baby Back.tif
+./Bankhead/Images/RAW Images/DSC_0006.NEF
+./Bankhead/Images/RAW Images/DSC_0007.NEF
+./Bankhead/Images/RAW Images/DSC_0005.NEF
+./Bankhead/Images/RAW Images/DSC_0007.psd
+./Bankhead/Images/Woman with Baby Uncropped.tif
+./Bankhead/Images/Woman with Baby.tif
+./Bankhead/Images/Woman with Baby.jpg
+./Goff/Images/RAW Images/DSC_0022.psd
+./Goff/Images/RAW Images/DSC_0024.NEF
+./Goff/Images/RAW Images/DSC_0021.NEF
+./Goff/Images/RAW Images/DSC_0022.NEF
+./Goff/Images/RAW Images/DSC_0023.NEF
+./Goff/Images/Untitled Uncropped.tif
+./Goff/Images/Untitled.tif
+./Goff/Images/Untitled.jpg
+./Goff/Images/Untitled Back.tif
+./Kraus/Images/Beth.jpg
+./Kraus/Images/RAW Images/DSC_0035.NEF
+./Kraus/Images/RAW Images/DSC_0036.NEF
+./Kraus/Images/RAW Images/DSC_0037.NEF
+./Kraus/Images/RAW Images/DSC_0038.NEF
+./Kraus/Images/Beth.tif
+./Kraus/Images/Beth Uncropped.tif
+./Kraus/Images/Beth Back.tif
+./Lavalette/Images/Kaylyn Swinging.tif
+./Lavalette/Images/Kaylyn Swinging Back.tif
+./Cunningham/Images/Egg's in Ruth's Basket Uncropped.tif
+./Cunningham/Images/RAW Images/DSC_0018.NEF
+./Cunningham/Images/RAW Images/DSC_0023.NEF
+./Cunningham/Images/RAW Images/DSC_0017.NEF
+./Cunningham/Images/RAW Images/DSC_0016.NEF
+./Cunningham/Images/Egg's in Ruth's Basket.tif
+./Cunningham/Condition Report/Foxing 4.JPG
+./Cunningham/Condition Report/Foxing 3.JPG
+./Cunningham/Condition Report/Foxing 2.JPG
+./Cunningham/Condition Report/Foxing 1.JPG
+./Mitchell/The Illumination/Images/The Illumination.tif
+./Mitchell/The Illumination/Images/The Illumination Back.tif
+./Foglia/Cardin in Rain/Images/Cardin in Rain RAW.NEF
+./Foglia/Cardin in Rain/Images/Cardin in Rain.tif
+./Hamilton/Images/Cooper's Hawk.tif
+./Hamilton/Images/Cooper's Hawk Back.tif
+./Padilla/Images/Untitled.tif
+./Baer/Images/Round Valley Back.tif
+./Baer/Images/RAW Images/DSC_0035.NEF
+./Baer/Images/RAW Images/DSC_0034.NEF
+./Baer/Images/RAW Images/DSC_0036.NEF
+./Baer/Images/RAW Images/DSC_0038.NEF
+./Baer/Images/Round Valley.tif
+./Furtado/Images/Cockfighter.tif
+./Weinstein/Who Dat/Images/Who Dat.tif
+./Weinstein/Boys of Diwali/Images/Boys of Diwali.tif
+./Weinstein/Girl at the Mosque/Images/Girl at the Mosque Back.tif
+./Weinstein/Girl at the Mosque/Images/Girl at the Mosque.tif
+./Lovett/Images/RAW Images/DSC_0008.NEF
+./Lovett/Images/RAW Images/DSC_0006.NEF
+./Lovett/Images/RAW Images/DSC_0005.NEF
+./Lovett/Images/RAW Images/DSC_0004.NEF
+./Lovett/Images/RAW Images/DSC_0004.psd
+./Lovett/Images/Pauline.tif
+./Lovett/Images/Pauline.jpg
+./Weiner/New Year's Eve,Times Square/Images/RAW Images/DSC_0006.NEF
+./Weiner/New Year's Eve,Times Square/Images/RAW Images/DSC_0005.NEF
+./Weiner/New Year's Eve,Times Square/Images/RAW Images/DSC_0004.NEF
+./Weiner/New Year's Eve,Times Square/Images/RAW Images/DSC_0003.NEF
+./Weiner/New Year's Eve,Times Square/Images/RAW Images/DSC_0002.NEF
+./Weiner/New Year's Eve,Times Square/Images/New Year's Eve,Times Square.jpg
+./Weiner/New Year's Eve,Times Square/Images/New Year's Eve,Times Square.TIF
+./Weiner/Martin Luther King, Jr/Images/Martin Luther King, Jr.jpg
+./Weiner/Martin Luther King, Jr/Images/RAW Images/DSC_0042.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/DSC_0041.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/DSC_0040.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/_DSC0035.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/_DSC0034.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/_DSC0033.NEF
+./Weiner/Martin Luther King, Jr/Images/RAW Images/_DSC0032.NEF
+./Weiner/Martin Luther King, Jr/Images/Martin Luther King, Jr.tif
+./Vrba/Images/Blindfold.tif
+./Vrba/Images/Blindfold Back.tif
+./Langham/Images/Snail Hand.tif
+./Langham/Images/RAW Images/DSC_0013.NEF
+./Langham/Images/RAW Images/DSC_0014.NEF
+./Langham/Images/RAW Images/DSC_0015.NEF
+./Langham/Images/RAW Images/DSC_0016.NEF
+./Langham/Images/RAW Images/DSC_0015.psd
+./Langham/Images/Snail Hand.jpg
+./Barnett/Images/Lubbock Man.tif
+./Burnstine/Images/Suspend RAW.NEF
+./Burnstine/Images/Suspend.tif
+./Burnstine/Images/Suspend Back.tif
+./Evans, J/Images/Bull Snake on Sofa.tif
+./Evans, J/Images/RAW Images/DSC_0004.NEF
+./Evans, J/Images/RAW Images/DSC_0001.NEF
+./Evans, J/Images/RAW Images/DSC_0003.NEF
+./Evans, J/Images/RAW Images/DSC_0002.NEF
+./Evans, J/Images/RAW Images/DSC_0002.psd
+./Evans, J/Images/Bull Snake on Sofa.jpg
+./Evans, J/Images/Bull Snake on Sofa Uncropped.tif
+./Evans, J/Images/Bull Snake on Sofa Back.tif
+./Denton/Unbeholding/Images/Unbeholding Back.tif
+./Denton/Unbeholding/Images/Unbeholding.tif
+./Denton/Bent Tree/Images/Bent Tree Back.tif
+./Denton/Bent Tree/Images/Bent Tree.tif
+./Bey/Five Children/Images/RAW Images/dawood_bey.psd
+./Bey/Five Children/Images/RAW Images/DSC_0030.NEF
+./Bey/Five Children/Images/RAW Images/_DSC0005.NEF
+./Bey/Five Children/Images/RAW Images/_DSC0006.NEF
+./Bey/Five Children/Images/RAW Images/_DSC0007.NEF
+./Bey/Five Children/Images/Five Children Uncropped.tif
+./Bey/Five Children/Images/Five Children Back.tif
+./Bey/Five Children/Images/Five Children.jpg
+./Bey/Five Children/Images/Five Children.tif
+./Bey/Jason/Images/Jason.tif
+./Bey/Jason/Images/Jason.jpg
+./Bey/Jason/Images/Jason Back.tif
+./Tsinhnahjinnie/Images/Idelia.jpg
+./Tsinhnahjinnie/Images/RAW Images/_DSC0028.NEF
+./Tsinhnahjinnie/Images/RAW Images/_DSC0029.NEF
+./Tsinhnahjinnie/Images/RAW Images/_DSC0030.NEF
+./Tsinhnahjinnie/Images/Idelia.tif
+./Bleasdale/Images/Open Gold Mine.tif
+./Gibson, R./Images/New York.tif
+./Gibson, R./Images/RAW Images/DSC_0018.NEF
+./Gibson, R./Images/RAW Images/DSC_0015.NEF
+./Gibson, R./Images/RAW Images/DSC_0017.NEF
+./Gibson, R./Images/RAW Images/DSC_0016.NEF
+./Stein/Images/Woman Wearing Ear Muffs Back.tif
+./Stein/Images/Woman Wearing Ear Muffs.tif
+./Fuhrmann/Glockenblume/Images/Glockenblume.tif
+./Fuhrmann/Glockenblume/Images/Glockenblume Back.tif
+./Fuhrmann/Unknown Title/Images/Unknown Title Back.tif
+./Fuhrmann/Unknown Title/Images/Unknown.tif
+./Fuhrmann/Hornklee/Images/Hornklee.tif
+./Fuhrmann/Hornklee/Images/Hornklee_B.tif
+./Fuhrmann/Erodium gruinum/Images/Erodium gruinum Back.tif
+./Fuhrmann/Erodium gruinum/Images/Erodium gruinum.tif
+./Ebner/Images/Fadin Away Back.tif
+./Ebner/Images/Fadin Away.tif
+./Salgado/Images/Rwanda.jpg
+./Salgado/Images/RAW Images/_DSC0035.NEF
+./Salgado/Images/RAW Images/_DSC0034.NEF
+./Salgado/Images/Rwanda.tif
+./Stringfellow/Siroshton Homestead/Images/RAW Images/_DSC0017.NEF
+./Stringfellow/Siroshton Homestead/Images/RAW Images/_DSC0016.NEF
+./Stringfellow/Siroshton Homestead/Images/RAW Images/_DSC0015.NEF
+./Stringfellow/North Shore Marina/Images/North Shore Marina Back.tif
+./Stringfellow/North Shore Marina/Images/RAW Images/_DSC0004.NEF
+./Stringfellow/North Shore Marina/Images/RAW Images/_DSC0006.NEF
+./Stringfellow/North Shore Marina/Images/RAW Images/_DSC0007.NEF
+./Stringfellow/Wormus Homestead/Images/RAW Images/_DSC0028.NEF
+./Stringfellow/Wormus Homestead/Images/RAW Images/_DSC0029.NEF
+./Stringfellow/Wormus Homestead/Images/RAW Images/_DSC0027.NEF
+./Stringfellow/Flooded Building/Images/RAW Images/_DSC0014.NEF
+./Stringfellow/Flooded Building/Images/RAW Images/_DSC0012.NEF
+./Stringfellow/Flooded Building/Images/RAW Images/_DSC0013.NEF
+./Stringfellow/Flooded Building/Images/Flooded Building Back.tif
+./Stringfellow/Kenny Homestead/Images/RAW Images/_DSC0024.NEF
+./Stringfellow/Kenny Homestead/Images/RAW Images/_DSC0025.NEF
+./Stringfellow/Kenny Homestead/Images/RAW Images/_DSC0026.NEF
+./Stringfellow/Abandoned Pro Shop/Images/RAW Images/_DSC0011.NEF
+./Stringfellow/Abandoned Pro Shop/Images/RAW Images/_DSC0010.NEF
+./Stringfellow/Abandoned Pro Shop/Images/RAW Images/_DSC0008.NEF
+./Stringfellow/Abandoned Pro Shop/Images/Abandoned Pro Shop Back.tif
+./Stringfellow/Abandoned Trailer/Images/RAW Images/_DSC0043.NEF
+./Stringfellow/Abandoned Trailer/Images/RAW Images/_DSC0044.NEF
+./Stringfellow/Abandoned Trailer/Images/RAW Images/_DSC0045.NEF
+./Stringfellow/Abandoned Trailer/Images/Abandoned Trailer.tif
+./Kozal/Cypress Grove/Images/Cypress Grove.tif
+./Kozal/Cypress Grove/Images/Cypress Grove Back.tif
+./Kozal/Winter/Images/Winter.tif
+./Kozal/Winter/Images/RAW Images/kozal.psd
+./Kozal/Winter/Images/RAW Images/DSC_0024.NEF
+./Kozal/Winter/Images/RAW Images/DSC_0021.NEF
+./Kozal/Winter/Images/RAW Images/DSC_0022.NEF
+./Kozal/Winter/Images/RAW Images/DSC_0023.NEF
+./Kozal/Winter/Images/Winter.jpg
+./Gleaton/Images/Langi, Wearing a Siapo Back.tif
+./Gleaton/Images/Langi, Wearing a Siapo.tif
+./Jordahl, G./Images/FA49_jordahl.jpg
+./Jordahl, G./Images/RAW Images/DSC_0035.psd
+./Jordahl, G./Images/RAW Images/DSC_0033.NEF
+./Jordahl, G./Images/RAW Images/DSC_0035.NEF
+./Jordahl, G./Images/RAW Images/DSC_0034.NEF
+./Jordahl, G./Images/RAW Images/DSC_0036.NEF
+./Jordahl, G./Images/Canyonlands.tif
+./Rosenthal/Images/Dream Back.tif
+./Rosenthal/Images/Dream.tif
+./Wegman/Images/Cross Training RAW.NEF
+./Wegman/Images/Cross Training.tif
+./Hetherington/Images/Dinka Country Back.tif
+./Hetherington/Images/Dinka Country.tif
+./Keimig/Images/Tres Cruces.tif
+./McDowell/Images/Diptych.tif
+./McDowell/Images/Diptych Back.tif
+./Lyon/Images/Demo Driver.jpg
+./Lyon/Images/RAW Images/danny_lyon37.psd
+./Lyon/Images/RAW Images/_DSC0036.NEF
+./Lyon/Images/RAW Images/_DSC0037.NEF
+./Lyon/Images/RAW Images/DSC_0011.NEF
+./Lyon/Images/Demo Driver.tif
+./Casabare/Images/RAW Images/DSC_0008.NEF
+./Casabare/Images/RAW Images/DSC_0006.NEF
+./Casabare/Images/RAW Images/DSC_0005.NEF
+./Casabare/Images/RAW Images/DSC_0004.NEF
+./Casabare/Images/Barrel Vaulted Room Uncropped.tif
+./Casabare/Images/Barrel Vaulted Room.tif
+./Casabare/Images/Barrel Vaulted Room Back.tif
+./Halsmann/Images/Andy Warhol Back.tif
+./Halsmann/Images/Andy Warhol.tif
+./Fernandez/Images/RAW Images/DSC_0006.NEF
+./Fernandez/Images/RAW Images/DSC_0005.NEF
+./Fernandez/Images/RAW Images/DSC_0004.NEF
+./Fernandez/Images/RAW Images/_DSC0024.NEF
+./Fernandez/Images/RAW Images/_DSC0025.NEF
+./Fernandez/Images/RAW Images/_DSC0026.NEF
+./Fernandez/Images/Memorial to MLK Uncropped.tif
+./Fernandez/Images/Memorial to MLK.tif
+./Fernandez/Images/Memorial to MLK Back.tif
+./Fernandez/Images/Memorial to MLK.jpg
+./D'Amato/Images/Girl in Rain Uncropped.tif
+./D'Amato/Images/Girl in Rain Back.tif
+./D'Amato/Images/Girl in Rain.tif
+./Whitlock/Images/Joshua Back.tif
+./Whitlock/Images/Joshua.tif
+./Menuez/Images/Heaven, Earth, Tequila.tif
+./Menuez/Images/Heaven, Earth, Tequila Back.tif
+./Divine/Images/Kanga.tif
+./Bone/Images/La Nueva Vida.tif
+./Bone/Images/La Nueva Vida Back.tif
+./Behr/Images/Gold Cat.tif
+./Behr/Images/Gold Cat Back.tif
+./Lawrence/Images/Maldiya Back.tif
+./Lawrence/Images/Maldiya.tif
+./Schwedhelm/Images/Ryder 4.tif
+./Thompson/Images/Death Valley Dune.tif
+./Arnold/Images/First Five Back.tif
+./Arnold/Images/RAW Images/DSC_0009.NEF
+./Arnold/Images/RAW Images/DSC_0008.NEF
+./Arnold/Images/RAW Images/DSC_0011.NEF
+./Arnold/Images/RAW Images/DSC_0010.NEF
+./Arnold/Images/RAW Images/DSC_0010.psd
+./Arnold/Images/First Five.tif
+./Arnold/Images/First Five.jpg
+./Kratochvil/Images/Palm Sunday Back.tif
+./Kratochvil/Images/Palm Sunday.tif
+./Modica/Images/Treadwell.jpg
+./Modica/Images/RAW Images/DSC_0033.NEF
+./Modica/Images/RAW Images/DSC_0032.NEF
+./Modica/Images/RAW Images/DSC_0030.NEF
+./Modica/Images/RAW Images/DSC_0034.NEF
+./Modica/Images/Treadwell.tif
+./Mark/Images/RAW Images/DSC_0035.NEF
+./Mark/Images/RAW Images/DSC_0034.NEF
+./Mark/Images/RAW Images/DSC_0036.NEF
+./Mark/Images/RAW Images/_DSC0022.NEF
+./Mark/Images/RAW Images/_DSC0023.NEF
+./Mark/Images/RAW Images/_DSC0021.NEF
+./Mark/Images/RAW Images/_DSC0020.NEF
+./Mark/Images/Vashira & Tashira.tif
+./Mark/Images/Vashira & Tashira.jpg
+./Patterson/Images/Prarie Grass Leak Back.tif
+./Patterson/Images/Prarie Grass Leak.tif
+./Stern/Images/Beatniks.tif
+./Stern/Images/Beatniks Back.tif
+./Wang/Images/Cemetary.tif
+./Thelwell/Images/Lily Back.tif
+./Thelwell/Images/Lily.tif
+./Aigner/Images/Political Expression in Harlem Back.tif
+./Aigner/Images/Political Expression in Harlem.tif
+./Halpern/Images/California Fire.tif
+./Halpern/Images/California Fire Back.tif
+./Noggle/Images/Myself as a Pilot.jpg
+./Noggle/Images/RAW Images/DSC_0035.NEF
+./Noggle/Images/RAW Images/_DSC0031.NEF
+./Noggle/Images/RAW Images/_DSC0033.NEF
+./Noggle/Images/RAW Images/_DSC0032.NEF
+./Noggle/Images/Myself as a Pilot.tif
+./Anderson, R/Images/RAW Images/DSC_0012.NEF
+./Anderson, R/Images/RAW Images/DSC_0011.NEF
+./Anderson, R/Images/RAW Images/DSC_0010.NEF
+./Anderson, R/Images/Viking Bristlecone Back.tif
+./Anderson, R/Images/Viking Bristlecone.tif
+./Dresser/Images/S-Shaped Sand Dune.tif
+./Dresser/Images/RAW Images/DSC_0013.NEF
+./Dresser/Images/RAW Images/DSC_0014.NEF
+./Dresser/Images/RAW Images/DSC_0015.NEF
+./Dresser/Images/RAW Images/DSC_0016.NEF
+./Dresser/Images/RAW Images/DSC_0014.psd
+./Dresser/Images/S-Shaped Sand Dune.jpg
+./Francois/Images/Monkey Legs Back.tif
+./Francois/Images/RAW Images/DSC_0018.psd
+./Francois/Images/RAW Images/DSC_0018.NEF
+./Francois/Images/RAW Images/DSC_0019.NEF
+./Francois/Images/RAW Images/DSC_0020.NEF
+./Francois/Images/RAW Images/DSC_0017.NEF
+./Francois/Images/Monkey Legs Uncropped.tif
+./Francois/Images/Monkey Legs.jpg
+./Francois/Images/Monkey Legs.tif
+./Pfahl/Images/RAW Images/DSC_0041.NEF
+./Pfahl/Images/RAW Images/phahl_john_2.psd
+./Pfahl/Images/Bethlehem.tif
+./Pfahl/Images/Bethlehem.jpg
+./Abbott/El Station/Images/El Station Back.tif
+./Abbott/El Station/Images/RAW Images/DSC_0041.NEF
+./Abbott/El Station/Images/RAW Images/DSC_0040.NEF
+./Abbott/El Station/Images/RAW Images/DSC_0024.NEF
+./Abbott/El Station/Images/RAW Images/Berenice_Abbott_subway.psd
+./Abbott/El Station/Images/RAW Images/DSC_0022.NEF
+./Abbott/El Station/Images/RAW Images/DSC_0023.NEF
+./Abbott/El Station/Images/El Station.tif
+./Abbott/El Station/Images/El Station.jpg
+./Abbott/El Station/Images/El Station uncropped.tif
+./Abbott/Leadbelly/Images/Leadbelly.tif
+./Abbott/Leadbelly/Images/Leadbelly Back.tif
+./Graham/Images/Thompson Avenue, Eatonville.tif
+./Carter/Images/Birth Back.tif
+./Carter/Images/Birth.tif
+./Fullbright/Images/RAW Images/DSC_0005.NEF
+./Fullbright/Images/RAW Images/DSC_0001.NEF
+./Fullbright/Images/RAW Images/DSC_0003.NEF
+./Fullbright/Images/RAW Images/DSC_0002.NEF
+./Fullbright/Images/Moon Behind Glass.tif
+./Meyerowitz/Images/RAW Images/DSC_0040.NEF
+./Meyerowitz/Images/RAW Images/DSC_0037.NEF
+./Meyerowitz/Images/RAW Images/DSC_0039.NEF
+./Meyerowitz/Images/RAW Images/DSC_0038.NEF
+./Meyerowitz/Images/Provincetown.tif
+./Yudelson/Images/Under the Surface.tif
+./Yudelson/Images/Under the Surface Back.tif
+./Wolcott/Images/Young Boy on Wagon.tif
+./Wolcott/Images/RAW Images/DSC_0042.NEF
+./Wolcott/Images/RAW Images/DSC_0043.NEF
+./Wolcott/Images/RAW Images/DSC_0026.NEF
+./Wolcott/Images/RAW Images/DSC_0029.NEF
+./Wolcott/Images/RAW Images/wolcott.psd
+./Wolcott/Images/Young Boy on Wagon.jpg
+./Rinnhofer/Images/Menschenkunde.tif
+./Rinnhofer/Images/Menschenkunde Back.tif
+./Hudnall/Images/Three Drummers.tif
+./Hudnall/Images/RAW Images/DSC_0033.NEF
+./Hudnall/Images/RAW Images/_DSC0002.NEF
+./Hudnall/Images/RAW Images/DSC_0032.NEF
+./Hudnall/Images/RAW Images/_DSC0001.NEF
+./Hudnall/Images/RAW Images/DSC_0031.NEF
+./Hudnall/Images/RAW Images/_DSC0005.NEF
+./Hudnall/Images/RAW Images/_DSC0006.NEF
+./Hudnall/Images/RAW Images/_DSC0007.NEF
+./Hudnall/Images/Three Drummers Uncropped.tif
+./Hudnall/Images/Three Drummers.jpg
+./Hudnall/Images/Three Drummers Back.tif
+./Barber/Images/Lion on the Bridge Back.tif
+./Barber/Images/Lion on the Bridge.tif
+./Rozovsky/Images/Untitled.tif
+./Rozovsky/Images/Untitled Back.tif
+./Jahiel/Images/Three Horses.tif
+./Soejima/Images/Still Life Back.tif
+./Soejima/Images/Still Life.tif
+./Bernhard/Images/RAW Images/DSC_0024.NEF
+./Bernhard/Images/RAW Images/DSC_0021.NEF
+./Bernhard/Images/RAW Images/DSC_0022.NEF
+./Bernhard/Images/RAW Images/DSC_0023.NEF
+./Bernhard/Images/Shell and Driftwood.tif
+./Smithson/Images/Venice Back.tif
+./Smithson/Images/Venice.tif
+./Tapper/Images/Laughing Girl.jpg
+./Tapper/Images/RAW Images/DSC_0024.NEF
+./Tapper/Images/RAW Images/DSC_0020.NEF
+./Tapper/Images/RAW Images/DSC_0022.NEF
+./Tapper/Images/RAW Images/DSC_0023.NEF
+./Tapper/Images/Laughing Girl.tif
+./Vitale/Images/Kashmir.tif
+./Kruvand/Images/RAW Images/DSC_0027.NEF
+./Kruvand/Images/RAW Images/DSC_0032.NEF
+./Kruvand/Images/RAW Images/DSC_0026.NEF
+./Kruvand/Images/RAW Images/DSC_0030.NEF
+./Kruvand/Images/RAW Images/DSC_0025.NEF
+./Kruvand/Images/RAW Images/DSC_0028.NEF
+./Kruvand/Images/RAW Images/DSC_0029.NEF
+./Kruvand/Images/Pinon Pine Floating in Black, Grand Canyon.tif
+./Kruvand/Images/Pinon Pine Back.tif
+./Miller/Images/Maxwell Street Blues.tif
+./Miller/Images/Maxwell Street Blues Back.tif
+./Fagan/Images/Stallion Back.tif
+./Fagan/Images/RAW Images/DSC_0047.NEF
+./Fagan/Images/RAW Images/DSC_0048.NEF
+./Fagan/Images/RAW Images/DSC_0049.NEF
+./Fagan/Images/Stallion.tif
+./George, Amy/Images/Her Magnolia.tif
+./George, Amy/Images/Her Magnolia Back.tif
+./Freed/Images/RAW Images/DSC_0012.NEF
+./Freed/Images/RAW Images/DSC_0011.NEF
+./Freed/Images/RAW Images/_DSC0047.NEF
+./Freed/Images/RAW Images/_DSC0046.NEF
+./Freed/Images/Harlem.jpg
+./Freed/Images/Harlem.tif
+./Cromer/Wildorado/Images/RAW Images/_DSC0054.NEF
+./Cromer/Wildorado/Images/RAW Images/_DSC0053.NEF
+./Cromer/Wildorado/Images/RAW Images/_DSC0052.NEF
+./Cromer/Wildorado/Images/Wildorado.tif
+./Cromer/Lost Love Triptych/Images/Lost Love Triptych.tif
+./Cromer/Lost Love Triptych/Images/Lost Love Triptych Back.tif
+./Sicurella/Images/Alex Eye.tif
+./Sicurella/Images/RAW Images/sicarella_tom_6.psd
+./Sicurella/Images/RAW Images/sicarella_tom_flat.psd
+./Sicurella/Images/RAW Images/_DSC0039.NEF
+./Sicurella/Images/RAW Images/_DSC0038.NEF
+./Sicurella/Images/RAW Images/_DSC0041.NEF
+./Sicurella/Images/RAW Images/_DSC0040.NEF
+./Sicurella/Images/RAW Images/_DSC0042.NEF
+./Sicurella/Images/RAW Images/_DSC0043.NEF
+./Sicurella/Images/RAW Images/_DSC0047.NEF
+./Sicurella/Images/RAW Images/_DSC0046.NEF
+./Sicurella/Images/RAW Images/_DSC0044.NEF
+./Sicurella/Images/RAW Images/_DSC0045.NEF
+./Sicurella/Images/Alex Eye.jpg
+./Sherman/Images/RAW Images/_DSC0014.NEF
+./Sherman/Images/RAW Images/_DSC0015.NEF
+./Sherman/Images/RAW Images/DSC_0025.NEF
+./Sherman/Images/RAW Images/sherman_cindy_2.psd
+./Sherman/Images/RAW Images/_DSC0011.NEF
+./Sherman/Images/RAW Images/_DSC0005.NEF
+./Sherman/Images/RAW Images/_DSC0010.NEF
+./Sherman/Images/RAW Images/_DSC0006.NEF
+./Sherman/Images/RAW Images/_DSC0012.NEF
+./Sherman/Images/RAW Images/_DSC0013.NEF
+./Sherman/Images/RAW Images/_DSC0007.NEF
+./Sherman/Images/RAW Images/_DSC0009.NEF
+./Sherman/Images/RAW Images/_DSC0008.NEF
+./Sherman/Images/Cigarettes.tif
+./Sherman/Images/Cigarettes.jpg
+./Sherman/Images/Cigarettes Back.tif
+./Berry/Images/Monkey at the Door.tif
+./Berry/Images/Monkey at the Door Back.tif
+./Riboud/Images/RAW Images/_DSC0017.NEF
+./Riboud/Images/RAW Images/_DSC0018.NEF
+./Riboud/Images/Karuizawa, Japan.jpg
+./Riboud/Images/Karuizawa, Japan.tif
+./Mattingly/Images/Navel of the Moon.tif
+./Mattingly/Images/Navel of the Moon Back.tif
+./Brenner/Images/RAW Images/DSC_0012.NEF
+./Brenner/Images/RAW Images/DSC_0013.NEF
+./Brenner/Images/RAW Images/DSC_0011.NEF
+./Brenner/Images/RAW Images/DSC_0014.NEF
+./Brenner/Images/Aconitum.tif
+./Brenner/Images/Aconitum Back.tif
+./Johndraw/Images/Toad.tif
+./Johndraw/Images/Toad Back.tif
+./Laughton/Dodge/Images/Dodge.tif
+./Ketchum/Images/Tidal Flats.tif
+./Dobrowner/Mushroom Cloud/Images/Mushroom Cloud.tif
+./Dobrowner/Bentonite Waves/Images/Bentonite Waves.tif
+./Dobrowner/The Windows/Images/The Windows.tif
+./Dobrowner/Church Rock/Images/Church Rock.tif
+./Dobrowner/Storm Cell/Images/Storm Cell.tif
+./Dobrowner/Indian Head/Images/Indian Head.tif
+./Dobrowner/Bright Angel/Images/Bright Angel.tif
+./Dobrowner/Clouds/Images/Clouds.tif
+./Dobrowner/Storms Portfolio Booklet 2.tif
+./Dobrowner/Storms Portfolio Booklet 1.tif
+./Dobrowner/Temple of the Moon/Images/Temple of the Moon.tif
+./Dobrowner/Bear's Claw/Images/Bear's Claw.tif
+./Dobrowner/Still Earth Portfolio Booklet 1.tif
+./Dobrowner/Shiprock/Images/Shiprock.tif
+./Dobrowner/Mars Formation/Images/Mars Formation.tif
+./Dobrowner/Still Earth Portfolio Booklet 2.tif
+./Dobrowner/Arm of God/Images/Arm of God.tif
+./Dobrowner/Vapor Cloud/Images/Vapor Cloud.tif
+./Dobrowner/Vasquez Point/Images/Vasquez Point.tif
+./Dobrowner/Road, Near Guymon/Images/Road, Near Guymon.tif
+./Dobrowner/Serpent's Tail/Images/Serpent's Tail Back.tif
+./Dobrowner/Funnel/Images/Funnel.tif
+./Dobrowner/Pleistocene/Images/Pleistocene.tif
+./Adams/Winter Sunrise/Images/Winter Sunrise Uncropped.tif
+./Adams/Winter Sunrise/Images/RAW Images/DSC_0032.NEF
+./Adams/Winter Sunrise/Images/RAW Images/DSC_0031.NEF
+./Adams/Winter Sunrise/Images/RAW Images/DSC_0029.NEF
+./Adams/Winter Sunrise/Images/Winter Sunrise.jpg
+./Adams/Fern Spring, Dust/Images/Fern Spring Uncropped.tif
+./Adams/Fern Spring, Dust/Images/Fern Spring Back.tif
+./Adams/Cathedral Spires/Images/Cathedral Spires.tif
+./Adams/Cathedral Spires/Images/RAW Images/DSC_0042.NEF
+./Adams/Cathedral Spires/Images/RAW Images/DSC_0041.NEF
+./Adams/Cathedral Spires/Images/RAW Images/DSC_0040.NEF
+./Adams/Cathedral Spires/Images/Cathedral Spires Back.tif
+./Guidi/Images/Kaliningrad Back.tif
+./Guidi/Images/Kaliningrad.tif
+./Lopez/Images/Heirs Come to Pass.jpg
+./Lopez/Images/Heirs Come to Pass.tif
+./Zito/Images/One Day in Onions Back.tif
+./Zito/Images/One Day in Onions.tif
+./Priola/Images/Crystal Ball.jpg
+./Priola/Images/Crystal Ball.tif
+./Priola/Images/RAW Images/DSC_0009.NEF
+./Priola/Images/RAW Images/DSC_0008.NEF
+./Priola/Images/RAW Images/DSC_0006.NEF
+./Priola/Images/RAW Images/DSC_0012.NEF
+./Priola/Images/RAW Images/DSC_0007.NEF
+./Priola/Images/RAW Images/DSC_0011.NEF
+./Priola/Images/RAW Images/DSC_0010.NEF
+./Cook/Images/Horse Shoe Bend.tif
+./Milligan/Images/Wren Day.tif
+./Sexton/Black Oaks, Morning Mist/Images/RAW Images/DSC_0040.NEF
+./Sexton/Black Oaks, Morning Mist/Images/RAW Images/DSC_0037.NEF
+./Sexton/Black Oaks, Morning Mist/Images/RAW Images/DSC_0039.NEF
+./Sexton/Black Oaks, Morning Mist/Images/RAW Images/DSC_0038.NEF
+./Sexton/Black Oaks, Morning Mist/Images/RAW Images/sexton.psd
+./Sexton/Black Oaks, Morning Mist/Images/Black Oaks, Morning Mist.jpg
+./Sexton/Black Oaks, Morning Mist/Images/Black Oaks, Morning Mist.tif
+./Sexton/Columbia, Aft View/Images/Columbia, Aft View.tif
+./Sexton/Columbia, Aft View/Images/Columbia, Aft View.jpg
+./Sexton/Columbia, Aft View/Images/RAW Images/DSC_0047.NEF
+./Sexton/Columbia, Aft View/Images/RAW Images/DSC_0046.NEF
+./Sexton/Columbia, Aft View/Images/RAW Images/DSC_0048.NEF
+./Casanave/Images/Beware of Dog Uncropped.tif
+./Casanave/Images/Beware of Dog Back.tif
+./Casanave/Images/RAW Images/DSC_0027.psd
+./Casanave/Images/RAW Images/DSC_0027.NEF
+./Casanave/Images/RAW Images/DSC_0026.NEF
+./Casanave/Images/RAW Images/DSC_0025.NEF
+./Casanave/Images/RAW Images/DSC_0028.NEF
+./Casanave/Images/Beware of Dog.jpg
+./Casanave/Images/Beware of Dog.tif
+./Gordon/Images/National Atomic Museum.tif
+./Gordon/Images/National Atomic Museum Back.tif
+./Dow/Images/Little Moreton Hall Back.tif
+./Dow/Images/Little Moreton Hall.tif
+./Birnbaum/Images/Sheep in Hoods.tif
+./Birnbaum/Images/Sheep in Hoods RAW.NEF
+./Leipzig/Images/Ideal Laundry, Brooklyn.tif
+./Leipzig/Images/RAW Images/DSC_0050.NEF
+./Leipzig/Images/RAW Images/DSC_0012.NEF
+./Leipzig/Images/RAW Images/leipzig_laundry.psd
+./Leipzig/Images/RAW Images/DSC_0014.NEF
+./Leipzig/Images/RAW Images/DSC_0049.NEF
+./Leipzig/Images/Ideal Laundry, Brooklyn.jpg
+./Herron/March from Selma/Images/RAW Images/DSC_0018.NEF
+./Herron/March from Selma/Images/RAW Images/DSC_0028.NEF
+./Herron/March from Selma/Images/RAW Images/DSC_0017.NEF
+./Herron/March from Selma/Images/RAW Images/Matt_Herron_march.psd
+./Herron/March from Selma/Images/March from Selma.jpg
+./Herron/March from Selma/Images/March from Selma.tif
+./Herron/March for Voting Rights/Images/March for Voting Rights Back.tif
+./Herron/March for Voting Rights/Images/March for Voting Rights.tif
+./Forman/Images/Swan Woman Back.tif
+./Forman/Images/Swan Woman.tif
+./Schulke/Images/RAW Images/DSC_0008.psd
+./Schulke/Images/RAW Images/DSC_0009.NEF
+./Schulke/Images/RAW Images/DSC_0008.NEF
+./Schulke/Images/RAW Images/DSC_0007.NEF
+./Schulke/Images/RAW Images/_DSC0041.NEF
+./Schulke/Images/RAW Images/_DSC0040.NEF
+./Schulke/Images/RAW Images/_DSC0042.NEF
+./Schulke/Images/RAW Images/FA88_schulke_back.jpg
+./Schulke/Images/RAW Images/_DSC0043.NEF
+./Schulke/Images/Corretta Scott King Funeral of Martin Luther King, Jr..jpg
+./Schulke/Images/Corretta Scott King Funeral of Martin Luther King, Jr..tif
+./Serrano/Images/RAW Images/DSC_0020.NEF
+./Serrano/Images/RAW Images/DSC_0023.NEF
+./Serrano/Images/RAW Images/_DSC0027.NEF
+./Serrano/Images/RAW Images/_DSC0026.NEF
+./Serrano/Images/Istanbul.tif
+./Serrano/Images/Istanbul.jpg
+./Strom/Images/Death Valley.tif
+./Kellenberger/Images/Four Fishing Poles Back.tif
+./Kellenberger/Images/Four Fishing Poles.tif
+./Jenson/Cape Perpetua/Images/Cape Perpetua.tif
+./Jenson/Lone Tree/Images/Lone Tree.tif
+./Jenson/Rock Wall/Images/Rock Wall.tif
+./Jenson/Winter Trees 1/Images/Winter Trees 1.tif
+./Jenson/Factory Butte/Images/Factory Butte.tif
+./Jenson/Sunken Boat/Images/Sunken Boat.tif
+./Jenson/Storm Clouds/Images/Storm Clouds.tif
+./Jenson/Dry Wash/Images/Dry Wash.tif
+./Jenson/Winter Trees 2/Images/Winter Trees 2.tif
+./Jenson/The Dalles Mountain Road/Images/The Dalles Mountain Road.tif
+./Sudek/IMG_0003 copy.tif
+./Sudek/IMG_0002 copy.tif
+./Homma/Images/Tokyo.tif
+./Breakey/Cyanocitta/Images/Cyanocitta Cristaio.jpg
+./Breakey/Cyanocitta/Images/RAW Images/DSC_0009.NEF
+./Breakey/Cyanocitta/Images/RAW Images/DSC_0012.NEF
+./Breakey/Cyanocitta/Images/RAW Images/DSC_0010.NEF
+./Breakey/Cyanocitta/Images/RAW Images/DSC_0011.psd
+./Breakey/Cyanocitta/Images/Cyanocitta Cristaio.tif
+./Breakey/Cyanocitta/Images/Cyanocitta Cristaio Back.tif
+./Pujol/Images/Baptism.tif
+./Pujol/Images/Baptism Back.tif
+./Gremillion/Shadow #2/Images/RAW Images/DSC_0050.NEF
+./Gremillion/Shadow #2/Images/RAW Images/DSC_0051.NEF
+./Gremillion/Shadow #2/Images/RAW Images/DSC_0052.NEF
+./Gremillion/Shadow #2/Images/Shadow #2.tif
+./Loebel/Entrances/Images/Entrances.tif
+./Loebel/Entrances/Images/Entrances.jpg
+./Loebel/Entrances/Images/Entrances Back.tif
+./Loebel/Urban Signage 2/Images/Urban Signage 2.tif
+./Loebel/Urban Signage 2/Images/Urban Signage 2 Back.tif
+./Loebel/Sales Office/Images/Sales Office.tif
+./Loebel/Sales Office/Images/Sales Office Back.tif
+./Loebel/Street/Images/Street Back.tif
+./Loebel/Street/Images/Street.tif
+./Loebel/Urban Signage 1/Images/Urban Signage 1.tif
+./Loebel/Back Yards/Images/Back Yards.tif
+./Loebel/Back Yards/Images/Back Yards Back.tif
+./Neill/Images/RAW Images/neill.psd
+./Neill/Images/RAW Images/DSC_0018.NEF
+./Neill/Images/RAW Images/DSC_0019.NEF
+./Neill/Images/RAW Images/DSC_0020.NEF
+./Neill/Images/RAW Images/DSC_0017.NEF
+./Neill/Images/Twilight Surf.tif
+./Neill/Images/Twilight Surf Uncropped.tif
+./Neill/Images/Twilight Surf.jpg
+./Baril/Images/Roses in a Vase.tif
+./Baril/Images/Roses in a Vase RAW.NEF
+./Baril/Images/Roses in a Vase back.tif
+./Huitt/Images/Gary's Eggs.tif
+./Clark, N./Doyan House/Images/Doyan House Back.tif
+./Clark, N./Doyan House/Images/Doyan House.tif
+./Clark, N./Stone Bridge/Images/Stone Bridge Back.tif
+./Clark, N./Stone Bridge/Images/Stone Bridge.tif
+./Clark, N./Henry House/Images/Henry House.tif
+./Clark, N./Henry House/Images/Henry House Back.tif
+./Clark, N./2nd Bull Run, Embankment/Images/Embankment.tif
+./Clark, N./2nd Bull Run, Embankment/Images/Embankment Back.tif
+./Clark, N./Near Henry house (GSP.12)/Images/Near Henry House (GSP.12).tif
+./Clark, N./Near Henry house (GSP.12)/Images/Near Henry House Back (GSP.12).tif
+./Clark, N./Clum House Ruins/Images/Clum House Ruins Back.tif
+./Clark, N./Clum House Ruins/Images/Clum House Ruins.tif
+./Clark, N./Jackson's Position/Images/Jackson'sPosition.tif
+./Clark, N./Jackson's Position/Images/Jackson's Position Back.tif
+./Clark, N./Cannon Batter/Images/Cannon Batter Back.tif
+./Clark, N./Cannon Batter/Images/Cannon Batter.tif
+./Clark, N./Clum House Ruin/Images/Clum House Ruin.tif
+./Clark, N./Clum House Ruin/Images/Clum House Ruin Back.tif
+./Clark, N./Matthews House/Images/Matthews House Back.tif
+./Clark, N./Matthews House/Images/Matthews House.tif
+./Clark, N./Near Henry house (GSP.13)/Images/Near Henry House (GSP.13).tif
+./Clark, N./Near Henry house (GSP.13)/Images/Near Henry House (GSP.13) Back.tif
+./Rodger/Images/RAW Images/DSC_0006.NEF
+./Rodger/Images/RAW Images/DSC_0007.NEF
+./Rodger/Images/RAW Images/DSC_0005.NEF
+./Rodger/Images/RAW Images/DSC_0004.NEF
+./Rodger/Images/Messakin Tiwal Girl.tif
+./Rodger/Images/Messakin Tiwal Girl.jpg
+./Van Cleef/Images/T.S.Redford, Lund Ranch.jpg
+./Van Cleef/Images/RAW Images/_DSC0005.NEF
+./Van Cleef/Images/RAW Images/_DSC0004.NEF
+./Van Cleef/Images/RAW Images/comer.psd
+./Van Cleef/Images/T.S.Redford, Lund Ranch.tif
+./Banta/Images/Boy with Toy Hoop.tif
+./Campbell/Toilet Paper/Images/Toilet Paper.tif
+./Young/Images/Georgia and Sabine.tif
+./Vignes/Images/A Day of Mourning Back.tif
+./Vignes/Images/A Day of Mourning.tif
+./Worsham/Images/Margaret's Rhubarb.tif
+./Worsham/Images/Margaret's Rhubarb RAW.NEF
+./Weems/Untitled/Images/Untitled.tif
+./Weems/Untitled/Images/Untitled Back.tif
+./Perry/Images/Truce (Back of Mat).tif
+./Perry/Images/Truce.tif
+./Perry/Images/Truce Back.tif
+./Richards/Images/Barefoot with Brent.jpg
+./Richards/Images/Barefoot with Brent Uncropped.tif
+./Richards/Images/RAW Images/DSC_0018.NEF
+./Richards/Images/RAW Images/DSC_0019.NEF
+./Richards/Images/RAW Images/DSC_0020.NEF
+./Richards/Images/RAW Images/DSC_0017.NEF
+./Richards/Images/Barefoot with Brent.tif
+./Finlay/Images/Religious Pilgrimage.tif
+./Finlay/Images/Religious Pilgrimage Back.tif
+./Evans, D.C./Images/Ace Spring Service.tif
+./Light/John, 77/Images/John, 77.jpg
+./Light/John, 77/Images/Raw Images/DSC_0033.NEF
+./Light/John, 77/Images/Raw Images/DSC_0034.NEF
+./Light/John, 77/Images/John, 77.tif
+./Light/El Aqujero Internacional/Images/RAW Images/DSC_0013.NEF
+./Light/El Aqujero Internacional/Images/RAW Images/DSC_0014.NEF
+./Light/El Aqujero Internacional/Images/El Aqujero Internacional.tif
+./Light/Gathering La Leña/Images/RAW Images/DSC_0024.NEF
+./Light/Gathering La Leña/Images/RAW Images/DSC_0023.NEF
+./Light/Gathering La Leña/Images/Gathering La Leña.jpg
+./Light/Gathering La Leña/Images/Gathering La Leña.tif
+./Light/Ohio National Guard/Images/RAW Images/DSC_0006.NEF
+./Light/Ohio National Guard/Images/RAW Images/DSC_0005.NEF
+./Light/Ohio National Guard/Images/Ohio National Guard.tif
+./Light/Handwoven Sombrero/Images/Handwoven Sombrero.tif
+./Light/Handwoven Sombrero/Images/RAW Images/DSC_0019.NEF
+./Light/Handwoven Sombrero/Images/RAW Images/DSC_0020.NEF
+./Light/Feet of the Campesino/Images/Feet of the Campesino.tif
+./Light/Feet of the Campesino/Images/Feet of the Campesino.jpg
+./Light/Feet of the Campesino/Images/RAW Images/DSC_0021.NEF
+./Light/Feet of the Campesino/Images/RAW Images/DSC_0022.NEF
+./Light/Sunday Service/Images/Sunday Service.tif
+./Light/Sunday Service/Images/RAW Images/DSC_0027.NEF
+./Light/Sunday Service/Images/RAW Images/DSC_0028.NEF
+./Light/Emerson Rudd/Images/RAW Images/DSC_0009.NEF
+./Light/Emerson Rudd/Images/RAW Images/DSC_0010.NEF
+./Light/Emerson Rudd/Images/Emerson Rudd.tif
+./Light/Child Loom Worker/Images/Child Loom Worker.tif
+./Light/Child Loom Worker/Images/RAW Images/DSC_0012.NEF
+./Light/Child Loom Worker/Images/RAW Images/DSC_0011.NEF
+./Light/Lettuce Picker/Images/RAW Images/DSC_0015.NEF
+./Light/Lettuce Picker/Images/RAW Images/DSC_0016.NEF
+./Light/Lettuce Picker/Images/Lettuce Picker.tif
+./Light/Drying Alfalfa/Images/RAW Images/DSC_0035.NEF
+./Light/Drying Alfalfa/Images/RAW Images/DSC_0036.NEF
+./Light/Drying Alfalfa/Images/Drying Alfalfa.tif
+./Light/Drying Alfalfa/Images/Drying Alfalfa.jpg
+./Light/Veronica/Images/RAW Images/DSC_0026.NEF
+./Light/Veronica/Images/RAW Images/DSC_0025.NEF
+./Light/Veronica/Images/Veronica.tif
+./Light/Laotian Family/Images/Laotian Family.tif
+./Light/Laotian Family/Images/RAW Images/DSC_0018.NEF
+./Light/Laotian Family/Images/RAW Images/DSC_0017.NEF
+./Light/Emmanuel and His Mother/Images/RAW Images/DSC_0001.NEF
+./Light/Emmanuel and His Mother/Images/RAW Images/DSC_0002.NEF
+./Light/Emmanuel and His Mother/Images/Emmanuel and His Mother.tif
+./Light/Emmanuel and His Mother/Images/Emmanuel and His Mother Back.tif
+./Light/Cotton Choppers/Images/Cotton Choppers.tif
+./Light/Cotton Choppers/Images/RAW Images/DSC_0044.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0045.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0042.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0043.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0041.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0040.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0027.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0033.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0032.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0026.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0030.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0024.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0018.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0019.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0025.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0031.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0009.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0035.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0021.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0020.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0034.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0008.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0022.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0036.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0037.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0023.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0006.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0012.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0013.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0007.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0011.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0005.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0039.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0038.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0010.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0028.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0014.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0015.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0029.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0017.NEF
+./Light/Cotton Choppers/Images/RAW Images/DSC_0016.NEF
+./Light/Cotton Choppers/Images/Cotton Choppers Back.tif
+./Light/River Baptism/Images/RAW Images/DSC_0032.NEF
+./Light/River Baptism/Images/RAW Images/DSC_0031.NEF
+./Light/River Baptism/Images/River Baptism.tif
+./Light/Dancing Saturday Night/Images/Dancing Saturday Night.tif
+./Light/Dancing Saturday Night/Images/RAW Images/DSC_0030.NEF
+./Light/Dancing Saturday Night/Images/RAW Images/DSC_0029.NEF
+./Light/Sewing Guards/Images/RAW Images/DSC_0008.NEF
+./Light/Sewing Guards/Images/RAW Images/DSC_0007.NEF
+./Light/Sewing Guards/Images/Sewing Guards.tif
+./Light/Unknown Title/Images/Unknown.tif
+./Light/Unknown Title/Images/RAW Images/DSC_0037.NEF
+./Light/Unknown Title/Images/RAW Images/DSC_0038.NEF
+./Light/Unknown Title/Images/Unknown copy.tif
+./Light/Unknown Title/Images/Unknown Back.tif
+./Light/Field Workers/Images/Field Workers.tif
+./Light/Field Workers/Images/RAW Images/DSC_0004.NEF
+./Light/Field Workers/Images/RAW Images/DSC_0003.NEF
+./Porter/Rhodora/Images/Rhodora.tif
+./Porter/Rhodora/Images/Rhodora Back.tif
+./Porter/Snow on Sand Dunes/Images/Snow on Sand Dunes Back.tif
+./Porter/Snow on Sand Dunes/Images/Snow on Sand Dunes.tif
+./Porter/Eroded Rock/Images/Eroded Rock.tif
+./Porter/Eroded Rock/Images/Eroded Rock Back.tif
+./Porter/Portfolio Booklet 1.tif
+./Porter/Aspens in Early Spring/Images/Aspens in Early Spring.tif
+./Porter/Aspens in Early Spring/Images/Aspens in Early Spring Back.tif
+./Porter/Portfolio Booklet 2.tif
+./Porter/Portfolio Booklet 3.tif
+./Porter/Portfolio Booklet 4.tif
+./Porter/Cypress Swamp/Images/Cypress Swamp Back.tif
+./Porter/Cypress Swamp/Images/Cypress Swamp.tif
+./Porter/Snow and Grass/Images/Snow and Grass.tif
+./Porter/Snow and Grass/Images/Snow and Grass Back.tif
+./Porter/Maple Blossoms in a Woodland Pool/Images/Maple Blossoms in a Woodland Pool.tif
+./Porter/Maple Blossoms in a Woodland Pool/Images/Maple Blossoms in a Woodland Pool Back.tif
+./Porter/Spruce Trees and River/Images/Spruce Trees and River Back.tif
+./Porter/Spruce Trees and River/Images/Spruce Trees and River.tif
+./Porter/Ponderosa Pine/Images/Ponderosa Pine Back.tif
+./Porter/Ponderosa Pine/Images/Ponderosa Pine.tif
+./McNeill/Joe Louis/Images/Joe Louis Back.tif
+./McNeill/Joe Louis/Images/Joe Louis.tif
+./McNeill/Diaper Service Truck/Images/Diaper Service Truck Back.tif
+./McNeill/Diaper Service Truck/Images/Diaper Service Truck.tif
+./McNeill/Johnson's Store/Images/Johnson's Store.tif
+./McNeill/Johnson's Store/Images/Johnson's Store Back.tif
+./McNeill/Lionel Hampton/Images/Lionel Hampton Back.tif
+./McNeill/Lionel Hampton/Images/Lionel Hampton.tif
+./McNeill/Boys and Comics/Images/Boys Reading Comic Books Back.tif
+./McNeill/Boys and Comics/Images/Boys Reading Comic Books.tif
+./McNeill/Robert with Camera/Images/Robert with Camera.tif
+./McNeill/Two Women Talking/Images/Two Women Talking.tif
+./McNeill/Two Women Talking/Images/Two Women Talking Back.tif
+./McNeill/New Car/Images/New Car.tif
+./McNeill/New Car/Images/New Car Back.tif
+./McNeill/NACW/Images/NACW.tif
+./McNeill/NACW/Images/NACW Back.tif
+./McNeill/Republic Theatre/Images/Republic Theatre Back.tif
+./McNeill/Republic Theatre/Images/Republic Theatre.tif
+./McNeill/Make a Wish/Images/Make a Wish Back.tif
+./McNeill/Make a Wish/Images/Make a Wish.tif
+./McNeill/Taking Tickets/Images/Taking TIckets Back.tif
+./McNeill/Taking Tickets/Images/Taking Tickets.tif
+./McNeill/Dorothy Height/Images/Dorothy Height Back.tif
+./McNeill/Dorothy Height/Images/Dorothy Height.tif
+./McNeill/Jesse Owens/Images/Jesse Owens.tif
+./McNeill/Jesse Owens/Images/Jesse Owens Back.tif
+./Martin, S./Images/Love Bus.tif
+./Lowe/Images/Cotton Pickers.tif
+./Goldman/Images/Carol Back.tif
+./Goldman/Images/Carol.tif
+./Leshko/Images/Swing Ride Back.tif
+./Leshko/Images/Swing Ride.tif
+./Chambers/Images/Prom Gown RAW.NEF
+./Chambers/Images/Prom Gown.tif
+./Tinnen/Images/They Walked.tif
+./Brown, E/Images/Planning.tif
+./Brown, E/Images/Planning Back.tif
+./Clark, J./Images/Assembly Line.tif
+./Clark, J./Images/Assembly Line Back.tif
+./Steinmetz/Images/Perugia, Italy.tif
+./Steinmetz/Images/Perugia, Italy Back.tif
+./Watson/Images/Swayback Barn.tif
+./Watson/Images/Swayback Barn Back.tif
+./O'Neal/Images/Eastwood and Bennett.tif
+./O'Neal/Images/Eastwood and Bennett Back.tif
+./Hooper/Images/RAW Images/DSC_0027.NEF
+./Hooper/Images/RAW Images/DSC_0026.NEF
+./Hooper/Images/RAW Images/DSC_0025.NEF
+./Hooper/Images/Birds on a Rock.tif
+./Morgan/Images/Studio Shoot Back.tif
+./Morgan/Images/Studio Shoot.tif
+./Meeks/Images/Lara Back.tif
+./Meeks/Images/Lara.tif
+./Newman/Images/Dining Spot.jpg
+./Newman/Images/RAW Images/DSC_0044.NEF
+./Newman/Images/RAW Images/DSC_0024.NEF
+./Newman/Images/RAW Images/DSC_0025.NEF
+./Newman/Images/RAW Images/newman_dots.psd
+./Newman/Images/Dining Spot.tif
+./Katchian/Phone at Gene's Loft/Images/Phone at Gene's Loft Back.tif
+./Katchian/Phone at Gene's Loft/Images/Phone at Gene's Loft.tif
+./Katchian/Kyoto/Images/Kyoto.tif
+./Katchian/Kyoto/Images/Kyoto Back.tif
+./Thomas/Images/Branded Chest.tif
+./Thomas/Images/Branded Chest.jpg
+./Thomas/Images/Branded Chest Back.tif
+./Moore/Images/Birmingham.jpg
+./Moore/Images/RAW Images/charles_moore_civil_rights1.psd
+./Moore/Images/RAW Images/DSC_0044.NEF
+./Moore/Images/RAW Images/DSC_0045.NEF
+./Moore/Images/RAW Images/comer2_1.psd
+./Moore/Images/Birmingham.tif
+./Jordahl, K./Images/Yosemite Falls.tif
+./Jordahl, K./Images/RAW Images/DSC_0035.NEF
+./Jordahl, K./Images/RAW Images/DSC_0034.NEF
+./Jordahl, K./Images/RAW Images/DSC_0036.NEF
+./Jordahl, K./Images/Yosemite Falls Back.tif
+./Jordahl, K./Images/Yosemite Falls Uncropped.tif
+./Connell/Images/Head to Head.tif
+./Connell/Images/Head to Head Back.tif
+./Hewitt/Images/Untitled.tif
+./Hewitt/Images/Untitled Back.tif
+./Goldkind/Images/Image 250.tif
+./Burke/Images/Military Hospital.tif
+./Burke/Images/Military Hospital Back.tif
+./Weston, B/Images/Driftwood.tif
+./Weston, B/Images/RAW Images/DSC_0044.NEF
+./Weston, B/Images/RAW Images/DSC_0042.NEF
+./Weston, B/Images/RAW Images/DSC_0043.NEF
+./Weston, B/Images/RAW Images/DSC_0041.NEF
+./Weston, B/Images/RAW Images/weston.psd
+./Weston, B/Images/Driftwood.jpg
+./Bieber/Drift Wood/Images/Drift Wood.tif
+./Bieber/Drift Wood/Images/Drift Wood Back.tif
+./Bieber/The Lone Gull/Images/The Lone Gull.tif
+./Bieber/The Lone Gull/Images/The Lone Gull Back.tif
+./Bieber/Sweet Music/Images/Sweet Music Back.tif
+./Bieber/Sweet Music/Images/Sweet Music.tif
+./Bieber/Thru the Hallway/Images/Thru the Hallway Back.tif
+./Bieber/Thru the Hallway/Images/Thru the Hallway.tif
+./Salcido/Images/Tangerines.tif
+./Fink/Images/Studio 54 Uncropped.tif
+./Fink/Images/Studio 54 Back.tif
+./Fink/Images/RAW Images/DSC_0032.NEF
+./Fink/Images/Studio 54.jpg
+./Fink/Images/Studio 54.tif
+./Layton/Images/Untitled (Saiga).tif
+./Layton/Images/Untitled (Saiga) RAW.NEF
+./Flomen/Plate 2, Paris, France/Images/Plate 2, Paris, France Back.tif
+./Flomen/Plate 2, Paris, France/Images/Plate 2, Paris, France.tif
+./Flomen/Plate 1, Venice, Italy/Images/Plate 1, Venice, Italy Back.tif
+./Flomen/Plate 1, Venice, Italy/Images/Plate 1, Venice, Italy.tif
+./Flomen/Woman with Handbag/Images/Woman with Handbag.tif
+./Flomen/Plate 19, West Berlin/Images/Plate 19, West Berlin.tif
+./Flomen/Plate 19, West Berlin/Images/Plate 19, West Berlin Back.tif
+./Flomen/Plate 12, Kyoto, Japan/Images/Plate 12, Kyoto, Japan Back.tif
+./Flomen/Plate 12, Kyoto, Japan/Images/Plate 12, Kyoto, Japan.tif
+./Flomen/Plate 4, Paris, France/Images/Plate 4, Paris, France Back.tif
+./Flomen/Plate 4, Paris, France/Images/Plate 4, Paris, France.tif
+./Flomen/Plate 16, Paris, France/Images/Plate 16, Paris, France Back.tif
+./Flomen/Plate 16, Paris, France/Images/Plate 16, Paris, France.tif
+./Flomen/Plate 9, Paris, France/Images/Plate 9, Paris, France.tif
+./Flomen/Plate 9, Paris, France/Images/Plate 9, Paris, France Back.tif
+./Flomen/Plate 15, Florence, Italy/Images/Plate 15, Florence, Italy.tif
+./Flomen/Plate 15, Florence, Italy/Images/Plate 15, Florence, Italy Back.tif
+./Flomen/Plate 11, Tokyo, Japan/Images/Plate 11, Tokyo, Japan.tif
+./Flomen/Plate 11, Tokyo, Japan/Images/Plate 11, Tokyo, Japan Back.tif
+./Flomen/Plate 5, Washington, DC/Images/Plate 5, Washington, DC.tif
+./Flomen/Plate 5, Washington, DC/Images/Plate 5, Washington, DC Back.tif
+./Flomen/Plate 17, Paris, France/Images/Plate 17, Paris, France.tif
+./Flomen/Plate 17, Paris, France/Images/Plate 17, Paris, France Back.tif
+./Flomen/Plate 7, Paris, France/Images/Plate 7, Paris, France Back.tif
+./Flomen/Plate 7, Paris, France/Images/Plate 7, Paris, France.tif
+./Flomen/Plate 22, Assisi, Italy/Images/Plate 22, Assisi, Italy Back.tif
+./Flomen/Plate 22, Assisi, Italy/Images/Plate 22, Assisi, Italy.tif
+./Flomen/Plate 23, Paris, France/Images/Plate 23, Paris, France.tif
+./Flomen/Plate 23, Paris, France/Images/Plate 23, Paris, France Back.tif
+./Flomen/Plate 3, Montreal Canada/Images/Plate 3, Montreal Canada Back.tif
+./Flomen/Plate 3, Montreal Canada/Images/Plate 3, Montreal Canada.tif
+./Flomen/Old Man Shading Eyes/Images/Old Man Shading Eyes.tif
+./Flomen/Old Man Shading Eyes/Images/Old Man Shading Eyes Back.tif
+./Flomen/Plate 13, Montreal, Canada/Images/Plate 13, Montreal, Canada Back.tif
+./Flomen/Plate 13, Montreal, Canada/Images/Plate 13, Montreal, Canada.tif
+./Flomen/Plate 26, Paris, France/Images/Plate 26, Paris, France.tif
+./Flomen/Plate 26, Paris, France/Images/Plate 26, Paris, France Back.tif
+./Flomen/Plate 18, Florence, Italy/Images/Plate 18, Florence, Italy.tif
+./Flomen/Plate 18, Florence, Italy/Images/Plate 18, Florence, Italy Back.tif
+./Black/Images/Dawn, Firebaugh.tif
+./Black/Images/Dawn, Firebaugh Back.tif
+./Lynch/Images/Blue Marilyn Back.tif
+./Lynch/Images/Blue Marilyn.tif
+./Phelps/Images/RAW Images/DSC_0009.NEF
+./Phelps/Images/RAW Images/DSC_0012.NEF
+./Phelps/Images/RAW Images/phelps.psd
+./Phelps/Images/RAW Images/DSC_0011.NEF
+./Phelps/Images/RAW Images/DSC_0010.NEF
+./Phelps/Images/Two Medicine Fight Site, Montana.tif
+./Phelps/Images/Two Medicine Fight Site, Montana.jpg
+./Willis/Images/View from the Pulpit.tif
+./Cox/Images/Atlas Uncropped.tif
+./Cox/Images/Atlas Back.tif
+./Cox/Images/RAW Images/_DSC0022.NEF
+./Cox/Images/RAW Images/_DSC0023.NEF
+./Cox/Images/RAW Images/_DSC0024.NEF
+./Cox/Images/RAW Images/_DSC0025.NEF
+./Cox/Images/RAW Images/DSC_0048.NEF
+./Cox/Images/Atlas.jpg
+./Cox/Images/Atlas.tif
+./Johnson, S./Images/Ice Fall.jpg
+./Johnson, S./Images/Ice Fall Back.tif
+./Johnson, S./Images/RAW Images/DSC_0008.NEF
+./Johnson, S./Images/RAW Images/DSC_0006.NEF
+./Johnson, S./Images/RAW Images/DSC_0007.NEF
+./Johnson, S./Images/RAW Images/DSC_0005.NEF
+./Johnson, S./Images/RAW Images/DSC_0006.psd
+./Johnson, S./Images/Ice Fall.tif
+./Johnson, S./Images/Ice Fall Uncropped.tif
+./Mallo/Images/Passengers.jpg
+./Mallo/Images/RAW Images/DSC_0001.NEF
+./Mallo/Images/RAW Images/DSC_0003.NEF
+./Mallo/Images/RAW Images/DSC_0017.NEF
+./Mallo/Images/RAW Images/DSC_0002.NEF
+./Mallo/Images/Passengers.tif
+./Parks/Images/RAW Images/_DSC0028.NEF
+./Parks/Images/RAW Images/_DSC0029.NEF
+./Parks/Images/RAW Images/DSC_0012.NEF
+./Parks/Images/RAW Images/DSC_0011.NEF
+./Parks/Images/RAW Images/DSC_0010.NEF
+./Parks/Images/RAW Images/_DSC0030.NEF
+./Parks/Images/RAW Images/_DSC0031.NEF
+./Parks/Images/RAW Images/_DSC0027.NEF
+./Parks/Images/Ella Watson.tif
+./Parks/Images/Ella Watson.jpg
+./Berman, I/Boxing Match/Images/Boxing Match Back.tif
+./Berman, I/Boxing Match/Images/Boxing Match.tif
+./Berman, I/Lineman/Images/Lineman Back.tif
+./Berman, I/Lineman/Images/Lineman.tif
+./Berman, I/Blind Violin Player/Images/Blind Violin Player.tif
+./Berman, I/Blind Violin Player/Images/Blind Violin Player Back.tif
+./Berman, I/Street Cleaner/Images/Street Cleaner Back.tif
+./Berman, I/Street Cleaner/Images/Street Cleaner.tif
+./Berman, I/Gypsy Flower Girl/Images/Gypsy Flower Girl.tif
+./Berman, I/Gypsy Flower Girl/Images/Gypsy Flower Girl Back.tif
+./Solyagua/Images/Flying Birds Uncropped.tif
+./Solyagua/Images/RAW Images/DSC_0044.NEF
+./Solyagua/Images/RAW Images/DSC_0045.NEF
+./Solyagua/Images/RAW Images/DSC_0046.NEF
+./Solyagua/Images/RAW Images/DSC_0041.NEF
+./Solyagua/Images/Flying Birds.tif
+./Solyagua/Images/Flying Birds.jpg
+./Bucklow/Images/RAW Images/DSC_0013.NEF
+./Bucklow/Images/RAW Images/DSC_0014.NEF
+./Bucklow/Images/RAW Images/DSC_0015.NEF
+./Bucklow/Images/RAW Images/DSC_0016.NEF
+./Bucklow/Images/Sol Invectus.tif
+./Golemboski/Images/Fast As You Can Back.tif
+./Golemboski/Images/Fast As You Can.tif
+./Sheikh/Images/RAW Images/DSC_0024.NEF
+./Sheikh/Images/RAW Images/DSC_0019.NEF
+./Sheikh/Images/RAW Images/DSC_0021.NEF
+./Sheikh/Images/RAW Images/DSC_0020.NEF
+./Sheikh/Images/RAW Images/DSC_0023.NEF
+./Sheikh/Images/Born at the Time of War Uncropped.tif
+./Sheikh/Images/Born at the Time of War Back.tif
+./Sheikh/Images/Born at the Time of War.jpg
+./Sheikh/Images/Born at the Time of War.tif
+./Hower/Images/Cooling Towers.jpg
+./Hower/Images/Cooling Towers Uncropped.tif
+./Hower/Images/RAW Images/_DSC0017.NEF
+./Hower/Images/RAW Images/_DSC0016.NEF
+./Hower/Images/RAW Images/_DSC0018.NEF
+./Hower/Images/Cooling Towers.tif
+./Hower/Images/Cooling Towers Back.tif
+./Anderson-Staley/Cledyth/Images/Cledyth.jpg
+./Anderson-Staley/Jameela/Images/Jameela.jpg
+./Anderson-Staley/Anderson-Staley Invoice (3 works).tif
+./Anderson-Staley/Kevin/Images/Kevin.jpg
+./Anderson-Staley/Kevin/Images/Kevin Back.tif
+./Anderson-Staley/Kevin/Images/Kevin.tif
+./Anderson-Staley/Ali, Marilyn, Al, Rafia/Images/Santana-Nance_Family.jpg
+./Anderson-Staley/Ali, Marilyn, Al, Rafia/Images/Santana-Nance_Family small.jpg
+./Gentry/Images/Winsor Creek Runoff.tif
+./Gentry/Images/Winsor Creek Runoff Back.tif
+./Medow/Images/Great Blue Heron Back.tif
+./Medow/Images/Great Blue Heron.tif
+./Anderson, C/Images/Caterpillar Back.tif
+./Anderson, C/Images/Caterpillar Uncropped.tif
+./Faye/Images/Pier.tif
+./Michna-Bales/Eagle Hollow from Hunter’s Bottom/Images/Eagle Hollow Web.jpg
+./Michna-Bales/Eagle Hollow from Hunter’s Bottom/Images/Eagle Hollow Print.jpg
+./Freeman/Images/White Tulips.tif
+./Chamlee/San Ignacio/Images/San Ignacio Back.tif
+./Chamlee/San Ignacio/Images/San Ignacio.tif
+./Chamlee/Creitz Farm/Images/Creitz Farm.jpg
+./Chamlee/Creitz Farm/Images/RAW Images/chamlee_paula.psd
+./Chamlee/Creitz Farm/Images/RAW Images/_DSC0006.NEF
+./Chamlee/Creitz Farm/Images/RAW Images/_DSC0007.NEF
+./Chamlee/Creitz Farm/Images/Creitz Farm.tif
+./Chamlee/Creitz Farm/Images/Creitz Farm Uncropped.tif
+./Chamlee/Creitz Farm/Images/Creitz Farm Back.tif
+./Vargas/Images/Angel Denny.jpg
+./Vargas/Images/Angel Denny.tif
+./Vargas/Images/RAW Images/DSC_0044.NEF
+./Vargas/Images/RAW Images/DSC_0042.NEF
+./Vargas/Images/RAW Images/DSC_0043.NEF
+./Vargas/Images/RAW Images/DSC_0041.NEF
+./Brown, Peter/Church/Images/RAW Images/_DSC0039.NEF
+./Brown, Peter/Church/Images/RAW Images/_DSC0038.NEF
+./Brown, Peter/Church/Images/RAW Images/_DSC0037.NEF
+./Brown, Peter/Church/Images/Church Back.tif
+./Brown, Peter/White Barn/Images/RAW Images/_DSC0036.NEF
+./Brown, Peter/White Barn/Images/RAW Images/_DSC0035.NEF
+./Brown, Peter/White Barn/Images/RAW Images/_DSC0034.NEF
+./Brown, Peter/Dimmitt Meat Company/Images/Dimmitt Meat Company.jpg
+./Brown, Peter/Dimmitt Meat Company/Images/Dimmitt Meat Company Back.tif
+./Brown, Peter/Dimmitt Meat Company/Images/Dimmitt Meat Company.tif
+./Brown, Peter/Dimmitt Meat Company/Images/RAW Images/_DSC0011.NEF
+./Brown, Peter/Dimmitt Meat Company/Images/RAW Images/_DSC0010.NEF
+./Brown, Peter/Dimmitt Meat Company/Images/RAW Images/_DSC0009.NEF
+./Brown, Peter/Dimmitt Meat Company/Images/RAW Images/_DSC0008.NEF
+./Brown, Peter/Dimmitt Meat Company/Images/RAW Images/brown_dimmitt.psd
+./Brown, Peter/Dimmitt Meat Company/Images/Dimmitt Meat Company Uncropped.tif
+./Brown, Peter/Texas Theater/Images/RAW Images/_DSC0030.NEF
+./Brown, Peter/Texas Theater/Images/RAW Images/_DSC0033.NEF
+./Brown, Peter/Texas Theater/Images/RAW Images/_DSC0032.NEF
+./Stromee/Images/Hydrangea.tif
+./Ross/Images/Leidig Meadow.tif
+./Ross/Images/RAW Images/DSC_0005.NEF
+./Ross/Images/RAW Images/DSC_0004.NEF
+./Ross/Images/RAW Images/DSC_0003.NEF
+./Ross/Images/RAW Images/DSC_0002.NEF
+./Ross/Images/Leidig Meadow.jpg
+./Grant/Images/Bird Collector.tif
+./Grant/Images/Bird Collector Back.tif
+./Hoving/Images/Coma Bernices.tif
+./Hoving/Images/Coma Bernices Back.tif
+./Mattern/Images/Tree #2.tif
+./Goldin/Images/Lynette & Donna Back.tif
+./Goldin/Images/Lynette & Donna.jpg
+./Goldin/Images/RAW Images/DSC_0050.NEF
+./Goldin/Images/Lynette & Donna.tif
+./Block/Gloria and Carl Herman/Images/Hermans.tif
+./Block/Gita Bauer/Images/Bauer, Gitta.tif
+./Block/Burt Bochove/Images/Bochove, Burt.tif
+./Block/Antonin Kalina/Images/Kalina_Antonin.tif
+./Block/Zofia Baniecka/Images/Baniecka, Zofia.tif
+./Block/Zofia Baniecka/Images/RAW Images/block_full.psd
+./Block/Zofia Baniecka/Images/RAW Images/block_crop_flat.psd
+./Block/Zofia Baniecka/Images/Baniecka, Zofia.jpg
+./Block/Zofia Baniecka/Images/Zofia Baniecka Back.tif
+./Block/Gina Stern in her Mink/Images/Stern_mink parka.tif
+./Block/Esta Heiber/Images/Heiber, Esta.tif
+./Block/Mothers & Daughters, Jane and Elise/Images/Levi_Mother_Daughters.tif
+./Block/Andree Herscovici/Images/Herscovici.tif
+./Cooke/Images/Detroit Automotive Worker Back.tif
+./Cooke/Images/Detroit Automotive Worker.jpg
+./Cooke/Images/Detroit Automotive Worker.tif
+./Chandler/Images/Aransas Back.tif
+./Chandler/Images/Aransas.tif
+./Berman, Z/Web #2/Images/RAW Images/DSC_0009.NEF
+./Berman, Z/Web #2/Images/RAW Images/DSC_0008.NEF
+./Berman, Z/Web #2/Images/RAW Images/DSC_0006.NEF
+./Berman, Z/Web #2/Images/RAW Images/DSC_0010.NEF
+./Berman, Z/Web #2/Images/Web #2.tif
+./Berman, Z/Measuring Cup/Images/RAW Images/DSC_0027.NEF
+./Berman, Z/Measuring Cup/Images/RAW Images/DSC_0026.NEF
+./Berman, Z/Measuring Cup/Images/RAW Images/DSC_0025.NEF
+./Berman, Z/Measuring Cup/Images/RAW Images/DSC_0029.NEF
+./Berman, Z/Measuring Cup/Images/Measuring Cup.tif
+./Caffery/Images/RAW Images/DSC_0045.NEF
+./Caffery/Images/RAW Images/DSC_0047.NEF
+./Caffery/Images/RAW Images/DSC_0046.NEF
+./Caffery/Images/RAW Images/DSC_0048.NEF
+./Caffery/Images/Cavali.tif

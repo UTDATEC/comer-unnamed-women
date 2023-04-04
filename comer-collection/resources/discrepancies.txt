@@ -1,0 +1,29 @@
+The data says"Casebere, James" the image folder says "Casabare",  
+there is a "Lizette" folder with the images but no Lizette in the data, 
+the data says "McNeill, Robert H." and the image folder says "McNeill", 
+"Michals" in the data and "Michaels" in the image folder, 
+another Jensen vs Jenson
+Fulbright vs Fullbright
+*fixed* database has lines for both "Burkholder,Dan" and "Burkholder, Dan"
+Johndrow vs Johndraw
+*fixed* Anderson-Staley, Keliy has a space at the end
+*fixed* Abbott, Berenice on one line and Abbott, Berenice with a space in another
+*fixed* Agrons, Geoffrey Ansel ends with a space
+*fixed* Bacon-Kidwell, Angela ends with a space
+*fixed* Bischof, Werner ends with a space
+*fixed* Capa, Robert ends with a space
+*fixed* Clark, Noel ends with a space
+*fixed* Cook, Pierre ends with a space
+*fixed* D'Amato, Paul ends with a space
+*fixed* Flomen, Michael ends with a space
+*fixed* Goldkind, Joy ends with a space
+*fixed* Golemboski, Carol ends with a space
+*fixed* Halpern, Gregory ends with a space
+*fixed* Loebel, Herbert ends with a space
+*fixed* Magnum Photo ends with a space
+*fixed* McDowell, Bill ends with a space
+*fixed* Muholi, Zanele ends with a space
+*fixed* Ohringer, Frederic ends with a space
+*fixed* Sudek, Joseph ends with a space
+
+
