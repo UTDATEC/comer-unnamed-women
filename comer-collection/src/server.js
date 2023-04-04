@@ -3,16 +3,17 @@ import { createServer } from "miragejs"
 export function makeServer() {
   createServer({
     routes() {
-      this.urlPrefix = 'https://localhost:9000';
-      this.get("/testAPI", (schema, request, response) => {
-        console.log(response.responseBody)
-      })
+      this.get("/api/reminders", () => ({
+        reminders: [
+            { id: 1, text: "Walk the dog" },
+            { id: 2, text: "Take out the trash" },
+            { id: 3, text: "Work out" },
+          ],
+      }))
 
-      this.post("/testAPI", (schema, request) => {
-        return {
-          status: true,
-          msg: "data"
-        }
+      this.post("/api/post", (schema, request) => {
+        let attrs = JSON.parse(request.requestBody)
+        console.log(attrs)
       })
 
       // this.post("/api/betterpost?", function (schema, request) {

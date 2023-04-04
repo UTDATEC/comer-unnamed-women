@@ -1,5 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import { View } from 'react-native';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +14,7 @@ import { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import NavBar from "../NavBar/NavBar";
+
 
 function errorMessage()
 {
@@ -208,6 +207,5 @@ handleSubmit(event) {
   );
     }
 }
-
 
 export default withRouter(SearchBy);

@@ -1,23 +1,13 @@
 var express = require("express");
-const { connection } = require("mongoose");
-const { sequelize } = require("../sequelize.js");
 var router = express.Router();
-const getImageById = require('../controllers/controller.js').getImageById
 
 const db = require("../sequelize.js");
 const Image = db.image;
 const Op = db.Sequelize.Op;
 
-// simple route
-router.get("/", (req, res) => {
-  res.json({ message: "Welcome to comer collection application." });
-});
-
-// simple route
-router.get("/:id", getImageById)
 
 // Search: uses all query parameter strings to find if the column has that string ANYWHERE in it
-router.get('/searchBy', function(req, res, next) {
+router.get('/', function(req, res, next) {
     Image.findAll({
       where: {
         title: {
