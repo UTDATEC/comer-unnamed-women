@@ -1,4 +1,4 @@
-import './SearchPage2.css';
+import './ExpandedView.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
+import NavBar from '../NavBar/NavBar'
+import logo from './utd.svg';
 
 const useStyles = makeStyles((theme) => ({
   abRoot: {
@@ -22,21 +24,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SearchPage2(props) {
+function ExpandedView(props) {
   const classes = useStyles();
   const history = useHistory();
 
   return (
   <div className="App">
-    <AppBar position="fixed" classes={{ root: classes.abRoot}}>
+    {/*<AppBar position="fixed" classes={{ root: classes.abRoot}}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Search Results Page
         </Typography>
         <Button class = "myButton" onClick={() => history.goBack()}>Go Back</Button>
       </Toolbar>
-    </AppBar> 
-
+    </AppBar> */}
+    <NavBar />
     <Container>
     <Col>
       <Row>
@@ -77,4 +79,4 @@ function SearchPage2(props) {
 );
 }
 
-export default SearchPage2;
+export default ExpandedView;
