@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# package and yarn files
+package-lock.json
+package.json
+yarn.lock
+
 # User-specific files
 *.rsuser
 *.suo
