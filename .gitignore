@@ -352,3 +352,11 @@ MigrationBackup/
 comer-collection/api/public/images/1650907619013-comer-Screen Shot 2021-10-14 at 4.20.01 PM.png
 *.jpeg
 imageUtils/images/*
+*.DS_Store
+*.tif
+*.NEF
+
+comer-collection/imageUtils/images/Thomas, Hank Willis/front/Thomas Reproduction Form 2020.docx
+comer-collection/imageUtils/images/Muholi, Zanele/front/Muholi Reproduction Rights 2020.pdf
+comer-collection/.DS_Store
+
