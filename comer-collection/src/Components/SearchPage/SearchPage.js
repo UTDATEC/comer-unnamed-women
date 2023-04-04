@@ -9,8 +9,9 @@ import NavBar from "../NavBar/NavBar";
 export default function SearchPage(props) {
     return(
       <div>
-        <ButtonAppBar />
-        <Cards appProps={props}/>
+        {/* {console.log(props)} */}
+        {/*<Cards appProps={props}/>*/}
+          <NavBar />
       </div>
     );
 }

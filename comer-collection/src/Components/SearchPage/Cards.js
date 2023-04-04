@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
+import ImageListTileBar from '@material-ui/core/ImageListItemBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
@@ -10,7 +10,6 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 import tileData from './tileData';
-import { List } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function TitlebarGridList(props) {
   const classes = useStyles();
   const history = useHistory();
-  const data_c = [];
+
   const [images, setImages] = useState([])
 
   function handleClick(image) {
@@ -48,7 +46,7 @@ export default function TitlebarGridList(props) {
     useEffect(() => {
         const getImagesData = async () => {
           console.log(props)
-            const { data } = await axios.get("http://localhost:9000/testAPI/searchBy", {params: { 
+            const { data } = await axios.get("http://localhost:9000/testAPI", {params: { 
               title: props.appProps.searchParams.title,
               artist: props.appProps.searchParams.artist,
               medium: props.appProps.searchParams.medium,
@@ -62,38 +60,35 @@ export default function TitlebarGridList(props) {
               tags: props.appProps.searchParams.tags
            }})
             console.log(data)
-            data_c = Object.values(data)
-            console.log(data_c)
             setImages(data)
+            console.log(images)
         }
         getImagesData()
+        console.log(images)
     }, [])
+
+
   return (
-    <ul>
-        {data_c.map(item => {
-          return <li>{item[0]}</li>;
-        })}
-      </ul>
-    //<div className={classes.root}>
-      //<ImageList rowHeight={300}  gap={30} className={classes.gridList}>
-        //<ImageListItem key="Subheader" cols={4} style={{ height: 'auto' }}>
-          //<ListSubheader component="div"></ListSubheader>
-        //</ImageListItem>.getImagesData
-        //{data_c.map((image) => (
-          //<ImageListItem key={image.img}>
-          //{/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
-             //<img src={`http://localhost:9000/images/${image.fileName}`} alt={image.title} />
-            //<ImageListItemBar
-              //title={image.title}
-              //actionIcon={
-                //<IconButton aria-label={`info about ${image.title}`} className={classes.icon} onClick={() => handleClick(image)}>
-                   //<InfoIcon />
-                //</IconButton>
-              //}
-            ///>
-          //</ImageListItem>
-        //))}
-      //</ImageList>
-    //</div>
+    <div className={classes.root}>
+      <ImageList rowHeight={300}  gap={30} className={classes.gridList}>
+        <ImageListItem key="Subheader" cols={4} style={{ height: 'auto' }}>
+          <ListSubheader component="div"></ListSubheader>
+        </ImageListItem>.getImagesData
+        {images.map((image) => (
+          <ImageListItem key={image.img}>
+          {/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
+             <img src={`http://localhost:9000/images/${image.fileName}`} alt={image.title} />
+            <ImageListItemBar
+              title={image.title}
+              actionIcon={
+                <IconButton aria-label={`info about ${image.title}`} className={classes.icon} onClick={() => handleClick(image)}>
+                   <InfoIcon />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    </div>
   );
 }
