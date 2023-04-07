@@ -3,6 +3,7 @@ import './Exhibit.css';
 import { View } from 'react-native';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +15,7 @@ import Grid from '@material-ui/core/Grid'
 import { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import NavBar from '../NavBar/NavBar'
 
 function errorMessage()
 {
@@ -82,147 +84,49 @@ handleSubmit(event) {
   render() {
     return (
     <div className="Exhibit">
-      <div>
-        <AppBar position="fixed" className= "abRoot" style = {{background : "#e87500"}}>
-          <Toolbar>
-            <IconButton edge="start" className="menuButton" color= "inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className="title">
-              Exhibit Page
-            </Typography>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <NavBar />
       <div className="dataInputForm">
-   <form onSubmit={this.handleSubmit}>
-     <Grid container spacing={3}>
-     <Grid item xs={5} sm={5}>
-     <label>Exhibit Title</label>
-     <input 
-       type="text" 
-       name="title"
-       value={this.state.value} 
-       onChange={this.handleChange}
-     />
-     </Grid>
+        <form onSubmit={this.handleSubmit}>
+        <Grid container spacing={3}>
+        <Grid item xs={5} sm={5}>
+        <label>Exhibit Title</label>
+        <input 
+          type="text" 
+          name="title"
+          value={this.state.value} 
+          onChange={this.handleChange}
+        />
+        </Grid>
      
-     <Grid item xs={5} sm={5}>
-     <label>Description</label>
-     <input 
-       type="text" 
-       name="description"
-       value={this.state.value} 
-       onChange={this.handleChange}
-        
-     />
-     </Grid>
-     <Grid item xs={5} sm={5}>
-     <label>Current Exhibits</label>
-     <output 
-       type="text" 
-       name="title"
-       value={this.state.value} 
-       onChange={this.handleChange}
-     />
-     </Grid>
-     </Grid>
+        <Grid item xs={5} sm={5}>
+        <label>Description</label>
+        <input 
+          type="text" 
+          name="description"
+          value={this.state.value} 
+          onChange={this.handleChange}
+            
+        />
+        </Grid>
+        <Grid item xs={5} sm={5}>
+        <label>Current Exhibits</label>
+        <output 
+          type="text" 
+          name="title"
+          value={this.state.value} 
+          onChange={this.handleChange}
+        />
+        </Grid>
+        </Grid>
      
       
       
-    <button>+ Create New Exhibit</button>
-   </form>
-  </div>
-     </div>
+        <button>+ Create New Exhibit</button>
+        </form>
+      </div>
+    </div>
   );
     }
 }
 
 export default withRouter(ExhibitMain);
-
-/*
-<Grid item xs={5} sm={5}>
-      <label>Inscriptions</label>
-      <input 
-       type="text" 
-       name="inscriptions"
-       value={this.state.value} 
-       onChange={this.handleChange}
-         
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Tags</label>
-      <input 
-        type="text" 
-        name="tags"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Date</label>
-      <input 
-        type="text" 
-        name="dateCreated"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Medium</label>
-      <input 
-        type="text" 
-        name="medium"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Dimensions</label>
-      <input 
-        type="text" 
-        name="dimensions"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Accession Number</label>
-      <input 
-        type="text" 
-        name="accessionNumber"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Copyright</label>
-      <input 
-        type="text" 
-        name="copyright"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Subject</label>
-      <input 
-        type="text" 
-        name="subject"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-      <Grid item xs={5} sm={5}>
-      <label>Collection Location</label>
-      <input 
-        type="text" 
-        name="collectionLocation"
-        value={this.state.value} 
-        onChange={this.handleChange}
-      />
-      </Grid>
-     </Grid>
-*/
