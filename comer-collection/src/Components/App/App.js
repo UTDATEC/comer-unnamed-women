@@ -4,6 +4,7 @@ import SearchPage from '../SearchPage/SearchPage'
 import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
+import ExhibitMain from '../Exhibit/ExhibitMain'
 import NavBar from '../NavBar/NavBar'
 import React, { Component, useEffect, useState } from 'react';
 
@@ -47,6 +48,9 @@ export default function App() {
         <Switch>
           <Route path="/searchBy">
             <SearchBy paramSetter={setSearchParams}/>
+          </Route>
+          <Route path="/exhibitmain">
+            <ExhibitMain paramSetter={setSearchParams}/>
           </Route>
           <Route path="/expandedView">
             <ExpandedView selectedImage={selectedImage}/>

@@ -46,6 +46,7 @@ export default function ButtonAppBar() {
             Search Results Page
           </Typography>
           <Button className="myButton" onClick={() => history.push('/searchBy')}>Search</Button>
+          <Button className="myButton" onClick={() => history.push('/exhibitmain')}>Exhibit</Button>
         </Toolbar>
       </AppBar>
     </div>

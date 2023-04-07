@@ -39,7 +39,7 @@ export default function NavBar() {
                     </Typography>
                     <Button className="myButton" onClick={() => history.push('/searchPage')}>Home</Button>
                     <Button className="myButton" onClick={() => history.push('/expandedView')}>Expanded</Button>
-                    <Button className="myButton" onClick={() => history.push('/exhibitMain')}>Exhibitions</Button>
+                    <Button className="myButton" onClick={() => history.push('/ExhibitMain')}>Exhibitions</Button>
                     <Button className="myButton" onClick={() => history.push('/searchBy')}>Search</Button>
                 </Toolbar>
             </AppBar>
