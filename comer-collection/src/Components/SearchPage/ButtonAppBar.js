@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import { useHistory } from 'react-router-dom';
 
+//
 const useStyles = makeStyles((theme) => ({
   abRoot: {
   backgroundColor: '#e87500',
@@ -24,12 +25,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//creates function to make a Material-UI AppBar component with a button
 export default function ButtonAppBar() {
-  const classes = useStyles();
-  const history = useHistory();
+  const classes = useStyles(); //defines a css class for the component
+  const history = useHistory(); //allows component to navigate between different pages
 
+  /*
+  div creates a division or section in HTML document and is stylized with classes.root to allow css stylization
+  AppBar specifies that an appbar is being created, is static, and uses the abRoot class to change the color
+  Toolbar specifies that its content should be group in an application bar
+  Typography is for text, h6 is a font style, uses title class to specify text attributes
+  Button uses myButton class to stylize button, onClick specifies where to go (classname="myButton")
+  */
+ //creates the navigation bar with a search button
   return (
-    <div className={classes.root}>
+    <div className={classes.root}> 
       <AppBar position="static" classes={{ root: classes.abRoot}}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
