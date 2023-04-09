@@ -3,6 +3,7 @@ const { connection } = require("mongoose");
 const { sequelize } = require("../sequelize.js");
 var router = express.Router();
 const getImageById = require('../controllers/controller.js').getImageById
+const getImages = require('../controllers/controller.js').getImages
 
 const db = require("../sequelize.js");
 const Image = db.image;
@@ -14,10 +15,13 @@ router.get("/", (req, res) => {
 });
 
 // simple route
-router.get("/:id", getImageById)
+//router.get("/id", getImageById)
+
+router.get("/searchBy", getImages)
 
 // Search: uses all query parameter strings to find if the column has that string ANYWHERE in it
-router.get('/searchBy', function(req, res, next) {
+
+/*router.get('/searchBy', function(req, res, next) {
     Image.findAll({
       where: {
         title: {
@@ -64,6 +68,6 @@ router.get('/searchBy', function(req, res, next) {
             err.message || "Some error occurred while retrieving images."
         });
       });
-  });
+  });*/
 
 module.exports = router;

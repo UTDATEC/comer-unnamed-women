@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
+import ImageListTileBar from '@material-ui/core/ImageListItemBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
@@ -10,90 +10,85 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 import tileData from './tileData';
-import { List } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
-  },
-  gridList: {
-    width: 1000,
-    height: 1000,
-  },
-  titleBar: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
+    flexWrap: 'center',
+    justifyContent: 'center',
+  }
 }));
 
-
-export default function TitlebarGridList(props) {
-  const classes = useStyles();
-  const history = useHistory();
-  const data_c = [];
+const UsingFetch = () => {
   const [images, setImages] = useState([])
 
-  function handleClick(image) {
-    props.appProps.setSelectedImage(image)
-    history.push("/searchpage2")
+  const fetchData = () => {
+    fetch("http://localhost:9000/testAPI/searchBy")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setImages(data)
+      })
   }
 
-    useEffect(() => {
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  return (
+    <div>
+      {images.length > 0 && (
+        <ul>
+          {images[0].map(image => (
+            //console.log(image)
+            
+            //<h1>[{image[0].title}]</h1>
+            
+            <li key="{image[0].title}">{image.title}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+export default UsingFetch
+
+
+    /*useEffect(() => {
         const getImagesData = async () => {
           console.log(props)
-            const { data } = await axios.get("http://localhost:9000/testAPI/searchBy", {params: { 
-              title: props.appProps.searchParams.title,
-              artist: props.appProps.searchParams.artist,
-              medium: props.appProps.searchParams.medium,
-              inscriptions: props.appProps.searchParams.inscriptions,
-              dateCreated: props.appProps.searchParams.dateCreated,
-              subject: props.appProps.searchParams.subject,
-              collectionLocation: props.appProps.searchParams.collectionLocation,
-              dimensions: props.appProps.searchParams.dimensions,
-              accessionNumber: props.appProps.searchParams.accessionNumber,
-              copyright: props.appProps.searchParams.copyright,
-              tags: props.appProps.searchParams.tags
-           }})
+            const data = await axios.get("http://localhost:9000/testAPI/searchBy")
             console.log(data)
-            data_c = Object.values(data)
-            console.log(data_c)
             setImages(data)
+            console.log(images)
         }
         getImagesData()
-    }, [])
-  return (
-    <ul>
-        {data_c.map(item => {
-          return <li>{item[0]}</li>;
-        })}
-      </ul>
+        console.log(images)
+    }, [])*/
+
+
+  //return (
     //<div className={classes.root}>
       //<ImageList rowHeight={300}  gap={30} className={classes.gridList}>
         //<ImageListItem key="Subheader" cols={4} style={{ height: 'auto' }}>
           //<ListSubheader component="div"></ListSubheader>
         //</ImageListItem>.getImagesData
-        //{data_c.map((image) => (
+        //{images.map((image) => (
           //<ImageListItem key={image.img}>
-          //{/* We use localhost:9000's images directory bc that is where the static images are served in our server */}
+          //{/* We use localhost:9000's images directory bc that is where the static images are served in our server */
              //<img src={`http://localhost:9000/images/${image.fileName}`} alt={image.title} />
             //<ImageListItemBar
               //title={image.title}
               //actionIcon={
                 //<IconButton aria-label={`info about ${image.title}`} className={classes.icon} onClick={() => handleClick(image)}>
                    //<InfoIcon />
-                //</IconButton>
-              //}
+               // </IconButton>
+             // }
             ///>
           //</ImageListItem>
         //))}
       //</ImageList>
     //</div>
-  );
-}
+  //);

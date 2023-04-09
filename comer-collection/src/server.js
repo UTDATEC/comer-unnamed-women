@@ -4,8 +4,8 @@ export function makeServer() {
   createServer({
     routes() {
       this.urlPrefix = 'https://localhost:9000';
-      this.get("/testAPI", (schema, request, response) => {
-        console.log(response.responseBody)
+      this.get("/testAPI/searchBy", (schema, request, response) => {
+        return ["Interstellar", "Inception", "Dunkirk"]
       })
 
       this.post("/testAPI", (schema, request) => {
