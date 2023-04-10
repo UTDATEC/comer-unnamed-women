@@ -65,7 +65,6 @@ export default function TitlebarGridList() {
 //<ImageList rowHeight={300}  gap={30} className={classes.gridList}></ImageList>
 //rowHeight={300} sx={{ width: 500, height: 500 }}
 div className={classes.root}>
-
                 <ImageListItem key="Subheader" cols={3} style={{ height: "auto" }}>
                     <ListSubHeader component="div"></ListSubHeader>
                 </ImageListItem>

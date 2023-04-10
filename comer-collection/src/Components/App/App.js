@@ -72,7 +72,6 @@ export default function App() {
 export default function MyApp() {
   return(
       <div>
-
         <NavBar />
         <App />
       </div>
