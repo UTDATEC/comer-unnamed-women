@@ -27,3 +27,7 @@ Johndrow vs Johndraw
 *fixed* Sudek, Joseph ends with a space
 
 
+Michna-Bales, Jeanine has 12 accession_numbers, 1 digital image, mp artists_titles
+Nowinski has 10 0 digital images
+Sudek, Joseph has 2, 2 digital images
+Wolcott, Marion Post has 6, 1 processed image, 4 RAW

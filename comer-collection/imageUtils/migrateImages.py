@@ -15,7 +15,7 @@ print("read", len(image_folder_data), 'names from', image_folder_data_json)
 ARTISTS_TITLES_DATA_JSON = '../resources/artists_titles.json'
 artists_titles_data = {}
 
-with open(artists_titles_data_json) as json_file:
+with open(ARTISTS_TITLES_DATA_JSON) as json_file:
     artists_titles_data = json.load(json_file)
 print("read", len(artists_titles_data), 'names from', ARTISTS_TITLES_DATA_JSON)
    
@@ -52,14 +52,14 @@ for name in range(len(image_folder_data)):
         if 'Condition Reports' in folder:
             pass
         else:
-            image_files = os.listdir (original_images_directory + folder)
-            image_files = [f for f in image_files if os.path.isfile(original_images_directory + folder +'/'+f )] #Filtering only the files .
+            image_files = os.listdir (ORIGINAL_IMAGES_DIRECTORY + folder)
+            image_files = [f for f in image_files if os.path.isfile(ORIGINAL_IMAGES_DIRECTORY + folder +'/'+f )] #Filtering only the files .
             if len(image_files) == 0:
-                print("no images found in ", original_images_directory + folder)
+                print("no images found in ", ORIGINAL_IMAGES_DIRECTORY + folder)
             #else:
                 #print(*image_files, sep="\n")
         for image_file in image_files:
-            source_image_path = original_images_directory + folder +'/'+ image_file
+            source_image_path = ORIGINAL_IMAGES_DIRECTORY + folder +'/'+ image_file
             destination_image_path = 'images/'+image_folder_data[name]['dbname']
             if 'back.' in image_file.lower():
                 shutil.copy(source_image_path, destination_image_path + '/back')
