@@ -356,7 +356,8 @@ imageUtils/images/*
 *.tif
 *.NEF
 
-comer-collection/imageUtils/images/Thomas, Hank Willis/front/Thomas Reproduction Form 2020.docx
-comer-collection/imageUtils/images/Muholi, Zanele/front/Muholi Reproduction Rights 2020.pdf
+comer-collection/imageUtils/images/*
 comer-collection/.DS_Store
 
+
+.DS_Store
