@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import SearchPage from '../SearchPage/SearchPage'
+import GridView from '../GridView/GridView'
 import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
@@ -55,7 +55,7 @@ export default function App() {
             <DataInput/>
           </Route>
           <Route path="/">
-            <SearchPage searchParams={searchParams} setSelectedImage={setSelectedImage}/>
+            <GridView searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
         </Switch>
       </BrowserRouter>
