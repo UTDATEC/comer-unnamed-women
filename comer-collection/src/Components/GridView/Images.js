@@ -52,7 +52,7 @@ export default function TitlebarGridList() {
                     <ImageListItem key="Subheader" cols={4} style={{ height: 10 }}>
                         <ListSubHeader component="div"></ListSubHeader>
                     </ImageListItem>
-                    {tileData.slice(0, 20).map((item) => (
+                    {tileData.map((item) => (
                         /*this ILItem specifies attributes for the images that will be displayed*/
                         <ImageListItem key={item.img} className={classes.shadow} style={{ marginBottom: 10 }}>
                             <img
