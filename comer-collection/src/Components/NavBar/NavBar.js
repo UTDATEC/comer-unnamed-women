@@ -50,7 +50,7 @@ export default function NavBar() {
                     </Typography></Button>
                     <div className={classes.menuButton}>
                         <Button className="myButton" onClick={() => history.push('/searchPage')}>
-                            <div className={classes.buttonText}>Gallery</div></Button>
+                            <div className={classes.buttonText}>Images</div></Button>
                         {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
                             <div className={classes.buttonText}>Expanded</div></Button>*/}
                         &nbsp;&nbsp;
