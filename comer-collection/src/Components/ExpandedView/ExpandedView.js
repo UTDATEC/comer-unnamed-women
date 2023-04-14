@@ -42,13 +42,13 @@ function ExpandedView(props) {
       <Row>
         <div className = "bigText">
           <span>Title:  <i>{props.selectedImage.title}</i> </span>
-          <span>Year:  <i>{props.selectedImage.years}</i> </span>
+          <span>Year:  {props.selectedImage.years} </span>
         </div>
       </Row>
       <Row>
         <div className="medText">
-          <span> Artist: <i>{props.selectedImage.artist}</i> </span>
-          <span> Medium: <i>{props.selectedImage.medium}</i> </span>
+          <span> Artist: {props.selectedImage.artist} </span>
+          <span> Medium: {props.selectedImage.medium} </span>
 
         </div>
       </Row>

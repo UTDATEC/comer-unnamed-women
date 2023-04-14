@@ -66,16 +66,3 @@ export default function App() {
     </div>
   );
 }
-
-//export default App;
-/*
-export default function MyApp() {
-  return(
-      <div>
-
-        <NavBar />
-        <App />
-      </div>
-  )
-};
- */

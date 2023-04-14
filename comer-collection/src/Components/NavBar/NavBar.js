@@ -49,14 +49,16 @@ export default function NavBar() {
                         UTD Comer Collection
                     </Typography></Button>
                     <div className={classes.menuButton}>
-                    <Button className="myButton" onClick={() => history.push('/expandedView')}>
-                        <div className={classes.buttonText}>Expanded</div></Button>
-                    &nbsp;&nbsp;
-                    <Button className="myButton" onClick={() => history.push('/exhibihtion')}>
-                    <div className={classes.buttonText}>Exhibitions</div></Button>
-                    &nbsp;&nbsp;
-                    <Button className="myButton" onClick={() => history.push('/searchBy')}>
-                    <div className={classes.buttonText}>Search</div></Button>
+                        <Button className="myButton" onClick={() => history.push('/searchPage')}>
+                            <div className={classes.buttonText}>Gallery</div></Button>
+                        {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
+                            <div className={classes.buttonText}>Expanded</div></Button>*/}
+                        &nbsp;&nbsp;
+                        <Button className="myButton" onClick={() => history.push('/exhibitMain')}>
+                            <div className={classes.buttonText}>Exhibitions</div></Button>
+                        &nbsp;&nbsp;
+                        <Button className="myButton" onClick={() => history.push('/searchBy')}>
+                            <div className={classes.buttonText}>Search</div></Button>
                     </div>
                 </Toolbar>
             </AppBar>
