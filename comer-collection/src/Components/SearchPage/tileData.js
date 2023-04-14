@@ -11,7 +11,6 @@ const fetchData = () => {
   fetch("http://localhost:9000/testAPI/searchBy")
   .then(response => {
       return response.json();
-      
   })
   .then(data => {
     //console.log(data)

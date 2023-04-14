@@ -13,7 +13,6 @@ export default function SearchPage(props) {
     <div>
       {/* {console.log(props)} */}
         <NavBar />
-        
         <Images appProps={props}/>
     </div>
   );

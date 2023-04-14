@@ -11,7 +11,7 @@ import ListSubHeader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 
@@ -47,56 +47,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function TitlebarGridList() {
+export default function TitlebarGridList(props) {
     
     //classes to use styles created above and navigate pages
     const classes = useStyles();
     const history = useHistory();
 
-    //const [images, setImages] = useState([]) //needs something to work?
-
-    //function for redirecting to searchpage2
-    function handleClick(image) {
-        //props.appProps.setSelectedImage(image) //no props
-        history.push("/searchpage2")
+    const routeChange = (data) => {
+        let path = '/expandedView'
+        history.push(path, {data: data})
+        console.log(data)
     }
-
-/*
-//<ImageList rowHeight={300}  gap={30} className={classes.gridList}></ImageList>
-//rowHeight={300} sx={{ width: 500, height: 500 }}
-div className={classes.root}>
-                <ImageListItem key="Subheader" cols={3} style={{ height: "auto" }}>
-                    <ListSubHeader component="div"></ListSubHeader>
-                </ImageListItem>
-*/
-
-//alphabetical images
-//pages
-//switch to masonry/woven display for materialui
-//staying on the same page when you leave and come back
-
-
-//think about loading a specific amount of images per page?
-
-    /*
-    return (
-        <Box sx={{ width: 500, height: 450, overflowY: 'scroll' }}>
-            <ImageList variant="masonry" cols={3} gap={8}>
-                {itemData.map((item) => (
-                    <ImageListItem key={item.img}>
-                        <img
-                            src={`${item.img}?w=248&fit=crop&auto=format`}
-                            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                            alt={item.title}
-                            loading="lazy"
-                        />
-                    </ImageListItem>
-                ))}
-            </ImageList>
-        </Box>
-    );
-    */
-
+            
     return (
         <div className={classes.root}>
             <ImageList cols={4} gap={15} className={classes.gridList}>
@@ -106,12 +68,14 @@ div className={classes.root}>
                 </ImageListItem>
                 {tileData.map((item) => (
                     /*this ILItem specifies attributes for the images that will be displayed*/
-                    <ImageListItem key={item.img} className={classes.shadow}>
+                    <ImageListItem key={item.img} className={classes.shadow}> 
                          <img
                             src={item.img}
                             alt={item.title}
-                            loading="lazy"
+                            //loading="lazy"
+                            onClick={() => routeChange(item.title)}
                         />
+                        
                         <ImageListItemBar
                             title={item.title}
                             //position="top"

@@ -58,7 +58,7 @@ export default function App() {
           <Route path="/DataInputForm">
             <DataInput/>
           </Route>
-          <Route path="/">
+          <Route path="/searchPage">
             <SearchPage searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
         </Switch>

@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 function ExpandedView(props) {
   const classes = useStyles();
   const history = useHistory();
+  const data = history.location.state.data
 
   return (
 <div className="App">
@@ -41,7 +42,7 @@ function ExpandedView(props) {
       </Row>
       <Row>
         <div className = "bigText">
-          <span>Title:  <i>{props.selectedImage.title}</i> </span>
+          <span>Title:  <i>{JSON.stringify(data)}</i> </span>
           <span>Year:  <i>{props.selectedImage.years}</i> </span>
         </div>
       </Row>
