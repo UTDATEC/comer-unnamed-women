@@ -42,24 +42,24 @@ function ExpandedView(props) {
       </Row>
       <Row>
         <div className = "bigText">
-          <span>Title:  <i>{JSON.stringify(data)}</i> </span>
-          <span>Year:  <i>{props.selectedImage.years}</i> </span>
+          <span>Title:  <i>{JSON.stringify(data.title)}</i> </span>
+          <span>Year:  <i>{JSON.stringify(data.year)}</i> </span>
         </div>
       </Row>
       <Row>
         <div className="medText">
-          <span> Artist: <i>{props.selectedImage.artist}</i> </span>
-          <span> Medium: <i>{props.selectedImage.medium}</i> </span>
+          <span> Artist: <i>{JSON.stringify(data.artist)}</i> </span>
+          <span> Medium: <i>{JSON.stringify(data.medium)}</i> </span>
 
         </div>
       </Row>
       <Row>
         <div className = "demo">
-          <ul><span><b> Title: </b> <i>{props.selectedImage.title}</i> </span></ul>
-          <ul><span><b> Artist: </b> <i>{props.selectedImage.artist}</i> </span></ul>
-          <ul><span><b> Year: </b> <i>{props.selectedImage.artist}</i> </span></ul>
-          <ul><span><b> Medium: </b> <i>{props.selectedImage.medium}</i> </span></ul>
-          <ul><span><b> Dimensions: </b> <i>{props.selectedImage.dimensions}</i> </span></ul>
+          <ul><span><b> Title: </b> <i>{JSON.stringify(data.title)}</i> </span></ul>
+          <ul><span><b> Artist: </b> <i>{JSON.stringify(data.artist)}</i> </span></ul>
+          <ul><span><b> Year: </b> <i>{JSON.stringify(data.year)}</i> </span></ul>
+          <ul><span><b> Medium: </b> <i>{JSON.stringify(data.medium)}</i> </span></ul>
+          <ul><span><b> Dimensions: </b> <i>{JSON.stringify(data.dimensions)}</i> </span></ul>
           <ul><span><b> Copyrights Holder: </b> <i>{props.selectedImage.copyright}</i> </span></ul>
           <ul><span><b> Inscriptions: </b> <i>{props.selectedImage.inscriptions}</i> </span></ul>
           <ul><span><b> Location: </b> <i>{props.selectedImage.location}</i> </span></ul>

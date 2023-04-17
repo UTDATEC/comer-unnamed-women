@@ -11,7 +11,7 @@ import NavBar from "../NavBar/NavBar";
 export default function SearchPage(props) {
   return(
     <div>
-      {/* {console.log(props)} */}
+      {}
         <NavBar />
         <Images appProps={props}/>
     </div>

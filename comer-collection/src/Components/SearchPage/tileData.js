@@ -18,11 +18,16 @@ const fetchData = () => {
       tmpArray = []
       for (var i = 0; i < data[0].length; i++) {
           //console.log(data[0][i].title)
-          tmpArray.push(data[0][i].title)
-          console.log(tmpArray[i])
+          //console.log(data[0][i].artist)
+          //tmpArray.push(data[0][i].title)
+          //console.log(tmpArray[i])
           tileData.push({
             img: logo,
-            title: tmpArray[i]
+            title: data[0][i].title,
+            artist: data[0][i].artist,
+            year: data[0][i].date,
+            medium: data[0][i].medium,
+            dimensions: data[0][i].dimensions,
           })
       }
   });

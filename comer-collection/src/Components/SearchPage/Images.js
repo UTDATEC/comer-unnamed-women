@@ -73,7 +73,8 @@ export default function TitlebarGridList(props) {
                             src={item.img}
                             alt={item.title}
                             //loading="lazy"
-                            onClick={() => routeChange(item.title)}
+                            //onClick={() => routeChange(item.title)}
+                            onClick={() => routeChange(item)}
                         />
                         
                         <ImageListItemBar
