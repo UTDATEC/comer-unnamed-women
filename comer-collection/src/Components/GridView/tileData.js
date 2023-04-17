@@ -1,6 +1,6 @@
 import logo from './utd.jpg';
-import vertical from './testvertical.jpeg';
-import horizontal from './testhorizontal.jpeg';
+import vertical from './testvertical.jpg';
+import horizontal from './testhorizontal.jpg';
 import { useState } from 'react';
 
 let tmpArray;
@@ -68,6 +68,38 @@ export default tileData;
       img: vertical,
       title: 'Test Vertical',
       featured: true,
+    },
+    {
+      img: logo,
+      title: 'Sarah in the Jungle',
+    },
+    {
+      img: logo,
+      title: 'UTD Image',
+    },
+    {
+      img: horizontal,
+      title: 'Test Horizontal',
+    },
+    {
+      img: logo,
+      title: 'Sarah in the Jungle',
+    },
+    {
+      img: vertical,
+      title: 'Test Vertical',
+    },
+    {
+      img: vertical,
+      title: 'TestVertical',
+    },
+    {
+      img: logo,
+      title: 'UTD Image',
+    },
+    {
+      img: horizontal,
+      title: 'Test Horizontal',
     },
     {
       img: logo,
