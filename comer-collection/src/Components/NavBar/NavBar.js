@@ -17,13 +17,23 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        flexGrow: 1,
+        textAlign: "right",
+    },
+    buttonText: {
+        color: "white",
     },
     title: {
         flexGrow: 1,
-        textAlign: "left",
+        textAlign: "center",
+        color: 'white',
+        textTransform: "capitalize",
     },
-
+    titleButton: {
+        flexGrow: 1,
+        textAlign: "left",
+        width: "20%",
+    }
 }));
 
 export default function NavBar() {
@@ -34,13 +44,22 @@ export default function NavBar() {
         <div className={classes.root}>
             <AppBar position="fixed" classes={{ root: classes.abRoot}}>
                 <Toolbar>
+                    <Button styles={classes.titleButton} onClick={() => history.push('/searchPage')}>
                     <Typography variant="h6" className={classes.title}>
                         UTD Comer Collection
-                    </Typography>
-                    <Button className="myButton" onClick={() => history.push('/searchPage')}>Home</Button>
-                    <Button className="myButton" onClick={() => history.push('/expandedView')}>Expanded</Button>
-                    <Button className="myButton" onClick={() => history.push('/ExhibitMain')}>Exhibitions</Button>
-                    <Button className="myButton" onClick={() => history.push('/searchBy')}>Search</Button>
+                    </Typography></Button>
+                    <div className={classes.menuButton}>
+                        <Button className="myButton" onClick={() => history.push('/searchPage')}>
+                            <div className={classes.buttonText}>Images</div></Button>
+                        {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
+                            <div className={classes.buttonText}>Expanded</div></Button>*/}
+                        &nbsp;&nbsp;
+                        <Button className="myButton" onClick={() => history.push('/exhibitMain')}>
+                            <div className={classes.buttonText}>Exhibitions</div></Button>
+                        &nbsp;&nbsp;
+                        <Button className="myButton" onClick={() => history.push('/searchBy')}>
+                            <div className={classes.buttonText}>Search</div></Button>
+                    </div>
                 </Toolbar>
             </AppBar>
         </div>
