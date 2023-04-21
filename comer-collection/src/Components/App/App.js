@@ -5,6 +5,7 @@ import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
 import ExhibitMain from '../Exhibit/ExhibitMain'
+import ExhibitPage from '../ExhibitPage/GridView'
 import NavBar from '../NavBar/NavBar'
 import React, { Component, useEffect, useState } from 'react';
 
@@ -60,6 +61,9 @@ export default function App() {
           </Route>
           <Route path="/">
             <GridView searchParams={searchParams} setSelectedImage={setSelectedImage}/>
+          </Route>
+          <Route path="/exhibitPage">
+            <ExhibitPage searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
         </Switch>
       </BrowserRouter>
