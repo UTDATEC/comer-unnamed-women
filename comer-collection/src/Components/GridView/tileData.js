@@ -1,4 +1,4 @@
-import logo from './utd.jpg';
+import logo from '../GridView/utd.jpg';
 import vertical from './testvertical.jpg';
 import horizontal from './testhorizontal.jpg';
 import { useState } from 'react';
@@ -16,13 +16,20 @@ const fetchData = () => {
     //console.log(data)
       // Here you need to use an temporary array to store NeededInfo only 
       tmpArray = []
+      const prefix = "https://atecquilt01.utdallas.edu/comer/public/images/";
       for (var i = 0; i < data[0].length; i++) {
-          //console.log(data[0][i].title)
-          //console.log(data[0][i].artist)
-          //tmpArray.push(data[0][i].title)
-          //console.log(tmpArray[i])
+          let img_fname = data[0][i].image_file_name
+          let url = "";
+          //console.log(img_fname)
+          if (!img_fname) {
+            url = logo
+          } else {
+            img_fname = img_fname.replace(/ /g,"%20");
+            url = prefix + img_fname
+          }
+          console.log(url)
           tileData.push({
-            img: logo,
+            img: url,
             title: data[0][i].title,
             artist: data[0][i].artist,
             year: data[0][i].date,
@@ -35,90 +42,3 @@ const fetchData = () => {
 
 fetchData()
 export default tileData;
-
-
-/*tileData = [
-    {
-    img: logo,
-    title: 'UTD Image',
-    },
-    {
-      img: vertical,
-      title: 'Test Vertical',
-      featured: true,
-    },
-    {
-      img: logo,
-      title: 'Sarah in the Jungle',
-    },
-    {
-      img: horizontal,
-      title: 'Test Horizontal',
-    },
-    {
-      img: vertical,
-      title: 'Test Vertical',
-      featured: true,
-    },
-    {
-    img: logo,
-    title: 'UTD Image',
-    },
-    {
-      img: vertical,
-      title: 'Test Vertical',
-      featured: true,
-    },
-    {
-      img: logo,
-      title: 'Sarah in the Jungle',
-    },
-    {
-      img: logo,
-      title: 'UTD Image',
-    },
-    {
-      img: horizontal,
-      title: 'Test Horizontal',
-    },
-    {
-      img: logo,
-      title: 'Sarah in the Jungle',
-    },
-    {
-      img: vertical,
-      title: 'Test Vertical',
-    },
-    {
-      img: vertical,
-      title: 'TestVertical',
-    },
-    {
-      img: logo,
-      title: 'UTD Image',
-    },
-    {
-      img: horizontal,
-      title: 'Test Horizontal',
-    },
-    {
-      img: logo,
-      title: 'Sarah in the Jungle',
-    },
-    {
-      img: logo,
-      title: 'UTD Image',
-    },
-    {
-      img: horizontal,
-      title: 'Test Horizontal',
-    },
-    {
-      img: logo,
-      title: 'Sarah in the Jungle',
-    },
-    {
-      img: vertical,
-      title: 'Test Vertical',
-    }
-  ];*/

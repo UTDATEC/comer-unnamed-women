@@ -37,7 +37,7 @@ function ExpandedView(props) {
       <Row>
         <div className="align-center">
           {/*<img className="img" src={`http://localhost:9000/images/${props.selectedImage.fileName}`} />*/}
-          <img className="img" src={logo} />
+          <img className="img" src={data.img} />
         </div>
       </Row>
       <Row>

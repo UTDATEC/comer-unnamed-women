@@ -18,7 +18,7 @@ const getImageById = async (req, res) => {
 
 const getImages = async (req, res) => {
   try {
-    const data = await sequelize.query("SELECT title, artist, date, medium, dimensions FROM comerCollection2s GROUP BY id LIMIT 5;")
+    const data = await sequelize.query("SELECT title, artist, date, medium, dimensions, image_file_name FROM comerCollection2s GROUP BY id LIMIT 12;")
       if (data) {
           return res.send(data);
       }
