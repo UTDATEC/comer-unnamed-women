@@ -44,12 +44,12 @@ export default function NavBar() {
         <div className={classes.root}>
             <AppBar position="fixed" classes={{ root: classes.abRoot}}>
                 <Toolbar>
-                    <Button styles={classes.titleButton} onClick={() => history.push('/searchPage')}>
+                    <Button styles={classes.titleButton} onClick={() => history.push('/')}>
                     <Typography variant="h6" className={classes.title}>
                         UTD Comer Collection
                     </Typography></Button>
                     <div className={classes.menuButton}>
-                        <Button className="myButton" onClick={() => history.push('/searchPage')}>
+                        <Button className="myButton" onClick={() => history.push('/')}>
                             <div className={classes.buttonText}>Images</div></Button>
                         {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
                             <div className={classes.buttonText}>Expanded</div></Button>*/}

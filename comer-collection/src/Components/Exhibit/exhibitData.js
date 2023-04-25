@@ -1,4 +1,4 @@
-import logo from '../SearchPage/utd.jpg';
+import logo from '../GridView/utd.jpg';
 
 const exhibitData = [
     {
