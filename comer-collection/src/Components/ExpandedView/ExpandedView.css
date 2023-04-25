@@ -97,12 +97,15 @@ a:hover {
 }
 
 .img { 
-  display: block; 
+  display: table;
+    width: 100%;
+    table-layout: fixed;
   max-width:600px;
-   max-height:600px; 
-   width: auto; 
+   max-height:600px;
    height: auto;
    border: #282c34;
+    padding: 1px;
+    margin: 1px 0;
   }
 
 .bigText {

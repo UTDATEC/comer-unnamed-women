@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cors = require("cors");
 var uploadRouter = require('./routes/upload');
 var testAPIRouter = require('./routes/testAPI');
+var exhibitUploadRouter = require('./routes/exhibitUpload');
 
 global.__basedir = __dirname;
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/upload", uploadRouter);
 app.use("/testAPI", testAPIRouter);
+app.use("/exhibitUpload", exhibitUploadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

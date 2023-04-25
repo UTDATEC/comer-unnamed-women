@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) =>
 {
     const exhibitTable = sequelize.define("comerExhibitions", 
     {
-        creator_user_id: {type: Sequelize.STRING},
+        //creator_user_id: {type: Sequelize.STRING},
         exhibit_name: {type: Sequelize.STRING},
         exhibit_notes: {type: Sequelize.STRING},
         exhibit_writeup: {type: Sequelize.STRING},

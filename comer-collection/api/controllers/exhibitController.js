@@ -8,13 +8,12 @@ const getExhibitById = async (req, res) =>
 {
     try
     {
-        const {creator_user_id} = req.params;
-        const data = await sequelize.query("SELECT * FROM comerExhibitions WHERE id = '" + creator_user_id + "'")
+        const data = await sequelize.query("SELECT * FROM comerExhibitions")
         if (data)
         {
-            return res.status(200).json({data});
+            return res.send(data)
         }
-        return res.status(404).send('Exhibition with the specified ID does not exist');
+        return res.status(404).send('No table.');
     }
     catch (error)
     {
@@ -23,26 +22,3 @@ const getExhibitById = async (req, res) =>
 }
 
 module.exports = {getExhibitById}
-
-// Code below is from Aleena Syed's branch
-/*const db = require("../sequelize.js");
-const { sequelize } = require("../sequelize.js");
-const Image = db.image;
-const Op = db.Sequelize.Op;
-
-const getImageById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await sequelize.query("SELECT * FROM comerCollection2s WHERE id = '" + id + "'")
-      if (data) {
-          return res.status(200).json({ data });
-      }
-      return res.status(404).send('Image with the specified ID does not exists');
-  } catch (error) {
-      return res.status(500).send(error.message);
-  }
-}
-
-module.exports = {
-  getImageById
-}*/
