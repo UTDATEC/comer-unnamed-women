@@ -8,6 +8,7 @@ import ListSubHeader from '@material-ui/core/ListSubheader';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import logo from '../GridView/utd.jpg';
 
+// This file displays the existing exhibits from the database
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -106,15 +107,15 @@ export default function ExhibitCard(){
                     </ImageListItem>
                     {exhibitData.map((item) => (
                         /*this ILItem specifies attributes for the images that will be displayed*/  
-                            <ImageListItem key={item.img} className={classes.shadow} style={{marginBottom: 10}}>                   
+                            <ImageListItem key={item.name} className={classes.shadow} style={{marginBottom: 10}}>                   
                                 <img 
-                                    src={item.img}
-                                    alt={item.title}
+                                    src={logo}
+                                    alt={item.name}
                                     loading="lazy"
                                 />
                                 
                                 <button onClick={() => handleClick(item)} className = {classes.button}>
-                                    <ImageListItemBar title={item.title}/>   
+                                    <ImageListItemBar title={item.name}/>   
                                 </button>
                                 
                             </ImageListItem>

@@ -15,6 +15,7 @@ import ExhibitCard from './ExhibitCard'
 import logo from '../GridView/utd.jpg';
 import exhibitData from './exhibitData';
 
+// This file has the ability to add new exhibits and displays the form to do so
 
 
 export default function ExhibitMain(props){
@@ -46,6 +47,7 @@ export default function ExhibitMain(props){
         <h2></h2>
       </div>
       <ExhibitCard appProps={props}/>
+      
       <div className="dataInputForm">
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>

@@ -34,6 +34,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.image = require("./models/image.js")(sequelize, Sequelize);
-module.exports = db;
+//module.exports = db;
 db.dbTable = require("./models/database.js")(sequelize, Sequelize);
 module.exports = db;

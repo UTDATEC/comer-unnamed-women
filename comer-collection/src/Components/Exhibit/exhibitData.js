@@ -5,15 +5,16 @@ let tempArray;
 const exhibitData = [];
 
 const getData = () => {
-    fetch("http://localhost:9000/exhibitMain")
+    fetch("http://localhost:9000/exhibitUpload/Exhibit")
     .then(response => {
         return response.json();
     })
     .then(data => {
         tempArray = []
         for (var i = 0; i < data.length; i++) {
+            console.log(data[0][i].exhibit_name)
             exhibitData.push({
-                name: data[i].exhibit_name,
+                name: data[0][i].exhibit_name
             })
         }
     });
@@ -21,6 +22,7 @@ const getData = () => {
 
 getData()
 export default exhibitData;
+
 // const exhibitData = [
 //     {
 //         img: logo,

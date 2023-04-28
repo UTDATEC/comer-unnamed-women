@@ -8,10 +8,10 @@ const getExhibitById = async (req, res) =>
 {
     try
     {
-        const data = await sequelize.query("SELECT * FROM comerExhibitions")
+        const data = await sequelize.query("SELECT * FROM comerExhibitions;")
         if (data)
         {
-            return res.send(data)
+            return res.send(data);
         }
         return res.status(404).send('No table.');
     }
