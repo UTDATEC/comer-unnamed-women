@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import NavBar from '../NavBar/NavBar'
-import logo from './utd.jpg';
 
 const useStyles = makeStyles((theme) => ({
   abRoot: {
