@@ -80,38 +80,10 @@ handleSubmit(event) {
 
 
   
-<<<<<<< Updated upstream
 
   render() {
     return (
     <div className="Exhibit">
-=======
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const tableData = {
-      exhibit_name: form.title,
-      exhibit_notes: "",
-      exhibit_writeup: "",
-      exhibit_isPublished: 0,
-      createdAt: "",
-      updatedAt: ""
-    }
-
-    axios.post("http://localhost:9000/exhibitUpload/Exhibit", tableData)
-    .then((response) => {
-      console.log(response.tableData)
-    }).catch((error) => {
-      console.log(error)
-    });
-    //let newItem = {img: logo,  title: form.title}
-    // exhibitData.push(newItem);
-    setForm(INITIAL_STATE);
-  };
-
-
-  return (
-    <div>
->>>>>>> Stashed changes
       <NavBar />
       <div className="dataInputForm">
         <form onSubmit={this.handleSubmit}>
