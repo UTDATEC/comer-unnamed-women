@@ -4,6 +4,8 @@ const {sequelize} = require("../sequelize.js");
 const exhibit = db.exhibitTable;
 const Op = db.Sequelize.Op;
 
+// Runs SQL query for exhibit table
+
 const getExhibitById = async (req, res) => 
 {
     try

@@ -28,6 +28,7 @@ app.use(cookieParser());
 // This line allows the public files to be read from/rendered by path in the front end
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routes for querying data
 app.use("/upload", uploadRouter);
 app.use("/testAPI", testAPIRouter);
 app.use("/exhibitUpload", exhibitUploadRouter)

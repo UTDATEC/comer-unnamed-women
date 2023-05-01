@@ -4,6 +4,7 @@ import { useState } from 'react';
 let tempArray;
 const exhibitData = [];
 
+// Get data from MySQL database, then push to exhibitData object for display
 const getData = () => {
     fetch("http://localhost:9000/exhibitUpload/Exhibit")
     .then(response => {
@@ -22,17 +23,3 @@ const getData = () => {
 
 getData()
 export default exhibitData;
-
-// const exhibitData = [
-//     {
-//         img: logo,
-//         title: 'Exhibit A',
-//     },
-//     {
-//         img: logo,
-//         title: 'Exhibit B',
-//     }
-
-// ];
-
-// export default exhibitData;

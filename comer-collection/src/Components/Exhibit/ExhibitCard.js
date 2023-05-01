@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid #ccc',
     },
     titleBar: {
-        //styles for?
+        //styles for title of exhibit
         background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0000) 100%',
     },
     icon: {
@@ -92,6 +92,8 @@ export default function ExhibitCard(){
         })
     }
     */
+
+    /* if clicked, exhibits go to expanded view, however this exhibit expanded view has yet to be implemented */
     function handleClick(image){
         history.push("/ExpandedView")
     }
@@ -106,7 +108,7 @@ export default function ExhibitCard(){
                         <ListSubHeader component="div"></ListSubHeader>
                     </ImageListItem>
                     {exhibitData.map((item) => (
-                        /*this ILItem specifies attributes for the images that will be displayed*/  
+                        /*this ILItem specifies attributes for the exhibits that will be displayed*/  
                             <ImageListItem key={item.name} className={classes.shadow} style={{marginBottom: 10}}>                   
                                 <img 
                                     src={logo}
