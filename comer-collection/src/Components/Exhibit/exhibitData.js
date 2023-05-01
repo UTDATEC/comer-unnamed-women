@@ -11,7 +11,7 @@ const getData = () => {
     })
     .then(data => {
         tempArray = []
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i <= data.length; i++) {
             console.log(data[0][i].exhibit_name)
             exhibitData.push({
                 name: data[0][i].exhibit_name
