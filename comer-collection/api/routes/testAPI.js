@@ -1,13 +1,25 @@
 var express = require("express");
 var router = express.Router();
+const getImageById = require('../controllers/controller.js').getImageById
+const getImages = require('../controllers/controller.js').getImages
 
 const db = require("../sequelize.js");
 const Image = db.image;
 const Op = db.Sequelize.Op;
 
+// simple route
+router.get("/", (req, res) => {
+  res.json({ message: "Welcome to comer collection application." });
+});
+
+// simple route
+//router.get("/id", getImageById)
+
+router.get("/searchBy", getImages)
 
 // Search: uses all query parameter strings to find if the column has that string ANYWHERE in it
-router.get('/', function(req, res, next) {
+
+/*router.get('/searchBy', function(req, res, next) {
     Image.findAll({
       where: {
         title: {
@@ -54,6 +66,6 @@ router.get('/', function(req, res, next) {
             err.message || "Some error occurred while retrieving images."
         });
       });
-  });
+  });*/
 
 module.exports = router;
