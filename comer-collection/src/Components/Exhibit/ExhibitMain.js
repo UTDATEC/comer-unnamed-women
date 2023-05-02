@@ -40,12 +40,14 @@ export default function ExhibitMain(props){
     exhibitData.push(newItem);
     setForm(INITIAL_STATE);
   };
+  /* adding to exhibit table has not been completed. */
   return (
     <div>
       <NavBar />
       <div>
         <h2></h2>
       </div>
+      
       <ExhibitCard appProps={props}/>
       
       <div className="dataInputForm">
