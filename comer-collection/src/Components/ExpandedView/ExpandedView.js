@@ -66,12 +66,12 @@ function ExpandedView(props) {
 
 
 
-    <div class="align-right">
-      <button class = "myButton" style={{width:300}}>
+    <div className="align-right">
+      <button className = "myButton" style={{width:300}}>
         ADD TO AN EXHIBITION
       </button>
 
-      <button class = "myButton"  style={{width:300}}>
+      <button className = "myButton"  style={{width:300}}>
         EDIT TAGS
       </button>
     </div>
