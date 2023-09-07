@@ -1,5 +1,5 @@
 # comer-unnamed-women
-Project space for Spring 2022 and Spring 2023 UTDesign project for UTD's Comer Collection and xtine burrough's AN Archive of Unnamed Women
+Project space for Spring 2022, Spring 2023, and Fall 2023 UTDesign project for UTD's Comer Collection and xtine burrough's AN Archive of Unnamed Women
 
 How to set up and test/use what we have so far:
 We used mySQLWorkbench, but you can probably do it in any way that you can set up mySQL tables;
