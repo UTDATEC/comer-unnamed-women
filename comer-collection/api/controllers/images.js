@@ -69,12 +69,14 @@ const deleteImage = async (req, res, next) => {
 
 const assignArtistToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId);
+        const image = await Image.findByPk(req.params.imageId, {
+            include: Artist
+        });
         const artist = await Artist.findByPk(req.params.artistId);
             if(image && artist) {
                 try {
                     image.addArtist(artist);
-                    res.status(200).json({ data: image });
+                    res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));
                 }
@@ -84,4 +86,23 @@ const assignArtistToImage = async (req, res, next) => {
     })
 };
 
-module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage }
+const unassignArtistFromImage = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const image = await Image.findByPk(req.params.imageId, {
+            include: Artist
+        });
+        const artist = await Artist.findByPk(req.params.artistId);
+            if(image && artist) {
+                try {
+                    image.removeArtist(artist);
+                    res.sendStatus(204);
+                } catch(e) {
+                    next(createError(400, {debugMessage: e.message}));
+                }
+            }
+            else
+                next(createError(404));
+    })
+}
+
+module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage }

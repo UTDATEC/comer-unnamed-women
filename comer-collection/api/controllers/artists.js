@@ -1,7 +1,6 @@
 const createError = require('http-errors');
 const { Artist, Image } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
-const { Image } = require("../sequelize.js")
 
 const listArtists = async (req, res) => {
     const artists = await Artist.findAll({
