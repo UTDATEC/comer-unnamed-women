@@ -1,11 +1,11 @@
 const createError = require('http-errors');
-const { Image, Artist } = require("../sequelize.js");
+const { Image, Artist, Tag } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 
 
 const listImages = async (req, res, next) => {
     const images = await Image.findAll({
-        include: Artist
+        include: [Artist, Tag]
     });
     res.status(200).json({ data: images });
 };
@@ -104,5 +104,8 @@ const unassignArtistFromImage = async (req, res, next) => {
                 next(createError(404));
     })
 }
+
+// Assign tag to image
+// Unassign tag from imaage
 
 module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage }
