@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 
 
@@ -12,7 +12,6 @@ router.post("/images", createImage);
 router.get("/images/:imageId", getImage)
 router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
-
 router.put("/images/:imageId/artist/:artistId", assignArtistToImage);
 router.delete("/images/:imageId/artist/:artistId", unassignArtistFromImage);
 
