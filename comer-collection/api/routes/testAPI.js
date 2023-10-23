@@ -3,6 +3,8 @@ var router = express.Router();
 const getImageById = require('../controllers/controller.js').getImageById
 const getImages = require('../controllers/controller.js').getImages
 
+const { getAllArtists } = require("../controllers/controller.js");
+
 const db = require("../sequelize.js");
 const Image = db.image;
 const Op = db.Sequelize.Op;
@@ -14,6 +16,8 @@ router.get("/", (req, res) => {
 
 // simple route
 //router.get("/id", getImageById)
+
+router.get("/getAllArtists", getAllArtists);
 
 router.get("/searchBy", getImages)
 

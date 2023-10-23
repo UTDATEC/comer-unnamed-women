@@ -1,74 +1,87 @@
-module.exports = (sequelize, Sequelize) => {
-    // This file defines the fields (columns) of the table that will be added to the mySQL database
-    // the name (comerCollection2) is the name of the table in mySQL (will create a new one if the name does not exist)
-    const Image = sequelize.define("comerCollection2", {
-      accession_number: {
-        type: Sequelize.STRING
-      },
-      artist: {
-        type: Sequelize.STRING
-      },
-      title: {
-        type: Sequelize.STRING
-      },
-      date: {
-        type: Sequelize.STRING
-      },
-      medium: {
-        type: Sequelize.STRING
-      },
-      dimensions: {
-        type: Sequelize.STRING
-      },
-      edition: {
-        type: Sequelize.STRING
-      },
-      matsize: {
-        type: Sequelize.STRING
-      },
-      location: {
-        type: Sequelize.STRING
-      },
-      notes: {
-        type: Sequelize.STRING
-      },
-      photo: {
-        type: Sequelize.STRING
-      },
-      condition: {
-        type: Sequelize.STRING
-      },
-      value: {
-        type: Sequelize.STRING
-      },
-      source: {
-        type: Sequelize.STRING
-      },
-      reference: {
-        type: Sequelize.STRING
-      },
-      webfinsite: {
-        type: Sequelize.STRING
-      },
-      
-      tags: {
-        type: Sequelize.STRING
-      },
-      inscriptions: {
-        type: Sequelize.STRING
-      },
-      
-      copyright: {
-        type: Sequelize.STRING
-      },
-      subject: {
-        type: Sequelize.STRING
-      },
-      
-      image_file_name: {
-        type: Sequelize.STRING
-      },
+module.exports = (db) => {
+    const { sequelize, Sequelize } = db;
+    const Image = sequelize.define("Image", {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            initialAutoIncrement: 1,
+            primaryKey: true,
+            field: "image_id"
+        },
+        accessionNumber: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_acc_no"
+        },
+        title: {
+            type: Sequelize.TEXT('tiny'),
+            allowNull: false,
+            field: "image_title"
+        },
+        year: {
+            type: Sequelize.INTEGER,
+            field: "image_year"
+        },
+        additionalPrintYear: {
+            type: Sequelize.INTEGER,
+            field: "image_addl_print_year"
+        },
+        medium: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_medium"
+        },
+        width: {
+            type: Sequelize.DECIMAL(7, 4),
+            allowNull: false,
+            field: "image_width"
+        },
+        height: {
+            type: Sequelize.DECIMAL(7, 4),
+            allowNull: false,
+            field: "image_height"
+        },
+        matWidth: {
+            type: Sequelize.DECIMAL(7, 4),
+            field: "image_mat_width"
+        },
+        matHeight: {
+            type: Sequelize.DECIMAL(7, 4),
+            field: "image_mat_height"
+        },
+        edition: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_edition"
+        },
+        condition: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_condition"
+        },
+        valuationNotes: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_valuation"
+        },
+        otherNotes: {
+            type: Sequelize.TEXT('medium'),
+            field: "image_notes_other"
+        },
+        copyright: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_copyright"
+        },
+        subject: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_subject"
+        },
+        url: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_url"
+        },
+        location: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_location"
+        }
+    }, {
+        tableName: "comer_images"
     });
 
     return Image;
-  };
+}
