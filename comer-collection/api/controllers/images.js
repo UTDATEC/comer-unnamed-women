@@ -1,10 +1,12 @@
 const createError = require('http-errors');
-const { Image } = require("../sequelize.js");
+const { Image, Artist } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 
 
 const listImages = async (req, res, next) => {
-    const images = await Image.findAll();
+    const images = await Image.findAll({
+        include: Artist
+    });
     res.status(200).json({ data: images });
 };
 
@@ -22,7 +24,9 @@ const createImage = async (req, res, next) => {
 };
 
 const getImage = async (req, res, next) => {
-    const image = await Image.findByPk(req.params.imageId);
+    const image = await Image.findByPk(req.params.imageId, {
+        include: Artist
+    });
     if(image)
         res.status(200).json({ data: image });
     else

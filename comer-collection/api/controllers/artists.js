@@ -1,10 +1,12 @@
 const createError = require('http-errors');
-const { Artist } = require("../sequelize.js");
+const { Artist, Image } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 
 
 const listArtists = async (req, res) => {
-    const artists = await Artist.findAll();
+    const artists = await Artist.findAll({
+        include: Image
+    });
     res.status(200).json({ data: artists });
 };
 
@@ -22,7 +24,9 @@ const createArtist = async (req, res, next) => {
 };
 
 const getArtist = async (req, res, next) => {
-    const artist = await Artist.findByPk(req.params.artistId);
+    const artist = await Artist.findByPk(req.params.artistId, {
+        include: Image
+    });
     if(artist)
         res.status(200).json({ data: artist });
     else
