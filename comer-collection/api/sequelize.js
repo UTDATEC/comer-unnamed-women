@@ -12,7 +12,7 @@ const fs = require('node:fs');
 //import cKey from 'raw-loadeer!ls /Users/dwm160130/Library/Application\ Support/MySQL/Workbench/certificates/5B407BCB-CA91-49DD-8A10-9C2B437C6A75/client-key.pem';
 
 // Authentication object for querying from database
-const sequelize = new Sequelize('atc_sandbox','root','cs4485', {
+const sequelize = new Sequelize('atc_sandbox','root','FireworkStand11!', {
         //const sequelize = new Sequelize('atc_sandbox','yourname','yourpassword', {
         dialect: 'mysql',
         dialectOptions: {

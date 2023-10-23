@@ -1,10 +1,12 @@
 const createError = require('http-errors');
 const { Artist } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
-
+const { Image } = require("../sequelize.js")
 
 const listArtists = async (req, res) => {
-    const artists = await Artist.findAll();
+    const artists = await Artist.findAll({
+        include: [Image]
+    });
     res.status(200).json({ data: artists });
 };
 
