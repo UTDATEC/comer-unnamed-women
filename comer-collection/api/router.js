@@ -14,6 +14,8 @@ router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
 router.put("/images/:imageId/assignArtist/:artistId", assignArtistToImage);
 
+router.put("/images/:imageId/assignArtist/:artistId", assignArtistToImage);
+
 router.get("/artists", listArtists);
 router.post("/artists", createArtist);
 router.get("/artists/:artistId", getArtist);
