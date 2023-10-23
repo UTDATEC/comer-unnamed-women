@@ -1,3 +1,4 @@
+const createError = require('http-errors');
 
 const UserTypes = Object.freeze({
     PUBLIC: "PUBLIC",
