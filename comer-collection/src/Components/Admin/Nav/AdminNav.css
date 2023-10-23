@@ -1,0 +1,72 @@
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-top: 100px;
+}
+  
+body {
+    margin: 0;
+    padding: 0;
+}
+  
+.AdminProfile {
+    color: white;
+    padding-top: 30%;
+    display: flex;
+    justify-content: center;
+}
+  
+.AdminSideBar {
+    height: 100vh; 
+    width: 250px;
+    background-color: #E87500;
+
+}
+
+.AdminSideBarList {
+    height: auto;
+    padding: 0;
+    width: 100%;
+    
+}
+
+.AdminSideBarList .AdminSideBarRow{
+    width: 100%;
+    height: 50px; 
+    list-style-type: none;
+    margin: 0%;
+    display: flex;
+    flex: row;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.AdminSideBarList .AdminSideBarRow:hover {
+    cursor: pointer;
+    background-color: darkgreen;
+}
+
+.AdminSideBarList #active {
+    background-color: darkgreen;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.AdminSideBarRow #AdminIcon {
+    flex: 30%;
+    display: grid;
+    place-items: center;
+}
+
+.AdminSideBarRow #AdminTitle {
+    flex: 70%;
+}
+
+.icon-small {
+  width: 25px; 
+  height: 25px; 
+}
