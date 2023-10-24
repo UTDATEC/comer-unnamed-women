@@ -5,6 +5,7 @@ import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
 import ExhibitMain from '../Exhibit/ExhibitMain'
+import Login from '../Login/Login'
 import NavBar from '../NavBar/NavBar'
 
 import Admin from '../Admin/Admin'
@@ -77,6 +78,9 @@ export default function App() {
           <Route path='/Admin/Invite' element={<InviteForm />} />
 
 
+          <Route path="/login">
+            <Login/>
+          </Route>
           <Route path="/">
             <GridView searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
