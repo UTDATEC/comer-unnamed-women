@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
-const { createTag, updateTag, deleteTag } = require("./controller/tags.js");
+const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
 
 router.get("/images", listImages);
 router.post("/images", createImage);
@@ -28,7 +28,7 @@ router.post("/tags", createTag);
 router.put("/tags/:tagId", updateTag)
 router.delete("/tags/:tagId", deleteTag)
 
-router.use(["/images", "/artists"], (req, res, next) => {
+router.use(["/images", "/artists", "/tags"], (req, res, next) => {
     next(createError(405));
 })
 

@@ -105,7 +105,45 @@ const unassignArtistFromImage = async (req, res, next) => {
     })
 }
 
+const assignTagToImage = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const image = await Image.findByPk(req.params.imageId, {
+            include: Artist
+        });
+        const tag = await Tag.findByPk(req.params.tagId);
+            if(image && tag) {
+                try {
+                    image.addTag(tag);
+                    res.sendStatus(204);
+                } catch(e) {
+                    next(createError(400, {debugMessage: e.message}));
+                }
+            }
+            else
+                next(createError(404));
+    })
+};
+
+const unassignTagFromImage = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const image = await Image.findByPk(req.params.imageId, {
+            include: Artist
+        });
+        const tag = await Tag.findByPk(req.params.tagId);
+            if(image && tag) {
+                try {
+                    image.removeArtist(tag);
+                    res.sendStatus(204);
+                } catch(e) {
+                    next(createError(400, {debugMessage: e.message}));
+                }
+            }
+            else
+                next(createError(404));
+    })
+}
+
 // Assign tag to image
 // Unassign tag from imaage
 
-module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage }
+module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage }
