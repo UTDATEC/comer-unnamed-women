@@ -7,21 +7,13 @@
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
-    "multer": "^1.4.4",
-    "mysql2": "^2.3.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.3.1",
     "react-dom": "^17.0.2",
-    "react-native-web": "^0.17.7",
     "react-router-dom": "^5.3.1",
     "react-scripts": "^5.0.1",
-    "sequelize": "^6.19.0",
-    "web-vitals": "^2.1.4",
-    "zlib": "^1.0.5"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
