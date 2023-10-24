@@ -1,5 +1,6 @@
 const createError = require('http-errors');
-const { Tag } = require("../sequelize.js")
+const { Tag } = require("../sequelize.js");
+const { adminOperation } = require('../security.js');
 
 const listTags = async (req, res, next) => {
     const tags = await Tag.findAll();
@@ -8,7 +9,6 @@ const listTags = async (req, res, next) => {
 
 const createTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const tag = await Tag.findByPk(req.params.tagId)
         try {
             if(req.body.id)
                 throw new Error("Tag id should not be included when creating a tag")
@@ -22,13 +22,36 @@ const createTag = async (req, res, next) => {
 
 const updateTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-
         try {
-            
+            const tag = await Tag.findByPk(req.params.tagId)
+            if(tag) {
+                console.log(req.body.id, req.params.artistId);
+                if(req.body.id && req.body.id !== req.params.tagId) {
+                    throw new Error("Tag id in request body does not match Tag id in URL")
+                }
+                tag.set(req.body)
+                await tag.save();
+                res.status(200).json({ data: artist })
+            }
+            else
+                next(createError(404));
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}));
         }
     })
-}
-// Admin only
-// Create tag
-// Update tag
-// Delete tag
+};
+
+const deleteTag = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const tag = await Tag.findByPk(req.params.tagId);
+        if(artist) {
+            await tag.destroy();
+            res.sendStatus(204);
+        }
+        else
+            next(createError(404))
+    })
+};
+
+module.exports = { listTags, createTag, updateTag, deleteTag }
