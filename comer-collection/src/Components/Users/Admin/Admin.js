@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom'; // Import Route from react-router-dom
-import NavBar from '../NavBar/NavBar';
-import AdminNav from './Nav/AdminNav';
-import StudentList from './StudentList/StudentList';
-import ExhibitionList from './ExhibitionList/ExhibitionList';
-import ImageList from './ImageList/ImageList';
-import InviteForm from './Invite/InviteForm';
-import Profile from './Profile/Profile';
+import NavBar from '../../NavBar/NavBar';
+import AdminNav from './AdminNav';
+import CuratorList from './CuratorList';
+import ExhibitionList from './ExhibitionList';
+import ImageList from './ImageList';
+import InviteForm from './InviteForm';
+import Profile from './Profile';
 
 
 function Admin() {
@@ -28,6 +28,7 @@ function Admin() {
 
       <NavBar />
 
+
       <div style={containerStyle}>
 
         <div style={adminNavStyle}>
@@ -40,8 +41,8 @@ function Admin() {
             <Profile />
           </Route>
 
-          <Route path="/Admin/StudentList">
-            <StudentList />
+          <Route path="/Admin/CuratorList">
+            <CuratorList />
           </Route>
           
           <Route path="/Admin/ExhibitionList">

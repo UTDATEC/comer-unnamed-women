@@ -1,19 +1,26 @@
 import React from 'react';
-import AdminNav from '../Nav/AdminNav';
-import "./Profile.css"
+import "../Profile.css"
 
-function UserProfileCard({ fullName, userType }) {
+function UserProfileCard({ netid, fullName, password, userType }) {
   return (
     <div className="user-card-container">
       <div className="user-profile-card">
         
-        <h2>User Information</h2>
+        <h2 id='text-center'>User Information</h2>
 
         <div className="user-info">
-
+        <div>
+            <strong>Net ID:</strong>
+            <span>{netid}</span>
+          </div>
           <div>
             <strong>Name:</strong>
             <span>{fullName}</span>
+          </div>
+          <div>
+            <strong>Password:</strong>
+            <span>{password}</span>
+            <span><button className='RedButton'>Reset Password</button></span>
           </div>
           <div>
             <strong>User Type:</strong>
@@ -31,7 +38,7 @@ function Profile() {
   return (
     <div className="ProfileContainer">
 
-      <UserProfileCard fullName="John Doe" userType="Admin" />
+      <UserProfileCard netid='abc1234567' fullName="John Doe" password='********' userType="Admin" />
 
     </div>
   );

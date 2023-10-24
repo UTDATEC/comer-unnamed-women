@@ -21,6 +21,8 @@
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 10px;
 }
 
 .table-name {
@@ -74,4 +76,8 @@
 .GreenButton:hover {
   background-color: darkgreen;
   font-weight: bold;
+}
+
+#top-margin {
+  margin-top: 20px;
 }

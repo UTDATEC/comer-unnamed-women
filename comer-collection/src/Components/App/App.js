@@ -8,12 +8,8 @@ import ExhibitMain from '../Exhibit/ExhibitMain'
 import Login from '../Login/Login'
 import NavBar from '../NavBar/NavBar'
 
-import Admin from '../Admin/Admin'
-import Profile from '../Admin/Profile/Profile';
-import StudentList from '../Admin/StudentList/StudentList';
-import ExhibitionList from '../Admin/ExhibitionList/ExhibitionList';
-import ImageList from '../Admin/ImageList/ImageList';
-import InviteForm from '../Admin/Invite/InviteForm';
+import Admin from '../Users/Admin/Admin'
+import Curator from '../Users/Curator/Curator'
 
 import React, { Component, useEffect, useState } from 'react';
 
@@ -71,12 +67,8 @@ export default function App() {
           </Route>
 
           <Route path="/Admin"><Admin /></Route>
-          <Route path='/Admin/Profile' element={<Profile />} />
-          <Route path='/Admin/StudentList' element={<StudentList />} />
-          <Route path='/Admin/ImageList' element={<ImageList />} />
-          <Route path='/Admin/ExhibitionList' element={<ExhibitionList />} />
-          <Route path='/Admin/Invite' element={<InviteForm />} />
 
+          <Route path="/Curator"><Curator /></Route>
 
           <Route path="/login">
             <Login/>
@@ -85,6 +77,7 @@ export default function App() {
             <GridView searchParams={searchParams} setSelectedImage={setSelectedImage}/>
           </Route>
         </Switch>
+        
       </BrowserRouter>
     </div>
   );

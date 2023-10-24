@@ -1,35 +1,37 @@
 import React from 'react'
-import "./AdminNavData"
-import { AdminNavData } from './AdminNavData';
-import "./AdminNav.css"
+import "./CuratorNavData"
+import { CuratorNavData } from './CuratorNavData';
+import "../AccountNav.css"
 
-function AdminNav() {
+function CuratorNav() {
 
   return (
 
-    <div className='AdminSideBar'> 
-      <div className='AdminProfile'>
+    <div className='SideBar'> 
 
-        <h2>Admin</h2>
+      <div className='Profile'>
+
+        <h2>Curator</h2>
       
       </div>
 
-      <ul className='AdminSideBarList'>
-        {AdminNavData.map ((val, key) => {
+      <ul className='SideBarList'>
+        {CuratorNavData.map ((val, key) => {
           return ( 
             <li key={key} 
-            className='AdminSideBarRow'
+            className='SideBarRow'
 
 
             // color stay wherever the current pathname
             id={window.location.pathname === val.link ? "active" : ""}
             onClick = {() => {
+              
               // change path when clicking
               window.location.pathname = val.link
                 }
               }>
-              <div id='AdminIcon'>{val.icon}</div>
-              <div id='AdminTitle'>{val.title}</div>
+              <div id='icon'>{val.icon}</div>
+              <div id='title'>{val.title}</div>
             </li>
           )
       })}
@@ -38,4 +40,4 @@ function AdminNav() {
   )
 }
 
-export default AdminNav
+export default CuratorNav
