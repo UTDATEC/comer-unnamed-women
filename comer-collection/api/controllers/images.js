@@ -107,7 +107,7 @@ const unassignArtistFromImage = async (req, res, next) => {
 
 const assignTagToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Tag.findByPk(req.params.imageId, {
+        const image = await Image.findByPk(req.params.imageId, {
             include: Artist
         });
         const tag = await Tag.findByPk(req.params.tagId);
