@@ -69,9 +69,7 @@ const deleteImage = async (req, res, next) => {
 
 const assignArtistToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: Artist
-        });
+        const image = await Image.findByPk(req.params.imageId);
         const artist = await Artist.findByPk(req.params.artistId);
             if(image && artist) {
                 try {
@@ -88,9 +86,7 @@ const assignArtistToImage = async (req, res, next) => {
 
 const unassignArtistFromImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: Artist
-        });
+        const image = await Image.findByPk(req.params.imageId);
         const artist = await Artist.findByPk(req.params.artistId);
             if(image && artist) {
                 try {
@@ -107,9 +103,7 @@ const unassignArtistFromImage = async (req, res, next) => {
 
 const assignTagToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: Artist
-        });
+        const image = await Image.findByPk(req.params.imageId);
         const tag = await Tag.findByPk(req.params.tagId);
             if(image && tag) {
                 try {
@@ -126,9 +120,7 @@ const assignTagToImage = async (req, res, next) => {
 
 const unassignTagFromImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: Artist
-        });
+        const image = await Image.findByPk(req.params.imageId);
         const tag = await Tag.findByPk(req.params.tagId);
             if(image && tag) {
                 try {
