@@ -1,0 +1,133 @@
+/* Container for the entire content */
+.containerInvite {
+  display: flex;
+  padding-top: 7%;
+  max-width: 500px;
+}
+
+
+/* Style the invite form on the right with added padding */
+.invite-form {
+  flex: 2;
+  margin-left: 10px;
+}
+
+.InviteForm {
+  margin: 0 auto;
+}
+
+.form-group {
+  margin: 15px 0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+h1 {
+  text-align: center;
+  font-size: 45px;
+
+}
+
+.EmailAddresses {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* To align the "Clear" button properly */
+.ClearButton {
+  margin-top: 10px;
+  display: block;
+}
+
+
+/* Add Email button (green) */
+.green-button {
+  background-color: green; /* Green background color */
+  color: white; /* White text color */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px; /* Add some margin for spacing */
+}
+
+.green-button:hover {
+  background-color: darkgreen; /* Darker green on hover */
+  font-weight: bold; /* Make the text bold on hover */
+}
+
+/* Clear button (red) */
+.red-button {
+  background-color: red; /* Red background color */
+  color: white; /* White text color */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  background-color: darkred; /* Darker red on hover */
+  font-weight: bold; /* Make the text bold on hover */
+}
+
+/* Centered button container */
+.center-button {
+  text-align: center; /* Center the button within this container */
+}
+
+/* Rounded button class */
+.rounded-button {
+  border-radius: 10px; /* Adjust the value to control the roundness */
+}
+
+/* Style text input boxes */
+input[type="text"] {
+  text-indent: 10px;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #e5e5e5e8;
+  color: black;
+  font-size: 14px;
+}
+
+/* For screens smaller than 600px (adjust the breakpoint as needed) */
+@media (max-width: 600px) {
+  /* Adjust the container width and input width for smaller screens */
+  .containerInvite {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center-align items vertically */
+    margin-top: 20%;
+  }
+  
+  .invite-form {
+    flex: 1; /* Make the form take up full width */
+    margin-left: 0; /* Remove left margin */
+  }
+
+  input[type="text"] {
+    max-width: 100%; /* Allow the input to take the full width of the container */
+  }
+}
+
+
+
+
+

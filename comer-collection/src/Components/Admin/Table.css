@@ -1,0 +1,77 @@
+.ListContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.TableContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-top: 70px;
+}
+
+.AdminTable {
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.Table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.table-name {
+  font-size: 35px;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.Table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.Table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.RedButton {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 2px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.RedButton:hover {
+  background-color: #cc0000;
+  font-weight: bold;
+}
+
+.GreenButton {
+  background-color: rgb(0, 149, 0);
+  color: #fff;
+  border: none;
+  padding: 2px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.GreenButton:hover {
+  background-color: darkgreen;
+  font-weight: bold;
+}
