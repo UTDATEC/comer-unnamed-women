@@ -28,7 +28,7 @@ router.post("/tags", createTag);
 router.put("/tags/:tagId", updateTag)
 router.delete("/tags/:tagId", deleteTag)
 
-router.use(["/images", "/artists"], (req, res, next) => {
+router.use(["/images", "/artists", "/tags"], (req, res, next) => {
     next(createError(405));
 })
 
