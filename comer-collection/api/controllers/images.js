@@ -25,7 +25,7 @@ const createImage = async (req, res, next) => {
 
 const getImage = async (req, res, next) => {
     const image = await Image.findByPk(req.params.imageId, {
-        include: Artist
+        include: [Artist, Tag]
     });
     if(image)
         res.status(200).json({ data: image });
