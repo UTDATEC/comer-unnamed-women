@@ -31,7 +31,7 @@ const updateTag = async (req, res, next) => {
                 }
                 tag.set(req.body)
                 await tag.save();
-                res.status(200).json({ data: artist })
+                res.status(200).json({ data: tag })
             }
             else
                 next(createError(404));
