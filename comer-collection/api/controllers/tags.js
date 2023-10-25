@@ -8,7 +8,6 @@ const listTags = async (req, res, next) => {
 
 const createTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const tag = await Tag.findByPk(req.params.tagId)
         try {
             if(req.body.id)
                 throw new Error("Tag id should not be included when creating a tag")
@@ -22,9 +21,22 @@ const createTag = async (req, res, next) => {
 
 const updateTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-
         try {
-            
+            const tag = await Tag.findByPk(req.params.tagId)
+            if(tag) {
+                console.log(req.body.id, req.params.tagId);
+                if(req.body.id && req.body.id !== req.params.tagId) {
+                    throw new Error("Tag id in request body does not match Artist id in URL")
+                }
+                tag.set(req.body);
+                await tag.save();
+                res.status(200).json({ data: tag })
+            }
+            else
+                next(createError(404));
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}))
         }
     })
 }

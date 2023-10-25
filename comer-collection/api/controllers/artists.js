@@ -41,7 +41,7 @@ const updateArtist = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.artistId) {
                     throw new Error("Artist id in request body does not match Artist id in URL");
                 }
-                artist.set(req.body)
+                artist.set(req.body);
                 await artist.save();
                 res.status(200).json({ data: artist });
             }
