@@ -30,11 +30,11 @@ router.put("/tags/:tagId", updateTag)
 router.delete("/tags/:tagId", deleteTag)
 
 router.get("/users", listUsers);
-router.post("/tags", createUser);
-router.put("/tags/:tagId", updateUser)
-router.delete("/tags/:tagId", deleteUser)
+router.post("/users", createUser);
+router.put("/users/:userId", updateUser)
+router.delete("/users/:userId", deleteUser)
 
-router.use(["/images", "/artists", "/tags", "/user"], (req, res, next) => {
+router.use(["/images", "/artists", "/tags", "/users"], (req, res, next) => {
     next(createError(405));
 })
 
