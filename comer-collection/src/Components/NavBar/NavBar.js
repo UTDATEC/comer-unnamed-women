@@ -59,6 +59,9 @@ export default function NavBar() {
                         &nbsp;&nbsp;
                         <Button className="myButton" onClick={() => history.push('/searchBy')}>
                             <div className={classes.buttonText}>Search</div></Button>
+                        &nbsp;&nbsp;
+                        <Button className="myButton" onClick={() => history.push('/login')}>
+                            <div className={classes.buttonText}>Login</div></Button>
                     </div>
                 </Toolbar>
             </AppBar>

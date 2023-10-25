@@ -5,7 +5,12 @@ import ExpandedView from '../ExpandedView/ExpandedView'
 import SearchBy from '../SearchBy/SearchBy'
 import DataInput from '../DataInput/DataInputForm'
 import ExhibitMain from '../Exhibit/ExhibitMain'
+import Login from '../Login/Login'
 import NavBar from '../NavBar/NavBar'
+
+import Admin from '../Users/Admin/Admin'
+import Curator from '../Users/Curator/Curator'
+
 import React, { Component, useEffect, useState } from 'react';
 
 import { PrivateRoute } from '../Routes/PrivateRoute';
@@ -60,10 +65,19 @@ export default function App() {
           <Route path="/DataInputForm">
             <DataInput/>
           </Route>
-          <PrivateRoute path="/">
+
+          <Route path="/Admin"><Admin /></Route>
+
+          <Route path="/Curator"><Curator /></Route>
+
+          <Route path="/login">
+            <Login/>
+          </Route>
+          <Route path="/">
             <GridView searchParams={searchParams} setSelectedImage={setSelectedImage}/>
-          </PrivateRoute>
+          </Route>
         </Switch>
+        
       </BrowserRouter>
     </div>
   );
