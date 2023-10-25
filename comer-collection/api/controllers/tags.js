@@ -25,13 +25,13 @@ const updateTag = async (req, res, next) => {
         try {
             const tag = await Tag.findByPk(req.params.tagId)
             if(tag) {
-                console.log(req.body.id, req.params.artistId);
+                console.log(req.body.id, req.params.tagId);
                 if(req.body.id && req.body.id !== req.params.tagId) {
                     throw new Error("Tag id in request body does not match Tag id in URL")
                 }
                 tag.set(req.body)
                 await tag.save();
-                res.status(200).json({ data: artist })
+                res.status(200).json({ data: tag })
             }
             else
                 next(createError(404));
@@ -45,7 +45,7 @@ const updateTag = async (req, res, next) => {
 const deleteTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const tag = await Tag.findByPk(req.params.tagId);
-        if(artist) {
+        if(tag) {
             await tag.destroy();
             res.sendStatus(204);
         }

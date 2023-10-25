@@ -44,6 +44,7 @@ const db = {
 db.Artist = require("./models/artist.js")(db);
 db.Image = require("./models/image.js")(db);
 db.Tag = require("./models/tag.js")(db);
+db.User = require(".models/user.js")(db);
 
 
 db.Artist.belongsToMany(db.Image, { through: "comer_image_credits", foreignKey: "artist_id" });
