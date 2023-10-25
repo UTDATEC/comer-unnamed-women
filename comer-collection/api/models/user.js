@@ -1,6 +1,6 @@
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
-    const Tag = sequelize.define("User", {
+    const User = sequelize.define("User", {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
@@ -19,7 +19,7 @@ module.exports = (db) => {
         },
         pw_salt: {
             type: Sequelize.BLOB('tiny'),
-            field: "user_pw_setl"
+            field: "user_pw_salt"
         },
         pw_temp: {
             type: Sequelize.TEXT('tiny'),
