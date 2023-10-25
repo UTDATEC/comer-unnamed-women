@@ -51,10 +51,10 @@ class InviteForm extends Component {
           
           <div className="form-group">
             <label>
-              Instructions: <br></br>
-              Input NetID and press <strong>Enter</strong> or <strong>Add Email</strong> to add <br></br>
-              Click <strong>Invite</strong> after finishing adding. <br></br>
-              @utdallas.edu will be automically added.
+              Instructions : <br></br>
+              1. Input Net ID and press <strong>Enter</strong> or <strong>Add Email</strong> to add <br></br>
+              <i>@utdallas.edu</i> will be automically added. <br></br>
+              2. Click <strong>Invite</strong> after finish adding.
             </label>
             <div>
               <input
@@ -75,7 +75,7 @@ class InviteForm extends Component {
 
           <div className="form-group">
             <div>
-              <label>Email Addresses with @utdallas.edu</label>
+              <label>Email Addresses :</label>
             </div>
             <textarea
               value={emailList.join('\n')}
