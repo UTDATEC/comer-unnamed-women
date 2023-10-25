@@ -1,13 +1,13 @@
 import React from 'react';
-import "./AdminNav.css";
+import "../AccountNav.css";
 
 // Import image files
-import profileIcon from './image/profileIcon.png';
-import StudentIcon from './image/studentIcon.png';
-import ExhibitionIcon from './image/exhibitionIcon.png';
-import ImageIcon from './image/imageIcon.png';
-import InviteIcon from './image/inviteIcon.png';
-import LogoutIcon from './image/logoutIcon.png';
+import profileIcon from '../image/profileIcon.png';
+import StudentIcon from '../image/studentIcon.png';
+import ExhibitionIcon from '../image/exhibitionIcon.png';
+import ImageIcon from '../image/imageIcon.png';
+import InviteIcon from '../image/inviteIcon.png';
+import LogoutIcon from '../image/logoutIcon.png';
 
 export const AdminNavData = [
     {
@@ -16,9 +16,9 @@ export const AdminNavData = [
         link: "/Admin/Profile"
     },
     {
-        title: "Student",
-        icon: <img src={StudentIcon} alt="StudentIcon" className="icon-small" />,
-        link: "/Admin/StudentList"
+        title: "Curator",
+        icon: <img src={StudentIcon} alt="CuratorIcon" className="icon-small" />,
+        link: "/Admin/CuratorList"
     },
     {
         title: "Exhibition",

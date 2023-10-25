@@ -3,18 +3,7 @@ import axios from 'axios';
 import "../Table.css"
 import { Link } from 'react-router-dom';
 
-function StudentList() {
-  const [admin, setAdmin] = useState([])
-
-  // Place the useEffect hook at the top level of the component
-  useEffect(() => {
-    axios.get('http://localhost:8081/')
-      .then(res => {
-        // Set the state with the data received from the server
-        setAdmin(res.data);
-      })
-      .catch(err => console.error(err))
-  }, []);
+function CuratorList() {
 
   // Function to format ISO 8601 date to a readable format (YYYY-MM-DD)
   const formatISODate = (isoDate) => {
@@ -32,7 +21,11 @@ function StudentList() {
 
     const differenceInTime = deactivation.getTime() - today.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    return differenceInDays;
+    if (differenceInDays < 0) {
+      return "Expired";
+    } else {
+      return differenceInDays.toString();
+    }
   };
 
   // Function to handle the Deactivate button click and show a confirmation dialog
@@ -57,12 +50,13 @@ function StudentList() {
 
         <div className='AdminTable'>
 
-          <h2 className="table-name">List of Students</h2>
+          <h2 className="table-name">List of Curators</h2>
 
           <table className='Table'>
 
             <thead>
               <tr>
+                <th>Status</th>
                 <th>Net ID</th>
                 <th>Name</th>
                 <th>Exhibition</th>
@@ -89,15 +83,28 @@ function StudentList() {
               ))} */}
               {/* testing data */}
               <tr> 
-                <td>"abc1234567"</td>
-                <td>"John Doe"</td>
-                <td className='text-center'>"20"</td>
-                <td className='text-center'>"2024-01-01"</td>
+                <td className='ActiveText'>Active</td>
+                <td>abc1234567</td>
+                <td>John Doe</td>
+                <td className='text-center'>20</td>
+                <td className='text-center'>2024-01-01</td>
                 <td className='text-center'>{calculateDeactivationInDays("2024-01-01")}</td>
                 <td>
                   <button className='RedButton' onClick={handleDeactivateClick}>
                     Deactivate
                   </button>
+                </td>
+              </tr>
+
+              <tr> 
+                <td className='InactiveText'>Inactive</td>
+                <td>bbc1234567</td>
+                <td>Test Test</td>
+                <td className='text-center'>0</td>
+                <td className='text-center'>2023-01-01</td>
+                <td className='text-center'>{calculateDeactivationInDays("2023-01-01")}</td>
+                <td>
+
                 </td>
               </tr>
             </tbody>
@@ -108,4 +115,4 @@ function StudentList() {
   );
 }
 
-export default StudentList;
+export default CuratorList;

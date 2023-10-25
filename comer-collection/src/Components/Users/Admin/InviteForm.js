@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./InviteForm.css"; // Import CSS styles
+import "../InviteForm.css"; 
 
 
 class InviteForm extends Component {
@@ -44,7 +44,7 @@ class InviteForm extends Component {
     const { email, emailList } = this.state;
 
     return (
-      <div className="containerInvite">
+      <div className="container-invite">
 
         <div className="invite-form">
           <h1>Invite Form</h1>
@@ -53,7 +53,8 @@ class InviteForm extends Component {
             <label>
               Instructions: <br></br>
               Input NetID and press <strong>Enter</strong> or <strong>Add Email</strong> to add <br></br>
-              Click <strong>Invite</strong> after finishing adding.
+              Click <strong>Invite</strong> after finishing adding. <br></br>
+              @utdallas.edu will be automically added.
             </label>
             <div>
               <input

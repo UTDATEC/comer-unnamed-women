@@ -4,7 +4,7 @@ import "../Table.css"
 import { Link } from 'react-router-dom';
 
 
-function ImageList() {
+function Exhibition() {
   const [admin, setAdmin] = useState([])
 
   // Place the useEffect hook at the top level of the component
@@ -21,14 +21,13 @@ function ImageList() {
     <div className='ListContainer'>
       <div className='TableContainer'>
         <div className='AdminTable'>
-          <h2 className="table-name">List of Images</h2>
+          <h2 className="table-name">List of Exhibition</h2>
 
           <table className='Table'>
 
             <thead>
               <tr>
-                <th>Image Name</th>
-                <th>Arist</th>
+                <th>Exhibition Name</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -40,40 +39,41 @@ function ImageList() {
                   <td>{data.netid}</td>
                   <td>{data.fullname}</td>
                   <td>
-                    <Link to="/ViewImages" className='GreenButton'>
-                      View
+                    <Link to="/DeleteExhibition" className='RedButton'>
+                      Delete
                     </Link>
                   </td>
-                  <td>
-                    <Link to="/EditImages" className='GreenButton'>
-                      Edit
-                    </Link>
-                  </td>
+
                 </tr>
               ))} */}
 
               <tr>
-                <td>Image Name</td>
-                <td>John Doe</td>
+                <td>Exhibition Name</td>
                 <td>
-                    <Link to="/ViewImages" className='GreenButton'>
-                      View
-                    </Link>
-                  </td>
-                  <td>
-                    <Link to="/EditImages" className='GreenButton'>
+                    <Link to="/DeleteExhibition" className='GreenButton'>
                       Edit
                     </Link>
-                  </td>
+                </td>
+                <td>
+                    <Link to="/DeleteExhibition" className='RedButton'>
+                      Delete
+                    </Link>
+                </td>
+
               </tr>
-
-
             </tbody>
           </table>
+
         </div>
+
+        <div>
+      <button className='GreenButton' id='top-margin'>Create New Exhibition</button>
       </div>
+
+      </div>
+
     </div>
   );
 }
 
-export default ImageList;
+export default Exhibition;

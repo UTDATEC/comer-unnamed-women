@@ -5,17 +5,7 @@ import { Link } from 'react-router-dom';
 
 
 function ExhibitionList() {
-  const [admin, setAdmin] = useState([])
 
-  // Place the useEffect hook at the top level of the component
-  useEffect(() => {
-    axios.get('http://localhost:8081/')
-      .then(res => {
-        // Set the state with the data received from the server
-        setAdmin(res.data);
-      })
-      .catch(err => console.error(err))
-  }, []);
 
   return (
     <div className='ListContainer'>
