@@ -6,13 +6,13 @@ const { User } = require('../sequelize')
 
 const signUp = async(req, res, next) => {
     try {
-        //const { email, password } = req.body;
-        const user = await User.findOne({ where: { email: req.body.email } });
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email: email } });
         //getDbConnection?
         if (user) {
 
         bcrypt.genSalt(10, function(err, salt) {
-            bcrypt.hash(req.body.password, salt, function(err, hash){
+            bcrypt.hash(password, salt, function(err, hash){
                 user.set({pw_hash: hash, pw_salt: salt});
             });
         });
@@ -20,7 +20,6 @@ const signUp = async(req, res, next) => {
         await user.save();
 
         jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60*60), //Creates expiration in 1 hour
             id: user.id,
             email: user.email,
             isVerified: false

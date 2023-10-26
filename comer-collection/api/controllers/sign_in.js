@@ -5,14 +5,14 @@ const { User } = require('../sequelize')
 
 const signIn = async(req, res, next) => {
     try {
-        //const { email, password } = req.body;
+        const { email, password } = req.body;
         console.log(email, password)
         console.log("Hello")
-        const user = await User.findOne({ where: { email: req.body.email } });
+        const user = await User.findOne({ where: { email: email } });
         //getDbConnection?
         if (user) {
 
-        bcrypt.compare(req.body.password, user.pw_hash, function(err, result) {
+        bcrypt.compare(password, user.pw_hash, function(err, result) {
             if (err) {
                 next(createError(400, {debugMessage: err.message}));
             }
