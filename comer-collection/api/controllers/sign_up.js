@@ -1,24 +1,26 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+//const dotenv = require('dotenv').config()
 const createError = require('http-errors');
 const { User } = require('../sequelize')
 
-const signUpRoute = async(req, res, next) => {
+const signUp = async(req, res, next) => {
     try {
-        const { user_email, password } = req.body;
-        const user = await User.findOne({ where: { email: user_email}});
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email: email } });
         //getDbConnection?
         if (user) {
-            res.sendStatus(409);
 
-        const passwordHash = await bcrypt.hash(password, 10)
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash){
+                user.set({pw_hash: hash, pw_salt: salt});
+            });
+        });
 
-        user.set({pw_hash: passwordHash});
         await user.save();
-        //user.pw_salt = ?
-        //Need to add salt
-            
+
         jwt.sign({
+            exp: Math.floor(Date.now() / 1000) + (60*60), //Creates expiration in 1 hour
             id: user.id,
             email: user.email,
             isVerified: false
@@ -29,11 +31,11 @@ const signUpRoute = async(req, res, next) => {
         },
         (err, token) => {
             if (err) {
-                return res.status(500).send(err);
+                next(createError(500, {debugMessage: err.message}));
             }
+            console.log({ token })
             res.status(200).json({ token })
         });
-
 
         } else {
             next(createError(404));
@@ -44,4 +46,4 @@ const signUpRoute = async(req, res, next) => {
     }
 };
 
-module.exports = { signUpRoute }
+module.exports = { signUp }

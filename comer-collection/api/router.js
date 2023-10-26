@@ -7,7 +7,9 @@ const { listImages, createImage, getImage, updateImage, deleteImage, assignArtis
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser } = require("./controllers/users.js");
-const { signUpRoute } = require("./controllers/sign_up.js")
+const { signUp } = require("./controllers/sign_up.js")
+const { signIn } = require("./controllers/sign_in.js")
+
 
 router.get("/images", listImages);
 router.post("/images", createImage);
@@ -35,9 +37,11 @@ router.post("/users", createUser);
 router.put("/users/:userId", updateUser)
 router.delete("/users/:userId", deleteUser)
 
-router.put("/signUp", signUpRoute);
+router.put("/signUp", signUp);
 
-router.use(["/images", "/artists", "/tags", "/users", "/sign_up"], (req, res, next) => {
+router.put("/signIn", signIn);
+
+router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/sign_in"], (req, res, next) => {
     next(createError(405));
 })
 
