@@ -101,6 +101,21 @@ const unassignArtistFromImage = async (req, res, next) => {
     })
 }
 
+const getTags = async (req, res, next) => {
+    const image = await Image.findByPk(req.params.imageId, {
+        include: Tag
+    });
+    if(image) {
+        try {
+            res.status(200).json({ tags: image.Tags });
+        } catch(e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    }
+    else
+        next(createError(404));
+}
+
 const assignTagToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const image = await Image.findByPk(req.params.imageId);
@@ -138,4 +153,4 @@ const unassignTagFromImage = async (req, res, next) => {
 // Assign tag to image
 // Unassign tag from imaage
 
-module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage }
+module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }
