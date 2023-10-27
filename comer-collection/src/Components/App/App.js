@@ -8,7 +8,6 @@ import ExhibitMain from '../Exhibit/ExhibitMain';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { Component, useEffect, useState } from 'react';
-import Login from '../Login/Login';
 
 export default function App() {
   const [searchParams, setSearchParams] = useState({

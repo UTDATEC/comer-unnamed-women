@@ -25,7 +25,7 @@ export default class Login extends Component {
             <input
               type="text"
               name="email"
-              // value={this.state.value}
+              // value={this.state.value} (no functionality yet)
               // onChange={this.handleChange}
               // required
             />
