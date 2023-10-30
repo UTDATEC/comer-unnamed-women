@@ -7,7 +7,7 @@ const { listImages, createImage, getImage, updateImage, deleteImage, assignArtis
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser } = require("./controllers/users.js");
-const { signUp } = require("./controllers/sign_up.js")
+const { changePassword } = require("./controllers/change_password.js")
 const { signIn } = require("./controllers/sign_in.js")
 
 
@@ -39,11 +39,11 @@ router.put("/users/:userId", updateUser)
 router.delete("/users/:userId", deleteUser)
 router.put("/getUser", getUser)
 
-router.put("/signUp", signUp);
+router.put("/changePassword", changePassword);
 
 router.put("/signIn", signIn);
 
-router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/sign_in"], (req, res, next) => {
+router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
     next(createError(405));
 })
 
