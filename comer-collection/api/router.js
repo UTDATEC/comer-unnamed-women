@@ -17,11 +17,11 @@ router.post("/images", createImage);
 router.get("/images/:imageId", getImage)
 router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
-router.put("/images/:imageId/artist/:artistId", assignArtistToImage);
-router.delete("/images/:imageId/artist/:artistId", unassignArtistFromImage);
+router.put("/images/:imageId/artists/:artistId", assignArtistToImage);
+router.delete("/images/:imageId/artists/:artistId", unassignArtistFromImage);
 // router.get("/images/:imageId/tag", getTags)
-router.put("/images/:imageId/tag/:tagId", assignTagToImage);
-router.delete("/images/:imageId/tag/:tagId", unassignTagFromImage);
+router.put("/images/:imageId/tags/:tagId", assignTagToImage);
+router.delete("/images/:imageId/tags/:tagId", unassignTagFromImage);
 
 router.get("/artists", listArtists);
 router.post("/artists", createArtist);
@@ -35,18 +35,18 @@ router.put("/tags/:tagId", updateTag)
 router.delete("/tags/:tagId", deleteTag)
 
 router.get("/users", listUsers);
+router.get("/users/:userId", getUser)
 router.post("/users", createUser);
 router.put("/users/:userId", updateUser)
 router.delete("/users/:userId", deleteUser)
-router.put("/getUser", getUser)
 
 router.get("/courses", listCourses);
+router.get("/courses/:courseId", getCourse);
 router.post("/courses", createCourse);
-router.put("/courses/:courseId", updateCourse)
-router.delete("/courses/:courseId", deleteCourse)
-router.put("/getCourse", getCourse)
-router.put("/courses/:courseId/user/:userId", assignUserToCourse);
-router.delete("/courses/:courseId/user/:userId", unassignUserFromCourse);
+router.put("/courses/:courseId", updateCourse);
+router.delete("/courses/:courseId", deleteCourse);
+router.put("/courses/:courseId/users/:userId", assignUserToCourse);
+router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 
 router.put("/signUp", signUp);
 

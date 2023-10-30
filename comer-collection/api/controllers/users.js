@@ -1,10 +1,12 @@
 const createError = require('http-errors');
-const { User } = require("../sequelize.js");
+const { User, Course } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            include: [Course]
+        });
         res.status(200).json({ data: users });
     })
 };
@@ -57,7 +59,9 @@ const deleteUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const user = await User.findOne({ where: { email: req.body.email } });
+        const user = await User.findByPk(req.params.userId, {
+            include: [Course]
+        });
         if (user) {
             res.status(200).json({ data: user });
         }
