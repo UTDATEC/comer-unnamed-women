@@ -17,6 +17,8 @@ const createUser = async (req, res, next) => {
             if(req.body.id)
                 throw new Error("User id should not be included when creating a user")
             const newUser = await User.create(req.body);
+            const tempPass = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            newUser.set({pw_temp: tempPass});   
             res.status(201).json({ data: newUser });
         } catch (e) {
             next(createError(400, {debugMessage: e.message}));

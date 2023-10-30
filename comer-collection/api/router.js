@@ -8,7 +8,7 @@ const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = req
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
-const { signUp } = require("./controllers/sign_up.js")
+const { changePassword } = require("./controllers/change_password.js")
 const { signIn } = require("./controllers/sign_in.js")
 
 
@@ -48,11 +48,11 @@ router.delete("/courses/:courseId", deleteCourse);
 router.put("/courses/:courseId/users/:userId", assignUserToCourse);
 router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 
-router.put("/signUp", signUp);
+router.put("/changePassword", changePassword);
 
 router.put("/signIn", signIn);
 
-router.use(["/images", "/artists", "/tags", "/users", "/courses", "/sign_up", "/sign_in"], (req, res, next) => {
+router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
     next(createError(405));
 })
 
