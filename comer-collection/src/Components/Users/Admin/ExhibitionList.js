@@ -18,7 +18,7 @@ function ExhibitionList() {
             <thead>
               <tr>
                 <th>Exhibition Name</th>
-                <th>Arist</th>
+                <th>Curator</th>
                 <th></th>
               </tr>
             </thead>
