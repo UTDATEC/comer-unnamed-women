@@ -8,6 +8,8 @@ import ExhibitMain from '../Exhibit/ExhibitMain';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { Component, useEffect, useState } from 'react';
+import Admin from '../Users/Admin/Admin';
+import Curator from '../Users/Curator/Curator';
 
 import { PrivateRoute } from '../Routes/PrivateRoute';
 

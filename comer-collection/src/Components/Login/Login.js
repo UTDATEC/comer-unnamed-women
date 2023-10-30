@@ -31,14 +31,13 @@ export default class Login extends Component {
             />
 
             <label>Password</label>
-            <input
+            <input style={{marginBottom: "11px"}}
               type="text"
               name="password"
               // value={this.state.value}
               // onChange={this.handleChange}
               // required
             />
-
             <button id="centered">Login</button>
           </form>
         </div>
