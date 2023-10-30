@@ -25,7 +25,7 @@ export default class Login extends Component {
             <input
               type="text"
               name="email"
-              // value={this.state.value}
+              // value={this.state.value} (no functionality yet)
               // onChange={this.handleChange}
               // required
             />
@@ -38,8 +38,8 @@ export default class Login extends Component {
               // onChange={this.handleChange}
               // required
             />
-            
-            <button id="centered">Submit</button>
+
+            <button id="centered">Login</button>
           </form>
         </div>
       </div>

@@ -12,7 +12,6 @@
 
 .separator {
   min-height: 10vh;
-  
 }
 
 .loginForm label {
@@ -43,10 +42,10 @@
 }
 
 .loginForm button {
-  box-shadow: inset 0px 1px 3px 0px #484848;
-  background-color: #000000;
+  /* box-shadow: inset 0px 1px 3px 0px #000000; */
+  background-color: #e8741c;
   border-radius: 5px;
-  border: 1px solid #566963;
+  border: 1px solid #e8741c;
   /* display: inline-block; */
   cursor: pointer;
   color: #ffffff;
@@ -55,18 +54,17 @@
   font-weight: bold;
   padding: 13px 23px;
   text-decoration: none;
-  text-shadow: 0px -1px 0px #2b665e;
+  /* text-shadow: 0px -1px 0px #2b665e; */
   width: 100px;
 }
 .loginForm button:hover {
-  background-color: #6c7c7c;
+  background-color: #e68f4d;
 }
 .loginForm button:active {
   /* position: relative; */
   /* top: 1px; */
-  background-color: #c5baba;
+  background-color: #e9b68f;
 }
-
 
 #centered {
   margin: auto;
@@ -74,4 +72,3 @@
   left: 0;
   right: 0;
 }
-
