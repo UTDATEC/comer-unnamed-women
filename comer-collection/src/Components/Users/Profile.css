@@ -1,0 +1,38 @@
+.user-profile-card {
+  border: 3px solid darkorange;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(215, 83, 17, 0.2);
+  font-family: Arial, sans-serif;
+  text-align: left;
+  position: absolute;
+  top: 15%;
+  margin-left: 50px;
+}
+
+.user-profile-card h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info div {
+  margin-bottom: 10px;
+}
+
+.user-info strong {
+  color: black;
+}
+
+.user-info span {
+  margin-left: 10px;
+}
+
+#text-center {
+  text-align: center;
+  padding-bottom: 20px;
+}

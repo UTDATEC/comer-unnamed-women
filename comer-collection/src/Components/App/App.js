@@ -9,6 +9,8 @@ import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { Component, useEffect, useState } from 'react';
 
+import { PrivateRoute } from '../Routes/PrivateRoute';
+
 export default function App() {
   const [searchParams, setSearchParams] = useState({
     title: '',
@@ -58,6 +60,11 @@ export default function App() {
           <Route path="/DataInputForm">
             <DataInput />
           </Route>
+
+          <Route path="/Admin"><Admin /></Route>
+
+          <Route path="/Curator"><Curator /></Route>
+
           <Route path="/login">
             <Login />
           </Route>
@@ -71,6 +78,7 @@ export default function App() {
             />
           </Route>
         </Switch>
+        
       </BrowserRouter>
     </div>
   );
