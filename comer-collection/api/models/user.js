@@ -14,11 +14,11 @@ module.exports = (db) => {
             field: "user_email"
         },
         pw_hash: {
-            type: Sequelize.BLOB('tiny'),
+            type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
         },
         pw_salt: {
-            type: Sequelize.BLOB('tiny'),
+            type: Sequelize.TEXT('tiny'),
             field: "user_pw_salt"
         },
         pw_temp: {

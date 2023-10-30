@@ -3,8 +3,10 @@ const { User } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 
 const listUsers = async (req, res, next) => {
-    const users = await User.findAll();
-    res.status(200).json({ data: users });
+    adminOperation(req, res, next, async () => {
+        const users = await User.findAll();
+        res.status(200).json({ data: users });
+    })
 };
 
 const createUser = async (req, res, next) => {
@@ -53,4 +55,16 @@ const deleteUser = async (req, res, next) => {
     })
 };
 
-module.exports = { listUsers, createUser, updateUser, deleteUser }
+const getUser = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const user = await User.findOne({ where: { email: req.body.email } });
+        if (user) {
+            res.status(200).json({ data: user });
+        }
+        else {
+            next(createError(404));
+        }
+    })
+};
+
+module.exports = { listUsers, createUser, updateUser, deleteUser, getUser }

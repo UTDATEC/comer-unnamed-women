@@ -3,10 +3,13 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
-const { listUsers, createUser, updateUser, deleteUser } = require("./controllers/users.js");
+const { listUsers, createUser, updateUser, deleteUser, getUser } = require("./controllers/users.js");
+const { signUp } = require("./controllers/sign_up.js")
+const { signIn } = require("./controllers/sign_in.js")
+
 
 router.get("/images", listImages);
 router.post("/images", createImage);
@@ -15,6 +18,7 @@ router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
 router.put("/images/:imageId/artist/:artistId", assignArtistToImage);
 router.delete("/images/:imageId/artist/:artistId", unassignArtistFromImage);
+router.get("/images/:imageId/tag", getTags)
 router.put("/images/:imageId/tag/:tagId", assignTagToImage);
 router.delete("/images/:imageId/tag/:tagId", unassignTagFromImage);
 
@@ -33,8 +37,13 @@ router.get("/users", listUsers);
 router.post("/users", createUser);
 router.put("/users/:userId", updateUser)
 router.delete("/users/:userId", deleteUser)
+router.put("/getUser", getUser)
 
-router.use(["/images", "/artists", "/tags", "/users"], (req, res, next) => {
+router.put("/signUp", signUp);
+
+router.put("/signIn", signIn);
+
+router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/sign_in"], (req, res, next) => {
     next(createError(405));
 })
 
