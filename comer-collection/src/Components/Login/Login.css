@@ -1,9 +1,5 @@
-.form {
-  border: 3px solid black;
-}
-
 .loginForm {
-  padding-left: 0%;
+  /* padding-left: auto; */
   position: relative;
   -webkit-text-size-adjust: auto; /* Font size scale with zoom */
   margin-top: 12.5%;
@@ -14,31 +10,26 @@
   min-height: 10vh;
 }
 
+.loginForm form {
+  padding: 0 35%;
+}
+
 .loginForm label {
   text-align: left;
-  /* display: block; */
+  display: block;
   font-size: 26px;
-  margin-left: 32.5%;
-  margin-right: auto;
 }
 
 .loginForm input,
 .loginForm textarea,
 .loginForm select {
-  width: 35%;
+  display: block;
   padding: 12px 12px;
-  margin: 10px 0;
+  max-width: 100%;
   border: 1px solid #ddd;
   box-sizing: border-box;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.loginForm h2 {
-  font-size: 35px;
-  color: black;
-  margin-bottom: 30px;
+  float: none;
+  position: relative;
 }
 
 .loginForm button {
