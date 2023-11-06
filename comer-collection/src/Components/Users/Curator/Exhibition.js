@@ -21,7 +21,7 @@ function Exhibition() {
     <div className='ListContainer'>
       <div className='TableContainer'>
         <div className='AdminTable'>
-          <h2 className="table-name">List of Exhibition</h2>
+          <h2 className="table-name">List of Exhibitions</h2>
 
           <table className='Table'>
 

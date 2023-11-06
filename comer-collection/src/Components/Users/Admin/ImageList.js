@@ -57,7 +57,7 @@ const handleSearch = (event) => {
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Curator</th>
+                <th>Photographer</th>
                 <th>Date</th>
                 <th></th>
                 <th></th>
