@@ -28,6 +28,7 @@ function Image() {
             <thead>
               <tr>
                 <th>Image Name</th>
+                <th>Photographer</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -53,6 +54,7 @@ function Image() {
 
               <tr>
                 <td>Image Name</td>
+                <td>Name</td>
                 <td>
                     <Link to="/ViewImages" className='GreenButton'>
                       View

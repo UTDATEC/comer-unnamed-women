@@ -1,10 +1,12 @@
 const createError = require('http-errors');
-const { User } = require("../sequelize.js");
+const { User, Course } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            include: [Course]
+        });
         res.status(200).json({ data: users });
     })
 };
@@ -15,6 +17,8 @@ const createUser = async (req, res, next) => {
             if(req.body.id)
                 throw new Error("User id should not be included when creating a user")
             const newUser = await User.create(req.body);
+            const tempPass = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            newUser.set({pw_temp: tempPass});   
             res.status(201).json({ data: newUser });
         } catch (e) {
             next(createError(400, {debugMessage: e.message}));
@@ -57,7 +61,9 @@ const deleteUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const user = await User.findOne({ where: { email: req.body.email } });
+        const user = await User.findByPk(req.params.userId, {
+            include: [Course]
+        });
         if (user) {
             res.status(200).json({ data: user });
         }

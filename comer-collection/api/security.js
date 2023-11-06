@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const jwt = require('jsonwebtoken')
 
 const UserTypes = Object.freeze({
     PUBLIC: "PUBLIC",
@@ -6,22 +7,56 @@ const UserTypes = Object.freeze({
     ADMIN: "ADMIN"
 });
 
-const getCurrentUserType = () => {
-    return UserTypes.ADMIN;
+/*
+const getCurrentUserType = (decoded) => {
+    switch(decoded.is_admin) {
+        case null:
+            return UserTypes.PUBLIC;
+        case false:
+            return UserTypes.CURATOR;
+        case true:
+            return UserTypes.ADMIN;
+        default:
+            return UserTypes.PUBLIC;
+    }
 }
+*/
 
-
-const adminOperation = (req, res, next, callback) => {
-    switch (getCurrentUserType()) {
-        case UserTypes.PUBLIC:
+const userOperation = (req, res, next, callback) => {
+    var header = req.get("Authorization")
+    //console.log(header)
+    if (header == undefined || header == null) {
+        next(createError(401))
+    } else {
+        const token = header.replace("Bearer ","");
+        //console.log(token)
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decoded)
+            callback(decoded);
+        } catch(err) {
             next(createError(401));
-            break;
-        case UserTypes.CURATOR:
-            next(createError(403));
-            break;
-        case UserTypes.ADMIN:
-            callback();
+        }
     }
 }
 
-module.exports = {getCurrentUserType, UserTypes, adminOperation};
+const adminOperation = (req, res, next, callback) => {
+    var header = req.get("Authorization")
+    if (header == undefined || header == null) {
+        next(createError(401))
+    } else {
+        const token = header.replace("Bearer ","");
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            if (decoded.is_admin) {
+                callback(decoded);
+            } else {
+                next(createError(403));
+            }
+        } catch(err) {
+            next(createError(401));
+        }
+    }
+}
+
+module.exports = {userOperation, adminOperation};

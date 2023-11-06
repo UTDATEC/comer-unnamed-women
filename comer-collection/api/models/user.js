@@ -17,10 +17,6 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
         },
-        pw_salt: {
-            type: Sequelize.TEXT('tiny'),
-            field: "user_pw_salt"
-        },
         pw_temp: {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_temp"
