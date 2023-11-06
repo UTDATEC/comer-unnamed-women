@@ -20,6 +20,7 @@ const changePassword = async(req, res, next) => {
                         user.set({pw_hash: hash, pw_temp: null});
                         // !!! Gets stuck on this user.save()
                         await user.save();
+                        res.sendStatus(204);
                     } else {
                         next(createError(401));
                     }
@@ -41,7 +42,7 @@ const changePassword = async(req, res, next) => {
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
         }
-    });
+    }, false, false);
 };
 
 module.exports = { changePassword }

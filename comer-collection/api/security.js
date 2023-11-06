@@ -22,18 +22,22 @@ const getCurrentUserType = (decoded) => {
 }
 */
 
-const userOperation = (req, res, next, callback) => {
+const userOperation = (req, res, next, callback, requirePermanentPassword = true, requireAdmin = false) => {
     var header = req.get("Authorization")
-    //console.log(header)
     if (header == undefined || header == null) {
         next(createError(401))
     } else {
         const token = header.replace("Bearer ","");
-        //console.log(token)
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log(decoded)
-            callback(decoded);
+            console.log(decoded);
+            if(requirePermanentPassword && decoded.temporaryPassword) {
+                next(createError(401));
+            } else if(requireAdmin && !decoded.is_admin) {
+                next(createError(403));
+            } else{
+                callback(decoded);
+            }
         } catch(err) {
             next(createError(401));
         }
@@ -41,22 +45,7 @@ const userOperation = (req, res, next, callback) => {
 }
 
 const adminOperation = (req, res, next, callback) => {
-    var header = req.get("Authorization")
-    if (header == undefined || header == null) {
-        next(createError(401))
-    } else {
-        const token = header.replace("Bearer ","");
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            if (decoded.is_admin) {
-                callback(decoded);
-            } else {
-                next(createError(403));
-            }
-        } catch(err) {
-            next(createError(401));
-        }
-    }
+    userOperation(req, res, next, callback, true, true);
 }
 
 module.exports = {userOperation, adminOperation};

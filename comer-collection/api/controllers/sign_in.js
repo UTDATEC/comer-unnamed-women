@@ -8,58 +8,25 @@ const signIn = async(req, res, next) => {
         const { email, password } = req.body;
         console.log(password)
         const user = await User.findOne({ where: { email: email } });
-        console.log(user.pw_hash)
-        //getDbConnection?
-        if (user) {
-            if(user.pw_hash == null) {
-                if(password == user.pw_temp) {
-                    jwt.sign({
-                        id: user.id,
-                        email: user.email,
-                        is_admin: user.is_admin,
-                        isVerified: false
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: '30d'
-                    },
-                    (err, token) => {
-                        if (err) {
-                            next(createError(500, {debugMessage: err.message}));
-                        }
-                        console.log({ token });
-                        res.status(200).json({ token: token });
-                    });
-                }
-            } else {
-                const match = await bcrypt.compare(password, user.pw_hash);
-                console.log("Access Granted");
-                if (match) {
-                    jwt.sign({
-                        id: user.id,
-                        email: user.email,
-                        is_admin: user.is_admin,
-                        isVerified: false
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: '30d'
-                    },
-                    (err, token) => {
-                        if (err) {
-                            next(createError(500, {debugMessage: err.message}));
-                        }
-                        console.log({ token })
-                        res.status(200).json({ token: token })
-                    });
-                }
-                else {
-                    next(createError(400, {debugMessage: "Invalid credentials"}));
-                }
-                }
+        
+        const match = user && ((password == user.pw_temp) || (user.pw_hash && await bcrypt.compare(password, user.pw_hash)));
 
+        if(match) {
+            const token = {
+                id: user.id,
+                email: user.email,
+                is_admin: user.is_admin,
+                isVerified: false,
+                temporaryPassword: (password == user.pw_temp)
+            };
+            jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
+                if (err) {
+                    next(createError(500, {debugMessage: err.message}));
+                }
+                res.status(200).json({ token: token });
+            });
         } else {
-            next(createError(404));
+            next(createError(401));
         }
 
     } catch(e) {
