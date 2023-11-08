@@ -5,6 +5,7 @@ import AdminNav from './AdminNav';
 import CuratorList from './CuratorList';
 import ExhibitionList from './ExhibitionList';
 import ImageList from './ImageList';
+import ImageEdit from './ImageEdit';
 import InviteForm from './InviteForm';
 import Profile from './Profile';
 
@@ -52,6 +53,9 @@ function Admin() {
           <Route path="/Admin/ImageList">
             <ImageList />
           </Route>
+
+          <Route path="/Admin/ImageEdit/:id" component={ImageEdit} />
+
 
           <Route path="/Admin/Invite">
             <InviteForm />

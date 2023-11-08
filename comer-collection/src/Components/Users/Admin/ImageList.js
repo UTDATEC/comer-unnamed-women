@@ -5,15 +5,12 @@ import { Link } from 'react-router-dom';
 
 function ImageList() {
   const [images, setImages] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredImages, setFilteredImages] = useState([]);
 
-  // fetch data from the database
   const fetchData = () => {
-    axios.get('http://localhost:9000/testAPI/searchBy')
+    axios.get('http://localhost:9000/api/images')
       .then(response => {
         setImages(response.data);
-        setFilteredImages(response.data); // Initialize filteredImages with all images
+        console.log('Images:', response.data);
       })
       .catch(error => {
         console.error('API request error:', error);
@@ -24,34 +21,11 @@ function ImageList() {
     fetchData();
   }, []);
 
-const handleSearch = (event) => {
-  const query = event.target.value.toLowerCase();
-  setSearchQuery(query);
-
-  // Filter images based on the search query
-  const filtered = images.map(imageGroup =>
-    imageGroup.filter(image => {
-      // Combine all properties and convert to lowercase for searching
-      const imageData = Object.values(image).join(' ').toLowerCase(); 
-      return imageData.includes(query);
-    })
-  );
-
-  setFilteredImages(filtered);
-};
-
   return (
     <div className='ListContainer'>
       <div className='TableContainer'>
         <div className='AdminTable'>
           <h2 className="table-name">List of Images</h2>
-
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
 
           <table className='Table'>
             <thead>
@@ -60,29 +34,28 @@ const handleSearch = (event) => {
                 <th>Photographer</th>
                 <th>Date</th>
                 <th></th>
-                <th></th>
               </tr>
             </thead>
 
             <tbody>
-              {filteredImages.map((imageGroup, groupIndex) => (
-                imageGroup.map((image, imageIndex) => (
-                  <tr key={imageIndex}>
-                    <td>{image.title}</td>
-                    <td>{image.artist}</td>
-                    <td>{image.date}</td>
-                    <td>
-                      <Link to="/ViewImages" className='GreenButton'>
-                        View
-                      </Link>
-                    </td>
-                    <td>
-                      <Link to="/EditImages" className='GreenButton'>
-                        Edit
-                      </Link>
-                    </td>
-                  </tr>
-                ))
+              {Array.isArray(images.data) && images.data.map((image, index) => (
+                <tr key={index}>
+                  <td>{image.title}</td>
+                  <td>
+                    <span>
+                      {image.Artists.length > 0 ? `${image.Artists[0].givenName} ${image.Artists[0].familyName}` : 'Unknown'}
+                    </span>
+                  </td>
+                  <td>{image.year}</td>
+                  {/* <td>
+                    <Link to={`/Admin/ImageView/${image.id}`} className='GreenButton'> View</Link>                  
+                  </td> */}
+
+                  <td>
+                    <Link to={`/Admin/ImageEdit/${image.id}`} className='GreenButton'> Edit</Link>                  
+                  </td>
+
+                </tr>
               ))}
             </tbody>
           </table>
