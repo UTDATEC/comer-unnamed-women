@@ -2,11 +2,18 @@ const createError = require('http-errors');
 const { User, Course } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 
+const randomPassword = () => {
+    return Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+}
+
+
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const users = await User.findAll({
-            attributes: ['id', 'email', 'is_admin'],
-            include: [Course]
+            include: [Course],
+            attributes: {
+                include: ['pw_temp']
+            }
         });
         res.status(200).json({ data: users });
     })
@@ -17,11 +24,12 @@ const createUser = async (req, res, next) => {
         try {
             if(req.body.id)
                 throw new Error("User id should not be included when creating a user")
-            const tempPass = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const newUser = await User.create({
                 email: req.body.email,
-                pw_temp: tempPass,
-                is_admin: false
+                pw_temp: randomPassword(),
+                ps_hash: null,
+                is_admin: false,
+                pw_updated: Date.now()
             });
             // await newUser.set({pw_temp: tempPass});   
             res.status(201).json({ data: {
@@ -39,13 +47,20 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
-            const user = await User.findByPk(req.params.userId)
+            const user = await User.findByPk(req.params.userId, {
+                attributes: {
+                    include: ['pw_temp']
+                }
+            });
             if(user) {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
                 }
-                user.set(req.body)
-                await user.save();
+                await user.update({
+                    email: user.email,
+                    family_name: user.family_name,
+                    given_name: user.given_name
+                })
                 res.status(200).json({ data: user })
             }
             else
@@ -72,8 +87,10 @@ const deleteUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId, {
-            attributes: ['id', 'email', 'is_admin'],
-            include: [Course]
+            include: [Course],
+            attributes: {
+                include: ['pw_temp']
+            }
         });
         if (user) {
             res.status(200).json({ data: user });
@@ -84,4 +101,33 @@ const getUser = async (req, res, next) => {
     })
 };
 
-module.exports = { listUsers, createUser, updateUser, deleteUser, getUser }
+
+const resetUserPassword = async(req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        try {
+            const user = await User.findByPk(req.params.userId, {
+                attributes: {
+                    include: ['pw_temp']
+                }
+            });
+            if(user) {
+                if(req.body.id && req.body.id !== req.params.userId) {
+                    throw new Error("User id in request body does not match User id in URL")
+                }
+                await user.update({
+                    pw_temp: randomPassword(),
+                    pw_hash: null,
+                    pw_updated: Date.now()
+                })
+                res.status(200).json({ data: user })
+            }
+            else
+                next(createError(404));
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}));
+        } 
+    });
+}
+
+module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword }

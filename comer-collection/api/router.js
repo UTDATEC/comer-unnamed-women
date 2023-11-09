@@ -6,9 +6,9 @@ const router = express.Router();
 const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
-const { listUsers, createUser, updateUser, deleteUser, getUser } = require("./controllers/users.js");
+const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
-const { changePassword, signIn } = require("./controllers/accounts.js")
+const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js")
 
 // Read images
 router.get("/images", listImages);
@@ -52,6 +52,7 @@ router.get("/users/:userId", getUser);
 router.post("/users", createUser);
 router.put("/users/:userId", updateUser);
 router.delete("/users/:userId", deleteUser);
+router.put("/users/:userId/resetpassword", resetUserPassword);
 
 // Read courses
 router.get("/courses", listCourses);
@@ -70,6 +71,7 @@ router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 // User interactions
 router.put("/account/signin", signIn);
 router.put("/account/changepassword", changePassword);
+router.get("/account/profile", getCurrentUser);
 
 
 
