@@ -38,7 +38,19 @@ module.exports = (db) => {
             defaultValue: "PRIVATE"
         }
     }, {
-        tableName: "comer_exhibitions"
+        tableName: "comer_exhibitions",
+        defaultScope: {
+            attributes: {
+                exclude: ['data']
+            }
+        },
+        scopes: {
+            with_data: {
+                attributes: {
+                    include: ['data']
+                }
+            }
+        }
     });
 
     return Exhibition;

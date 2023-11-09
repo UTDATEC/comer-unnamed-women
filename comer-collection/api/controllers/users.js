@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { User, Course } = require("../sequelize.js");
+const { User, Course, Exhibition } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 
 const randomPassword = () => {
@@ -10,7 +10,7 @@ const randomPassword = () => {
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const users = await User.findAll({
-            include: [Course],
+            include: [Course, Exhibition],
             attributes: {
                 include: ['pw_temp']
             }
@@ -87,7 +87,7 @@ const deleteUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId, {
-            include: [Course],
+            include: [Course, Exhibition],
             attributes: {
                 include: ['pw_temp']
             }
