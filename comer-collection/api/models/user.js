@@ -14,6 +14,14 @@ module.exports = (db) => {
             unique: true,
             field: "user_email"
         },
+        family_name: {
+            type: Sequelize.TEXT('tiny'),
+            field: "user_family_name"
+        },
+        given_name: {
+            type: Sequelize.TEXT('tiny'),
+            field: "user_given_name"
+        },
         pw_hash: {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
