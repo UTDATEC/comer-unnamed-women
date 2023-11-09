@@ -9,8 +9,9 @@ module.exports = (db) => {
             field: "user_id"
         },
         email: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.STRING(255),
             allowNull: false,
+            unique: true,
             field: "user_email"
         },
         pw_hash: {
