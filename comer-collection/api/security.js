@@ -31,7 +31,7 @@ const userOperation = (req, res, next, callback, requirePermanentPassword = true
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             console.log(decoded);
-            if(requirePermanentPassword && decoded.temporaryPassword) {
+            if(requirePermanentPassword && decoded.hasTempPassword) {
                 next(createError(401));
             } else if(requireAdmin && !decoded.is_admin) {
                 next(createError(403));

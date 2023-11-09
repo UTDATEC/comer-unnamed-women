@@ -17,7 +17,7 @@ const signIn = async(req, res, next) => {
                 email: user.email,
                 is_admin: user.is_admin,
                 isVerified: false,
-                temporaryPassword: (password == user.pw_temp)
+                hasTempPassword: (password == user.pw_temp)
             };
             jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
                 if (err) {
