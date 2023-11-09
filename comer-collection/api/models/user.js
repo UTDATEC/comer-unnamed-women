@@ -30,6 +30,10 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_temp"
         },
+        pw_updated: {
+            type: Sequelize.DATE(3),
+            field: "user_pw_last_updated"
+        },
         is_admin: {
             type: Sequelize.BOOLEAN,
             field: "user_is_admin",
