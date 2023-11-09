@@ -40,7 +40,12 @@ module.exports = (db) => {
             allowNull: false
         }
     }, {
-        tableName: "comer_users"
+        tableName: "comer_users",
+        defaultScope: {
+            attributes: {
+                exclude: ['pw_hash', 'pw_temp']
+            }
+        }
     });
 
     return User;
