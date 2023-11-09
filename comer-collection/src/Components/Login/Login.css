@@ -20,7 +20,7 @@
   font-size: 26px;
 }
 
-.loginForm input,
+/* .loginForm input,
 .loginForm textarea,
 .loginForm select {
   display: block;
@@ -30,6 +30,21 @@
   box-sizing: border-box;
   float: none;
   position: relative;
+} */
+
+input,
+input .text {
+  text-indent: 10px;
+  width: 100%;
+  padding: 12px 12px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #e5e5e5e8;
+  color: black;
+  font-size: 14px;
+  display: block;
+  box-sizing: border-box;
 }
 
 .loginForm button {
