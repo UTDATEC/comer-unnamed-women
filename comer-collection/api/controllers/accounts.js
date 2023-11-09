@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
-const { User } = require('../sequelize')
-const { userOperation, generateTokenDataFromUserInstance } = require("../security.js");
+const { User, Course } = require('../sequelize')
+const { userOperation, generateTokenDataFromUserInstance, filterUserData } = require("../security.js");
 
 const signIn = async(req, res, next) => {
     try {
@@ -36,54 +36,57 @@ const signIn = async(req, res, next) => {
 };
 
 const changePassword = async(req, res, next) => {
-    userOperation(req, res, next, async (user) => {
+    userOperation(req, res, next, async (user_id) => {
         try {
-            const { oldPassword, newPassword } = req.body;
-            if(!user.pw_hash && !user.pw_temp) {
-                next(createError(500, {debugMessage:
-                    "No password found of either type" + JSON.stringify(user.toJSON())
-                }))
-            }
-            else if(user.pw_hash) {
-                if (!bcrypt.compareSync(oldPassword, user.pw_hash)) 
-                    next(createError(401));
-            }
-            else if(user.pw_temp) {
-                if (oldPassword != user.pw_temp)
-                    next(createError(401));
-            }
-
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(newPassword, salt);
-            await user.update({
-                pw_hash: hash, 
-                pw_temp: null,
-                pw_updated: Date.now()
-            });
-
-            token = generateTokenDataFromUserInstance(user);
-            jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
-                if (err) {
-                    next(createError(500, {debugMessage: err.message}));
+            const user = await User.findByPk(user_id, {
+                attributes: {
+                    include: ['pw_temp', 'pw_hash']
                 }
-                res.status(200).json({ token: token });
             });
+            const { oldPassword, newPassword } = req.body;
+            if(!oldPassword || !newPassword)
+                throw new Error("Request must have both oldPassword and newPassword parameters");
+
+            if(!user.pw_hash && !user.pw_temp) {
+                next(createError(500, { debugMessage: "No current temporary or permanent password found" }))
+            }
+            else if(user.pw_hash && !bcrypt.compareSync(oldPassword, user.pw_hash)) {
+                next(createError(401, { debugMessage: "Password hashes do not match" }));
+            }
+            else if(user.pw_temp && oldPassword != user.pw_temp) {
+                next(createError(401, { debugMessage: "Temporary password does not match" }));
+            }
+            else {
+                const salt = bcrypt.genSaltSync(10);
+                const hash = bcrypt.hashSync(newPassword, salt);
+                await user.update({
+                    pw_hash: hash, 
+                    pw_temp: null,
+                    pw_updated: Date.now()
+                });
+    
+                token = generateTokenDataFromUserInstance(user);
+                jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
+                    if (err) {
+                        next(createError(500, {debugMessage: err.message}));
+                    }
+                    res.status(200).json({ token: token });
+                });
+            }
+
 
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
         }
-    }, false, false, ['pw_temp', 'pw_hash']);
+    }, false, false);
 };
 
 const getCurrentUser = async(req, res, next) => {
-    userOperation(req, res, next, async(user) => {
+    userOperation(req, res, next, async(user_id) => {
         try {
-            // const user = await User.findOne({
-            //     where: {
-            //         id: user.id 
-            //     },
-            //     include: [Course]
-            // });
+            const user = await User.findByPk(user_id, {
+                include: [Course]
+            });
             res.status(200).json({ data: user });
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
