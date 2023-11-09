@@ -15,73 +15,62 @@ import Grid from '@material-ui/core/Grid';
 // import '../SearchBy/DataInputForm.css';
 
 class Login extends Component {
-
-  // async function LoginUser()
-
-
-  //disable javascript.validate in vsc settings?
-  // [email, setEmail] = useState();
-  // [password, setPassword] = useState();
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       email: '',
       password: '',
+      loggedIn: false,
+      error: '',
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
   }
 
-  handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-  
-    this.setState({
-      [name]: value
-    });
-  }
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value });
+  };
 
-  handleLogin(event) {
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value });
+  };
+
+  //Api call here
+  handleLogin = (event) => {
     event.preventDefault();
-    //todo
-    alert(email);
 
-    // const response = await LoginUser({
-    //   email,
-    //   password
-    // });
-
-
-  }
+    //Debug just to test if its passing correct arguments
+    const { email, password } = this.state;
+    alert(`Passed Email: ${email}\nPassed Password: ${password}`);
+  };
 
   render() {
     return (
       <div>
+        {/* todo: navbar when logged in */}
         <NavBar />
-        <div class="separator" />
-        <div class="loginForm">
+        <div className="separator" />
+        <div className="loginForm">
           <form onSubmit={this.handleLogin}>
             <label>Email</label>
             <input
               type="text"
               name="email"
-              value={this.state.value}
-              onChange={this.handleChange}
+              value={this.state.email}
+              onChange={this.handleEmailChange}
               required
             />
 
             <label>Password</label>
-            <input style={{marginBottom: "11px"}}
-              type="text"
+            <input
+              style={{ marginBottom: '12px' }}
+              type="password"
               name="password"
-              value={this.state.value}
-              onChange={this.handleChange}
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
               required
             />
-            <button id="centered">Login</button>
+            <button id="centered" type="submit">
+              Login
+            </button>
           </form>
         </div>
       </div>
