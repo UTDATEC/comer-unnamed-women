@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-//const dotenv = require('dotenv').config()
 const createError = require('http-errors');
 const { User } = require('../sequelize')
 const { userOperation, adminOperation } = require("../security.js");
@@ -17,9 +16,7 @@ const changePassword = async(req, res, next) => {
                     if (result) {
                         const salt = bcrypt.genSaltSync(10);
                         const hash = bcrypt.hashSync(newPassword, salt);
-                        user.set({pw_hash: hash, pw_temp: null});
-                        // !!! Gets stuck on this user.save()
-                        await user.save();
+                        await user.update({pw_hash: hash, pw_temp: null});
                         res.sendStatus(204);
                     } else {
                         next(createError(401));
