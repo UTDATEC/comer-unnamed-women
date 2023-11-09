@@ -7,20 +7,6 @@ const UserTypes = Object.freeze({
     ADMIN: "ADMIN"
 });
 
-/*
-const getCurrentUserType = (decoded) => {
-    switch(decoded.is_admin) {
-        case null:
-            return UserTypes.PUBLIC;
-        case false:
-            return UserTypes.CURATOR;
-        case true:
-            return UserTypes.ADMIN;
-        default:
-            return UserTypes.PUBLIC;
-    }
-}
-*/
 
 const userOperation = (req, res, next, callback, requirePermanentPassword = true, requireAdmin = false) => {
     var header = req.get("Authorization")
