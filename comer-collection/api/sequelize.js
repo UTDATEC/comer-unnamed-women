@@ -39,6 +39,7 @@ db.Image = require("./models/image.js")(db);
 db.Tag = require("./models/tag.js")(db);
 db.User = require("./models/user.js")(db);
 db.Course = require("./models/course.js")(db);
+db.Exhibition = require("./models/exhibition.js")(db);
 
 
 db.Artist.belongsToMany(db.Image, { through: "comer_image_credits", foreignKey: "artist_id" });
@@ -49,6 +50,9 @@ db.Image.belongsToMany(db.Tag, { through: "comer_image_tag_assignments", foreign
 
 db.User.belongsToMany(db.Course, { through: "comer_enrollments", foreignKey: "user_id"});
 db.Course.belongsToMany(db.User, { through: "comer_enrollments", foreignKey: "course_id"});
+
+db.User.hasMany(db.Exhibition, {foreignKey: 'exhibition_owner'})
+db.Exhibition.belongsTo(db.User, {foreignKey: 'exhibition_owner'});
 
 
 module.exports = db;
