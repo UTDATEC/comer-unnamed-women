@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
-import NavBar from '../../NavBar/NavBar';
 import AdminNav from './AdminNav';
 import CuratorList from './CuratorList';
 import ExhibitionList from './ExhibitionList';
@@ -27,7 +26,6 @@ function Admin() {
   return (
     <div>
 
-      <NavBar />
 
 
       <div style={containerStyle}>

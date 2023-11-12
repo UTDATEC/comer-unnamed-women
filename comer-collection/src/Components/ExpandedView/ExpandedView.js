@@ -2,7 +2,6 @@ import './ExpandedView.css';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
-import NavBar from '../NavBar/NavBar';
 
 const PREFIX = 'ExpandedView';
 
@@ -42,7 +41,6 @@ function ExpandedView(props) {
 
   return (
     <Root className="App">
-        <NavBar />
         <Container>
         <Col>
           <Row>

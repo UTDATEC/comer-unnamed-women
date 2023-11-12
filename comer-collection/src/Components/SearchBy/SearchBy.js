@@ -1,7 +1,6 @@
 import './App.css';
 import Grid from '@mui/material/Grid';
 import { Component } from 'react';
-import NavBar from "../NavBar/NavBar";
 
 
 function errorMessage()
@@ -66,7 +65,6 @@ handleSubmit(event) {
   render() {
     return (
     <div className="App">
-        <NavBar />
         <div className="dataInputForm">
            <form onSubmit={this.handleSubmit}>
              <Grid container spacing={3}>

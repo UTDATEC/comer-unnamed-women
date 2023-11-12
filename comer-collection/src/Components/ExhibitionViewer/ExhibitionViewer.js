@@ -1,5 +1,4 @@
 import { Component, createElement, useEffect, useRef, useState } from 'react';
-import NavBar from '../NavBar/NavBar';
 import * as THREE from 'three';
 import primary_json from './example2.json' // assert { type: "json" };
 
@@ -160,7 +159,6 @@ const ExhibitionViewer = (props) => {
         
     return (
         <>
-        <NavBar />
         <div className="background_menu">
             <div id="menu" ref={menuRef}>
                 <div id="image_container">

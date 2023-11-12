@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
-import NavBar from '../../NavBar/NavBar';
 import CuratorNav from './CuratorNav';
 import Exhibition from './Exhibition';
 import Image from './Image';
@@ -24,7 +23,6 @@ function Curator() {
   return (
     <div>
 
-      <NavBar />
 
 
       <div style={ContainerStyle}>

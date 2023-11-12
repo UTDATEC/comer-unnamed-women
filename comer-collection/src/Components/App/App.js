@@ -62,6 +62,7 @@ export default function App() {
     <div className="wrapper">
       <ThemeProvider theme={theme}>
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />

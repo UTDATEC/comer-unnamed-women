@@ -1,5 +1,4 @@
 import './Login.css';
-import NavBar from '../NavBar/NavBar';
 import { Component } from 'react';
 
 class Login extends Component {
@@ -33,8 +32,6 @@ class Login extends Component {
   render() {
     return (
       <div>
-        {/* todo: navbar when logged in */}
-        <NavBar />
         <div className="separator" />
         <div className="loginForm">
           <form onSubmit={this.handleLogin}>
