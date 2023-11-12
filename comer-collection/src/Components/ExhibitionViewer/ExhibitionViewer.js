@@ -153,7 +153,7 @@ const ExhibitionViewer = (props) => {
 
         return () => {
             console.log("Running cleanup");
-            containerRef.current.removeChild(containerRef.current.firstChild);
+            containerRef.current?.removeChild(containerRef.current.firstChild);
         }
 
     }, []);
