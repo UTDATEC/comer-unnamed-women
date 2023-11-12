@@ -11,6 +11,8 @@ import Curator from '../Users/Curator/Curator';
 
 import { PrivateRoute } from '../Routes/PrivateRoute';
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { green, orange } from '@mui/material/colors';
 
 export default function App() {
   const [searchParams, setSearchParams] = useState({
@@ -45,8 +47,20 @@ export default function App() {
     updatedAt: '',
   });
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: green['900']
+      },
+      secondary: {
+        main: orange['500']
+      }
+    }
+  })
+
   return (
     <div className="wrapper">
+      <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
@@ -68,6 +82,7 @@ export default function App() {
         </Routes>
         
       </BrowserRouter>
+      </ThemeProvider>
     </div>
   );
 }
