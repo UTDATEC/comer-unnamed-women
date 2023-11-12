@@ -1,7 +1,4 @@
 import logo from '../GridView/utd.jpg';
-import vertical from './testvertical.jpg';
-import horizontal from './testhorizontal.jpg';
-import { useState } from 'react';
 
 const tileData = [];
 

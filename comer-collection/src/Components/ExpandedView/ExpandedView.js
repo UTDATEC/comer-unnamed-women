@@ -1,12 +1,8 @@
 import './ExpandedView.css';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBar/NavBar';
 
 const useStyles = makeStyles((theme) => ({
   abRoot: {

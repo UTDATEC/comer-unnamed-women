@@ -1,20 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Card, Container} from '@material-ui/core'
 import ImageList from '@material-ui/core/ImageList';
-//import GridList from '@material-ui/core/GridList';
 import ImageListItem from '@material-ui/core/ImageListItem';
-//import GridlistTile from '@material-ui/core/GridListTile'; (gridlist is now imagelist)
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-//import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubHeader from '@material-ui/core/ListSubheader';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { Link, useHistory } from 'react-router-dom';
-import logo from './utd.jpg';
+import { useHistory } from 'react-router-dom';
 
-import Box from '@material-ui/core/Box';
 
 import tileData from './tileData';
 
