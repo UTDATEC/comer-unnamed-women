@@ -53,7 +53,7 @@ export default function App() {
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
           <Route path="/expandedView" element={<ExpandedView selectedImage={selectedImage} />} />
 
-          <Route path="/Admin" element={<Admin />} />
+          <Route path="/Admin/*" element={<Admin />} />
           <Route path="/Curator" element={<Curator />} />
 
           <Route path="/login" element={<Login />} />

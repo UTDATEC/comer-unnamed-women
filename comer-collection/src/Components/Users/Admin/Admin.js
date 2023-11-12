@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom'; // Import Route from react-router-dom
+import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import NavBar from '../../NavBar/NavBar';
 import AdminNav from './AdminNav';
 import CuratorList from './CuratorList';
@@ -37,29 +37,19 @@ function Admin() {
         </div>
         
         <div style={AdminContent}>
-
-          <Route path="/Admin/Profile">
-            <Profile />
-          </Route>
-
-          <Route path="/Admin/CuratorList">
-            <CuratorList />
-          </Route>
           
-          <Route path="/Admin/ExhibitionList">
-            <ExhibitionList />
-          </Route>
+          <Routes>
+            <Route path="Profile" element={<Profile />} />
+            <Route path="CuratorList" element={<CuratorList />} />
+            <Route path="ExhibitionList" element={<ExhibitionList />} />
+            <Route path="ImageList" element={<ImageList />} />
+            <Route path="Invite" element={<InviteForm />} />
 
-          <Route path="/Admin/ImageList">
-            <ImageList />
-          </Route>
-
-          <Route path="/Admin/ImageEdit/:id" component={ImageEdit} />
+          </Routes>
 
 
-          <Route path="/Admin/Invite">
-            <InviteForm />
-          </Route>
+          {/* <Route path="/Admin/ImageEdit/:id" component={ImageEdit} /> */}
+
 
         </div>
       </div>

@@ -2,8 +2,11 @@ import React from 'react'
 import "./AdminNavData"
 import { AdminNavData } from './AdminNavData';
 import "../AccountNav.css"
+import { useNavigate } from 'react-router';
 
 function AdminNav() {
+
+  const navigate = useNavigate();
 
   return (
 
@@ -25,7 +28,7 @@ function AdminNav() {
             id={window.location.pathname === val.link ? "active" : ""}
             onClick = {() => {
               // change path when clicking
-              window.location.pathname = val.link
+              navigate(val.link)
                 }
               }>
               <div id='icon'>{val.icon}</div>
