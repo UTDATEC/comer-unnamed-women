@@ -3,7 +3,6 @@ import './App.css';
 import GridView from '../GridView/GridView';
 import ExpandedView from '../ExpandedView/ExpandedView';
 import SearchBy from '../SearchBy/SearchBy';
-import DataInput from '../DataInput/DataInputForm';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { Component, useEffect, useState } from 'react';
@@ -54,9 +53,6 @@ export default function App() {
           </Route>
           <Route path="/expandedView">
             <ExpandedView selectedImage={selectedImage} />
-          </Route>
-          <Route path="/DataInputForm">
-            <DataInput />
           </Route>
 
           <Route path="/Admin"><Admin /></Route>
