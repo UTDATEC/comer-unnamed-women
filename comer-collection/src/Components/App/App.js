@@ -62,9 +62,6 @@ export default function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
           <Route path="/">
             <GridView
               searchParams={searchParams}
