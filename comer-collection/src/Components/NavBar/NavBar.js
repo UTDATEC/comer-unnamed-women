@@ -25,9 +25,6 @@ const Root = styled('div')((
     theme
   }
 ) => ({
-  [`& .${classes.abRoot}`]: {
-    backgroundColor: 'darkgreen'
-  },
 
   [`&.${classes.root}`]: {
     flexGrow: 1,
@@ -62,7 +59,7 @@ export default function NavBar() {
 
   return (
     <Root className={classes.root}>
-      <AppBar position="fixed" className={classes.abRoot}>
+      <AppBar position="fixed" color="primary">
         <Toolbar>
           <Button
             styles={classes.titleButton}
