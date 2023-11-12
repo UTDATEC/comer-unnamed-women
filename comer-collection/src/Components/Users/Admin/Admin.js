@@ -44,6 +44,7 @@ function Admin() {
             <Route path="ExhibitionList" element={<ExhibitionList />} />
             <Route path="ImageList" element={<ImageList />} />
             <Route path="Invite" element={<InviteForm />} />
+            <Route path="ImageEdit/:id" element={<ImageEdit />} />
 
           </Routes>
 
