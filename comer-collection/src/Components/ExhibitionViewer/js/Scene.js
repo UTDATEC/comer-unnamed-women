@@ -6,10 +6,10 @@ export const scene = new THREE.Scene();
 let camera, controls, renderer;
 
 // variables for aspect ratio updates
-let window_height = window.innerHeight, window_width = window.innerWidth;
 
-export const setupScene = () =>  {
-
+export const setupScene = (scene) =>  {
+    let window_height = window.innerHeight, window_width = window.innerWidth;
+    
     // camera set up
     camera = new THREE.PerspectiveCamera(
         60, // field of view: 60-90 is normal for viewing on a monitor
@@ -24,13 +24,15 @@ export const setupScene = () =>  {
     camera.position.set(0, 0, 5);
 
     // enable antialiasing
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
+    renderer = new THREE.WebGL1Renderer({
+        antialias: true
     });
 
     // set initial window size
+    console.log(window_width, window_height);
     renderer.setSize(window_width, window_height);
-    document.body.appendChild(renderer.domElement);
+    // document.body.appendChild(renderer.domElement);
+    // console.log(renderer.domElement);
 
     // render options
 
@@ -56,7 +58,7 @@ export const setupScene = () =>  {
 };
 
 // animate scene
-export const animate = () => {
+export const animate = (scene, camera) => {
     requestAnimationFrame(() => animate());
     renderer.render(scene, camera);
 };
