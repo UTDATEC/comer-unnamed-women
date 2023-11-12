@@ -64,7 +64,7 @@ export default function NavBar() {
           <Button
             styles={classes.titleButton}
             onClick={() => navigate('/')}>
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h4" className={classes.title}>
               UTD Comer Collection
             </Typography>
           </Button>
