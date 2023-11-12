@@ -12,6 +12,7 @@ import Admin from '../Users/Admin/Admin';
 import Curator from '../Users/Curator/Curator';
 
 import { PrivateRoute } from '../Routes/PrivateRoute';
+import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 
 export default function App() {
   const [searchParams, setSearchParams] = useState({
@@ -53,8 +54,8 @@ export default function App() {
           <Route path="/searchBy">
             <SearchBy paramSetter={setSearchParams} />
           </Route>
-          <Route path="/exhibitmain">
-            <ExhibitMain paramSetter={setSearchParams} />
+          <Route path="/exhibition_viewer">
+            <ExhibitionViewer />
           </Route>
           <Route path="/expandedView">
             <ExpandedView selectedImage={selectedImage} />
