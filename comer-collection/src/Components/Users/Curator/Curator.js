@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom'; // Import Route from react-router-dom
+import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import NavBar from '../../NavBar/NavBar';
 import CuratorNav from './CuratorNav';
 import Exhibition from './Exhibition';
@@ -35,17 +35,11 @@ function Curator() {
         
         <div style={CuratorContent}>
 
-          <Route path="/Curator/Profile">
-            <Profile />
-          </Route>
-          
-          <Route path="/Curator/ExhibitionList">
-            <Exhibition />
-          </Route>
-
-          <Route path="/Curator/ImageList">
-            <Image />
-          </Route>
+          <Routes>
+            <Route path="Profile" element={<Profile />} />
+            <Route path="ExhibitionList" element={<Exhibition />} />
+            <Route path="ImageList" element={<Image />} />
+          </Routes>
 
         </div>
       </div>
