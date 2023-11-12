@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { controls_enabled } from './Menu';
+// import { controls_enabled } from './Menu';
 
 // initialize as false so the player is not moving
 export const keys_pressed = {
@@ -21,7 +21,7 @@ export const keys_pressed = {
 export const updateMovement = (delta, controls, camera, walls) => {
 
     // if this is false, movement is disabled, return early
-    if (!controls_enabled) {
+    if (!controls.isLocked) {
         return;
     }
 

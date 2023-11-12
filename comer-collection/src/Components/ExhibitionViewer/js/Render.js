@@ -11,7 +11,8 @@ export const setupRendering = (
     controls,
     walls,
     gallery_width,
-    gallery_length
+    gallery_length,
+    controlsEnabled
 ) => {
 
     // create clock for accurate and fluid movement
@@ -109,5 +110,6 @@ export const setupRendering = (
         requestAnimationFrame(render);
     };
 
+    console.log("render() function is called");
     render();
 };
