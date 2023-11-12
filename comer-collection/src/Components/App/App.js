@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import GridView from '../GridView/GridView';
 import ExpandedView from '../ExpandedView/ExpandedView';
@@ -48,31 +48,24 @@ export default function App() {
   return (
     <div className="wrapper">
       <BrowserRouter>
-        <Switch>
-          <Route path="/searchBy">
-            <SearchBy paramSetter={setSearchParams} />
-          </Route>
-          <Route path="/exhibition_viewer">
-            <ExhibitionViewer />
-          </Route>
-          <Route path="/expandedView">
-            <ExpandedView selectedImage={selectedImage} />
-          </Route>
+        <Routes>
+          <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
+          <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
+          <Route path="/expandedView" element={<ExpandedView selectedImage={selectedImage} />} />
 
-          <Route path="/Admin"><Admin /></Route>
+          <Route path="/Admin" element={<Admin />} />
+          <Route path="/Curator" element={<Curator />} />
 
-          <Route path="/Curator"><Curator /></Route>
-
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/">
+          <Route path="/login" element={<Login />} />
+          
+          <Route path="/" element={
             <GridView
-              searchParams={searchParams}
-              setSelectedImage={setSelectedImage}
-            />
-          </Route>
-        </Switch>
+            searchParams={searchParams}
+            setSelectedImage={setSelectedImage}
+          />
+          } />
+            
+        </Routes>
         
       </BrowserRouter>
     </div>

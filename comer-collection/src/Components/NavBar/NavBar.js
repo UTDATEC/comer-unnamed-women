@@ -7,7 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PREFIX = 'NavBar';
 
@@ -58,7 +58,7 @@ const Root = styled('div')((
 
 export default function NavBar() {
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Root className={classes.root}>
@@ -66,31 +66,31 @@ export default function NavBar() {
         <Toolbar>
           <Button
             styles={classes.titleButton}
-            onClick={() => history.push('/')}>
+            onClick={() => navigate('/')}>
             <Typography variant="h6" className={classes.title}>
               UTD Comer Collection
             </Typography>
           </Button>
           <div className={classes.menuButton}>
-            <Button className="myButton" onClick={() => history.push('/')}>
+            <Button className="myButton" onClick={() => navigate('/')}>
               <div className={classes.buttonText}>Images</div>
             </Button>
-            {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
+            {/*<Button className="myButton" onClick={() => navigate('/expandedView')}>
                             <div className={classes.buttonText}>Expanded</div></Button>*/}
             &nbsp;&nbsp;
             <Button
               className="myButton"
-              onClick={() => history.push('/exhibitMain')}>
-              <div className={classes.buttonText}>Exhibitions</div>
+              onClick={() => navigate('/exhibition_viewer')}>
+              <div className={classes.buttonText}>Exhibit Viewer</div>
             </Button>
             &nbsp;&nbsp;
             <Button
               className="myButton"
-              onClick={() => history.push('/searchBy')}>
+              onClick={() => navigate('/searchBy')}>
               <div className={classes.buttonText}>Search</div>
             </Button>
             &nbsp;&nbsp;
-            <Button className="myButton" onClick={() => history.push('/login')}>
+            <Button className="myButton" onClick={() => navigate('/login')}>
               <div className={classes.buttonText}>Login</div>
             </Button>
           </div>

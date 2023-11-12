@@ -1,7 +1,6 @@
 import './App.css';
 import Grid from '@mui/material/Grid';
 import { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import NavBar from "../NavBar/NavBar";
 
 
@@ -12,7 +11,7 @@ function errorMessage()
 
 class SearchBy extends Component {
   push = () => {
-    this.props.history.push("/searchpage");
+    this.props.navigate("/searchpage");
   };
 
   constructor(props) {
@@ -179,4 +178,4 @@ handleSubmit(event) {
     }
 }
 
-export default withRouter(SearchBy);
+export default SearchBy;

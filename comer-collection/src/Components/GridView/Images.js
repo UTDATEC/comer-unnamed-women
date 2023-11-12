@@ -4,7 +4,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubHeader from '@mui/material/ListSubheader';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 import tileData from './tileData';
@@ -72,11 +72,11 @@ export default function TitlebarGridList(props) {
     
     //classes to use styles created above and navigate pages
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const routeChange = (data) => {
         let path = '/expandedView'
-        history.push(path, {data: data})
+        navigate(path, {data: data})
         console.log(data)
     }
            

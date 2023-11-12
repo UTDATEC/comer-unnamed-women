@@ -1,6 +1,6 @@
 import './ExpandedView.css';
 import { styled } from '@mui/material/styles';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import NavBar from '../NavBar/NavBar';
 
@@ -37,8 +37,8 @@ const Root = styled('div')((
 
 function ExpandedView(props) {
 
-  const history = useHistory();
-  const data = history.location.state.data
+  const navigate = useNavigate();
+  const data = navigate.location.state.data
 
   return (
     <Root className="App">
