@@ -151,6 +151,11 @@ const ExhibitionViewer = (props) => {
 
         console.log("controls", controls);
 
+        return () => {
+            console.log("Running cleanup");
+            containerRef.current.removeChild(containerRef.current.firstChild);
+        }
+
     }, []);
         
     return (
