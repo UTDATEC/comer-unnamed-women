@@ -113,42 +113,4 @@ export default function TitlebarGridList(props) {
         </Root>
     );
 
-    //return (
-        //<div className={classes.root}>
-            //<ImageList cols={4} gap={15} className={classes.gridList}>
-                //{/*this ILItem adds space between the images and the navigation bar*/}
-                //<ImageListItem key="Subheader" cols={4} style={{ height: 80 }}>
-                    //<ListSubHeader component="div"></ListSubHeader>
-                //</ImageListItem>
-                //{tileData.map((item) => (
-                    /*this ILItem specifies attributes for the images that will be displayed*/
-                    //<ImageListItem key={item.img} className={classes.shadow}> 
-                         //<img
-                            //src={item.img}
-                            //alt={item.title}
-                            //loading="lazy"
-                            //onClick={() => routeChange(item.title)}
-                            //onClick={() => routeChange(item)}
-                        ///>
-                        
-                        //<ImageListItemBar
-                            //title={item.title}
-                            //position="top"
-                            //actionIcon={
-                                //<IconButton 
-                                    //sx={{ color: 'white' }} 
-                                    //aria-label={`star ${item.title}`} 
-                                    //onClick={() => handleClick(item)}
-                                //>
-                                    //<StarBorderIcon />
-                                //</IconButton>
-                            //}
-                            //style={{ opacity: 0}}
-                            //actionPosition="Left" //doesnt work?
-                        ///>
-                    //</ImageListItem>
-                //))}
-            //</ImageList>
-        //</div>
-    //);
 }
