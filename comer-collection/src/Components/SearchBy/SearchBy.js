@@ -1,5 +1,5 @@
 import './App.css';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import NavBar from "../NavBar/NavBar";

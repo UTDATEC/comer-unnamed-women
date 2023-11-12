@@ -1,5 +1,5 @@
 import './ExpandedView.css';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import NavBar from '../NavBar/NavBar';

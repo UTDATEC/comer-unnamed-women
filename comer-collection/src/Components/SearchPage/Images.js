@@ -1,14 +1,14 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ImageList from '@material-ui/core/ImageList';
-//import GridList from '@material-ui/core/GridList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-//import GridlistTile from '@material-ui/core/GridListTile'; (gridlist is now imagelist)
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-//import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubHeader from '@material-ui/core/ListSubheader';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { makeStyles } from '@mui/material/styles';
+import ImageList from '@mui/material/ImageList';
+//import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+//import GridlistTile from '@mui/material/ImageListItem'; (gridlist is now imagelist)
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+//import ImageListItemBar from '@mui/material/ImageListItemBar';
+import ListSubHeader from '@mui/material/ListSubheader';
+import IconButton from '@mui/material/IconButton';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useHistory } from 'react-router-dom';
 
 
@@ -78,11 +78,11 @@ export default function TitlebarGridList(props) {
                             title={item.title}
                             //position="top"
                             actionIcon={
-                                <IconButton 
-                                    sx={{ color: 'white' }} 
-                                    aria-label={`star ${item.title}`} 
+                                <IconButton
+                                    sx={{ color: 'white' }}
+                                    aria-label={`star ${item.title}`}
                                     onClick={() => handleClick(item)}
-                                >
+                                    size="large">
                                     <StarBorderIcon />
                                 </IconButton>
                             }

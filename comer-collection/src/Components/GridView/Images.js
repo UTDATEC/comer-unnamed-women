@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ImageList from '@material-ui/core/ImageList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import ListSubHeader from '@material-ui/core/ListSubheader';
+import { makeStyles } from '@mui/styles';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import ListSubHeader from '@mui/material/ListSubheader';
 import { useHistory } from 'react-router-dom';
 
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         //styles for ImageList
         width: '1000px',
         height: '100%',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'theme.palette.background.paper',
     },
     shadow: {
         //Styles for ImageList shadows
