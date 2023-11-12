@@ -1,11 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import ImageList from '@mui/material/ImageList';
-//import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-//import GridlistTile from '@mui/material/ImageListItem'; (gridlist is now imagelist)
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-//import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubHeader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -14,8 +11,22 @@ import { useHistory } from 'react-router-dom';
 
 import tileData from './tileData';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
+const PREFIX = 'Images';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    gridList: `${PREFIX}-gridList`,
+    shadow: `${PREFIX}-shadow`,
+    titleBar: `${PREFIX}-titleBar`,
+    icon: `${PREFIX}-icon`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
         //styles for div
         display: 'flex',
         flexWrap: 'wrap',
@@ -24,21 +35,25 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 5px 2px rgba(0,0,0,0.2)',
     },
-    gridList: {
+
+    [`& .${classes.gridList}`]: {
         //styles for ImageList
         width: 1000,
         height: 725,
     },
-    shadow: {
+
+    [`& .${classes.shadow}`]: {
         //Styles for ImageList shadows
         boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
         border: '1px solid #ccc',
     },
-    titleBar: {
+
+    [`& .${classes.titleBar}`]: {
         //styles for?
         background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0000) 100%',
     },
-    icon: {
+
+    [`& .${classes.icon}`]: {
         //styles for ImageListItemBar
         color: 'rgba(255, 255, 0.54)'
     }
@@ -47,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 export default function TitlebarGridList(props) {
     
     //classes to use styles created above and navigate pages
-    const classes = useStyles();
+
     const history = useHistory();
 
     const routeChange = (data) => {
@@ -57,7 +72,7 @@ export default function TitlebarGridList(props) {
     }
             
     return (
-        <div className={classes.root}>
+        <Root className={classes.root}>
             <ImageList cols={4} gap={15} className={classes.gridList}>
                 {/*this ILItem adds space between the images and the navigation bar*/}
                 <ImageListItem key="Subheader" cols={4} style={{ height: 80 }}>
@@ -92,7 +107,7 @@ export default function TitlebarGridList(props) {
                     </ImageListItem>
                 ))}
             </ImageList>
-        </div>
+        </Root>
     );
 
 /*

@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -9,8 +9,22 @@ import { useHistory } from 'react-router-dom';
 
 import tileData from './tileData';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
+const PREFIX = 'Images';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    imageList: `${PREFIX}-imageList`,
+    shadow: `${PREFIX}-shadow`,
+    icon: `${PREFIX}-icon`,
+    button: `${PREFIX}-button`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
         //styles for div
         display: 'flex',
         alignItems: 'flex-start',
@@ -18,22 +32,26 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         backgroundColor: 'theme.palette.background.paper',
     },
-    imageList: {
+
+    [`& .${classes.imageList}`]: {
         //styles for ImageList
         width: '1000px',
         height: '100%',
         backgroundColor: 'theme.palette.background.paper',
     },
-    shadow: {
+
+    [`& .${classes.shadow}`]: {
         //Styles for ImageList shadows
         boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
         border: '1px solid #ccc',
     },
-    icon: {
+
+    [`& .${classes.icon}`]: {
         //styles for ImageListItemBar
         color: 'rgba(255, 255, 0.54)'
     },
-    button: {
+
+    [`& .${classes.button}`]: {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -49,40 +67,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-/*const useStyles = makeStyles((theme) => ({
-    root: {
-        //styles for div
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: '0px 0px 5px 2px rgba(0,0,0,0.2)',
-    },
-    gridList: {
-        //styles for ImageList
-        width: 1000,
-        height: 725,
-    },
-    shadow: {
-        //Styles for ImageList shadows
-        boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
-        border: '1px solid #ccc',
-    },
-    titleBar: {
-        //styles for?
-        background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0000) 100%',
-    },
-    icon: {
-        //styles for ImageListItemBar
-        color: 'rgba(255, 255, 0.54)'
-    }
-}));*/
 
 export default function TitlebarGridList(props) {
     
     //classes to use styles created above and navigate pages
-    const classes = useStyles();
+
     const history = useHistory();
 
     const routeChange = (data) => {
@@ -92,7 +81,7 @@ export default function TitlebarGridList(props) {
     }
            
     return (
-        <div>
+        <Root>
             {/*stylized div adds spacing so the navigation bar does not overlap*/}
             <div style={{ height: '70px' }}/>
             <div className={classes.root}>
@@ -121,7 +110,7 @@ export default function TitlebarGridList(props) {
             <div style={{ width: '100%', height: '80px' }} />
             {/*adds white bottom bar*/}
             <div style={{ position: 'fixed', bottom: '0px', width: '100%', height: '70px', boxShadow: '0px -4px 5px -2px rgba(0,0,0,0.2)', backgroundColor: 'white' }} />
-        </div>
+        </Root>
     );
 
     //return (

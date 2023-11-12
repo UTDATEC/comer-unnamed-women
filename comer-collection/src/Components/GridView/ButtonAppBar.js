@@ -1,7 +1,7 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import '../App/App.css';
 
-import { makeStyles } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -9,25 +9,40 @@ import Button from '@mui/material/Button';
 
 import { useHistory } from 'react-router-dom';
 
-//
-const useStyles = makeStyles((theme) => ({
-  abRoot: {
+const PREFIX = 'ButtonAppBar';
+
+const classes = {
+  abRoot: `${PREFIX}-abRoot`,
+  root: `${PREFIX}-root`,
+  menuButton: `${PREFIX}-menuButton`,
+  title: `${PREFIX}-title`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.abRoot}`]: {
   backgroundColor: '#e87500',
   },
-  root: {
+
+  [`&.${classes.root}`]: {
     flexGrow: 1,
   },
-  menuButton: {
+
+  [`& .${classes.menuButton}`]: {
     marginRight: theme.spacing(2),
   },
-  title: {
+
+  [`& .${classes.title}`]: {
     flexGrow: 1,
-  },
+  }
 }));
 
 //creates function to make a Material-UI AppBar component with a button
 export default function ButtonAppBar() {
-  const classes = useStyles(); //defines a css class for the component
+
   const history = useHistory(); //allows component to navigate between different pages
 
   /*
@@ -39,7 +54,7 @@ export default function ButtonAppBar() {
   */
  //creates the navigation bar with a search button
   return (
-    <div className={classes.root}> 
+    <Root className={classes.root}> 
       <AppBar position="static" classes={{ root: classes.abRoot}}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
@@ -49,6 +64,6 @@ export default function ButtonAppBar() {
           <Button className="myButton" onClick={() => history.push('/exhibitmain')}>Exhibit</Button>
         </Toolbar>
       </AppBar>
-    </div>
+    </Root>
   );
 }

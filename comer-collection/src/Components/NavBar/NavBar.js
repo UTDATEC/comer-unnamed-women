@@ -1,7 +1,7 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import '../App/App.css';
 
-import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -9,40 +9,60 @@ import Button from '@mui/material/Button';
 
 import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  abRoot: {
+const PREFIX = 'NavBar';
+
+const classes = {
+  abRoot: `${PREFIX}-abRoot`,
+  root: `${PREFIX}-root`,
+  menuButton: `${PREFIX}-menuButton`,
+  buttonText: `${PREFIX}-buttonText`,
+  title: `${PREFIX}-title`,
+  titleButton: `${PREFIX}-titleButton`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.abRoot}`]: {
     backgroundColor: 'darkgreen'
   },
-  root: {
+
+  [`&.${classes.root}`]: {
     flexGrow: 1,
   },
-  menuButton: {
+
+  [`& .${classes.menuButton}`]: {
     flexGrow: 1,
     textAlign: 'right',
   },
-  buttonText: {
+
+  [`& .${classes.buttonText}`]: {
     color: 'white',
   },
-  title: {
+
+  [`& .${classes.title}`]: {
     flexGrow: 1,
     textAlign: 'center',
     color: 'white',
     textTransform: 'capitalize',
   },
-  titleButton: {
+
+  [`& .${classes.titleButton}`]: {
     flexGrow: 1,
     textAlign: 'left',
     width: '20%',
-  },
+  }
 }));
 
 export default function NavBar() {
-  const classes = useStyles();
+
   const history = useHistory();
 
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed" style={{backgroundColor: "darkgreen"}} className={classes.abRoot}>
+    <Root className={classes.root}>
+      <AppBar position="fixed" className={classes.abRoot}>
         <Toolbar>
           <Button
             styles={classes.titleButton}
@@ -76,6 +96,6 @@ export default function NavBar() {
           </div>
         </Toolbar>
       </AppBar>
-    </div>
+    </Root>
   );
 }
