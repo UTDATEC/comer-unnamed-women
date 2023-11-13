@@ -20,9 +20,7 @@ body {
   
 .SideBar {
     height: 100vh; 
-    width: 250px;
     background-color: #E87500;
-    position: fixed;
 }
 
 .SideBarList {
