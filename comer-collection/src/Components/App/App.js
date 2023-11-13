@@ -1,15 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import GridView from '../GridView/GridView';
-import ExpandedView from '../ExpandedView/ExpandedView';
 import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
-import React, { Component, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Admin from '../Users/Admin/Admin';
 import Curator from '../Users/Curator/Curator';
 
-import { PrivateRoute } from '../Routes/PrivateRoute';
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { green, orange } from '@mui/material/colors';
