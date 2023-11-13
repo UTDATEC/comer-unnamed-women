@@ -9,7 +9,7 @@ import Admin from '../Users/Admin/Admin';
 import Curator from '../Users/Curator/Curator';
 
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { Box, ThemeProvider, createTheme } from '@mui/material';
 import { green, orange } from '@mui/material/colors';
 
 export default function App() {
@@ -65,14 +65,23 @@ export default function App() {
   })
 
   return (
-    <div className="wrapper">
       <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <NavBar />
+        <Box sx={{
+          height: '100vh', 
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gridTemplateRows: '64px auto',
+          gridTemplateAreas: `
+            "header"
+            "body"
+          `
+        }}>
+        <NavBar sx={{ gridArea: 'header' }} />
+        <Box sx={{ gridArea: 'body' }} >
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
-          <Route path="/expandedView" element={<ExpandedView selectedImage={selectedImage} />} />
 
           <Route path="/Admin/*" element={<Admin />} />
           <Route path="/Curator/*" element={<Curator />} />
@@ -85,11 +94,12 @@ export default function App() {
             setSelectedImage={setSelectedImage}
           />
           } />
-            
-        </Routes>
+              
+          </Routes>
+        </Box>
+        </Box>
         
       </BrowserRouter>
       </ThemeProvider>
-    </div>
   );
 }
