@@ -1,12 +1,9 @@
 .ListContainer {
-  display: flex;
   justify-content: space-between;
   margin: 0 auto;
 }
 
 .TableContainer {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   padding: 20px;
   margin-top: 70px;
