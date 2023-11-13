@@ -40,6 +40,7 @@ const ExhibitionViewer = (props) => {
     
     const showMenu = () => {
         menuRef.current.style.display = 'block';
+        //disableControls(controls);
     }
     
     const hideMenu = () => {
@@ -131,6 +132,7 @@ const ExhibitionViewer = (props) => {
 
 
         setupEventListeners(controls);
+        controls.addEventListener('lock', hideMenu);
         controls.addEventListener('unlock', showMenu);
 
         
@@ -162,7 +164,7 @@ const ExhibitionViewer = (props) => {
         <div className="background_menu">
             <div id="menu" ref={menuRef}>
                 <div id="image_container">
-                    <img src="./images/artworks1/1.jpg" alt="Menu Picture" />
+                    <img src="./images/wall.jpg" alt="Menu Picture" />
                 </div>
 
                 <div id="content">
