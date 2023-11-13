@@ -1,9 +1,10 @@
 import * as THREE from 'three';
+import staticImages from './StaticImages';
 
 export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name) => {
 
-    const floor_texture_path = '../images/' + floor_texture_name;
-    console.log("floor_texture_path", floor_texture_path);
+    const floor_texture_key = `./${floor_texture_name}`;
+    const floor_texture_path = staticImages[floor_texture_key];
     const floor_texture = texture_loader.load(floor_texture_path);  // load texture
     floor_texture.wrapS = THREE.RepeatWrapping;                     // horizontal wrap
     floor_texture.wrapT = THREE.RepeatWrapping;                     // vertical wrap
@@ -14,7 +15,7 @@ export const setupFloor = (scene, texture_loader, floor_width, floor_length, flo
 
     // create material from texture to apply to geometry
     const plane_material = new THREE.MeshPhongMaterial({
-        // map: floor_texture,
+        map: floor_texture,
         side: THREE.DoubleSide,
         color: floor_color,
     });

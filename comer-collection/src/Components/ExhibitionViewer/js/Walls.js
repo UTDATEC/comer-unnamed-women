@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import staticImages from './StaticImages';
 
 export function setupWalls(scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, side_color) {
     
@@ -16,7 +17,8 @@ export function setupWalls(scene, texture_loader, wall_width, wall_length, galle
     // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
 
     // front and back wall texture set up
-    const wall_texture_frontback = texture_loader.load('images/wall.jpg');
+    const wall_texture_frontback_key = './wall.jpg'
+    const wall_texture_frontback = texture_loader.load(staticImages[wall_texture_frontback_key]);
     wall_texture_frontback.wrapS = THREE.RepeatWrapping; // horizontal wrap
     wall_texture_frontback.wrapT = THREE.RepeatWrapping; // vertical wrap
     wall_texture_frontback.repeat.set(wall_width, wall_height); // repeat texture (width, height)
@@ -39,7 +41,8 @@ export function setupWalls(scene, texture_loader, wall_width, wall_length, galle
     );
 
     // left and right wall texture set up
-    const wall_texture_leftright = texture_loader.load('images/wall.jpg');
+    const wall_texture_leftright_key = './wall.jpg'
+    const wall_texture_leftright = texture_loader.load(staticImages[wall_texture_leftright_key]);
     wall_texture_leftright.wrapS = THREE.RepeatWrapping; // horizontal wrap
     wall_texture_leftright.wrapT = THREE.RepeatWrapping; // vertical wrap
     wall_texture_leftright.repeat.set(wall_length, wall_height); // repeat texture (width, height)
