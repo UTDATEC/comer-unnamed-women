@@ -29,7 +29,7 @@ function Admin() {
 
       <Box sx={{
         display: 'grid',
-        gridTemplateColumns: '200px auto',
+        gridTemplateColumns: '250px auto',
         gridTemplateRows: '1fr',
         gridTemplateAreas: `
           "sidebar main"
