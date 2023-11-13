@@ -57,40 +57,42 @@ export default function NavBar() {
 
   const navigate = useNavigate();
 
+  const buttons = [
+    {
+      text: "Home",
+      link: "/"
+    },
+    {
+      text: "Exhibit Viewer",
+      link: "/exhibition_viewer"
+    },
+    {
+      text: "Search",
+      link: "/searchBy"
+    },
+    {
+      text: "Login",
+      link: "/login"
+    }
+  ]
+
   return (
     <Root className={classes.root}>
       <AppBar position="fixed" color="primary">
         <Toolbar>
-          <Button
-            styles={classes.titleButton}
-            onClick={() => navigate('/')}>
-            <Typography variant="h4" className={classes.title}>
-              UTD Comer Collection
-            </Typography>
-          </Button>
-          <div className={classes.menuButton}>
-            <Button className="myButton" onClick={() => navigate('/')}>
-              <div className={classes.buttonText}>Images</div>
-            </Button>
-            {/*<Button className="myButton" onClick={() => navigate('/expandedView')}>
-                            <div className={classes.buttonText}>Expanded</div></Button>*/}
-            &nbsp;&nbsp;
-            <Button
-              className="myButton"
-              onClick={() => navigate('/exhibition_viewer')}>
-              <div className={classes.buttonText}>Exhibit Viewer</div>
-            </Button>
-            &nbsp;&nbsp;
-            <Button
-              className="myButton"
-              onClick={() => navigate('/searchBy')}>
-              <div className={classes.buttonText}>Search</div>
-            </Button>
-            &nbsp;&nbsp;
-            <Button className="myButton" onClick={() => navigate('/login')}>
-              <div className={classes.buttonText}>Login</div>
-            </Button>
-          </div>
+          <Typography variant="h4" className={classes.title}>
+            UTD Comer Collection
+          </Typography>
+          <Stack spacing={1} direction={'row'}>
+            {buttons.map((button) => (
+              <Button key={button.text} color="primary" variant="contained" onClick={() => navigate(button.link)}>
+                <Typography variant="h6" className={classes.buttonText}>
+                  {button.text}
+                </Typography>
+                {/* <div className={classes.buttonText}></div> */}
+              </Button>
+            ))}
+          </Stack>
         </Toolbar>
       </AppBar>
     </Root>
