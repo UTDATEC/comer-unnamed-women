@@ -50,10 +50,12 @@ export default function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: green['900']
+        main: green['900'],
+        contrastText: 'white'
       },
       secondary: {
-        main: orange['500']
+        main: orange['700'],
+        contrastText: 'black'
       }
     }
   })
