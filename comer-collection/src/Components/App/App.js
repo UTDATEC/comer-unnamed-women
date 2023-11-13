@@ -48,6 +48,12 @@ export default function App() {
   });
 
   const theme = createTheme({
+    typography: {
+      fontFamily: [
+        "Helvetica"
+      ].join(","),
+      fontSize: 12,
+    },
     palette: {
       primary: {
         main: green['900'],
