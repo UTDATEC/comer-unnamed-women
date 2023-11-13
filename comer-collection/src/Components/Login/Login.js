@@ -1,6 +1,17 @@
 import './Login.css';
 import { Component } from 'react';
 
+async function loginUser(info) {
+  return fetch('http://localhost:9000/api/account/signin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(info)
+  })
+  .then( data => data.json())
+}
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +23,8 @@ class Login extends Component {
     };
   }
 
+  
+
   handleEmailChange = (event) => {
     this.setState({ email: event.target.value });
   };
@@ -21,12 +34,31 @@ class Login extends Component {
   };
 
   //Api call here
-  handleLogin = (event) => {
+  handleLogin = async (event) => {
     event.preventDefault();
+    const { email, password } = this.state;
+    console.log(email);
+    console.log(password);
+
+    const response = await loginUser({
+      email,
+      password
+    });
+
+    if('accessToken' in response) {
+      alert("Sucess");
+      (value) => {
+        localStorage.setItem('accessToken', response['accessToken']);
+        localStorage.setItem('user', JSON.stringify(response['user']))
+      }
+    }
+    else {
+      alert("Error - no token detected")
+    }
 
     //Debug just to test if its passing correct arguments
-    const { email, password } = this.state;
-    alert(`Passed Email: ${email}\nPassed Password: ${password}`);
+    // const { email, password } = this.state;
+    // alert(`Passed Email: ${email}\nPassed Password: ${password}`);
   };
 
   render() {
