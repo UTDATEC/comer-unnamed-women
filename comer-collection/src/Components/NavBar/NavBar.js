@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
+import { Stack } from '@mui/material';
 
 const PREFIX = 'NavBar';
 
@@ -26,28 +27,22 @@ const Root = styled('div')((
   }
 ) => ({
 
-  [`&.${classes.root}`]: {
-    flexGrow: 1,
-  },
 
   [`& .${classes.menuButton}`]: {
-    flexGrow: 1,
     textAlign: 'right',
   },
-
+  
   [`& .${classes.buttonText}`]: {
-    color: 'white',
+    color: 'white'
   },
 
   [`& .${classes.title}`]: {
     flexGrow: 1,
-    textAlign: 'center',
+    textAlign: 'left',
     color: 'white',
-    textTransform: 'capitalize',
   },
 
   [`& .${classes.titleButton}`]: {
-    flexGrow: 1,
     textAlign: 'left',
     width: '20%',
   }
