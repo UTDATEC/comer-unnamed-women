@@ -24,7 +24,7 @@ export const setupScene = (scene) =>  {
     camera.position.set(0, 0, 5);
 
     // enable antialiasing
-    renderer = new THREE.WebGL1Renderer({
+    renderer = new THREE.WebGLRenderer({
         antialias: true
     });
 
