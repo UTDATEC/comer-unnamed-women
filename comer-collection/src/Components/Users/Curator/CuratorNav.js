@@ -2,8 +2,11 @@ import React from 'react'
 import "./CuratorNavData"
 import { CuratorNavData } from './CuratorNavData';
 import "../AccountNav.css"
+import { useNavigate } from 'react-router';
 
 function CuratorNav() {
+
+  const navigate = useNavigate();
 
   return (
 
@@ -27,7 +30,7 @@ function CuratorNav() {
             onClick = {() => {
               
               // change path when clicking
-              window.location.pathname = val.link
+              navigate(val.link);
                 }
               }>
               <div id='icon'>{val.icon}</div>

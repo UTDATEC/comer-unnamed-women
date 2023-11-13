@@ -1,24 +1,32 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Card, Container} from '@material-ui/core'
-import ImageList from '@material-ui/core/ImageList';
-//import GridList from '@material-ui/core/GridList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-//import GridlistTile from '@material-ui/core/GridListTile'; (gridlist is now imagelist)
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-//import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubHeader from '@material-ui/core/ListSubheader';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { Link, useHistory } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import ListSubHeader from '@mui/material/ListSubheader';
+import IconButton from '@mui/material/IconButton';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { useNavigate } from 'react-router-dom';
 
-import Box from '@material-ui/core/Box';
 
 import tileData from './tileData';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
+const PREFIX = 'Images';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    gridList: `${PREFIX}-gridList`,
+    shadow: `${PREFIX}-shadow`,
+    titleBar: `${PREFIX}-titleBar`,
+    icon: `${PREFIX}-icon`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
         //styles for div
         display: 'flex',
         flexWrap: 'wrap',
@@ -27,21 +35,25 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 5px 2px rgba(0,0,0,0.2)',
     },
-    gridList: {
+
+    [`& .${classes.gridList}`]: {
         //styles for ImageList
         width: 1000,
         height: 725,
     },
-    shadow: {
+
+    [`& .${classes.shadow}`]: {
         //Styles for ImageList shadows
         boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
         border: '1px solid #ccc',
     },
-    titleBar: {
+
+    [`& .${classes.titleBar}`]: {
         //styles for?
         background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0000) 100%',
     },
-    icon: {
+
+    [`& .${classes.icon}`]: {
         //styles for ImageListItemBar
         color: 'rgba(255, 255, 0.54)'
     }
@@ -50,17 +62,17 @@ const useStyles = makeStyles((theme) => ({
 export default function TitlebarGridList(props) {
     
     //classes to use styles created above and navigate pages
-    const classes = useStyles();
-    const history = useHistory();
+
+    const navigate = useNavigate();
 
     const routeChange = (data) => {
         let path = '/expandedView'
-        history.push(path, {data: data})
+        navigate(path, {data: data})
         console.log(data)
     }
             
     return (
-        <div className={classes.root}>
+        <Root className={classes.root}>
             <ImageList cols={4} gap={15} className={classes.gridList}>
                 {/*this ILItem adds space between the images and the navigation bar*/}
                 <ImageListItem key="Subheader" cols={4} style={{ height: 80 }}>
@@ -81,11 +93,11 @@ export default function TitlebarGridList(props) {
                             title={item.title}
                             //position="top"
                             actionIcon={
-                                <IconButton 
-                                    sx={{ color: 'white' }} 
-                                    aria-label={`star ${item.title}`} 
+                                <IconButton
+                                    sx={{ color: 'white' }}
+                                    aria-label={`star ${item.title}`}
                                     onClick={() => handleClick(item)}
-                                >
+                                    size="large">
                                     <StarBorderIcon />
                                 </IconButton>
                             }
@@ -95,7 +107,7 @@ export default function TitlebarGridList(props) {
                     </ImageListItem>
                 ))}
             </ImageList>
-        </div>
+        </Root>
     );
 
 /*

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Route } from 'react-router-dom'; // Import Route from react-router-dom
-import NavBar from '../../NavBar/NavBar';
+import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import AdminNav from './AdminNav';
 import CuratorList from './CuratorList';
 import ExhibitionList from './ExhibitionList';
 import ImageList from './ImageList';
+import ImageEdit from './ImageEdit';
 import InviteForm from './InviteForm';
 import Profile from './Profile';
+import { Box } from '@mui/material';
 
 
 function Admin() {
@@ -24,42 +25,36 @@ function Admin() {
   };
 
   return (
-    <div>
+    <>
 
-      <NavBar />
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: '250px auto',
+        gridTemplateRows: '1fr',
+        gridTemplateAreas: `
+          "sidebar main"
+        `
+      }}>
 
 
-      <div style={containerStyle}>
-
-        <div style={adminNavStyle}>
-          <AdminNav />
-        </div>
+        <AdminNav sx={{gridArea: 'sidebar'}}/>
         
-        <div style={AdminContent}>
-
-          <Route path="/Admin/Profile">
-            <Profile />
-          </Route>
-
-          <Route path="/Admin/CuratorList">
-            <CuratorList />
-          </Route>
+        <Box sx={{gridArea: 'main'}}>
           
-          <Route path="/Admin/ExhibitionList">
-            <ExhibitionList />
-          </Route>
+          <Routes>
+            <Route path="Profile" element={<Profile />} />
+            <Route path="CuratorList" element={<CuratorList />} />
+            <Route path="ExhibitionList" element={<ExhibitionList />} />
+            <Route path="ImageList" element={<ImageList />} />
+            <Route path="Invite" element={<InviteForm />} />
+            <Route path="ImageEdit/:id" element={<ImageEdit />} />
 
-          <Route path="/Admin/ImageList">
-            <ImageList />
-          </Route>
+          </Routes>
 
-          <Route path="/Admin/Invite">
-            <InviteForm />
-          </Route>
-
-        </div>
-      </div>
-    </div>
+        </Box>
+      
+      </Box>
+    </>
   );
 }
 

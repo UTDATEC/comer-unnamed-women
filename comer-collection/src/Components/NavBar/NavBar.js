@@ -1,81 +1,95 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import '../App/App.css';
 
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Stack } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  abRoot: {
-    backgroundColor: 'darkgreen',
-  },
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    flexGrow: 1,
+const PREFIX = 'NavBar';
+
+const classes = {
+  abRoot: `${PREFIX}-abRoot`,
+  root: `${PREFIX}-root`,
+  menuButton: `${PREFIX}-menuButton`,
+  buttonText: `${PREFIX}-buttonText`,
+  title: `${PREFIX}-title`,
+  titleButton: `${PREFIX}-titleButton`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+
+
+  [`& .${classes.menuButton}`]: {
     textAlign: 'right',
   },
-  buttonText: {
-    color: 'white',
+  
+  [`& .${classes.buttonText}`]: {
+    color: 'white'
   },
-  title: {
-    flexGrow: 1,
-    textAlign: 'center',
-    color: 'white',
-    textTransform: 'capitalize',
-  },
-  titleButton: {
+
+  [`& .${classes.title}`]: {
     flexGrow: 1,
     textAlign: 'left',
-    width: '20%',
+    color: 'white',
   },
+
+  [`& .${classes.titleButton}`]: {
+    textAlign: 'left',
+    width: '20%',
+  }
 }));
 
 export default function NavBar() {
-  const classes = useStyles();
-  const history = useHistory();
+
+  const navigate = useNavigate();
+
+  const buttons = [
+    {
+      text: "Home",
+      link: "/"
+    },
+    {
+      text: "Exhibit Viewer",
+      link: "/exhibition_viewer"
+    },
+    {
+      text: "Search",
+      link: "/searchBy"
+    },
+    {
+      text: "Login",
+      link: "/login"
+    }
+  ]
 
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed" classes={{ root: classes.abRoot }}>
+    <Root className={classes.root}>
+      <AppBar position="fixed" color="primary">
         <Toolbar>
-          <Button
-            styles={classes.titleButton}
-            onClick={() => history.push('/')}>
-            <Typography variant="h6" className={classes.title}>
-              UTD Comer Collection
-            </Typography>
-          </Button>
-          <div className={classes.menuButton}>
-            <Button className="myButton" onClick={() => history.push('/')}>
-              <div className={classes.buttonText}>Images</div>
-            </Button>
-            {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
-                            <div className={classes.buttonText}>Expanded</div></Button>*/}
-            &nbsp;&nbsp;
-            <Button
-              className="myButton"
-              onClick={() => history.push('/exhibitMain')}>
-              <div className={classes.buttonText}>Exhibitions</div>
-            </Button>
-            &nbsp;&nbsp;
-            <Button
-              className="myButton"
-              onClick={() => history.push('/searchBy')}>
-              <div className={classes.buttonText}>Search</div>
-            </Button>
-            &nbsp;&nbsp;
-            <Button className="myButton" onClick={() => history.push('/login')}>
-              <div className={classes.buttonText}>Login</div>
-            </Button>
-          </div>
+          <Typography variant="h4" className={classes.title}>
+            UTD Comer Collection
+          </Typography>
+          <Stack spacing={1} direction={'row'}>
+            {buttons.map((button) => (
+              <Button key={button.text} color="primary" variant="contained" onClick={() => navigate(button.link)}>
+                <Typography variant="h6" className={classes.buttonText}>
+                  {button.text}
+                </Typography>
+                {/* <div className={classes.buttonText}></div> */}
+              </Button>
+            ))}
+          </Stack>
         </Toolbar>
       </AppBar>
-    </div>
+    </Root>
   );
 }

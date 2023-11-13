@@ -1,11 +1,10 @@
-import { Route } from "react-router-dom";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { Route, Navigate } from "react-router-dom";
 
 export const PrivateRoute = (props) => {
     const currentUser = null;
 
     if(!currentUser) {
-        return <Redirect to="/notloggedin" />
+        return <Navigate to="/notloggedin" replace state={state} />
     }
     return <Route {...props} />
 }

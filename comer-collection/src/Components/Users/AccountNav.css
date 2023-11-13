@@ -1,28 +1,13 @@
-.App {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin-top: 100px;
-}
-  
-body {
-    margin: 0;
-    padding: 0;
-}
   
 .Profile {
     color: white;
-    padding-top: 30%;
     display: flex;
     justify-content: center;
 }
   
 .SideBar {
     height: 100vh; 
-    width: 250px;
     background-color: #E87500;
-    position: fixed;
 }
 
 .SideBarList {

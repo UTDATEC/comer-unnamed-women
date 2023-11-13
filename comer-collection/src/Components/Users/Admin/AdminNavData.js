@@ -26,7 +26,7 @@ export const AdminNavData = [
         link: "/Admin/ExhibitionList"
     },
     {
-        title: "Image",
+        title: "Image Management",
         icon: <img src={ImageIcon} alt="ImageIcon" className="icon-small" />,
         link: "/Admin/ImageList"
     },
