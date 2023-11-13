@@ -7,6 +7,7 @@ import ImageList from './ImageList';
 import ImageEdit from './ImageEdit';
 import InviteForm from './InviteForm';
 import Profile from './Profile';
+import { Box } from '@mui/material';
 
 
 function Admin() {
@@ -24,17 +25,21 @@ function Admin() {
   };
 
   return (
-    <div>
+    <>
+
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: '200px auto',
+        gridTemplateRows: '1fr',
+        gridTemplateAreas: `
+          "sidebar main"
+        `
+      }}>
 
 
-
-      <div style={containerStyle}>
-
-        <div style={adminNavStyle}>
-          <AdminNav />
-        </div>
+        <AdminNav sx={{gridArea: 'sidebar'}}/>
         
-        <div style={AdminContent}>
+        <Box sx={{gridArea: 'main'}}>
           
           <Routes>
             <Route path="Profile" element={<Profile />} />
@@ -46,13 +51,10 @@ function Admin() {
 
           </Routes>
 
-
-          {/* <Route path="/Admin/ImageEdit/:id" component={ImageEdit} /> */}
-
-
-        </div>
-      </div>
-    </div>
+        </Box>
+      
+      </Box>
+    </>
   );
 }
 
