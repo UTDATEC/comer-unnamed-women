@@ -50,7 +50,7 @@ export default function App() {
       fontFamily: [
         "Helvetica"
       ].join(","),
-      fontSize: 12,
+      fontSize: 10,
     },
     palette: {
       primary: {
