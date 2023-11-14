@@ -1,13 +1,13 @@
 import './Login.css';
 import { Component } from 'react';
 
-async function loginUser(info) {
+async function loginUser(email, password) {
   const response = await fetch('http://localhost:9000/api/account/signin', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(info)
+    body: JSON.stringify({ email, password })
   })
   return response.json();
 }
@@ -40,10 +40,7 @@ class Login extends Component {
     console.log(email);
     console.log(password);
 
-    const response = await loginUser({
-      email,
-      password
-    });
+    const response = await loginUser(email, password);
 
     if(response.token) {
       alert("Success");
