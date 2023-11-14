@@ -77,6 +77,11 @@ function ImageList() {
           <Table size="small" aria-label="test table">
             <TableHead sx={{ '& th': {fontWeight: "bold"}, '&': { backgroundColor: "lightgray" } }} >
               <TableRow>
+                <TableCell colSpan={Object.keys(imageColumns).length + 1} className={classes.tableText} align="center">
+                  List of Images
+                </TableCell>
+              </TableRow>
+              <TableRow>
                 {Object.keys(imageColumns).map((col) => (
                   <TableCell className={classes.tableText}>
                     {imageColumns[col]}
