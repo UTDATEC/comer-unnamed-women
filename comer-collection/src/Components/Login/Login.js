@@ -37,9 +37,6 @@ class Login extends Component {
   handleLogin = async (event) => {
     event.preventDefault();
     const { email, password } = this.state;
-    console.log(email);
-    console.log(password);
-
     const response = await loginUser(email, password);
 
     if(response.token) {
@@ -49,10 +46,7 @@ class Login extends Component {
     else {
       alert("Error - no token detected")
     }
-
-    //Debug just to test if its passing correct arguments
-    // const { email, password } = this.state;
-    // alert(`Passed Email: ${email}\nPassed Password: ${password}`);
+    
   };
 
   render() {
