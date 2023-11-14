@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../Table.css';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 function ImageList() {
   const [images, setImages] = useState([]);
@@ -52,7 +53,8 @@ function ImageList() {
                   </td> */}
 
                   <td>
-                    <Link to={`/Admin/ImageEdit/${image.id}`} className='GreenButton'> Edit</Link>                  
+                    <Link to={`/Admin/ImageEdit/${image.id}`}> <Button color="primary" variant="contained" size="small" sx={{'fontSize': "1rem"}}>Edit</Button></Link>
+                    
                   </td>
 
                 </tr>
