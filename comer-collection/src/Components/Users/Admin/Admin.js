@@ -5,6 +5,7 @@ import CuratorList from './CuratorList';
 import ExhibitionList from './ExhibitionList';
 import ImageList from './ImageList';
 import ImageEdit from './ImageEdit';
+import Course from './Course'
 import InviteForm from './InviteForm';
 import Profile from './Profile';
 import { Box } from '@mui/material';
@@ -46,6 +47,7 @@ function Admin() {
             <Route path="CuratorList" element={<CuratorList />} />
             <Route path="ExhibitionList" element={<ExhibitionList />} />
             <Route path="ImageList" element={<ImageList />} />
+            <Route path="Course" element={<Course />} />
             <Route path="Invite" element={<InviteForm />} />
             <Route path="ImageEdit/:id" element={<ImageEdit />} />
 
