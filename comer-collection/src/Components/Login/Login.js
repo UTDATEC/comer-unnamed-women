@@ -2,14 +2,14 @@ import './Login.css';
 import { Component } from 'react';
 
 async function loginUser(info) {
-  return fetch('http://localhost:9000/api/account/signin', {
-    method: 'POST',
+  const response = await fetch('http://localhost:9000/api/account/signin', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(info)
   })
-  .then( data => data.json())
+  return response.json();
 }
 
 class Login extends Component {
@@ -45,12 +45,9 @@ class Login extends Component {
       password
     });
 
-    if('accessToken' in response) {
-      alert("Sucess");
-      (value) => {
-        localStorage.setItem('accessToken', response['accessToken']);
-        localStorage.setItem('user', JSON.stringify(response['user']))
-      }
+    if(response.token) {
+      alert("Success");
+      localStorage.setItem('token', response.token);
     }
     else {
       alert("Error - no token detected")
