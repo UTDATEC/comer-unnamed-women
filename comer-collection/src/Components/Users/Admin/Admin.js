@@ -40,7 +40,7 @@ function Admin() {
 
         <AdminNav sx={{gridArea: 'sidebar'}}/>
         
-        <Box sx={{gridArea: 'main'}}>
+        <Box sx={{gridArea: 'main', position: 'relative'}}>
           
           <Routes>
             <Route path="Profile" element={<Profile />} />
