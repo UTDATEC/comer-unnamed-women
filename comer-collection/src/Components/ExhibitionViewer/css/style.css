@@ -145,7 +145,7 @@ canvas {
 
 
 #painting-info {
-  position: fixed;
+  position: absolute;
   top: 20px;
   left: 20px;
   background-color: rgba(0, 0, 0, 0.7);
@@ -154,15 +154,12 @@ canvas {
   font-family: "Arial", sans-serif;
   color: #fff;
   width: 300px;
-  height: 150px;
   z-index: 1;
   transition: all 0.3s ease-in-out;
-  transform: translateY(100px);
   opacity: 0;
 }
 
 #painting-info.show {
-  transform: translateY(0);
   opacity: 1;
 }
 
