@@ -1,8 +1,10 @@
 /* Container for the entire content */
 .container-invite {
   display: flex;
-  padding-top: 7%;
   max-width: 500px;
+  margin: auto;
+  color: #333;
+
 }
 
 
