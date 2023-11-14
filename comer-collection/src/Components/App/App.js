@@ -12,7 +12,7 @@ import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme } from '@mui/material';
 import { green, orange } from '@mui/material/colors';
 
-export default function App() {
+const App = () => {
   const [searchParams, setSearchParams] = useState({
     title: '',
     inscriptions: '',
@@ -103,3 +103,5 @@ export default function App() {
       </ThemeProvider>
   );
 }
+
+export default App;
