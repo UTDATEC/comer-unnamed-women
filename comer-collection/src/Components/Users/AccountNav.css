@@ -31,11 +31,11 @@
 
 .SideBarList .SideBarRow:hover {
     cursor: pointer;
-    background-color: darkgreen;
+    background-color: #1B5E20;
 }
 
 .SideBarList #active {
-    background-color: darkgreen;
+    background-color: #1B5E20;
     font-weight: bold;
     text-decoration: underline;
 }
