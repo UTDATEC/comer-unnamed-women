@@ -190,10 +190,10 @@ function CuratorList() {
                       {status}
                     </TableCell>
                     <TableCell className={classes.tableText}>
-                      {course.Users.given_name}
+                      {curatorUser.given_name}
                     </TableCell>
                     <TableCell className={classes.tableText}>
-                      {course.Users.family_name}
+                      {curatorUser.family_name}
                     </TableCell>
                     <TableCell className={classes.tableText}>
                       {course.name}
