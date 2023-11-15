@@ -14,6 +14,7 @@ import { createAmbientLight } from './js/Lighting';
 import { createBoundingBoxes } from './js/BoundingBox';
 import { setupEventListeners } from './js/EventListener';
 import { setupRendering } from './js/Render';
+import  staticImages  from './js/StaticImages';
 
 const ExhibitionViewer = (props) => {
 
@@ -25,6 +26,7 @@ const ExhibitionViewer = (props) => {
     const playButtonRef = useRef(null);
     const menuRef = useRef(null);
 
+    //const [imageSrc] = useState('./images/logo.png'); // Set the default image source
 
 
     const enableControls = (controls) => {
@@ -54,7 +56,7 @@ const ExhibitionViewer = (props) => {
         const scene = new THREE.Scene();
         let { camera, controls, renderer } = setupScene(scene);
         
-        console.log(scene);
+        // console.log(scene);
         
         const texture_loader = new THREE.TextureLoader();
     
@@ -66,9 +68,7 @@ const ExhibitionViewer = (props) => {
     
         
         // checking if JSON was read correctly
-        console.log("Gallery Height Total: ", gallery_height + gallery_depth,
-        "Gallery Width: ", gallery_width,
-        "Gallery Length: ", gallery_length);
+        // console.log("Gallery Height Total: ", gallery_height + gallery_depth, "Gallery Width: ", gallery_width, "Gallery Length: ", gallery_length);
     
     
         // create gallery bounds
@@ -97,10 +97,7 @@ const ExhibitionViewer = (props) => {
         else if (image.metadata.direction == 4) { photos_on_4++; }
         })
     
-        console.log("photo_1:", photos_on_1, 
-                "photo_2:", photos_on_2,
-                "photo_3:", photos_on_3,
-                "photo_4:", photos_on_4);
+        // console.log("photo_1:", photos_on_1, "photo_2:", photos_on_2, "photo_3:", photos_on_3, "photo_4:", photos_on_4);
     
         // turn string value of brightness into a value we can use for brightness
         let ambient_light_intensity;
@@ -150,7 +147,7 @@ const ExhibitionViewer = (props) => {
             hideMenu();
         });
 
-        console.log("controls", controls);
+        // console.log("controls", controls);
 
         return () => {
             console.log("Running cleanup");
@@ -159,33 +156,39 @@ const ExhibitionViewer = (props) => {
 
     }, []);
         
+    const selectedImageKey = './logo.png'; // Replace this with the desired key
+    const selectedImageSrc = staticImages[selectedImageKey];
+
     return (
         <>
         <div className="background_menu">
             <div id="menu" ref={menuRef}>
-                <div id="image_container">
-                    <img src="./images/wall.jpg" alt="Menu Picture" />
+                <div id="image_container" ref={containerRef}>
+                    <img src={selectedImageSrc}/>
                 </div>
 
                 <div id="content">
-                    <h1>Art Gallery</h1>
-                    <div>
-                        <p>Curated by STUDENT NAME</p>
-                        <p>Interactive 3D Gallery of the GALLERY NAME</p>
+                    <h1>{primary_json.main.exhibition_name}</h1>
+                    <div id="content_centered">
+                        <p>Curated by {primary_json.main.curator}</p>
+                        <p>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</p>
                         
                     </div>
 
                     <div>
-                        <p>Instructions</p>
-                        <p>Use Arrow Keys or WASD to Move</p>
-                        <p>Look with mouse</p>
+                        <p><b>Welcome to {primary_json.main.curator}'s {primary_json.main.exhibition_name}</b></p>
+                        <p>Controls are temporarily paused while you're in this menu.</p>
+                        <ul>
+                            <li>To begin the exhibition and enable controls, click 'Enter Exhibition' below.</li>
+                            <li>This menu will reappear whenever you press 'Escape.'</li>
+                            <li>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</li>
+                            <li>Take a look around and turn by using your mouse or mousepad.</li>
+                            <li>Left click near an artwork to be positioned in front of the piece.</li>
+                        </ul>
                     </div>
 
                     <div id="play_button" ref={playButtonRef}>
-                        <p>Enter Gallery</p>
-                    </div>
-                    <div id="copyright_info">
-                        <p>Made with Three.js and Vite</p>
+                        <p>Enter Exhibition</p>
                     </div>
                 </div>
             </div>
@@ -196,7 +199,7 @@ const ExhibitionViewer = (props) => {
         </div>
 
 
-        <div id="painting-info"></div>
+        <div id="art-info"></div>
 
         </>
     )
