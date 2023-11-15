@@ -122,20 +122,11 @@ canvas {
   height: 100%;
 }
 
-
-
-
-
-
-
-
-
-
 #painting-info {
   position: absolute;
   top: 20px;
   left: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.9);
   padding: 20px;
   border-radius: 10px;
   font-family: "Arial", sans-serif;
