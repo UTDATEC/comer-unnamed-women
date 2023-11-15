@@ -1,16 +1,16 @@
 export function displayArtInfo(info) {
-    const info_element = document.getElementById('painting-info');
+    const info_element = document.getElementById('art-info');
     info_element.innerHTML = `
         <h3>${info.title}</h3>
-        <p>Artist: ${info.artist}</p>
-        <p>Description: ${info.description}</p>
-        <p>Year: ${info.year}</p>
+        <p><i>${info.artist}</i>, <i>${info.medium}</i>, ${info.year}</p>
+        <p><br></p>
+        <p>${info.description}</p>
         `;
 
     info_element.classList.add('show');
 };
 
 export function hideArtInfo() {
-    const info_element = document.getElementById('painting-info');
+    const info_element = document.getElementById('art-info');
     info_element.classList.remove('show');
 };

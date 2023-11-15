@@ -110,6 +110,6 @@ export const setupRendering = (
         requestAnimationFrame(render);
     };
 
-    console.log("render() function is called");
+    // console.log("render() function is called");
     render();
 };

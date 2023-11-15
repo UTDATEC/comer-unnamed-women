@@ -11,10 +11,6 @@ export const keys_pressed = {
     a: false,
     s: false,
     d: false,
-    W: false, 
-    A: false,
-    S: false,
-    D: false
 };
 
 // update movement according to key pressed
@@ -28,19 +24,19 @@ export const updateMovement = (delta, controls, camera, walls) => {
     const move_speed = 5 * delta;
     const previous_position = camera.position.clone();
 
-    if (keys_pressed.ArrowDown || keys_pressed.s || keys_pressed.S) {
+    if (keys_pressed.ArrowDown || keys_pressed.s) {
         controls.moveForward(-move_speed);
     }
 
-    if (keys_pressed.ArrowUp || keys_pressed.w || keys_pressed.W) {
+    if (keys_pressed.ArrowUp || keys_pressed.w) {
         controls.moveForward(move_speed);
     }
 
-    if (keys_pressed.ArrowLeft || keys_pressed.a || keys_pressed.A) {
+    if (keys_pressed.ArrowLeft || keys_pressed.a) {
         controls.moveRight(-move_speed);
     }
 
-    if (keys_pressed.ArrowRight || keys_pressed.d || keys_pressed.D) {
+    if (keys_pressed.ArrowRight || keys_pressed.d) {
         controls.moveRight(move_speed);
     }
 
