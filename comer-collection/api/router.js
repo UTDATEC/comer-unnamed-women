@@ -9,7 +9,7 @@ const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tag
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, saveExhibition, loadExhibition } = require('./controllers/exhibitions.js');
 
 // Read images
 router.get("/images", listImages);
@@ -72,6 +72,8 @@ router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 // Read exhibitions (admin)
 router.get("/exhibitions", listExhibitions)
 router.get("/exhibitions/:exhibitionId", getExhibition)
+router.put("/exhibitions", saveExhibition)
+router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
 // Write exhibitions (admin)
 

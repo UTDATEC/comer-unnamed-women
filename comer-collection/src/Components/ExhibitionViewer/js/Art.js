@@ -34,7 +34,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     art_data.forEach((data) => {
 
         // grab the texture and apply that texture to a material (lambert has lighting effects applied to it)
-        const texture = texture_loader.load('images/artworks1/' + data.img_src + '.jpg'); // convert image into texture
+        const texture = texture_loader.load('../images/artworks1/' + data.img_src + '.jpg'); // convert image into texture
         const material = new THREE.MeshLambertMaterial({ map: texture }); // map texture to a material
 
         // convert material into mesh with proper dimensions

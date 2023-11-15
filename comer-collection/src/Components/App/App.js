@@ -4,7 +4,7 @@ import GridView from '../GridView/GridView';
 import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Admin from '../Users/Admin/Admin';
 import Curator from '../Users/Curator/Curator';
 
@@ -12,7 +12,7 @@ import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme } from '@mui/material';
 import { green, orange } from '@mui/material/colors';
 
-export default function App() {
+const App = () => {
   const [searchParams, setSearchParams] = useState({
     title: '',
     inscriptions: '',
@@ -50,7 +50,7 @@ export default function App() {
       fontFamily: [
         "Helvetica"
       ].join(","),
-      fontSize: 12,
+      fontSize: 10,
     },
     palette: {
       primary: {
@@ -63,6 +63,30 @@ export default function App() {
       }
     }
   })
+
+  const [currentUserProfile, setCurrentUserProfile] = useState(null);
+  useEffect(() => {
+    const setAppUser = async() => {
+      try {
+        const response = await fetch("http://localhost:9000/api/account/profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if(response.status == 200) {
+          let responseJson = await response.json();
+          setCurrentUserProfile(responseJson.data);
+        } else {
+          throw new Error("Response status was not 200")
+        }
+      } catch (error) {
+        setCurrentUserProfile(null);
+      }
+      
+    }
+    setAppUser();
+  }, []);
+
 
   return (
       <ThemeProvider theme={theme}>
@@ -77,8 +101,8 @@ export default function App() {
             "body"
           `
         }}>
-        <NavBar sx={{ gridArea: 'header' }} />
-        <Box sx={{ gridArea: 'body' }} >
+        <NavBar user={currentUserProfile} setUser={setCurrentUserProfile} sx={{ gridArea: 'header' }} />
+        <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
@@ -86,7 +110,7 @@ export default function App() {
           <Route path="/Admin/*" element={<Admin />} />
           <Route path="/Curator/*" element={<Curator />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login user={currentUserProfile} setUser={setCurrentUserProfile} />} />
           
           <Route path="/" element={
             <GridView
@@ -103,3 +127,5 @@ export default function App() {
       </ThemeProvider>
   );
 }
+
+export default App;

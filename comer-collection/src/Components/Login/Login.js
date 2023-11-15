@@ -1,78 +1,80 @@
+import { useNavigate } from 'react-router';
 import './Login.css';
-import { Component } from 'react';
+import { useState } from 'react';
 
-async function loginUser(info) {
-  return fetch('http://localhost:9000/api/account/signin', {
-    method: 'POST',
+async function loginUser(email, password) {
+  const response = await fetch('http://localhost:9000/api/account/signin', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(info)
+    body: JSON.stringify({ email, password })
   })
-  .then( data => data.json())
+  return response.json();
 }
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      loggedIn: false,
-      error: '',
-    };
-  }
-
+const Login = (props) => {
   
+  const { user, setUser } = props;
 
-  handleEmailChange = (event) => {
-    this.setState({ email: event.target.value });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const navigate = useNavigate();
+
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
-  handlePasswordChange = (event) => {
-    this.setState({ password: event.target.value });
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
   //Api call here
-  handleLogin = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    const { email, password } = this.state;
-    console.log(email);
-    console.log(password);
+    const response = await loginUser(email, password);
 
-    const response = await loginUser({
-      email,
-      password
-    });
+    if(response.token) {
+      // alert("Success");
+      localStorage.setItem('token', response.token);
 
-    if('accessToken' in response) {
-      alert("Sucess");
-      (value) => {
-        localStorage.setItem('accessToken', response['accessToken']);
-        localStorage.setItem('user', JSON.stringify(response['user']))
+      const profileResponse = await fetch("http://localhost:9000/api/account/profile", {
+        headers: {
+          Authorization: `Bearer ${response.token}`
+        }
+      })
+      if(profileResponse.status == 200) {
+        let profileResponseJson = await profileResponse.json();
+        setUser(profileResponseJson.data);
+        navigate('/Admin');
       }
+      else {
+        setUser(null);
+        localStorage.removeItem('token');
+      }
+
+      
     }
     else {
       alert("Error - no token detected")
     }
-
-    //Debug just to test if its passing correct arguments
-    // const { email, password } = this.state;
-    // alert(`Passed Email: ${email}\nPassed Password: ${password}`);
+    
   };
 
-  render() {
     return (
       <div>
         <div className="separator" />
         <div className="loginForm">
-          <form onSubmit={this.handleLogin}>
+          <form onSubmit={handleLogin}>
             <label>Email</label>
             <input
               type="text"
               name="email"
-              value={this.state.email}
-              onChange={this.handleEmailChange}
+              value={email}
+              onChange={handleEmailChange}
               required
             />
 
@@ -81,8 +83,8 @@ class Login extends Component {
               style={{ marginBottom: '12px' }}
               type="password"
               name="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
+              value={password}
+              onChange={handlePasswordChange}
               required
             />
             <button id="centered" type="submit">
@@ -92,7 +94,6 @@ class Login extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default Login;

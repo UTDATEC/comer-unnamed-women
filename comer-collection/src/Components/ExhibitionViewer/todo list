@@ -6,18 +6,10 @@ important tasks:
 - info card update
 - saving json stuff, see below
 
-
-medium importance:
-- create loading screen
-
-
 future stuff:
 - curator vs public view
 - how to incorporate with existing website. I think vaughan/donnie will know something about this but i feel bad about asking him how to do this
 
-bugs: 
-- fix shift movement bug
-- fix the event listener problem (click to view)
 
 RAMBLING NOTES:
 
@@ -27,15 +19,3 @@ take this value and move up the art by this amount to give it some weight at the
 Once these things are done, we need a way that a frame, matte, image desc, image placement can be moved inside the simulation. this needs to require curator view, need to ask backend team how we can do this
  - we will need a way server side to do this (saving movements). must ask backend what they think about this 
  - we can move it all we want in the sim, but there is no way to save these values
-
-user options
-- flooring options
-
-NOTES:
-
-frames:
-- the frames are set to be a bit larger than originally intended. may remove when there is actual art from the collection, but it fits better like this for now
-
-custom position:
-- there are no safety bounds for this, and to be honest i dont feel like adding them because i feel like it should be 'on the student' whether or not they checked before turning in
-
