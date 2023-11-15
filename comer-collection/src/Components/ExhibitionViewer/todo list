@@ -1,6 +1,6 @@
 important tasks:
-- entry card update
-- cover photo (ask diane for picture, or go take some with dslr from library)
+- entry card update (style.css)
+  - cover photo
 - matte math for weighted bottom
 - ask frontend about outside sim editing
 - info card update
@@ -8,8 +8,6 @@ important tasks:
 
 future stuff:
 - curator vs public view
-- how to incorporate with existing website. I think vaughan/donnie will know something about this but i feel bad about asking him how to do this
-
 
 RAMBLING NOTES:
 
@@ -17,5 +15,6 @@ math:: [size of matte - height of art] / 4
 take this value and move up the art by this amount to give it some weight at the bottom? ask diane
 
 Once these things are done, we need a way that a frame, matte, image desc, image placement can be moved inside the simulation. this needs to require curator view, need to ask backend team how we can do this
- - we will need a way server side to do this (saving movements). must ask backend what they think about this 
+ - we will need a way server side to do this (saving movements, image desc). must ask backend what they think about this 
+ - it would be nice to alter colors, but the exhibition is already very expensive, so it may be best to just leave it
  - we can move it all we want in the sim, but there is no way to save these values

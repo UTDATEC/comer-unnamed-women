@@ -168,17 +168,20 @@ const ExhibitionViewer = (props) => {
                 </div>
 
                 <div id="content">
-                    <h1>Art Gallery</h1>
+                    <h1>{primary_json.main.exhibition_name}</h1>
                     <div>
-                        <p>Curated by STUDENT NAME</p>
-                        <p>Interactive 3D Gallery of the GALLERY NAME</p>
+                        <p>Curated by {primary_json.main.curator}'s {primary_json.main.exhibition_name}</p>
+                        <p>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</p>
                         
                     </div>
 
                     <div>
-                        <p>Instructions</p>
-                        <p>Use Arrow Keys or WASD to Move</p>
-                        <p>Look with mouse</p>
+                        <p><b>Welcome to {primary_json.main.curator}'s {primary_json.main.exhibition_name}</b></p>
+                        <p>Controls are temporarily paused while you're in this menu. To begin the exhibition and enable controls, click 'Enter Gallery' below.</p>
+                        <p>You can exit the gallery anytime by pressing the 'Escape Key' on your keyboard. This menu will reappear whenever you press 'Escape.'</p>
+                        <p>Explore the gallery using the Arrow Keys or the 'W A S D' keys on your keyboard.</p>
+                        <p>Take a look around and turn by using your mouse or mousepad.</p>
+                        <p>For a closer view of artworks, simply left-click near them, and you'll be positioned right in front of the art!</p>
                     </div>
 
                     <div id="play_button" ref={playButtonRef}>
