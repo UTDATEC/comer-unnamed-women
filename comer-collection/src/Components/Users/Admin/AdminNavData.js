@@ -40,10 +40,5 @@ export const AdminNavData = [
         title: "Invite",
         icon: <img src={InviteIcon} alt="InviteIcon" className="icon-small" />,
         link: "/Admin/Invite"
-    },
-    {
-        title: "Logout",
-        icon: <img src={LogoutIcon} alt="LogoutIcon" className="icon-small" />,
-        link: "/"
     }
 ]

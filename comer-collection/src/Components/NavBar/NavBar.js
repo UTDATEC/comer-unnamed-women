@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import '../App/App.css';
 
@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
-import { Stack } from '@mui/material';
+import { Menu, MenuItem, Stack } from '@mui/material';
 
 const PREFIX = 'NavBar';
 
@@ -48,28 +48,44 @@ const Root = styled('div')((
   }
 }));
 
-export default function NavBar() {
 
+
+export default function NavBar(props) {
+  
   const navigate = useNavigate();
+  const { user, setUser } = props;
+  
+  const signOutUser = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+  }
+  
+  const [buttons, setButtons] = useState([]);
 
-  const buttons = [
-    {
-      text: "Home",
-      link: "/"
-    },
-    {
-      text: "Exhibit Viewer",
-      link: "/exhibition_viewer"
-    },
-    {
-      text: "Search",
-      link: "/searchBy"
-    },
-    {
-      text: "Login",
-      link: "/login"
+  const [anchorElement, setAnchorElement] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorElement(event.currentTarget);
+  }
+
+  const handleMenuClose = (event) => {
+    setAnchorElement(null);
+  }
+
+  useEffect(() => {
+    const getButtons = (user) => {
+      const output = [
+        { text: "Home", link: "/" },
+        { text: "Exhibit Viewer", link: "/exhibition_viewer" },
+        { text: "Search", link: "/searchBy" }
+      ]
+      if(!user) {
+        output.push({ text: "Log in", link: "/login" })
+      }
+      return output
     }
-  ]
+    setButtons(getButtons(user));
+  }, [user])
 
   return (
     <Root className={classes.root}>
@@ -87,6 +103,33 @@ export default function NavBar() {
                 {/* <div className={classes.buttonText}></div> */}
               </Button>
             ))}
+            {user && (
+              <>
+                <Button variant="text" onClick={handleMenuOpen} sx={{textTransform: "unset"}}
+                  aria-haspopup={Boolean(anchorElement)}
+                  aria-expanded={Boolean(anchorElement)}
+                >
+                  <Typography variant="h5" sx={{color: "white", marginLeft: '20px'}}>{user.given_name} {user.family_name}</Typography>
+                </Button>
+                <Menu MenuListProps={{
+                }} anchorEl={anchorElement} anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right'
+                }} transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    signOutUser();
+                  }}>
+                    <Typography variant="h6">
+                      Log Out
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
           </Stack>
         </Toolbar>
       </AppBar>
