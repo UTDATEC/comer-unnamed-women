@@ -50,7 +50,7 @@ export default function App() {
       fontFamily: [
         "Helvetica"
       ].join(","),
-      fontSize: 12,
+      fontSize: 10,
     },
     palette: {
       primary: {
@@ -78,7 +78,7 @@ export default function App() {
           `
         }}>
         <NavBar sx={{ gridArea: 'header' }} />
-        <Box sx={{ gridArea: 'body' }} >
+        <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
