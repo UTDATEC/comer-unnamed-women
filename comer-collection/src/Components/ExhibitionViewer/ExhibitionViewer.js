@@ -201,7 +201,7 @@ const ExhibitionViewer = (props) => {
         </div>
 
 
-        <div id="painting-info"></div>
+        <div id="art-info"></div>
 
         </>
     )
