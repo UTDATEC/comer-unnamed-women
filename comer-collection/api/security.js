@@ -46,8 +46,7 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
 }
 
 const adminOperation = async (req, res, next, callback) => {
-    callback(true)
-    //await userOperation(req, res, next, callback, true, true);
+    await userOperation(req, res, next, callback, true, true);
 }
 
 // the user parameter is a sequelize User instance
