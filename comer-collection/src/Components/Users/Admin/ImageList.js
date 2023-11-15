@@ -74,7 +74,12 @@ function ImageList() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/api/images/${imageToDelete.id}`
+        `http://localhost:9000/api/images/${imageToDelete.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        }
       );
       if (response.status === 200) {
         // Remove the deleted image from the state
