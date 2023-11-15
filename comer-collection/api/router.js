@@ -76,7 +76,7 @@ router.put("/exhibitions", saveExhibition)
 router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
 // Modify exhibitions (admin)
-router.delete("/exhibitions", deleteExhibition)
+router.delete("/exhibitions/:exhibitionId", deleteExhibition)
 
 
 

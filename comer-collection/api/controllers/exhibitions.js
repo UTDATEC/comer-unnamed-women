@@ -56,8 +56,8 @@ const saveExhibition = async (req, res, next) => {
             privacy: req.body.privacy
         });
         
-        const temp_user = User.findByPk(req.body.user)
-        await newExhibition.setUser(temp_user);
+        const user = User.findByPk(req.body.userid)
+        await newExhibition.setUser(user);
 
         res.status(201);
 
