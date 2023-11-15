@@ -110,7 +110,7 @@ const App = () => {
           <Route path="/Admin/*" element={<Admin />} />
           <Route path="/Curator/*" element={<Curator />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login user={currentUserProfile} setUser={setCurrentUserProfile} />} />
           
           <Route path="/" element={
             <GridView
