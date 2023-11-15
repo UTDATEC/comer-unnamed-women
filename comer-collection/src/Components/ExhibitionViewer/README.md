@@ -5,6 +5,7 @@ relies on three-js, three-js-stdlib and an appropriate json to create a gallery
 ## user options
 - flooring options(texture title in /images/)
 - matte color* (#XXXXXX)
+- matte weighted* (true/false: true moves art upward to give the matte additional weight below the photo)
 - frame color* (#XXXXXX)
 - frame size* (Decimal, inches)
 - room darkness/brightness (enumeration: dark, moody dark, moody bright, bright)
