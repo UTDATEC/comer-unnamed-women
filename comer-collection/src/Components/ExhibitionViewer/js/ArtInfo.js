@@ -5,6 +5,8 @@ export function displayArtInfo(info) {
         <p><i>${info.artist}</i>, <i>${info.medium}</i>, ${info.year}</p>
         <p><br></p>
         <p>${info.description}</p>
+        <p><br></p>
+        <p>${info.additional_information}</p>
         `;
 
     info_element.classList.add('show');
