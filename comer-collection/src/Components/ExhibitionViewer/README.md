@@ -24,6 +24,7 @@ relies on three-js, three-js-stdlib and an appropriate json to create a gallery
 - up/down in relation to eyelevel* (Decimal, feet)
 - description* (String)
 - direction[1,2,3,4]* (Enumeration: 1, 2, 3, 4 - starting with the wall forward, moving clockwise)  
+- additional description* (String)
 *per photo  
 **for the three other walls  
 
@@ -36,6 +37,9 @@ relies on three-js, three-js-stdlib and an appropriate json to create a gallery
 
 ### custom position:
 - there are no safety bounds for this, and to be honest i dont feel like adding them because i feel like it should be 'on the student' whether or not they checked before turning in. This means you can set art outside the bounds of the gallery with no way of viewing it. Maybe create a suggestion somewhere to let someone know that the reason they cannot see a piece of art is because it has an invalid custom position
+
+### description/additional description:
+- there is nothing that checks length of this string. you can make it as long as you want, which causes it to go off screen. This is probably fine since the text descriptions should never be too long. 
 
 ## Known Bugs:
 - fix the event listener problem (click to view): in Render.js, we create event listeners for when a photo is clicked. The issue is that it creates [the amount of times your machine can complete the render function in the amount of time a single click is registered]. This can create upwards of like 2-300 event listeners, causing lag. Not necessesarily a bug, but definitely a performance loss that can be noticeable. 
