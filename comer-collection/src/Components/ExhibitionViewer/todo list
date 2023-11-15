@@ -1,18 +1,10 @@
 important tasks:
-- entry card update (style.css)
-  - cover photo
-
-- info card update
 
 
 future stuff:
 - curator vs public view
-- remove console statements
 - ask frontend about outside sim editing
 - saving json stuff, see below
-
-RAMBLING NOTES:
-
 
 Once these things are done, we need a way that a frame, matte, image desc, image placement can be moved inside the simulation. this needs to require curator view, need to ask backend team how we can do this
  - we will need a way server side to do this (saving movements, image desc). must ask backend what they think about this 

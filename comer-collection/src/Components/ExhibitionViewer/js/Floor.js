@@ -27,5 +27,5 @@ export const setupFloor = (scene, texture_loader, floor_width, floor_length, flo
     floor_plane.position.y = -floor_depth;  // lower floor so eye level can stay at 0
 
     scene.add(floor_plane);
-    console.log("floor plane", floor_plane);
+    // console.log("floor plane", floor_plane);
 };

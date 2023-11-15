@@ -56,7 +56,7 @@ const ExhibitionViewer = (props) => {
         const scene = new THREE.Scene();
         let { camera, controls, renderer } = setupScene(scene);
         
-        console.log(scene);
+        // console.log(scene);
         
         const texture_loader = new THREE.TextureLoader();
     
@@ -68,9 +68,7 @@ const ExhibitionViewer = (props) => {
     
         
         // checking if JSON was read correctly
-        console.log("Gallery Height Total: ", gallery_height + gallery_depth,
-        "Gallery Width: ", gallery_width,
-        "Gallery Length: ", gallery_length);
+        // console.log("Gallery Height Total: ", gallery_height + gallery_depth, "Gallery Width: ", gallery_width, "Gallery Length: ", gallery_length);
     
     
         // create gallery bounds
@@ -99,10 +97,7 @@ const ExhibitionViewer = (props) => {
         else if (image.metadata.direction == 4) { photos_on_4++; }
         })
     
-        console.log("photo_1:", photos_on_1, 
-                "photo_2:", photos_on_2,
-                "photo_3:", photos_on_3,
-                "photo_4:", photos_on_4);
+        // console.log("photo_1:", photos_on_1, "photo_2:", photos_on_2, "photo_3:", photos_on_3, "photo_4:", photos_on_4);
     
         // turn string value of brightness into a value we can use for brightness
         let ambient_light_intensity;
@@ -152,7 +147,7 @@ const ExhibitionViewer = (props) => {
             hideMenu();
         });
 
-        console.log("controls", controls);
+        // console.log("controls", controls);
 
         return () => {
             console.log("Running cleanup");

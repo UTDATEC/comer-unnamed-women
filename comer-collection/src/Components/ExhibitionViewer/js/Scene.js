@@ -29,8 +29,9 @@ export const setupScene = (scene) =>  {
     });
 
     // set initial window size
-    console.log(window_width, window_height);
+    // console.log(window_width, window_height);
     renderer.setSize(window_width, window_height);
+    
     // document.body.appendChild(renderer.domElement);
     // console.log(renderer.domElement);
 
