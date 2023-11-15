@@ -14,6 +14,7 @@ import { createAmbientLight } from './js/Lighting';
 import { createBoundingBoxes } from './js/BoundingBox';
 import { setupEventListeners } from './js/EventListener';
 import { setupRendering } from './js/Render';
+import  staticImages  from './js/StaticImages';
 
 const ExhibitionViewer = (props) => {
 
@@ -25,6 +26,7 @@ const ExhibitionViewer = (props) => {
     const playButtonRef = useRef(null);
     const menuRef = useRef(null);
 
+    //const [imageSrc] = useState('./images/logo.png'); // Set the default image source
 
 
     const enableControls = (controls) => {
@@ -159,18 +161,21 @@ const ExhibitionViewer = (props) => {
 
     }, []);
         
+    const selectedImageKey = './logo.png'; // Replace this with the desired key
+    const selectedImageSrc = staticImages[selectedImageKey];
+
     return (
         <>
         <div className="background_menu">
             <div id="menu" ref={menuRef}>
-                <div id="image_container">
-                    <img src="./images/wall.jpg" alt="Menu Picture" />
+                <div id="image_container" ref={containerRef}>
+                    <img src={selectedImageSrc} alt="Logo" />
                 </div>
 
                 <div id="content">
                     <h1>{primary_json.main.exhibition_name}</h1>
                     <div>
-                        <p>Curated by {primary_json.main.curator}'s {primary_json.main.exhibition_name}</p>
+                        <p>Curated by {primary_json.main.curator}</p>
                         <p>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</p>
                         
                     </div>
@@ -186,9 +191,6 @@ const ExhibitionViewer = (props) => {
 
                     <div id="play_button" ref={playButtonRef}>
                         <p>Enter Gallery</p>
-                    </div>
-                    <div id="copyright_info">
-                        <p>Made with Three.js and Vite</p>
                     </div>
                 </div>
             </div>
