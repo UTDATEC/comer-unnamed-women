@@ -284,6 +284,18 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         frame.position.set(0, -((data.frame.height + 1) / 2) / 12, 0);
         matte.position.set(0, 0, -(1 / 48));
 
+        // move the art if the curator designated they wanted a weighted matte
+        if (data.matte.weighted == true) {
+            art.position.set(0,1,0); // needs real math, look in todo
+            /**
+             * data.frame.height
+             * data.size.height
+             * (data.frame.height - data.size.height) = x
+             * art.position.set(0, x, 0)
+             * 
+             */
+        }
+
         // if intensity does not fit any of the requirements, make it one above the ambient lighting
         if (data.light.intensity <= 0 || 
             data.light.intensity == null || 
