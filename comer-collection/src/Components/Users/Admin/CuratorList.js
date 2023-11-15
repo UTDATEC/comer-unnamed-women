@@ -68,7 +68,7 @@ function CuratorList() {
       try {
         const response = await axios.get("http://localhost:9000/api/courses", {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
 
@@ -126,7 +126,7 @@ function CuratorList() {
         `http://localhost:9000/api/courses/${courseId}/curators/${curatorId}`,
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );

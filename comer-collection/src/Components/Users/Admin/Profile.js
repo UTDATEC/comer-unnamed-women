@@ -11,7 +11,7 @@ function Profile() {
       try {
         const response = await axios.get("http://localhost:9000/api/users", {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
 

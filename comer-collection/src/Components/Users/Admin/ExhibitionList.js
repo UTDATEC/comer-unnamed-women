@@ -65,7 +65,7 @@ function ExhibitionList() {
         "http://localhost:9000/api/exhibitions",
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
@@ -86,7 +86,7 @@ function ExhibitionList() {
         `http://localhost:9000/api/exhibitions/${exhibitionToDelete.id}`,
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
