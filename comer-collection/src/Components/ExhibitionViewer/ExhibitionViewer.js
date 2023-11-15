@@ -169,12 +169,12 @@ const ExhibitionViewer = (props) => {
         <div className="background_menu">
             <div id="menu" ref={menuRef}>
                 <div id="image_container" ref={containerRef}>
-                    <img src={selectedImageSrc} alt="Logo" />
+                    <img src={selectedImageSrc}/>
                 </div>
 
                 <div id="content">
                     <h1>{primary_json.main.exhibition_name}</h1>
-                    <div>
+                    <div id="content_centered">
                         <p>Curated by {primary_json.main.curator}</p>
                         <p>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</p>
                         
@@ -182,15 +182,18 @@ const ExhibitionViewer = (props) => {
 
                     <div>
                         <p><b>Welcome to {primary_json.main.curator}'s {primary_json.main.exhibition_name}</b></p>
-                        <p>Controls are temporarily paused while you're in this menu. To begin the exhibition and enable controls, click 'Enter Gallery' below.</p>
-                        <p>You can exit the gallery anytime by pressing the 'Escape Key' on your keyboard. This menu will reappear whenever you press 'Escape.'</p>
-                        <p>Explore the gallery using the Arrow Keys or the 'W A S D' keys on your keyboard.</p>
-                        <p>Take a look around and turn by using your mouse or mousepad.</p>
-                        <p>For a closer view of artworks, simply left-click near them, and you'll be positioned right in front of the art!</p>
+                        <p>Controls are temporarily paused while you're in this menu.</p>
+                        <ul>
+                            <li>To begin the exhibition and enable controls, click 'Enter Exhibition' below.</li>
+                            <li>This menu will reappear whenever you press 'Escape.'</li>
+                            <li>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</li>
+                            <li>Take a look around and turn by using your mouse or mousepad.</li>
+                            <li>Left click near an artwork to be positioned in front of the piece.</li>
+                        </ul>
                     </div>
 
                     <div id="play_button" ref={playButtonRef}>
-                        <p>Enter Gallery</p>
+                        <p>Enter Exhibition</p>
                     </div>
                 </div>
             </div>
