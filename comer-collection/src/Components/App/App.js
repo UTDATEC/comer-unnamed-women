@@ -67,17 +67,22 @@ const App = () => {
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
   useEffect(() => {
     const setAppUser = async() => {
-      const response = await fetch("http://localhost:9000/api/account/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+      try {
+        const response = await fetch("http://localhost:9000/api/account/profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if(response.status == 200) {
+          let responseJson = await response.json();
+          setCurrentUserProfile(responseJson.data);
+        } else {
+          throw new Error("Response status was not 200")
         }
-      })
-      if(response.status == 200) {
-        let responseJson = await response.json();
-        setCurrentUserProfile(responseJson.data);
-      }
-      else
+      } catch (error) {
         setCurrentUserProfile(null);
+      }
+      
     }
     setAppUser();
   }, []);
@@ -96,7 +101,7 @@ const App = () => {
             "body"
           `
         }}>
-        <NavBar user={currentUserProfile} sx={{ gridArea: 'header' }} />
+        <NavBar user={currentUserProfile} setUser={setCurrentUserProfile} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
