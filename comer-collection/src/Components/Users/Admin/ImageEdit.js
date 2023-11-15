@@ -2,7 +2,54 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../Image.css';
-import '../Table.css';
+
+// Separate component for input fields
+const InputField = ({ label, id, name, value, onChange }) => {
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input
+        type="text"
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
+
+// Separate component for Artists input
+const ArtistsInput = ({ artists, onChange }) => {
+  return (
+    <div>
+      <label htmlFor="Artists">Artists</label>
+      <input
+        type="text"
+        id="Artists"
+        name="Artists"
+        value={artists.map((artist) => `${artist.givenName} ${artist.familyName}`).join(', ')}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
+
+// Separate component for Tags input
+const TagsInput = ({ tags, onChange }) => {
+  return (
+    <div>
+      <label htmlFor="Tags">Tags</label>
+      <input
+        type="text"
+        id="Tags"
+        name="Tags"
+        value={tags.map((tag) => tag.tagName).join(', ')}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
 
 function EditImage() {
   const { id } = useParams();
@@ -27,8 +74,8 @@ function EditImage() {
       url: '',
       location: '',
       Artists: [],
-      Tags: []
-    }
+      Tags: [],
+    },
   });
 
   useEffect(() => {
@@ -51,8 +98,8 @@ function EditImage() {
     setImage({
       data: {
         ...image.data,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
 
@@ -67,238 +114,42 @@ function EditImage() {
   };
 
   return (
+    <div className="ImageContainer">
+      <p className="Image">Image Information</p>
 
-    <div className='ImageContainer'>
-        
-      <p className='Image'>Image Information</p>
+      <form onSubmit={handleSubmit} className="InputBox">
+        {/* Use the InputField component for each input */}
+        <InputField label="ID" id="id" name="id" value={image.data.id} onChange={handleInputChange} />
+        <InputField label="Accession Number" id="accessionNumber" name="accessionNumber" value={image.data.accessionNumber} onChange={handleInputChange} />
+        <InputField label="Title" id="title" name="title" value={image.data.title} onChange={handleInputChange} />
+        <InputField label="Year" id="year" name="year" value={image.data.year} onChange={handleInputChange} />
+        <InputField label="Additional Print Year" id="additionalPrintYear" name="additionalPrintYear" value={image.data.additionalPrintYear} onChange={handleInputChange} />
+        <InputField label="Medium" id="medium" name="medium" value={image.data.medium} onChange={handleInputChange} />
+        <InputField label="Width" id="width" name="width" value={image.data.width} onChange={handleInputChange} />
+        <InputField label="Height" id="height" name="height" value={image.data.height} onChange={handleInputChange} />
+        <InputField label="Mat Width" id="matWidth" name="matWidth" value={image.data.matWidth} onChange={handleInputChange} />
+        <InputField label="Mat Height" id="matHeight" name="matHeight" value={image.data.matHeight} onChange={handleInputChange} />
+        <InputField label="Edition" id="edition" name="edition" value={image.data.edition} onChange={handleInputChange} />
+        <InputField label="Condition" id="condition" name="condition" value={image.data.condition} onChange={handleInputChange} />
+        <InputField label="Valuation Notes" id="valuationNotes" name="valuationNotes" value={image.data.valuationNotes} onChange={handleInputChange} />
+        <InputField label="Other Notes" id="otherNotes" name="otherNotes" value={image.data.otherNotes} onChange={handleInputChange} />
+        <InputField label="Copyright" id="copyright" name="copyright" value={image.data.copyright} onChange={handleInputChange} />
+        <InputField label="Subject" id="subject" name="subject" value={image.data.subject} onChange={handleInputChange} />
+        <InputField label="URL" id="url" name="url" value={image.data.url} onChange={handleInputChange} />
+        <InputField label="Location" id="location" name="location" value={image.data.location} onChange={handleInputChange} />
 
-      <form onSubmit={handleSubmit} className='InputBox'>
-        <div>
-          <label htmlFor="id">ID</label>
-          <input
-            type="text"
-            id="id"
-            name="id"
-            value={image.data.id}
-            onChange={handleInputChange}
-          />
-        </div>
+        {/* Use the ArtistsInput component for Artists input */}
+        <ArtistsInput artists={image.data.Artists} onChange={handleInputChange} />
 
-        <div>
-          <label htmlFor="accessionNumber">Accession Number</label>
-          <input
-            type="text"
-            id="accessionNumber"
-            name="accessionNumber"
-            value={image.data.accessionNumber}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={image.data.title}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div>
-            <label htmlFor="year">Year</label>
-            <input
-                type="text"
-                id="year"
-                name="year"
-                value={image.data.year}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="additionalPrintYear">Additional Print Year</label>
-            <input
-                type="text"
-                id="additionalPrintYear"
-                name="additionalPrintYear"
-                value={image.data.additionalPrintYear}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="medium">Medium</label>
-            <input
-                type="text"
-                id="medium"
-                name="medium"
-                value={image.data.medium}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="width">Width</label>
-            <input
-                type="text"
-                id="width"
-                name="width"
-                value={image.data.width}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="height">Height</label>
-            <input
-                type="text"
-                id="height"
-                name="height"
-                value={image.data.height}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="matWidth">Mat Width</label>
-            <input
-                type="text"
-                id="matWidth"
-                name="matWidth"
-                value={image.data.matWidth}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="matHeight">Mat Height</label>
-            <input
-                type="text"
-                id="matHeight"
-                name="matHeight"
-                value={image.data.matHeight}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="edition">Edition</label>
-            <input
-                type="text"
-                id="edition"
-                name="edition"
-                value={image.data.edition}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="condition">Condition</label>
-            <input
-                type="text"
-                id="condition"
-                name="condition"
-                value={image.data.condition}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="valuationNotes">Valuation Notes</label>
-            <input
-                type="text"
-                id="valuationNotes"
-                name="valuationNotes"
-                value={image.data.valuationNotes}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="otherNotes">Other Notes</label>
-            <input
-                type="text"
-                id="otherNotes"
-                name="otherNotes"
-                value={image.data.otherNotes}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="copyright">Copyright</label>
-            <input
-                type="text"
-                id="copyright"
-                name="copyright"
-                value={image.data.copyright}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="subject">Subject</label>
-            <input
-                type="text"
-                id="subject"
-                name="subject"
-                value={image.data.subject}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="url">URL</label>
-            <input
-                type="text"
-                id="url"
-                name="url"
-                value={image.data.url}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-            <label htmlFor="location">Location</label>
-            <input
-                type="text"
-                id="location"
-                name="location"
-                value={image.data.location}
-                onChange={handleInputChange}
-            />
-        </div>
-
-        <div>
-        <label htmlFor="Artists">Artists</label>
-        <input
-            type="text"
-            id="Artists"
-            name="Artists"
-            value={image.data.Artists.map(artist => `${artist.givenName} ${artist.familyName}`).join(', ')}
-            onChange={handleInputChange}
-        />
-        </div>
-
-        <div>
-            <label htmlFor="Tags">Tags</label>
-            <input
-                type="text"
-                id="Tags"
-                name="Tags"
-                value={image.data.Tags.map(tag => tag.tagName).join(', ')}
-                onChange={handleInputChange}
-            />
-        </div>
+        {/* Use the TagsInput component for Tags input */}
+        <TagsInput tags={image.data.Tags} onChange={handleInputChange} />
 
         <div className="ButtonContainer">
-          <button type="submit" className='GreenButton'>Save Changes</button>
-        </div>    
-
-    </form>
-
+          <button type="submit" className="GreenButton">
+            Save Changes
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

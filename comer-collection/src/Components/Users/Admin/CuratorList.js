@@ -1,20 +1,96 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import "../Table.css"
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  IconButton,
+  Paper,
+  Stack,
+  TableContainer,
+  styled,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+const PREFIX = "CuratorList";
+
+const classes = {
+  root: `${PREFIX}-root`,
+  tableText: `${PREFIX}-tableText`,
+  options: `${PREFIX}-options`,
+  icon: `${PREFIX}-icon`,
+  dialog: `${PREFIX}-dialog`,
+};
+
+const Root = styled("div")({
+  [`& .${classes.tableText}`]: {
+    fontSize: "14px",
+    align: "left",
+  },
+  [`& .${classes.options}`]: {
+    fontSize: "20px",
+    align: "right",
+    width: "50px",
+  },
+  [`& .${classes.icon}`]: {
+    fontSize: "20px",
+  },
+  [`& .${classes.dialog}`]: {
+    "& .MuiDialog-paper": {
+      minWidth: "300px",
+    },
+  },
+});
 
 function CuratorList() {
+  const [curator, setCurator] = useState([]);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [curatorToDelete, setCuratorToDelete] = useState(null);
 
-  // Function to format ISO 8601 date to a readable format (YYYY-MM-DD)
+  const curatorColumns = {
+    status: "Status",
+    givenName: "First",
+    familyName: "Last",
+    course: "Course",
+    exhibition: "Exhibition",
+    deactivationDays: "Deactivation in (Days)",
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:9000/api/courses", {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+          },
+        });
+
+        setCurator(response.data.data);
+        console.log("Curator:", response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // if need to display date
   const formatISODate = (isoDate) => {
     const date = new Date(isoDate);
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
-  // Function to calculate the "Deactivating in (Days)" for each user
   const calculateDeactivationInDays = (deactivationDate) => {
     const today = new Date();
     const deactivation = new Date(deactivationDate);
@@ -28,89 +104,174 @@ function CuratorList() {
     }
   };
 
-  // Function to handle the Deactivate button click and show a confirmation dialog
-  const handleDeactivateClick = () => {
-    const confirmed = window.confirm("Are you sure you want to deactivate this student?");
-    if (confirmed) {
-      // User clicked "Yes," conditionally render the Link component to navigate
-      return <Link to="/deactivate">Deactivate</Link>;
-    } else {
-      // User clicked "No," you can do nothing here or perform other actions
+  const calculateDeactivationStatusAndColor = (deactivationDate) => {
+    const differenceInDays = calculateDeactivationInDays(deactivationDate);
+
+    return {
+      status: differenceInDays > 0 ? "Active" : "Inactive",
+      color: differenceInDays > 0 ? "green" : "red",
+    };
+  };
+
+  const handleDeleteClick = (curatorId, courseId) => {
+    setCuratorToDelete({ curatorId, courseId });
+    setDeleteConfirmation(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const { curatorId, courseId } = curatorToDelete;
+
+      const response = await axios.delete(
+        `http://localhost:9000/api/courses/${courseId}/curators/${curatorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_BEARER}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setCurator((prevCurator) =>
+          prevCurator.filter((cur) => cur.id !== curatorId)
+        );
+      } else {
+        console.error("Error deleting curator:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error handling delete operation:", error);
+    } finally {
+      setDeleteConfirmation(false);
+      setCuratorToDelete(null);
     }
   };
 
-
-
   return (
-    <div className='ListContainer'>
+    <div className="ListContainer">
+      <Root className="TableContainer">
+        <TableContainer component={Paper} sx={{ width: "100%" }}>
+          <Table size="small" aria-label="curator table" sx={{ width: "100%" }}>
+            <TableHead
+              sx={{
+                "& th": { fontWeight: "bold" },
+                "&": { backgroundColor: "lightgray" },
+              }}
+            >
+              <TableCell
+                colSpan={Object.keys(curatorColumns).length + 1}
+                className={classes.tableText}
+                align="center"
+                style={{ fontSize: "25px", padding: "15px" }}
+              >
+                List of Curators
+              </TableCell>
+              <TableRow>
+                {Object.keys(curatorColumns).map((col) => (
+                  <TableCell className={classes.tableText}>
+                    {curatorColumns[col]}
+                  </TableCell>
+                ))}
+                <TableCell>&nbsp;</TableCell>
+              </TableRow>
+            </TableHead>
 
+            <TableBody sx={{ "& tr:hover": { backgroundColor: "#EEE" } }}>
+              {curator.map((course) => {
+                const { status, color } = calculateDeactivationStatusAndColor(
+                  course.date_end
+                );
 
-      <div className='TableContainer'>
+                return (
+                  <TableRow key={course.id}>
+                    <TableCell
+                      className={classes.tableText}
+                      sx={{ color, fontWeight: "bold" }}
+                    >
+                      {status}
+                    </TableCell>
+                    <TableCell className={classes.tableText}>
+                      {course.Users[0]?.given_name}
+                    </TableCell>
+                    <TableCell className={classes.tableText}>
+                      {course.Users[0]?.family_name}
+                    </TableCell>
+                    <TableCell className={classes.tableText}>
+                      {course.name}
+                    </TableCell>
+                    <TableCell className={classes.tableText}>
+                      {/* holder for curator's exhibition number*/}
+                    </TableCell>
+                    <TableCell className={classes.tableText}>
+                      {calculateDeactivationInDays(course.date_end)}
+                    </TableCell>
 
+                    <TableCell className={classes.options}>
+                      <Stack direction="row">
+                        <IconButton
+                          color="primary"
+                          variant="contained"
+                          size="small"
+                          sx={{ color: "red" }}
+                          onClick={() =>
+                            handleDeleteClick(course.Users[0]?.id, course.id)
+                          }
+                        >
+                          <DeleteIcon className={classes.icon} />
+                        </IconButton>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Root>
 
-        <div className='AdminTable'>
+      {/* Delete confirmation dialog */}
+      <Dialog
+        open={deleteConfirmation}
+        onClose={() => setDeleteConfirmation(false)}
+        className={classes.dialog}
+      >
+        <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
+          Delete Curator
+        </DialogTitle>
 
-          <h2 className="table-name">List of Curators</h2>
+        <DialogContent>
+          Are you sure you want to delete this curator 
+          {/* "{curatorToDelete?.curatorId}" */}
+          ?
+        </DialogContent>
 
-          <table className='Table'>
-
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Net ID</th>
-                <th>Name</th>
-                <th>Exhibition</th>
-                <th>Deactivation Date</th>
-                <th>Deactivating in (Days)</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {/* {admin.map((data, i) => (
-                <tr key={i}>
-                  <td>{data.netid}</td>
-                  <td>{data.fullname}</td>
-                  <td className='text-center'>{data.exhibition}</td>
-                  <td className='text-center'>{formatISODate(data.deactivationdate)}</td>
-                  <td className='text-center'>{calculateDeactivationInDays(data.deactivationdate)}</td>
-                  <td>
-                    <Link to="/deactivate" className='RedButton'>
-                      Deactivate
-                    </Link>
-                  </td>
-                </tr>
-              ))} */}
-              {/* testing data */}
-              <tr> 
-                <td className='ActiveText'>Active</td>
-                <td>abc1234567</td>
-                <td>John Doe</td>
-                <td className='text-center'>20</td>
-                <td className='text-center'>2024-01-01</td>
-                <td className='text-center'>{calculateDeactivationInDays("2024-01-01")}</td>
-                <td>
-                  <button className='RedButton' onClick={handleDeactivateClick}>
-                    Deactivate
-                  </button>
-                </td>
-              </tr>
-
-              <tr> 
-                <td className='InactiveText'>Inactive</td>
-                <td>bbc1234567</td>
-                <td>Test Test</td>
-                <td className='text-center'>0</td>
-                <td className='text-center'>2023-01-01</td>
-                <td className='text-center'>{calculateDeactivationInDays("2023-01-01")}</td>
-                <td>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <DialogActions sx={{ justifyContent: "center" }}>
+          <Button
+            onClick={() => setDeleteConfirmation(false)}
+            color="primary"
+            sx={{
+              "&:hover": {
+                color: "white",
+                backgroundColor: "green",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDelete}
+            color="primary"
+            sx={{
+              color: "red",
+              "&:hover": {
+                color: "white",
+                backgroundColor: "red",
+              },
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
