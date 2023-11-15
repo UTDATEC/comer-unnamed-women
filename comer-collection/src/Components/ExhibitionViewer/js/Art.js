@@ -294,9 +294,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
             // if there has been an adjustment to the weight, make the adjustment
             if (data.matte.weighted_value != 0) {
-                console.log("test")
                 art.position.set(0, data.matte.weighted_value / 12, 0);
-                console.log(art.position)
             }
         }
 
