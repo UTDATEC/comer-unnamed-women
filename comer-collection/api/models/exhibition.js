@@ -1,3 +1,5 @@
+const { User } = require("../sequelize.js")
+
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
     const Exhibition = sequelize.define("Exhibition", {
@@ -38,19 +40,17 @@ module.exports = (db) => {
             defaultValue: "PRIVATE"
         }
     }, {
-        tableName: "comer_exhibitions",
         defaultScope: {
             attributes: {
-                exclude: ['data']
+                exclude: ['data'],
             }
         },
         scopes: {
             with_data: {
-                attributes: {
-                    include: ['data']
-                }
             }
-        }
+        },
+        sequelize,
+        tableName: "comer_exhibitions"
     });
 
     return Exhibition;
