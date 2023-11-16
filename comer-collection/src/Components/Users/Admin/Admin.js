@@ -12,18 +12,6 @@ import { Box } from '@mui/material';
 
 
 function Admin() {
-  
-  const containerStyle = {
-    display: 'flex',
-  };
-
-  const adminNavStyle = {
-    flex: 1,
-  };
-
-  const AdminContent = {
-    flex: 3, 
-  };
 
   return (
     <>
