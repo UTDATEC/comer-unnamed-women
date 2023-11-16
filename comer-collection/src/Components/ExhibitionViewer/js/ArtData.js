@@ -25,7 +25,8 @@ export function generateArtData() {
 
             matte: {
                 color: image.matte.color,
-                weighted: image.matte.weighted
+                weighted: image.matte.weighted,
+                weighted_value: image.matte.weighted_value
             },
 
             frame: {

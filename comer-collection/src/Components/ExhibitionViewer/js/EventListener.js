@@ -17,14 +17,30 @@ export const setupEventListeners = (controls) => {
  */
 
 function onKeyDown(event) {
-    let normal_key = event.key.toLowerCase();
+
+    let normal_key;
+    if (event.key == 'W' || event.key == 'A' || event.key == 'S' || event.key == 'D'){
+        normal_key = event.key.toLowerCase();
+    }
+    else {
+        normal_key = event.key;
+    }
+    
     if (normal_key in keys_pressed) {
         keys_pressed[normal_key] = true;
     }
 };
 
 function onKeyUp(event) {
-    let normal_key = event.key.toLowerCase();
+
+    let normal_key;
+    if (event.key == 'W' || event.key == 'A' || event.key == 'S' || event.key == 'D'){
+        normal_key = event.key.toLowerCase();
+    }
+    else {
+        normal_key = event.key;
+    }
+
     if (normal_key in keys_pressed) {
         keys_pressed[normal_key] = false;
     }

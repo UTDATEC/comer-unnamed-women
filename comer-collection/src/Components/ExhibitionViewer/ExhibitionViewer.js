@@ -177,6 +177,7 @@ const ExhibitionViewer = (props) => {
 
                     <div>
                         <p><b>Welcome to {primary_json.main.curator}'s {primary_json.main.exhibition_name}</b></p>
+                        <br></br>
                         <p>Controls are temporarily paused while you're in this menu.</p>
                         <ul>
                             <li>To begin the exhibition and enable controls, click 'Enter Exhibition' below.</li>
