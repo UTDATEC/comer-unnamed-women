@@ -34,6 +34,18 @@ const getExhibition = async (req, res, next) => {
     });
 }
 
+const deleteExhibition = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const exhibition = await Exhibition.findByPk(req.params.exhibitionId);
+        if(exhibition) {
+            await exhibition.destroy();
+            res.sendStatus(204);
+        }
+        else
+            next(createError(404));
+    });
+}
+
 const saveExhibition = async (req, res, next) => {
     try {
         const newExhibition = await Exhibition.create({
@@ -44,8 +56,8 @@ const saveExhibition = async (req, res, next) => {
             privacy: req.body.privacy
         });
         
-        const temp_user = User.findByPk(req.body.user)
-        await newExhibition.setUser(temp_user);
+        const user = User.findByPk(req.body.userid)
+        await newExhibition.setUser(user);
 
         res.status(201);
 
@@ -70,4 +82,4 @@ const loadExhibition = async (req, res, next) => {
     }
 }
 
-module.exports = { listExhibitions, getExhibition, saveExhibition, loadExhibition }
+module.exports = { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition }
