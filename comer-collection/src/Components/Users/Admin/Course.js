@@ -17,7 +17,7 @@ const Course = () => {
   const [newCourseTitle, setNewCourseTitle] = useState('');
   const [newCourseStartDate, setNewCourseStartDate] = useState('');
   const [newCourseEndDate, setNewCourseEndDate] = useState('');
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState('null');
   const [newCurators, setNewCurators] = useState([]);
 
   useEffect(() => {
@@ -66,9 +66,11 @@ const Course = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
-      setCourses(response.data);
-
+  
+      const updatedCourses = response.data.data;
+      setCourses(updatedCourses);
+  
+      // Clear input fields
       setNewCourseTitle('');
       setNewCourseStartDate('');
       setNewCourseEndDate('');
@@ -88,12 +90,19 @@ const Course = () => {
     }
 
     try {
-      await axios.post(`/api/courses/${selectedCourse}/addUsers`, {
+      await axios.post(`/api/courses/${selectedCourse}/users/${newCurators}`, {
         userNames: newCurators,
+
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
 
-      const response = await axios.get('/api/courses');
-      setCourses(response.data);
+      await axios.post(`/api/courses/${selectedCourse}/users/${newCurators}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
 
       setNewCurators([]);
     } catch (error) {
