@@ -97,18 +97,6 @@ h1 {
   border-radius: 10px; /* Adjust the value to control the roundness */
 }
 
-/* Style text input boxes */
-input[type="text"] {
-  text-indent: 10px;
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #e5e5e5e8;
-  color: black;
-  font-size: 14px;
-}
 
 /* For screens smaller than 600px (adjust the breakpoint as needed) */
 @media (max-width: 600px) {
@@ -124,10 +112,6 @@ input[type="text"] {
     margin-left: 0; /* Remove left margin */
   }
 
-  input[type="text"] {
-    max-width: 100%; /* Allow the input to take the full width of the container */
-  }
-}
 
 
 
