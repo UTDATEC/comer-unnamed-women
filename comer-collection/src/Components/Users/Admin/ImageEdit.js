@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Image.css';
 
 // Separate component for input fields
-const InputField = ({ label, id, name, value, onChange }) => {
+const InputField = ({ label, id, name, value = '', onChange }) => {
   return (
     <div>
       <label htmlFor={id}>{label}</label>
@@ -28,7 +28,7 @@ const ArtistsInput = ({ artists, onChange }) => {
         type="text"
         id="Artists"
         name="Artists"
-        value={artists.map((artist) => `${artist.givenName} ${artist.familyName}`).join(', ')}
+        value={artists.map((artist) => `${artist.givenName || ''} ${artist.familyName || ''}`).join(', ')}
         onChange={onChange}
       />
     </div>
@@ -44,7 +44,7 @@ const TagsInput = ({ tags, onChange }) => {
         type="text"
         id="Tags"
         name="Tags"
-        value={tags.map((tag) => tag.tagName).join(', ')}
+        value={tags.map((tag) => tag.tagName || '').join(', ')}
         onChange={onChange}
       />
     </div>
@@ -52,6 +52,7 @@ const TagsInput = ({ tags, onChange }) => {
 };
 
 function EditImage() {
+  const navigate = useNavigate();   
   const { id } = useParams();
   const [image, setImage] = useState({
     data: {
@@ -98,7 +99,7 @@ function EditImage() {
     setImage({
       data: {
         ...image.data,
-        [name]: value,
+        [name]: value || '', 
       },
     });
   };
@@ -106,8 +107,14 @@ function EditImage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:9000/api/images/${id}`, image.data);
+      const { id, ...imageData } = image.data; // Extract data
+      const response = await axios.put(`http://localhost:9000/api/images/${id}`, imageData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       console.log('Image updated:', response.data);
+      navigate('/Admin/ImageList');
     } catch (error) {
       console.error('API request error:', error);
     }

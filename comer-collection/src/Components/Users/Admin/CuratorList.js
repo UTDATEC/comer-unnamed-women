@@ -181,8 +181,8 @@ function CuratorList() {
                   course.date_end
                 );
 
-                return (
-                  <TableRow key={course.id}>
+                return course.Users.map((curatorUser) => (
+                  <TableRow key={curatorUser.id}>
                     <TableCell
                       className={classes.tableText}
                       sx={{ color, fontWeight: "bold" }}
@@ -190,10 +190,10 @@ function CuratorList() {
                       {status}
                     </TableCell>
                     <TableCell className={classes.tableText}>
-                      {course.Users[0]?.given_name}
+                      {curatorUser.given_name}
                     </TableCell>
                     <TableCell className={classes.tableText}>
-                      {course.Users[0]?.family_name}
+                      {curatorUser.family_name}
                     </TableCell>
                     <TableCell className={classes.tableText}>
                       {course.name}
@@ -221,7 +221,7 @@ function CuratorList() {
                       </Stack>
                     </TableCell>
                   </TableRow>
-                );
+                ));
               })}
             </TableBody>
           </Table>

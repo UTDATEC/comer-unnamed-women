@@ -13,34 +13,64 @@ const Course = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/courses');
+        const response = await axios.get('http://localhost:9000/api/courses', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        console.log('Fetched data:', response.data); 
         setCourses(response.data);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
-
+  
     fetchData();
   }, []);
-
+  
   const handleAddCourse = async () => {
     try {
-      await axios.post('/api/courses', {
-        title: newCourseTitle,
-        startDate: newCourseStartDate,
-        endDate: newCourseEndDate,
+      // Log before making the request
+      const courseData = {
+        name: newCourseTitle,
+        date_start: newCourseStartDate,
+        date_end: newCourseEndDate,
+      };
+      console.log('Before sending:', courseData);
+  
+      await axios.post(
+        'http://localhost:9000/api/courses',
+        courseData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      console.log('Updated data:', courseData);
+  
+      const response = await axios.get('http://localhost:9000/api/courses', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
-
-      const response = await axios.get('/api/courses');
+  
       setCourses(response.data);
-
+  
       setNewCourseTitle('');
       setNewCourseStartDate('');
       setNewCourseEndDate('');
     } catch (error) {
+      // Log the error details
       console.error('Error adding course:', error);
+      if (error.response) {
+        console.error('Response Data:', error.response.data);
+        console.error('Status Code:', error.response.status);
+      }
     }
   };
+  
 
   const handleAddUserToCourse = async () => {
     if (!selectedCourse || newCurators.length === 0) {
@@ -65,14 +95,8 @@ const Course = () => {
   return (
     <div className="course-container">
       <h1>Courses List</h1>
-      <ul className="course-list">
-        {courses.map((course) => (
-          <li key={course.id}>
-            {course.title} - {course.startDate} to {course.endDate}
-            <button onClick={() => setSelectedCourse(course)}>Add User</button>
-          </li>
-        ))}
-      </ul>
+
+
 
       <h2>Add New Course</h2>
       <div className="input-container">
@@ -87,14 +111,14 @@ const Course = () => {
       <div className="input-container">
         <label>Start Date:</label>
         <input
-          type="text"
+          type="date"
           value={newCourseStartDate}
           onChange={(e) => setNewCourseStartDate(e.target.value)}
         />
 
         <label>End Date:</label>
         <input
-          type="text"
+          type="date"
           value={newCourseEndDate}
           onChange={(e) => setNewCourseEndDate(e.target.value)}
         />

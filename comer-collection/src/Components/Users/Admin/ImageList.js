@@ -63,24 +63,32 @@ function ImageList() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      let response = await axios.get("http://localhost:9000/api/images");
+    fetchImages();
+  }, []); 
+
+  const fetchImages = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/images');
+      const imageData = response.data;
+      console.log('Fetched image data:', imageData); 
       setImages(response.data);
-      console.log("Images:", response.data);
-    };
-    fetchData();
-  }, []);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/api/images/${imageToDelete.id}`
+        `http://localhost:9000/api/images/${imageToDelete.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        }
       );
-      if (response.status === 200) {
-        // Remove the deleted image from the state
-        setImages((prevImages) =>
-          prevImages.filter((image) => image.id !== imageToDelete.id)
-        );
+      if (response.status === 200 || response.status === 204) {
+        fetchImages();
       } else {
         console.error("Error deleting image:", response.statusText);
       }
