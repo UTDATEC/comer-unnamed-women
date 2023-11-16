@@ -1,44 +1,43 @@
 import React from 'react';
-import "../AccountNav.css";
 
 // Import image files
-import profileIcon from '../image/profileIcon.png';
-import StudentIcon from '../image/studentIcon.png';
-import ExhibitionIcon from '../image/exhibitionIcon.png';
-import ImageIcon from '../image/imageIcon.png';
-import CourseIcon from '../image/courseIcon.png';
-import InviteIcon from '../image/inviteIcon.png';
-import LogoutIcon from '../image/logoutIcon.png';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
+import ImageIcon from '@mui/icons-material/Image';
+import SchoolIcon from '@mui/icons-material/School';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+
 
 export const AdminNavData = [
     {
         title: "Profile",
-        icon: <img src={profileIcon} alt="Profile" className="icon-small" />,
+        icon: <AccountCircleIcon fontSize="large"/>,
         link: "/Admin/Profile"
     },
     {
         title: "Curator",
-        icon: <img src={StudentIcon} alt="CuratorIcon" className="icon-small" />,
+        icon: <GroupsIcon fontSize="large"/>,
         link: "/Admin/CuratorList"
     },
     {
         title: "Exhibition",
-        icon: <img src={ExhibitionIcon} alt="ExhibitionIcon" className="icon-small" />,
+        icon: <PhotoCameraBackIcon fontSize="large"/>,
         link: "/Admin/ExhibitionList"
     },
     {
         title: "Image Management",
-        icon: <img src={ImageIcon} alt="ImageIcon" className="icon-small" />,
+        icon: <ImageIcon fontSize="large"/>,
         link: "/Admin/ImageList"
     },
     {
         title: "Course",
-        icon: <img src={CourseIcon} alt="CourseIcon" className="icon-small" />,
+        icon: <SchoolIcon fontSize="large"/>,
         link: "/Admin/Course"
     },
     {
         title: "Invite",
-        icon: <img src={InviteIcon} alt="InviteIcon" className="icon-small" />,
+        icon: <GroupAddIcon fontSize="large"/>,
         link: "/Admin/Invite"
     }
 ]
