@@ -103,8 +103,12 @@ function ExhibitionList() {
   };
 
   return (
-    <div className="ListContainer">
-      <Root className="TableContainer">
+    <div style={{
+      marginLeft: '10%',
+      marginRight: '10%',
+      paddingTop: '20px'
+    }}>
+      <Root >
         <TableContainer component={Paper}>
           <Table size="small" aria-label="exhibition table">
             <TableHead

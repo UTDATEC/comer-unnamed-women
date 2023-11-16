@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../Table.css";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -102,9 +101,13 @@ function ImageList() {
   };
 
   return (
-    <div className="ListContainer">
-      <Root className="TableContainer">
-        <TableContainer component={Paper}>
+    <div style={{
+      marginLeft: '10%',
+      marginRight: '10%',
+      paddingTop: '20px'
+    }}>
+      <Root >
+        <TableContainer component={Paper} >
           <Table size="small" aria-label="test table">
             <TableHead
               sx={{

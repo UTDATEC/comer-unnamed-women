@@ -123,7 +123,7 @@ function CuratorList() {
       const { curatorId, courseId } = curatorToDelete;
 
       const response = await axios.delete(
-        `http://localhost:9000/api/courses/${courseId}/curators/${curatorId}`,
+        `http://localhost:9000/api/courses/${courseId}/users/${curatorId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -147,8 +147,12 @@ function CuratorList() {
   };
 
   return (
-    <div className="ListContainer">
-      <Root className="TableContainer">
+    <div style={{
+      marginLeft: '10%',
+      marginRight: '10%',
+      paddingTop: '20px'
+    }}>
+      <Root >
         <TableContainer component={Paper} sx={{ width: "100%" }}>
           <Table size="small" aria-label="curator table" sx={{ width: "100%" }}>
             <TableHead
