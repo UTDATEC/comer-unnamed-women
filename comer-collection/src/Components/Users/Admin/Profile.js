@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../Profile.css";
+import {
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+} from "@mui/material";
 
 function Profile() {
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:9000/api/users", {
@@ -32,32 +37,53 @@ function Profile() {
   }
 
   return (
-    <div className="user-card-container">
-      <div className="user-profile-card">
-        <h2 id="text-center">User Information</h2>
-        <div className="user-info">
+    <Container style={{ paddingTop: "30px" }} maxWidth="xs">
+      <Card style={{ border: "1px solid lightgrey" }}>
+        <CardContent>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            style={{ fontWeight: "bold" }}
+          >
+            User Information
+          </Typography>
           <div>
-            <strong>Net ID:</strong>
-            <span>{user.email}</span>
+            <div>
+              <strong>Net ID: </strong>
+              <span>{user.email}</span>
+            </div>
+            <div style={{ paddingTop: "10px" }}>
+              <strong>Name: </strong>
+              <span>{`${user.given_name} ${user.family_name}`}</span>
+            </div>
+            <div style={{ paddingTop: "10px" }}>
+              <strong>Password: </strong>
+              <span>{"********"}</span>
+              <span style={{ paddingLeft: "10px" }}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "red",
+                      color: "white",
+                      fontWeight: "bold",
+                    },
+                  }}
+                >
+                  Reset Password
+                </Button>
+              </span>
+            </div>
+            <div style={{ paddingTop: "10px" }}>
+              <strong>User Type: </strong>
+              <span>{user.is_admin ? "Admin" : "Curator"}</span>
+            </div>
           </div>
-          <div>
-            <strong>Name:</strong>
-            <span>{`${user.given_name} ${user.family_name}`}</span>
-          </div>
-          <div>
-            <strong>Password:</strong>
-            <span>{"********"}</span>
-            <span>
-              <button className="RedButton">Reset Password</button>
-            </span>
-          </div>
-          <div>
-            <strong>User Type:</strong>
-            <span>{user.is_admin ? "Admin" : "Curator"}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
 
