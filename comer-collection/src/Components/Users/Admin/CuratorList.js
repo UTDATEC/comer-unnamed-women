@@ -64,6 +64,9 @@ function CuratorList() {
   };
 
   useEffect(() => {
+    fetchData();
+  }, []); 
+
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:9000/api/courses", {
@@ -78,9 +81,6 @@ function CuratorList() {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
-  }, []);
 
   // if need to display date
   const formatISODate = (isoDate) => {
@@ -131,10 +131,8 @@ function CuratorList() {
         }
       );
 
-      if (response.status === 200) {
-        setCurator((prevCurator) =>
-          prevCurator.filter((cur) => cur.id !== curatorId)
-        );
+      if (response.status === 200 || response.status === 204) {
+        fetchData();
       } else {
         console.error("Error deleting curator:", response.statusText);
       }
@@ -217,7 +215,7 @@ function CuratorList() {
                           size="small"
                           sx={{ color: "red" }}
                           onClick={() =>
-                            handleDeleteClick(course.Users[0]?.id, course.id)
+                            handleDeleteClick(curatorUser.id, course.id)
                           }
                         >
                           <DeleteIcon className={classes.icon} />
