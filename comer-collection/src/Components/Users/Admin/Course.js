@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, TextField, Typography, Button } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import '../Course.css';
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
+} from "@mui/material";
 
 const Course = () => {
   const [courses, setCourses] = useState([]);
@@ -20,16 +28,24 @@ const Course = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
+        
         console.log('Fetched data:', response.data); 
         setCourses(response.data);
+
+        if (response.data && Array.isArray(response.data.data)) {
+          setCourses(response.data.data);
+          setSelectedCourse("");
+        } else {
+          console.error("Response Data Error:", response.data);
+        }
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   const handleCreateCourse = async () => {
     try {
       // Log before making the request
@@ -38,33 +54,25 @@ const Course = () => {
         date_start: newCourseStartDate,
         date_end: newCourseEndDate,
       };
-      console.log('Before sending:', courseData);
-  
-      await axios.post(
-        'http://localhost:9000/api/courses',
-        courseData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
 
-      console.log('Updated data:', courseData);
-  
+      await axios.post('http://localhost:9000/api/courses', courseData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       const response = await axios.get('http://localhost:9000/api/courses', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+
       setCourses(response.data);
-  
+
       setNewCourseTitle('');
       setNewCourseStartDate('');
       setNewCourseEndDate('');
     } catch (error) {
-      // Log the error details
       console.error('Error adding course:', error);
       if (error.response) {
         console.error('Response Data:', error.response.data);
@@ -72,7 +80,6 @@ const Course = () => {
       }
     }
   };
-  
 
   const handleAddUserToCourse = async () => {
     if (!selectedCourse || newCurators.length === 0) {
@@ -81,7 +88,7 @@ const Course = () => {
     }
 
     try {
-      await axios.post(`/api/courses/${selectedCourse.id}/addUsers`, {
+      await axios.post(`/api/courses/${selectedCourse}/addUsers`, {
         userNames: newCurators,
       });
 
@@ -94,16 +101,16 @@ const Course = () => {
     }
   };
 
+  const handleCourseChange = (event) => {
+    setSelectedCourse(event.target.value);
+  };
+
   return (
-    <div className="course-container">
-      <h1>Courses List</h1>
-
-
-
-      <h2>Create Course</h2>
-
+    <div style={{ maxWidth: "70%", margin: "auto", overflowY: "auto" }}>
+      <h1 style={{ textAlign: "center" }}>Courses List</h1>
+      <h3>Create Course</h3>
       <Box component="form">
-        <Stack direction="column" spacing={2}>
+        <Stack spacing={2}>
           <TextField 
             label="Course Title"
             variant='outlined' 
@@ -128,47 +135,77 @@ const Course = () => {
               inputProps={{type: 'datetime-local'}}
             />
           </Stack>
-          <Stack direction="row" spacing={2}>
-            <Button variant="contained" size="large" 
+          <Stack
+            direction="row"
+            spacing={2}
+            style={{ display: "block", textAlign: "center" }}
+          >
+            <Button
+              variant="contained"
+              size="large"
               onClick={handleCreateCourse}
-              disabled={!Boolean(newCourseTitle && newCourseStartDate && newCourseEndDate)}
+              disabled={
+                !Boolean(
+                  newCourseTitle && newCourseStartDate && newCourseEndDate
+                )
+              }
             >
               <Typography>Add Course</Typography>
             </Button>
-            <Button variant="outlined" size="large" onClick={() => {
-              setNewCourseTitle('');
-              setNewCourseStartDate('');
-              setNewCourseEndDate('');
-            }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => {
+                setNewCourseTitle('');
+                setNewCourseStartDate('');
+                setNewCourseEndDate('');
+              }}
+            >
               <Typography>Clear</Typography>
             </Button>
           </Stack>
         </Stack>
       </Box>
 
+      <h3>Add Curators to the Course</h3>
 
-      <h2>Add Curators to the Course</h2>
-      <div className="input-container">
-        <label>Enter Course Title:</label>
-        <input
-          type="text"
-          value={selectedCourse ? selectedCourse.title : ''}
-          onChange={(e) => setSelectedCourse({ id: null, title: e.target.value })}
+      <Box component="form">
+        <FormControl variant="outlined" style={{ width: "100%" }}>
+          <InputLabel>Select Course</InputLabel>
+          <Select
+            value={selectedCourse}
+            onChange={handleCourseChange}
+            label="Select Course"
+            style={{ paddingTop: "5px", paddingBottom: "10px" }}
+          >
+            <MenuItem value="" style={{ backgroundColor: "transparent" }}>
+              <em>&nbsp;</em>
+            </MenuItem>
+            {courses.map((course) => (
+              <MenuItem key={course.id} value={course.id}>
+                {course.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <TextField
+          label="Email"
+          variant="outlined"
+          value={newCurators.join(",")}
+          style={{ width: "100%", paddingTop: "5px", paddingBottom: "10px" }}
+          onChange={(e) => setNewCurators(e.target.value.split(","))}
         />
-      </div>
-
-      <div className="input-container">
-        <label>Net IDs (can add multiple curators):</label>
-        <input
-          type="text"
-          value={newCurators.join(',')}
-          onChange={(e) => setNewCurators(e.target.value.split(','))}
-        />
-      </div>
-
-      <button className="GreenButton" onClick={handleAddUserToCourse}>
-        Add Curators
-      </button>
+        <Button
+          variant="contained"
+          size="large"
+          style={{ display: "block", margin: "auto", textAlign: "center" }}
+          onClick={handleAddUserToCourse}
+          disabled={!Boolean(selectedCourse && newCurators.length > 0)}
+        >
+          <Typography>Add Curators</Typography>
+        </Button>
+      </Box>
     </div>
   );
 };
