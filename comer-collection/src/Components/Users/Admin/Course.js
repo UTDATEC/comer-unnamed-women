@@ -28,7 +28,7 @@ const Course = () => {
     fetchData();
   }, []);
   
-  const handleAddCourse = async () => {
+  const handleCreateCourse = async () => {
     try {
       // Log before making the request
       const courseData = {
@@ -98,35 +98,50 @@ const Course = () => {
 
 
 
-      <h2>Add New Course</h2>
-      <div className="input-container">
-        <label>Title:</label>
-        <input
-          type="text"
-          value={newCourseTitle}
-          onChange={(e) => setNewCourseTitle(e.target.value)}
-        />
-      </div>
+      <h2>Create Course</h2>
 
-      <div className="input-container">
-        <label>Start Date:</label>
-        <input
-          type="date"
-          value={newCourseStartDate}
-          onChange={(e) => setNewCourseStartDate(e.target.value)}
-        />
+      <Box component="form">
+        <Stack direction="column" spacing={2}>
+          <TextField 
+            label="Course Title"
+            variant='outlined' 
+            value={newCourseTitle}
+            onChange={(e) => setNewCourseTitle(e.target.value)}
+          />
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography>Start:</Typography>
+            <TextField 
+              variant='outlined' 
+              value={newCourseStartDate}
+              onChange={(e) => setNewCourseStartDate(e.target.value)}
+              inputProps={{type: 'datetime-local'}}
+            />
+            <Typography>End: </Typography>
+            <TextField 
+              variant='outlined' 
+              value={newCourseEndDate}
+              onChange={(e) => setNewCourseEndDate(e.target.value)}
+              inputProps={{type: 'datetime-local'}}
+            />
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <Button variant="contained" size="large" 
+              onClick={handleCreateCourse}
+              disabled={!Boolean(newCourseTitle && newCourseStartDate && newCourseEndDate)}
+            >
+              <Typography>Add Course</Typography>
+            </Button>
+            <Button variant="outlined" size="large" onClick={() => {
+              setNewCourseTitle('');
+              setNewCourseStartDate('');
+              setNewCourseEndDate('');
+            }}>
+              <Typography>Clear</Typography>
+            </Button>
+          </Stack>
+        </Stack>
+      </Box>
 
-        <label>End Date:</label>
-        <input
-          type="date"
-          value={newCourseEndDate}
-          onChange={(e) => setNewCourseEndDate(e.target.value)}
-        />
-      </div>
-
-      <button className="GreenButton" onClick={handleAddCourse}>
-        Add Course
-      </button>
 
       <h2>Add Curators to the Course</h2>
       <div className="input-container">
