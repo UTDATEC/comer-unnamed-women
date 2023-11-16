@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
+import { Navigate, Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import AdminNav from './AdminNav';
 import CuratorList from './CuratorList';
 import ExhibitionList from './ExhibitionList';
@@ -43,6 +43,7 @@ function Admin() {
         <Box sx={{gridArea: 'main', position: 'relative'}}>
           
           <Routes>
+            <Route index element={<Navigate to='Profile' replace />} />
             <Route path="Profile" element={<Profile />} />
             <Route path="CuratorList" element={<CuratorList />} />
             <Route path="ExhibitionList" element={<ExhibitionList />} />

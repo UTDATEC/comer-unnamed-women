@@ -121,6 +121,14 @@ export default function NavBar(props) {
                 }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
                   <MenuItem onClick={() => {
                     handleMenuClose();
+                    navigate('/Admin')
+                  }}>
+                    <Typography variant="body">
+                      Admin
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
                     signOutUser();
                   }}>
                     <Typography variant="body">
