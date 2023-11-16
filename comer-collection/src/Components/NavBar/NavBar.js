@@ -91,13 +91,13 @@ export default function NavBar(props) {
     <Root className={classes.root}>
       <AppBar position="fixed" color="primary">
         <Toolbar>
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             UTD Comer Collection
           </Typography>
           <Stack spacing={1} direction={'row'}>
             {buttons.map((button) => (
               <Button key={button.text} color="primary" variant="contained" onClick={() => navigate(button.link)}>
-                <Typography variant="h6" className={classes.buttonText}>
+                <Typography variant="body1" className={classes.buttonText}>
                   {button.text}
                 </Typography>
                 {/* <div className={classes.buttonText}></div> */}
@@ -109,7 +109,7 @@ export default function NavBar(props) {
                   aria-haspopup={Boolean(anchorElement)}
                   aria-expanded={Boolean(anchorElement)}
                 >
-                  <Typography variant="h5" sx={{color: "white", marginLeft: '20px'}}>{user.given_name} {user.family_name}</Typography>
+                  <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>{user.given_name} {user.family_name}</Typography>
                 </Button>
                 <Menu MenuListProps={{
                 }} anchorEl={anchorElement} anchorOrigin={{
@@ -123,7 +123,7 @@ export default function NavBar(props) {
                     handleMenuClose();
                     signOutUser();
                   }}>
-                    <Typography variant="h6">
+                    <Typography variant="body">
                       Log Out
                     </Typography>
                   </MenuItem>

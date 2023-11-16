@@ -50,7 +50,11 @@ const App = () => {
       fontFamily: [
         "Helvetica"
       ].join(","),
-      fontSize: 10,
+      fontSize: 12,
+      body1: {
+        fontWeight: 500,
+        fontSize: '0.9rem'
+      }
     },
     palette: {
       primary: {
