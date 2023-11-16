@@ -112,7 +112,7 @@ const InviteForm = () => {
     <Container maxWidth="sm">
       <div style={{ paddingTop: "30px" }}>
         <Typography
-          variant="h3"
+          variant="h4"
           gutterBottom
           style={{ textAlign: "center", fontWeight: "bold" }}
         >
