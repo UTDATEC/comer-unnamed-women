@@ -51,7 +51,7 @@ db.Image.belongsToMany(db.Tag, { through: "comer_image_tag_assignments", foreign
 db.User.belongsToMany(db.Course, { through: "comer_enrollments", foreignKey: "user_id"});
 db.Course.belongsToMany(db.User, { through: "comer_enrollments", foreignKey: "course_id"});
 
-//db.User.hasMany(db.Exhibition, {foreignKey: 'exhibition_owner'})
+db.User.hasMany(db.Exhibition, {foreignKey: 'exhibition_owner'})
 db.Exhibition.belongsTo(db.User, {foreignKey: 'exhibition_owner', inverse: {as: 'exhibitions', type: 'hasMany'}});
 
 
