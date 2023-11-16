@@ -112,6 +112,7 @@ const Course = () => {
             <Typography>Start:</Typography>
             <TextField 
               variant='outlined' 
+              size="small"
               value={newCourseStartDate}
               onChange={(e) => setNewCourseStartDate(e.target.value)}
               inputProps={{type: 'datetime-local'}}
@@ -119,6 +120,7 @@ const Course = () => {
             <Typography>End: </Typography>
             <TextField 
               variant='outlined' 
+              size="small"
               value={newCourseEndDate}
               onChange={(e) => setNewCourseEndDate(e.target.value)}
               inputProps={{type: 'datetime-local'}}
