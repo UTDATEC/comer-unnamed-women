@@ -49,10 +49,14 @@ const Root = styled("div")({
   },
 });
 
-function CuratorList() {
+const CuratorList = (props) => {
   const [curator, setCurator] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [curatorToDelete, setCuratorToDelete] = useState(null);
+
+  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  setSelectedNavItem("Curator Management");
+  
 
   const curatorColumns = {
     status: "Status",

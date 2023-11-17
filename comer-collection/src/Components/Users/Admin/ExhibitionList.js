@@ -49,10 +49,13 @@ const Root = styled("div")({
   },
 });
 
-function ExhibitionList() {
+const ExhibitionList = (props) => {
   const [exhibitions, setExhibitions] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
+
+  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  setSelectedNavItem("Exhibition Management");
 
   const exhibitionColumns = {
     exhibitionTitle: "Exhibition Title",

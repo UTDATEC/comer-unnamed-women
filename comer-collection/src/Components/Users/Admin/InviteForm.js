@@ -13,11 +13,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const InviteForm = () => {
+const InviteForm = (props) => {
   const [email, setEmail] = useState("");
   const [emailList, setEmailList] = useState([]);
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
+
+  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  setSelectedNavItem("Invite");
 
   useEffect(() => {
     const fetchData = async () => {

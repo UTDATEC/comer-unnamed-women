@@ -127,7 +127,7 @@ function EditImage() {
         }
       );
       console.log("Image updated:", response.data);
-      navigate("/Admin/ImageList");
+      navigate("/Admin/ImageManagement");
     } catch (error) {
       console.error("API request error:", error);
     }
