@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 import './Login.css';
 import { useState } from 'react';
+import { Typography } from '@mui/material';
 
 async function loginUser(email, password) {
   const response = await fetch('http://localhost:9000/api/account/signin', {
@@ -59,7 +60,7 @@ const Login = (props) => {
       
     }
     else {
-      alert("Error - no token detected")
+      setError("Login failed")
     }
     
   };
@@ -87,6 +88,7 @@ const Login = (props) => {
               onChange={handlePasswordChange}
               required
             />
+            {error && (<Typography color="error">{error}</Typography>)}
             <button id="centered" type="submit">
               Login
             </button>
