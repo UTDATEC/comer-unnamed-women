@@ -49,7 +49,7 @@ const Login = (props) => {
       if(profileResponse.status == 200) {
         let profileResponseJson = await profileResponse.json();
         setUser(profileResponseJson.data);
-        navigate('/Admin');
+        navigate('/Account');
       }
       else {
         setUser(null);
