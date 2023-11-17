@@ -121,10 +121,10 @@ export default function NavBar(props) {
                 }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
                   <MenuItem onClick={() => {
                     handleMenuClose();
-                    navigate('/Admin')
+                    navigate('/Account')
                   }}>
                     <Typography variant="body">
-                      Admin
+                      Account
                     </Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {

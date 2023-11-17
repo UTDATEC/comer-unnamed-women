@@ -5,6 +5,7 @@ import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { useEffect, useState } from 'react';
+import Account from '../Users/Account'
 import Admin from '../Users/Admin/Admin';
 import Curator from '../Users/Curator/Curator';
 
@@ -111,6 +112,7 @@ const App = () => {
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
+          <Route path="/Account" element={<Account />} />
           <Route path="/Admin/*" element={<Admin />} />
           <Route path="/Curator/*" element={<Curator />} />
 
