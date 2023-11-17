@@ -31,7 +31,7 @@ export const AdminNavData = [
         link: "/Admin/ImageList"
     },
     {
-        title: "Course",
+        title: "Course Management",
         icon: <SchoolIcon fontSize="large"/>,
         link: "/Admin/Course"
     },
