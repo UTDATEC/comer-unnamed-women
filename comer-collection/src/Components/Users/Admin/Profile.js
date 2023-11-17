@@ -11,6 +11,9 @@ const Profile = (props) => {
 
   const { user, setUser } = props;
 
+  if(!user) {
+    return null;
+  }
 
   return (
     <Container style={{ paddingTop: "30px" }} maxWidth="xs">
