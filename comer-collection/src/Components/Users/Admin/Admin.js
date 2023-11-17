@@ -9,13 +9,14 @@ import Course from './Course'
 import InviteForm from './InviteForm';
 import Profile from './Profile';
 import { Box } from '@mui/material';
+import Unauthorized from '../../ErrorPages/Unauthorized';
 
 
 const Admin = (props) => {
 
   const { user, setUser } = props; 
 
-  return (
+  return user && (
     <>
 
       <Box sx={{
@@ -48,6 +49,8 @@ const Admin = (props) => {
       
       </Box>
     </>
+  ) || !user && (
+    <Unauthorized />
   );
 }
 
