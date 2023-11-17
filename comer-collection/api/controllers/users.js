@@ -76,8 +76,12 @@ const deleteUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId);
         if(user) {
-            await user.destroy();
-            res.sendStatus(204);
+            if(user.is_admin)
+                next(createError(401));
+            else {
+                await user.destroy();
+                res.sendStatus(204);
+            }
         }
         else
             next(createError(404))
