@@ -18,6 +18,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Unauthorized from "../../ErrorPages/Unauthorized";
 
 const PREFIX = "ExhibitionList";
 
@@ -80,7 +81,10 @@ const ExhibitionList = (props) => {
   };
 
   useEffect(() => {
-    fetchData();
+    setSelectedNavItem("Exhibition Management");
+    if(user.is_admin) {
+      fetchData();
+    }
   }, []);
 
   const handleDelete = async () => {
@@ -105,7 +109,10 @@ const ExhibitionList = (props) => {
     }
   };
 
-  return (
+  return !user.is_admin && (
+    <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  user.is_admin && (
     <div style={{
       marginLeft: '10%',
       marginRight: '10%',

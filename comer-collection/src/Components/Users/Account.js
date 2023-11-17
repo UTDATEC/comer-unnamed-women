@@ -31,7 +31,7 @@ const Account = (props) => {
       }}>
 
 
-        <AdminNav sx={{gridArea: 'sidebar'}} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem}/>
+        <AdminNav sx={{gridArea: 'sidebar'}} user={user} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem}/>
         
         <Box sx={{gridArea: 'main', position: 'relative'}}>
           
@@ -42,7 +42,7 @@ const Account = (props) => {
             <Route path="ExhibitionList" element={<ExhibitionList user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ImageManagement" element={<ImageManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="Course" user={user} element={<Course user={user} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="Invite" user={user} element={<InviteForm setSelectedNavItem={setSelectedNavItem} />} />
+            <Route path="Invite" user={user} element={<InviteForm user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ImageEdit/:id" user={user} element={<ImageEdit />} />
 
           </Routes>

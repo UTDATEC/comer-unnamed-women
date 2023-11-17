@@ -12,6 +12,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import axios from "axios";
+import Unauthorized from "../../ErrorPages/Unauthorized";
 
 const InviteForm = (props) => {
   const [email, setEmail] = useState("");
@@ -20,29 +21,31 @@ const InviteForm = (props) => {
   const [selectedCourse, setSelectedCourse] = useState("");
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
-  setSelectedNavItem("Invite");
-
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:9000/api/courses", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+    setSelectedNavItem("Invite");
+    if(user.is_admin) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get("http://localhost:9000/api/courses", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
 
-        if (response.data && Array.isArray(response.data.data)) {
-          setCourses(response.data.data);
-          setSelectedCourse("");
-        } else {
-          console.error("Response Data Error:", response.data);
+          if (response.data && Array.isArray(response.data.data)) {
+            setCourses(response.data.data);
+            setSelectedCourse("");
+          } else {
+            console.error("Response Data Error:", response.data);
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+      };
+      fetchData();
+    }
 
-    fetchData();
   }, []);
 
   const handleEmailChange = (e) => {
@@ -111,7 +114,10 @@ const InviteForm = (props) => {
     }
   };
 
-  return (
+  return !user.is_admin && (
+    <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  user.is_admin && (
     <Container maxWidth="sm">
       <div style={{ paddingTop: "30px" }}>
         <Typography

@@ -114,7 +114,7 @@ const Course = (props) => {
   };
 
   return !user.is_admin && (
-      <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Admin/Profile" />
+      <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) ||
     user.is_admin && (
     <div style={{ maxWidth: "70%", margin: "auto", overflowY: "auto" }}>

@@ -18,6 +18,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Unauthorized from "../../ErrorPages/Unauthorized";
 
 const PREFIX = "CuratorList";
 
@@ -55,7 +56,6 @@ const CuratorList = (props) => {
   const [curatorToDelete, setCuratorToDelete] = useState(null);
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
-  setSelectedNavItem("Curator Management");
   
 
   const curatorColumns = {
@@ -66,25 +66,30 @@ const CuratorList = (props) => {
     exhibition: "Exhibition",
     deactivationDays: "Deactivation in (Days)",
   };
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/courses", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setCurator(response.data.data);
+      console.log("Curator:", response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   useEffect(() => {
-    fetchData();
+    setSelectedNavItem("Curator Management");
+    if(user.is_admin) {
+      fetchData();
+    }
   }, []); 
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:9000/api/courses", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        setCurator(response.data.data);
-        console.log("Curator:", response.data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
   // if need to display date
   const formatISODate = (isoDate) => {
@@ -148,7 +153,10 @@ const CuratorList = (props) => {
     }
   };
 
-  return (
+  return !user.is_admin && (
+    <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  user.is_admin && (
     <div style={{
       marginLeft: '10%',
       marginRight: '10%',

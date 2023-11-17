@@ -57,7 +57,7 @@ const AccountNav = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { selectedNavItem, setSelectedNavItem } = props;
+  const { user, selectedNavItem, setSelectedNavItem } = props;
 
   
   const PREFIX = 'AccountNav';
@@ -122,40 +122,44 @@ const AccountNav = (props) => {
             </ListItem>
           ))}
         </List>
-        <Divider />
-        <Typography variant="h5" alignSelf="center" paddingTop="10px">Admin</Typography>
-        <List>
-          {adminNavLinks.map((item) => (
-            <ListItem
-              key={item.title}
-              onClick={() => {
-                setSelectedNavItem(item.title);
-                navigate(item.link)
-              }}
-              sx={{
-                backgroundColor:
-                  selectedNavItem == item.title
-                    ? "orange"
-                    : "unset",
-                "&:hover": {
+        {user.is_admin && (
+          <>
+          <Divider />
+          <Typography variant="h5" alignSelf="center" paddingTop="10px">Admin</Typography>
+          <List>
+            {adminNavLinks.map((item) => (
+              <ListItem
+                key={item.title}
+                onClick={() => {
+                  setSelectedNavItem(item.title);
+                  navigate(item.link)
+                }}
+                sx={{
                   backgroundColor:
                     selectedNavItem == item.title
-                      ? "lightorange"
-                      : "#444",
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
-              <ListItemText
-                primary={item.title}
-                sx={{
-                  textDecoration:
-                    location.pathname === item.link ? "underline" : "none",
+                      ? "orange"
+                      : "unset",
+                  "&:hover": {
+                    backgroundColor:
+                      selectedNavItem == item.title
+                        ? "lightorange"
+                        : "#444",
+                  },
                 }}
-              />
-            </ListItem>
-          ))}
-        </List>
+              >
+                <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={item.title}
+                  sx={{
+                    textDecoration:
+                      location.pathname === item.link ? "underline" : "none",
+                  }}
+                />
+              </ListItem>
+            ))}
+          </List>
+          </>
+        )}
       </Stack>
     </Root>
   );
