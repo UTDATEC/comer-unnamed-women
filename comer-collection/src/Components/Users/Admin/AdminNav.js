@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  Drawer,
-  Toolbar,
-} from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Stack } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AdminNavData } from "./AdminNavData";
 
@@ -20,11 +12,9 @@ function AdminNav() {
   };
 
   return (
-    <div style={{ display: "flex", position: "relative" }}>
-      <Drawer variant="permanent" sx={{ zIndex: 0 }}>
-        <Toolbar />
+    <Stack direction="column">
         <List
-          sx={{ backgroundColor: "#E87500", height: "100%", color: "white", width: "200px" }}
+          sx={{ backgroundColor: "#E87500", height: "100%", color: "white" }}
         >
           <ListItem>
             <div
@@ -68,8 +58,7 @@ function AdminNav() {
             </ListItem>
           ))}
         </List>
-      </Drawer>
-    </div>
+      </Stack>
   );
 }
 

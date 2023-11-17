@@ -21,10 +21,10 @@ const Admin = (props) => {
       <Box sx={{
         display: 'grid',
         gridTemplateColumns: '250px auto',
-        gridTemplateRows: '1fr',
         gridTemplateAreas: `
           "sidebar main"
-        `
+        `,
+        height: "100%"
       }}>
 
 
