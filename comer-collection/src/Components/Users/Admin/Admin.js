@@ -39,7 +39,7 @@ const Admin = (props) => {
             <Route path="CuratorList" element={<CuratorList />} />
             <Route path="ExhibitionList" element={<ExhibitionList />} />
             <Route path="ImageList" element={<ImageList />} />
-            <Route path="Course" element={<Course />} />
+            <Route path="Course" element={<Course user={user} />} />
             <Route path="Invite" element={<InviteForm />} />
             <Route path="ImageEdit/:id" element={<ImageEdit />} />
 

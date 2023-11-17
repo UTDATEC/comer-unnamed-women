@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, TextField, Typography, Button, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material";
+import Unauthorized from '../../ErrorPages/Unauthorized';
 
 const dateOptions = {month: "long", day: "numeric", year: "numeric"};
 
-const Course = () => {
+const Course = (props) => {
   const [courses, setCourses] = useState([]);
   const [newCourseTitle, setNewCourseTitle] = useState('');
   const [newCourseStartDate, setNewCourseStartDate] = useState('');
   const [newCourseEndDate, setNewCourseEndDate] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('null');
   const [newCurators, setNewCurators] = useState([]);
+
+  const { user } = props;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,7 +109,10 @@ const Course = () => {
     setSelectedCourse(event.target.value);
   };
 
-  return (
+  return !user.is_admin && (
+      <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Admin/Profile" />
+    ) ||
+    user.is_admin && (
     <div style={{ maxWidth: "70%", margin: "auto", overflowY: "auto" }}>
       <h1 style={{ textAlign: "center" }}>Courses List</h1>
       <h3>Create Course</h3>
