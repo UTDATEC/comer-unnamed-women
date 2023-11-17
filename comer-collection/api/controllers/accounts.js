@@ -91,7 +91,7 @@ const getCurrentUser = async(req, res, next) => {
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
         }
-    });
+    }, false);
 }
 
 module.exports = { changePassword, signIn, getCurrentUser }
