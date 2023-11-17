@@ -1,46 +1,81 @@
-import React from 'react'
-import "./CuratorNavData"
-import { CuratorNavData } from './CuratorNavData';
-import "../AccountNav.css"
-import { useNavigate } from 'react-router';
+import React from "react";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Drawer,
+  Toolbar,
+} from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { CuratorNavData } from "./CuratorNavData";
 
 function CuratorNav() {
-
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleItemClick = (link) => {
+    navigate(link);
+  };
 
   return (
-
-    <div className='SideBar'> 
-
-      <div className='Profile'>
-
-        <h2>Curator</h2>
-      
-      </div>
-
-      <ul className='SideBarList'>
-        {CuratorNavData.map ((val, key) => {
-          return ( 
-            <li key={key} 
-            className='SideBarRow'
-
-
-            // color stay wherever the current pathname
-            id={window.location.pathname === val.link ? "active" : ""}
-            onClick = {() => {
-              
-              // change path when clicking
-              navigate(val.link);
-                }
-              }>
-              <div id='icon'>{val.icon}</div>
-              <div id='title'>{val.title}</div>
-            </li>
-          )
-      })}
-      </ul>
+    <div style={{ display: "flex", position: "relative" }}>
+      <Drawer variant="permanent" sx={{ zIndex: 0 }}>
+        <Toolbar />
+        <List
+          sx={{
+            backgroundColor: "#E87500",
+            height: "100%",
+            color: "white",
+            width: "200px",
+          }}
+        >
+          <ListItem>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                paddingTop: "10px",
+                paddingBottom: "15px",
+              }}
+            >
+              <Typography variant="h4" style={{ fontWeight: "bold" }}>
+                Curator
+              </Typography>
+            </div>
+          </ListItem>
+          {CuratorNavData.map((item) => (
+            <ListItem
+              key={item.title}
+              button
+              selected={location.pathname === item.link}
+              onClick={() => handleItemClick(item.link)}
+              sx={{
+                backgroundColor:
+                  location.pathname === item.link
+                    ? "#1B5E20 !important"
+                    : "inherit",
+                "&:hover": {
+                  backgroundColor: "#1B5E20 !important",
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+              <ListItemText
+                primary={item.title}
+                sx={{
+                  textDecoration:
+                    location.pathname === item.link ? "underline" : "none",
+                }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </div>
-  )
+  );
 }
 
-export default CuratorNav
+export default CuratorNav;
