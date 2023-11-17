@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Stack,
-} from "@mui/material";
+import { Box, TextField, Typography, Button, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material";
+
+const dateOptions = {month: "long", day: "numeric", year: "numeric"};
 
 const Course = () => {
   const [courses, setCourses] = useState([]);
@@ -179,20 +171,22 @@ const Course = () => {
       <h3>Enroll Curators in Course</h3>
 
       <Box component="form">
+        <Stack spacing={2}>
         <FormControl variant="outlined" style={{ width: "100%" }}>
           <InputLabel>Select Course</InputLabel>
           <Select
             value={selectedCourse}
             onChange={handleCourseChange}
             label="Select Course"
-            style={{ paddingTop: "5px", paddingBottom: "10px" }}
           >
-            <MenuItem value="" style={{ backgroundColor: "transparent" }}>
-              <em>&nbsp;</em>
-            </MenuItem>
             {courses.map((course) => (
-              <MenuItem key={course.id} value={course.id}>
-                {course.name}
+              <MenuItem key={course.id} value={course.id} sx={{textOverflow: "ellipsis"}}>
+                <Typography width="30%" sx={{textOverflow: "ellipsis"}}>{course.name}</Typography>
+                <Typography width="20%" sx={{opacity: 0.5}}>{
+                  new Date(course.date_start).toLocaleDateString("en-US", dateOptions)
+                } - {
+                  new Date(course.date_end).toLocaleDateString("en-US", dateOptions)
+                }</Typography>
               </MenuItem>
             ))}
           </Select>
@@ -202,18 +196,19 @@ const Course = () => {
           label="Email"
           variant="outlined"
           value={newCurators.join(",")}
-          style={{ width: "100%", paddingTop: "5px", paddingBottom: "10px" }}
           onChange={(e) => setNewCurators(e.target.value.split(","))}
         />
+        <Stack spacing={2} direction="row" style={{ display: "block", textAlign: "center" }}>
         <Button
           variant="contained"
           size="large"
-          style={{ display: "block", margin: "auto", textAlign: "center" }}
           onClick={handleAddUserToCourse}
           disabled={!Boolean(selectedCourse && newCurators.length > 0)}
         >
           <Typography>Enroll</Typography>
         </Button>
+        </Stack>
+        </Stack>
       </Box>
     </div>
   );
