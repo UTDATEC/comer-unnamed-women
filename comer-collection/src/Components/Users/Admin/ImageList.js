@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,28 +23,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const PREFIX = "ImageList";
-
-const classes = {
-  root: `${PREFIX}-root`,
-  tableText: `${PREFIX}-tableText`,
-  options: `${PREFIX}-options`,
-  icon: `${PREFIX}-icon`,
-};
-
-const Root = styled("div")({
-  [`& .${classes.tableText}`]: {
-    fontSize: "14px",
-    align: "left",
-  },
-  [`& .${classes.options}`]: {
-    fontSize: "20px",
-    align: "right",
-    width: "50px",
-  },
-  [`& .${classes.icon}`]: {
-    fontSize: "20px",
-  },
-});
 
 function ImageList() {
   const [images, setImages] = useState([]);
@@ -106,7 +85,6 @@ function ImageList() {
       marginRight: '10%',
       paddingTop: '20px'
     }}>
-      <Root >
         <TableContainer component={Paper} >
           <Table size="small" aria-label="test table">
             <TableHead
@@ -118,7 +96,6 @@ function ImageList() {
               <TableRow>
                 <TableCell
                   colSpan={Object.keys(imageColumns).length + 1}
-                  className={classes.tableText}
                   align="center"
                   style={{ fontSize: "25px", padding: "15px" }}
                 >
@@ -127,8 +104,8 @@ function ImageList() {
               </TableRow>
               <TableRow>
                 {Object.keys(imageColumns).map((col) => (
-                  <TableCell className={classes.tableText} key={col}>
-                    {imageColumns[col]}
+                  <TableCell key={col}>
+                    <Typography variant="h6">{imageColumns[col]}</Typography>
                   </TableCell>
                 ))}
                 <TableCell>&nbsp;</TableCell>
@@ -139,11 +116,11 @@ function ImageList() {
               {images.data?.map((image) => (
                 <TableRow key={image.id}>
                   {Object.keys(imageColumns).map((col) => (
-                    <TableCell className={classes.tableText} key={col}>
-                      {image[col]}
+                    <TableCell key={col}>
+                      <Typography variant="body1">{image[col]}</Typography>
                     </TableCell>
                   ))}
-                  <TableCell className={classes.options}>
+                  <TableCell>
                     <Stack direction="row">
                       <IconButton
                         color="primary"
@@ -153,7 +130,7 @@ function ImageList() {
                           navigate(`../ImageEdit/${image.id}`);
                         }}
                       >
-                        <EditIcon className={classes.icon} />
+                        <EditIcon/>
                       </IconButton>
                       <IconButton
                         color="primary"
@@ -166,7 +143,7 @@ function ImageList() {
                           setDeleteConfirmation(true);
                         }}
                       >
-                        <DeleteIcon className={classes.icon} />
+                        <DeleteIcon/>
                       </IconButton>
                     </Stack>
                   </TableCell>
@@ -218,7 +195,6 @@ function ImageList() {
             </Dialog>
           </Table>
         </TableContainer>
-      </Root>
 
       {/* Delete confirmation dialog */}
     </div>
