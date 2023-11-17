@@ -14,7 +14,8 @@ function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/api/users", {
+        const response = await axios.get(`http://localhost:9000/api/users`, {
+        // const response = await axios.get(`http://localhost:9000/api/users/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -22,6 +23,7 @@ function Profile() {
 
         // only for demonstration, will fetch the 'current' user when log in is done
         const userData = response.data.data[0];
+        // const userData = response.data.data;
         setUser(userData);
         console.log("User:", userData);
       } catch (error) {
