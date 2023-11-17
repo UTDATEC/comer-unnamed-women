@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, Stack } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const PREFIX = 'NavBar';
 
@@ -109,7 +110,11 @@ export default function NavBar(props) {
                   aria-haspopup={Boolean(anchorElement)}
                   aria-expanded={Boolean(anchorElement)}
                 >
-                  <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>{user.given_name} {user.family_name}</Typography>
+                  <Stack direction="row" alignContent="center" alignItems="center">
+                    <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>
+                      {Boolean(user.given_name && user.family_name) ? `${user.given_name} ${user.family_name}` : `${user.email}`}
+                    </Typography>
+                  </Stack>
                 </Button>
                 <Menu MenuListProps={{
                 }} anchorEl={anchorElement} anchorOrigin={{
