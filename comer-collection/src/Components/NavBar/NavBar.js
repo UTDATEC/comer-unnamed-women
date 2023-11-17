@@ -114,6 +114,7 @@ export default function NavBar(props) {
                     <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>
                       {Boolean(user.given_name && user.family_name) ? `${user.given_name} ${user.family_name}` : `${user.email}`}
                     </Typography>
+                    <ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>
                   </Stack>
                 </Button>
                 <Menu MenuListProps={{
