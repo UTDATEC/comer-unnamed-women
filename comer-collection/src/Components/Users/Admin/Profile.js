@@ -5,6 +5,7 @@ import {
   CardContent,
   Typography,
   Button,
+  Stack,
 } from "@mui/material";
 
 const Profile = (props) => {
@@ -12,13 +13,14 @@ const Profile = (props) => {
   const { user, setUser } = props;
 
   if(!user) {
-    return null;
+    return (<></>);
   }
 
   return (
     <Container style={{ paddingTop: "30px" }} maxWidth="xs">
       <Card style={{ border: "1px solid lightgrey" }}>
         <CardContent>
+          <Stack direction="column" spacing={2}>
           <Typography
             variant="h4"
             align="center"
@@ -27,39 +29,28 @@ const Profile = (props) => {
           >
             User Information
           </Typography>
-          <div>
             <div>
               <strong>Net ID: </strong>
               <span>{user.email}</span>
             </div>
-            <div style={{ paddingTop: "10px" }}>
+            <div>
               <strong>Name: </strong>
               <span>{`${user.given_name} ${user.family_name}`}</span>
             </div>
-            <div style={{ paddingTop: "10px" }}>
-              <strong>Password: </strong>
-              <span>{"********"}</span>
+            <div>
+              <strong>Password Last Updated: </strong>
+              <span>{new Date(user.pw_updated).toLocaleString()}</span>
               <span style={{ paddingLeft: "10px" }}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "red",
-                      color: "white",
-                      fontWeight: "bold",
-                    },
-                  }}
-                >
-                  Reset Password
+                <Button variant="outlined" color="primary" disabled>
+                  Change Password
                 </Button>
               </span>
             </div>
-            <div style={{ paddingTop: "10px" }}>
+            <div>
               <strong>User Type: </strong>
               <span>{user.is_admin ? "Admin" : "Curator"}</span>
             </div>
-          </div>
+          </Stack>
         </CardContent>
       </Card>
     </Container>
