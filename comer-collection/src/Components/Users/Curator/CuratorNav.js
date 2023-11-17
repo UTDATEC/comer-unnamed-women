@@ -37,8 +37,8 @@ function CuratorNav() {
                 display: "flex",
                 justifyContent: "center",
                 width: "100%",
-                paddingTop: "10px",
-                paddingBottom: "15px",
+                paddingTop: "10%",
+                paddingBottom: "5%",
               }}
             >
               <Typography variant="h4" style={{ fontWeight: "bold" }}>
