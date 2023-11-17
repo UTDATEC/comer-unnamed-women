@@ -159,7 +159,7 @@ const Course = () => {
                 )
               }
             >
-              <Typography>Add Course</Typography>
+              <Typography>Create Course</Typography>
             </Button>
             <Button
               variant="outlined"
@@ -176,7 +176,7 @@ const Course = () => {
         </Stack>
       </Box>
 
-      <h3>Add Curators to the Course</h3>
+      <h3>Enroll Curators in Course</h3>
 
       <Box component="form">
         <FormControl variant="outlined" style={{ width: "100%" }}>
@@ -212,7 +212,7 @@ const Course = () => {
           onClick={handleAddUserToCourse}
           disabled={!Boolean(selectedCourse && newCurators.length > 0)}
         >
-          <Typography>Add Curators</Typography>
+          <Typography>Enroll</Typography>
         </Button>
       </Box>
     </div>
