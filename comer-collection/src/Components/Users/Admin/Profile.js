@@ -7,14 +7,11 @@ import {
   Button,
   Stack,
 } from "@mui/material";
+import Unauthorized from "../../ErrorPages/Unauthorized";
 
 const Profile = (props) => {
 
   const { user, setUser } = props;
-
-  if(!user) {
-    return (<></>);
-  }
 
   return (
     <Container style={{ paddingTop: "30px" }} maxWidth="xs">
