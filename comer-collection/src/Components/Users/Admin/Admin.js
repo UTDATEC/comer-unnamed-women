@@ -11,7 +11,9 @@ import Profile from './Profile';
 import { Box } from '@mui/material';
 
 
-function Admin() {
+const Admin = (props) => {
+
+  const { user, setUser } = props; 
 
   return (
     <>
@@ -32,7 +34,7 @@ function Admin() {
           
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
-            <Route path="Profile" element={<Profile />} />
+            <Route path="Profile" element={<Profile user={user} setUser={setUser} />} />
             <Route path="CuratorList" element={<CuratorList />} />
             <Route path="ExhibitionList" element={<ExhibitionList />} />
             <Route path="ImageList" element={<ImageList />} />

@@ -113,7 +113,7 @@ const App = () => {
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
           <Route path="/Account" element={<Account />} />
-          <Route path="/Admin/*" element={<Admin />} />
+          <Route path="/Admin/*" element={<Admin  user={currentUserProfile} setUser={setCurrentUserProfile} />} />
           <Route path="/Curator/*" element={<Curator />} />
 
           <Route path="/login" element={<Login user={currentUserProfile} setUser={setCurrentUserProfile} />} />

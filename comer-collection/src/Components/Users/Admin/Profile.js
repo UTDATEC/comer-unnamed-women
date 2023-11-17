@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import {
   Container,
   Card,
@@ -8,35 +7,10 @@ import {
   Button,
 } from "@mui/material";
 
-function Profile() {
-  const [user, setUser] = useState([]);
+const Profile = (props) => {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:9000/api/users`, {
-        // const response = await axios.get(`http://localhost:9000/api/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
+  const { user, setUser } = props;
 
-        // only for demonstration, will fetch the 'current' user when log in is done
-        const userData = response.data.data[0];
-        // const userData = response.data.data;
-        setUser(userData);
-        console.log("User:", userData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Container style={{ paddingTop: "30px" }} maxWidth="xs">
