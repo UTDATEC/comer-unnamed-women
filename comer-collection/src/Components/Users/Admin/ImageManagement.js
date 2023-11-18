@@ -19,8 +19,6 @@ const ImageManagement = (props) => {
   const [imageToDelete, setImageToDelete] = useState(null);
   
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
-  setSelectedNavItem("Image Management");
-
   const navigate = useNavigate();
 
   const imageColumns = {
@@ -31,13 +29,6 @@ const ImageManagement = (props) => {
     medium: "Medium",
     subject: "Subject",
   };
-
-  if(user.is_admin) {
-    useEffect(() => {
-      fetchImages();
-    }, []); 
-  }
-
   const fetchImages = async () => {
     try {
       const response = await axios.get('http://localhost:9000/api/images');
@@ -48,6 +39,13 @@ const ImageManagement = (props) => {
       console.error('Error fetching images:', error);
     }
   };
+
+  useEffect(() => {
+    setSelectedNavItem("Image Managemeent")
+    if(user.is_admin) {
+      fetchImages();
+    }
+  });
 
   const handleDelete = async () => {
     try {
