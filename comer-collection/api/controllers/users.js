@@ -56,11 +56,15 @@ const updateUser = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
                 }
-                await user.update({
-                    email: user.email,
-                    family_name: user.family_name,
-                    given_name: user.given_name
-                })
+                if(user.is_admin) {
+                    next(createError(401));
+                } else {
+                    await user.update({
+                        email: user.email,
+                        family_name: user.family_name,
+                        given_name: user.given_name
+                    })
+                }
                 res.status(200).json({ data: user })
             }
             else
