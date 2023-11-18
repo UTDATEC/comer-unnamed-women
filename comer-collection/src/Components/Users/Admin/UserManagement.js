@@ -282,7 +282,13 @@ const UserManagement = (props) => {
                       <Typography variant="body1">{curator.id}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1">{curator.family_name || curator.given_name ? `${curator.family_name}, ${curator.given_name}` : ""}</Typography>
+                      {
+                        curator.family_name || curator.given_name ? (
+                          <Typography variant="body1">{curator.family_name ?? ""}, {curator.given_name ?? ""}</Typography>
+                        ) : (
+                          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+                        )
+                      }
                     </TableCell>
                     <TableCell>
                       <Typography variant="body1">{curator.email}</Typography>
