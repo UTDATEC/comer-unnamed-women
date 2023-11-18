@@ -56,6 +56,7 @@ const App = () => {
       }
     },
     palette: {
+      mode: "light",
       primary: {
         main: green['900'],
         contrastText: 'white'
