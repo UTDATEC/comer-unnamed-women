@@ -75,12 +75,12 @@ const AccountNav = (props) => {
               sx={{
                 backgroundColor:
                   selectedNavItem == item.title
-                    ? "orange"
+                    ? theme.palette.secondary.main
                     : "unset",
                   "&:hover": {
                     backgroundColor:
                       selectedNavItem == item.title
-                        ? "lightorange"
+                        ? theme.palette.secondary.main
                         : "#444",
                   },
               }}
@@ -111,12 +111,12 @@ const AccountNav = (props) => {
                 sx={{
                   backgroundColor:
                     selectedNavItem == item.title
-                      ? "orange"
+                      ? theme.palette.secondary.main
                       : "unset",
                   "&:hover": {
                     backgroundColor:
                       selectedNavItem == item.title
-                        ? "lightorange"
+                        ? theme.palette.secondary.main
                         : "#444",
                   },
                 }}
