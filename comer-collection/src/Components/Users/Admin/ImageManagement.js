@@ -11,8 +11,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 
-const PREFIX = "ImageManagement";
-
 const ImageManagement = (props) => {
   const [images, setImages] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
@@ -80,6 +78,13 @@ const ImageManagement = (props) => {
       marginRight: '10%',
       paddingTop: '20px'
     }}>
+        <Typography
+          align="center"
+          style={{ fontSize: "25px", padding: "15px" }}
+        >
+          List of Images
+        </Typography>
+
         <TableContainer component={Paper} >
           <Table size="small" aria-label="test table">
             <TableHead
@@ -88,15 +93,6 @@ const ImageManagement = (props) => {
                 "&": { backgroundColor: "lightgray" },
               }}
             >
-              <TableRow>
-                <TableCell
-                  colSpan={Object.keys(imageColumns).length + 1}
-                  align="center"
-                  style={{ fontSize: "25px", padding: "15px" }}
-                >
-                  List of Images
-                </TableCell>
-              </TableRow>
               <TableRow>
                 {Object.keys(imageColumns).map((col) => (
                   <TableCell key={col}>
@@ -128,10 +124,9 @@ const ImageManagement = (props) => {
                         <EditIcon/>
                       </IconButton>
                       <IconButton
-                        color="primary"
+                        color="error"
                         variant="contained"
                         size="small"
-                        sx={{ color: "red" }}
                         onClick={() => {
                           // Set the image to delete and open the confirmation dialog
                           setImageToDelete(image);
