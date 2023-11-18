@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import './Login.css';
 import { useState } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material';
 
 async function loginUser(email, password) {
   const response = await fetch('http://localhost:9000/api/account/signin', {
@@ -20,17 +20,19 @@ const Login = (props) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    setError(false);
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    setError(false);
   };
 
   //Api call here
@@ -55,46 +57,53 @@ const Login = (props) => {
       else {
         setUser(null);
         localStorage.removeItem('token');
+        setPassword("");
+        setError(true);
       }
 
       
     }
     else {
-      setError("Login failed")
+      setPassword("");
+      setError(true);
     }
     
   };
 
-    return (
-      <div>
-        <div className="separator" />
-        <div className="loginForm">
-          <form onSubmit={handleLogin}>
-            <label>Email</label>
-            <input
+    return user && (
+        <Navigate to="/Account" />
+      ) || !user && (
+      <Box component="form" sx={{height: "100%"}} onSubmit={handleLogin}>
+          <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
+            sx={{width: "100%", height: "100%"}}>
+            <TextField sx={{minWidth: "400px"}}
+              error={Boolean(error)}
+              label="Email"
               type="text"
               name="email"
               value={email}
               onChange={handleEmailChange}
               required
             />
-
-            <label>Password</label>
-            <input
-              style={{ marginBottom: '12px' }}
+            <TextField sx={{minWidth: "400px"}}
+              error={Boolean(error)}
+              label="Password"
               type="password"
               name="password"
               value={password}
               onChange={handlePasswordChange}
               required
             />
-            {error && (<Typography color="error">{error}</Typography>)}
-            <button id="centered" type="submit">
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
+            <Divider />
+            <Button type="submit" 
+              variant="contained" 
+              sx={{minWidth: "400px"}} 
+              disabled={!(email && password)}
+            >
+              <Typography variant="body1">Log In</Typography>
+            </Button>
+          </Stack>
+      </Box>
     );
 }
 
