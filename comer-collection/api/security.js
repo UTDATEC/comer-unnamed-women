@@ -24,6 +24,9 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
         if(!user)
             throw new Error("User not found");
 
+        if(!user.is_active)
+            throw new Error("User is deactivated");
+
         // Check if password has changed since token was generated
         else if(`"${decoded.pw_updated}"` !== JSON.stringify(user.pw_updated))
             throw new Error("Token password update time does not match the latest password update time")

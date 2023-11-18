@@ -34,6 +34,12 @@ module.exports = (db) => {
             type: Sequelize.DATE(3),
             field: "user_pw_last_updated"
         },
+        is_active: {
+            type: Sequelize.BOOLEAN,
+            field: "user_is_active",
+            allowNull: false,
+            defaultValue: true
+        },
         is_admin: {
             type: Sequelize.BOOLEAN,
             field: "user_is_admin",
