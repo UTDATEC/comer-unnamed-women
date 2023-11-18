@@ -9,9 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch,
-  Box,
-  TextField, InputAdornment, IconButton
+  Switch, IconButton, Alert
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,10 +17,10 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy"
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
+import Snackbar from "@mui/material/Snackbar";
 
 const UserManagement = (props) => {
   const [curators, setCurators] = useState([]);
@@ -30,6 +28,10 @@ const UserManagement = (props) => {
   const [curatorToDelete, setCuratorToDelete] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
   
@@ -87,8 +89,17 @@ const UserManagement = (props) => {
         }
       );
       fetchData();
+
+      setSnackbarText(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
     } catch (error) {
       console.error(`Error deactivating user ${userId}: ${error}`);
+
+      setSnackbarText(`Error deactivating user ${userId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   }
 
@@ -127,9 +138,8 @@ const UserManagement = (props) => {
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
           <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} width="50%" />
-          <Button variant="contained" disabled>
-            <AddIcon fontSize="large"/>
-            <Typography variant="body1" sx={{padding: '5px'}} >Create User</Typography>
+          <Button variant="contained" startIcon={<AddIcon/>} disabled>
+            <Typography variant="body1">Create User</Typography>
           </Button>
         </Stack>
         <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
@@ -146,7 +156,10 @@ const UserManagement = (props) => {
 
             <TableBody>
               {curators.map((curator) => (
-                  <TableRow key={curator.id} hover={{backgroundColor: "#EEE"}} sx={{
+                  <TableRow key={curator.id} sx={{
+                    [`&:hover`]: {
+                      backgroundColor: "#EEE"
+                    },
                     display: (
                       searchQuery == "" ||
                       Boolean(curator.family_name?.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -167,10 +180,10 @@ const UserManagement = (props) => {
                     </TableCell>
                     <TableCell>
                       {curator.pw_temp ? (
-                        <IconButton>
-                          <ContentCopyIcon onClick={() => {
+                        <IconButton onClick={() => {
                             navigator.clipboard.writeText(curator.pw_temp);
-                          }} />
+                          }}>
+                          <ContentCopyIcon />
                         </IconButton>
                       ) : (
                         <Button variant="outlined" disabled>
@@ -204,6 +217,24 @@ const UserManagement = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <Snackbar 
+          open={snackbarOpen} 
+          autoHideDuration={3000} 
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+          onClose={() => {
+            setSnackbarOpen(false);
+          }}
+        >
+          <Alert severity={snackbarSeverity} variant="standard" sx={{width: "100%"}}>
+            <Stack direction="row" spacing={2}>
+              <Typography variant="body1">{snackbarText}</Typography>
+            </Stack>
+          </Alert>
+        </Snackbar>
 
       {/* Delete confirmation dialog */}
       <Dialog
