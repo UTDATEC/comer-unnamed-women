@@ -22,6 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"
 import Unauthorized from "../../ErrorPages/Unauthorized";
+import SearchBox from "../Tools/SearchBox";
 
 const UserManagement = (props) => {
   const [curators, setCurators] = useState([]);
@@ -125,17 +126,7 @@ const UserManagement = (props) => {
   user.is_admin && (
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
-          <TextField variant="outlined" placeholder="Search" value={searchQuery} sx={{width: "50%"}}
-            onChange={(e) => {
-              setSearchQuery(e.target.value)
-            }}
-            InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}></TextField>
+          <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} width="50%" />
           <Button variant="contained" disabled>
             <AddIcon fontSize="large"/>
             <Typography variant="body1" sx={{padding: '5px'}} >Create User</Typography>
