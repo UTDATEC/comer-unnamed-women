@@ -59,11 +59,13 @@ const App = () => {
       mode: "light",
       primary: {
         main: green['900'],
-        contrastText: 'white'
+        contrastText: 'white',
+        "200": green['200']
       },
       secondary: {
         main: orange['700'],
-        contrastText: 'black'
+        contrastText: 'black',
+        "200": orange['200']
       }
     }
   })
