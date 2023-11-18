@@ -147,8 +147,11 @@ const getUser = async (req, res, next) => {
 
 
 const resetUserPassword = async(req, res, next) => {
-    adminOperation(req, res, next, async () => {
+    adminOperation(req, res, next, async (currentUserId) => {
         try {
+            if(currentUserId == req.params.userId) {
+                throw new Error("User is trying to reset own password and should use change password instead")
+            }
             const user = await User.findByPk(req.params.userId, {
                 attributes: {
                     include: ['pw_temp']
