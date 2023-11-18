@@ -181,7 +181,17 @@ const UserManagement = (props) => {
                     <TableCell>
                       {curator.pw_temp ? (
                         <IconButton onClick={() => {
+                          try {
                             navigator.clipboard.writeText(curator.pw_temp);
+                            setSnackbarSeverity("success")
+                            setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
+                            setSnackbarOpen(true);
+                          } catch (error) {
+                            setSnackbarSeverity("error")
+                            setSnackbarText(`Error copying password`);
+                            setSnackbarOpen(true);
+                          }  
+                            
                           }}>
                           <ContentCopyIcon />
                         </IconButton>
