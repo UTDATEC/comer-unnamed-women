@@ -9,8 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, IconButton, Alert, useTheme, Menu, MenuItem, Divider
-} from "@mui/material";
+  Switch, IconButton, Alert, useTheme} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -20,12 +19,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import Snackbar from "@mui/material/Snackbar";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import CheckIcon from "@mui/icons-material/Check";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
+import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 
 
 const UserManagement = (props) => {
@@ -41,13 +38,6 @@ const UserManagement = (props) => {
 
   const [userTypeFilter, setUserTypeFilter] = useState(null);
   const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
-  const handleUserTypeMenuOpen = (event) => {
-    setUserTypeMenuAnchorElement(event.currentTarget);
-  }
-  const handleUserTypeMenuClose = (event) => {
-    setUserTypeMenuAnchorElement(null);
-  }
-
 
   const [sortColumn, setSortColumn] = useState("ID");
   const [sortAscending, setSortAscending] = useState(true);
@@ -215,55 +205,13 @@ const UserManagement = (props) => {
                 <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.secondary["200"] : "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="h6">User Type</Typography>
-                    <IconButton onClick={handleUserTypeMenuOpen}>
-                      {
-                        userTypeFilter ? (<FilterAltIcon fontSize="large" color="secondary" />) : (<FilterAltOutlinedIcon fontSize="large" />)
-                      }
-                    </IconButton>
+                    <ColumnFilterButton 
+                      filter={userTypeFilter} 
+                      setFilter={setUserTypeFilter} 
+                      menuAnchorElement={userTypeMenuAnchorElement}
+                      setMenuAnchorElement={setUserTypeMenuAnchorElement}
+                    />
                   </Stack>
-                  <Menu MenuListProps={{
-                    }} anchorEl={userTypeMenuAnchorElement} anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'center'
-                    }} transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center"
-                    }} open={Boolean(userTypeMenuAnchorElement)} onClose={handleUserTypeMenuClose}>
-                    <MenuItem onClick={() => {
-                      handleUserTypeMenuClose();
-                      setUserTypeFilter(null)
-                    }}>
-                      <Stack direction="row" spacing={1}>
-                        <CheckIcon sx={{ visibility: !userTypeFilter ? "" : "hidden" }}/>
-                        <Typography variant="body">
-                          All Users
-                        </Typography>
-                      </Stack>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => {
-                      handleUserTypeMenuClose();
-                      setUserTypeFilter("Administrator")
-                    }}>
-                      <Stack direction="row" spacing={1}>
-                        <CheckIcon sx={{ visibility: userTypeFilter == "Administrator" ? "" : "hidden" }}/>
-                        <Typography variant="body">
-                          Administrators
-                        </Typography>
-                      </Stack>
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                      handleUserTypeMenuClose();
-                      setUserTypeFilter("Curator")
-                    }}>
-                      <Stack direction="row" spacing={1}>
-                        <CheckIcon sx={{ visibility: userTypeFilter == "Curator" ? "" : "hidden" }}/>
-                        <Typography variant="body">
-                          Curators
-                        </Typography>
-                      </Stack>
-                    </MenuItem>
-                  </Menu>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Typography variant="h6">Active</Typography>
