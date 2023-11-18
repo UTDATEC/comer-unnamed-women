@@ -6,7 +6,7 @@ const router = express.Router();
 const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
-const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword } = require("./controllers/users.js");
+const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition } = require('./controllers/exhibitions.js');
@@ -52,6 +52,8 @@ router.get("/users/:userId", getUser);
 // Modify users
 router.post("/users", createUser);
 router.put("/users/:userId", updateUser);
+router.put("/users/:userId/deactivate", deactivateUser);
+router.put("/users/:userId/activate", activateUser);
 router.delete("/users/:userId", deleteUser);
 router.put("/users/:userId/resetpassword", resetUserPassword);
 

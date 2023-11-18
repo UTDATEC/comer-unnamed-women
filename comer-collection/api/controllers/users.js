@@ -76,6 +76,42 @@ const updateUser = async (req, res, next) => {
     })
 };
 
+const deactivateUser = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const user = await User.findByPk(req.params.userId);
+        if(user) {
+            if(user.is_admin)
+                next(createError(401, {debugMessage: "Admin cannot change activation status of admin"}));
+            else {
+                await user.update({
+                    is_active: false
+                })
+                res.status(200).json({ data: user })
+            }
+        }
+        else
+            next(createError(404))
+    })
+};
+
+const activateUser = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const user = await User.findByPk(req.params.userId);
+        if(user) {
+            if(user.is_admin)
+                next(createError(401, {debugMessage: "Admin cannot change activation status of admin"}));
+            else {
+                await user.update({
+                    is_active: true
+                })
+                res.status(200).json({ data: user })
+            }
+        }
+        else
+            next(createError(404))
+    })
+};
+
 const deleteUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId);
@@ -138,4 +174,4 @@ const resetUserPassword = async(req, res, next) => {
     });
 }
 
-module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword }
+module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser }
