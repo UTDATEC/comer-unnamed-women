@@ -31,6 +31,7 @@ const UserManagement = (props) => {
     id: "ID",
     displayName: "Name",
     email: "Email",
+    courseCount: "Courses",
     type: "User Type"
   };
   
@@ -127,6 +128,9 @@ const UserManagement = (props) => {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body1">{curator.email}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1">{curator.Courses.length}</Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body1">{curator.is_admin ? "Administrator" : "Curator"}</Typography>
