@@ -25,6 +25,7 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CheckIcon from "@mui/icons-material/Check";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { ColumnSortButton } from "../Tools/ColumnSortButton";
 
 
 const UserManagement = (props) => {
@@ -46,6 +47,10 @@ const UserManagement = (props) => {
   const handleUserTypeMenuClose = (event) => {
     setUserTypeMenuAnchorElement(null);
   }
+
+
+  const [sortColumn, setSortColumn] = useState("ID");
+  const [sortAscending, setSortAscending] = useState(true);
 
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
@@ -83,6 +88,13 @@ const UserManagement = (props) => {
     Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
     Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
     Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
+  }).sort((a, b) => {
+    if(sortColumn == "Name")
+      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+    else if(sortColumn == "ID")
+      return !sortAscending ^ (a.id > b.id);
+    else if(sortColumn == "Email")
+      return !sortAscending ^ (a.email > b.email)
   })
   
 
@@ -174,13 +186,22 @@ const UserManagement = (props) => {
             <TableHead>
               <TableRow sx={{backgroundColor: "#CCC"}}>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">ID</Typography>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h6">ID</Typography>
+                    <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Name</Typography>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h6">Name</Typography>
+                    <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Email</Typography>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h6">Email</Typography>
+                    <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Typography variant="h6">Password</Typography>
