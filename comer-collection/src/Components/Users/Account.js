@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import AdminNav from './AccountNav';
-import CuratorList from './Admin/CuratorList';
+import UserManagement from './Admin/UserManagement';
 import ExhibitionList from './Admin/ExhibitionList';
 import ImageManagement from './Admin/ImageManagement';
 import ImageEdit from './Admin/ImageEdit';
@@ -38,7 +38,7 @@ const Account = (props) => {
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
             <Route path="Profile" element={<Profile user={user} setUser={setUser} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="CuratorList" element={<CuratorList user={user} setSelectedNavItem={setSelectedNavItem} />} />
+            <Route path="UserManagement" element={<UserManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ExhibitionList" element={<ExhibitionList user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ImageManagement" element={<ImageManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="Course" user={user} element={<Course user={user} setSelectedNavItem={setSelectedNavItem} />} />

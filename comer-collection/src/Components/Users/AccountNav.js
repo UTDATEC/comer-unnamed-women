@@ -23,9 +23,9 @@ const navLinks = [
   
 const adminNavLinks = [
   {
-      title: "Curator Management",
+      title: "User Management",
       icon: <GroupsIcon fontSize="large"/>,
-      link: "/Account/CuratorList"
+      link: "/Account/UserManagement"
   },
   {
       title: "Exhibition Management",
