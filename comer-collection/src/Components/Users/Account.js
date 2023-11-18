@@ -33,7 +33,7 @@ const Account = (props) => {
 
         <AdminNav sx={{gridArea: 'sidebar'}} user={user} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem}/>
         
-        <Box sx={{gridArea: 'main', position: 'relative'}}>
+        <Box sx={{gridArea: 'main', position: 'relative', overflowY: "hidden", height: '100%'}}>
           
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
