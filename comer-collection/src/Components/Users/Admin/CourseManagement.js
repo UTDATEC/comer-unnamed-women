@@ -14,36 +14,36 @@ const Course = (props) => {
   const [newCurators, setNewCurators] = useState([]);
 
   const { user, setSelectedNavItem } = props;
-  setSelectedNavItem("Course Management")
-
-  if(user.is_admin) {
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('http://localhost:9000/api/courses', {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          });
-          
-          console.log('Fetched data:', response.data); 
-          setCourses(response.data);
   
-          if (response.data && Array.isArray(response.data.data)) {
-            setCourses(response.data.data);
-            setSelectedCourse("");
-          } else {
-            console.error("Response Data Error:", response.data);
-          }
-        } catch (error) {
-          console.error('Error fetching courses:', error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:9000/api/courses', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        
+        console.log('Fetched data:', response.data); 
+        setCourses(response.data);
+        
+        if (response.data && Array.isArray(response.data.data)) {
+          setCourses(response.data.data);
+          setSelectedCourse("");
+        } else {
+          console.error("Response Data Error:", response.data);
         }
-      };
-  
-      fetchData();
-    }, []);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
 
-  }
+      setSelectedNavItem("Course Management")
+      if(user.is_admin) {
+        fetchData();
+      }
+    }
+
+  }, []);
 
   const handleCreateCourse = async () => {
     try {
