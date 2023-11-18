@@ -1,5 +1,6 @@
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const SearchBox = (props) => {
     const { searchQuery, setSearchQuery, width } = props;
@@ -13,6 +14,17 @@ const SearchBox = (props) => {
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton sx={{
+                  visibility: searchQuery == "" ? "hidden" : ""
+                }} onClick={() => {
+                  setSearchQuery("");
+                }}>
+                  <ClearIcon />
+                </IconButton>
               </InputAdornment>
             )
         }}></TextField>
