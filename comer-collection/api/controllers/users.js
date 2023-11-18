@@ -60,12 +60,12 @@ const updateUser = async (req, res, next) => {
                     next(createError(401));
                 } else {
                     await user.update({
-                        email: user.email,
-                        family_name: user.family_name,
-                        given_name: user.given_name
+                        email: req.body.email,
+                        family_name: req.body.family_name,
+                        given_name: req.body.given_name
                     })
+                    res.status(200).json({ data: user })
                 }
-                res.status(200).json({ data: user })
             }
             else
                 next(createError(404));
