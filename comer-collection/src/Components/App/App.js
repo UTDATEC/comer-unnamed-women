@@ -99,7 +99,7 @@ const App = () => {
           height: '100vh', 
           display: 'grid',
           gridTemplateColumns: '1fr',
-          gridTemplateRows: '64px auto',
+          gridTemplateRows: '64px calc(100vh - 64px)',
           gridTemplateAreas: `
             "header"
             "body"
