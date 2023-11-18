@@ -59,41 +59,15 @@ const AccountNav = (props) => {
 
   const { user, selectedNavItem, setSelectedNavItem } = props;
 
-  
-  const PREFIX = 'AccountNav';
-
-  const classes = {
-    root: `${PREFIX}-root`,
-    listItem: `${PREFIX}-listItem`,
-  };
-
-  const Root = styled('div')((
-    {
-      theme
-    }
-  ) => ({
-
-    [`& .${classes.listItem}`]: {
-      // backgroundColor: selectedNavItem == ,
-    }
-  }));
-
-
-  // const handleItemClick = (link) => {
-  //   navigate(link);
-  // };
-
   const theme = useTheme();
 
   return (
-    <Root className={classes.root}>
     <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
       <Typography variant="h5" alignSelf="center" paddingTop="10px">Account</Typography>
         <List>
           {navLinks.map((item) => (
             <ListItem
               key={item.title}
-              className={classes.listItem}
               onClick={() => {
                 setSelectedNavItem(item.title);
                 navigate(item.link)
@@ -161,7 +135,6 @@ const AccountNav = (props) => {
           </>
         )}
       </Stack>
-    </Root>
   );
 }
 
