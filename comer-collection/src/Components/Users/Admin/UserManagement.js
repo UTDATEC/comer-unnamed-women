@@ -56,37 +56,6 @@ const UserManagement = (props) => {
     }
   };
   
-  
-  // if need to display date
-  const formatISODate = (isoDate) => {
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
-  const calculateDeactivationInDays = (deactivationDate) => {
-    const today = new Date();
-    const deactivation = new Date(deactivationDate);
-
-    const differenceInTime = deactivation.getTime() - today.getTime();
-    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    if (differenceInDays < 0) {
-      return "Expired";
-    } else {
-      return differenceInDays.toString();
-    }
-  };
-
-  const calculateDeactivationStatusAndColor = (deactivationDate) => {
-    const differenceInDays = calculateDeactivationInDays(deactivationDate);
-
-    return {
-      status: differenceInDays > 0 ? "Active" : "Inactive",
-      color: differenceInDays > 0 ? "green" : "red",
-    };
-  };
 
   const handleDeleteClick = (curatorId) => {
     setCuratorToDelete({ curatorId });
