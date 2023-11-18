@@ -173,7 +173,9 @@ const UserManagement = (props) => {
                           }} />
                         </IconButton>
                       ) : (
-                        <Typography variant="body1" sx={{opacity: 0.5}}>Set by user</Typography>
+                        <Button variant="outlined" disabled>
+                          <Typography variant="body1">Reset</Typography>
+                        </Button>
                       )}
                     </TableCell>
                     <TableCell>
