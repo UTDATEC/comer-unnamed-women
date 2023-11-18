@@ -206,6 +206,17 @@ const UserManagement = (props) => {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="h6">User Type</Typography>
                     <ColumnFilterButton 
+                      options={[
+                        {
+                          value: "Administrator",
+                          displayText: "Administrators"
+                        },
+                        {
+                          value: "Curator",
+                          displayText: "Curators"
+                        }
+                      ]}
+                      optionAll="All Users"
                       filter={userTypeFilter} 
                       setFilter={setUserTypeFilter} 
                       menuAnchorElement={userTypeMenuAnchorElement}

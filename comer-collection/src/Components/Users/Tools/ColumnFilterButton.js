@@ -6,20 +6,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 export const ColumnFilterButton = (props) => {
 
-  const { filter, setFilter, menuAnchorElement, setMenuAnchorElement } = props;
-
-  const options = [
-    {
-      value: "Administrator",
-      displayText: "Administrators"
-    },
-    {
-      value: "Curator",
-      displayText: "Curators"
-    }
-  ];
-
-  const optionAll = "All Users";
+  const { options, optionAll, filter, setFilter, menuAnchorElement, setMenuAnchorElement } = props;
 
   return (
     <>
