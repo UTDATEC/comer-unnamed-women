@@ -9,7 +9,8 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography
+  Typography,
+  Switch
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -34,6 +35,7 @@ const UserManagement = (props) => {
     courseCount: "Courses",
     exhibitionCount: "Exhibitions",
     type: "User Type",
+    isActive: "Active"
   };
   
   useEffect(() => {
@@ -63,6 +65,26 @@ const UserManagement = (props) => {
     setCuratorToDelete({ curatorId });
     setDeleteConfirmation(true);
   };
+
+  const handleChangeUserActivationStatus = async(userId, willBeActive) => {
+    try {
+      await axios.put(
+        (willBeActive ? 
+          `http://localhost:9000/api/users/${userId}/activate` : 
+          `http://localhost:9000/api/users/${userId}/deactivate`
+          ), null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+    } catch (error) {
+      console.error(`Error deactivating user ${userId}: ${error}`);
+    }
+  }
+
 
   const handleDelete = async () => {
     try {
@@ -114,7 +136,6 @@ const UserManagement = (props) => {
                     <Typography variant="h6">{curatorColumns[col]}</Typography>
                   </TableCell>
                 ))}
-                <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
 
@@ -142,7 +163,15 @@ const UserManagement = (props) => {
 
 
                     <TableCell>
-                      <Stack direction="row">
+                      <Switch 
+                        itemID={curator.id}
+                        checked={curator.is_active} 
+                        disabled={curator.is_admin} 
+                        onClick={(e) => {
+                          handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
+                        }}
+                      />
+                      {/* <Stack direction="row">
                         <IconButton
                           color="primary"
                           variant="contained"
@@ -154,7 +183,7 @@ const UserManagement = (props) => {
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </Stack>
+                      </Stack> */}
                     </TableCell>
                   </TableRow>
                 ))}
