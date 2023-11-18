@@ -81,7 +81,7 @@ const deleteUser = async (req, res, next) => {
         const user = await User.findByPk(req.params.userId);
         if(user) {
             if(user.is_admin)
-                next(createError(401));
+                next(createError(401, {debugMessage: "Admin cannot delete admin"}));
             else {
                 await user.destroy();
                 res.sendStatus(204);
