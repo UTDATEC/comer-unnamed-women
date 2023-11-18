@@ -56,11 +56,6 @@ export default function NavBar(props) {
   const navigate = useNavigate();
   const { user, setUser } = props;
   
-  const signOutUser = () => {
-    setUser(null);
-    localStorage.removeItem('token');
-  }
-  
   const [buttons, setButtons] = useState([]);
 
   const [anchorElement, setAnchorElement] = useState(null);
@@ -135,7 +130,9 @@ export default function NavBar(props) {
                   </MenuItem>
                   <MenuItem onClick={() => {
                     handleMenuClose();
-                    signOutUser();
+                    setUser(null);
+                    localStorage.removeItem('token');
+                    navigate('/')
                   }}>
                     <Typography variant="body">
                       Log Out
