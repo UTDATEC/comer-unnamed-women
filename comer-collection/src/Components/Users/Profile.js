@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Card,
@@ -11,7 +11,10 @@ import {
 const Profile = (props) => {
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
-  setSelectedNavItem("Profile");
+
+  useEffect(() => {
+    setSelectedNavItem("Profile");
+  }, [])
 
   return (
     <Container style={{ paddingTop: "30px" }} maxWidth="xs">
