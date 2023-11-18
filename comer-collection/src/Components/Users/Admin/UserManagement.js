@@ -33,7 +33,7 @@ const UserManagement = (props) => {
     email: "Email",
     courseCount: "Courses",
     exhibitionCount: "Exhibitions",
-    type: "User Type"
+    type: "User Type",
   };
   
   useEffect(() => {
