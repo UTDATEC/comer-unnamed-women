@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,38 +21,8 @@ import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 
-const PREFIX = "CuratorList";
-
-const classes = {
-  root: `${PREFIX}-root`,
-  tableText: `${PREFIX}-tableText`,
-  options: `${PREFIX}-options`,
-  icon: `${PREFIX}-icon`,
-  dialog: `${PREFIX}-dialog`,
-};
-
-const Root = styled("div")({
-  [`& .${classes.tableText}`]: {
-    fontSize: "14px",
-    align: "left",
-  },
-  [`& .${classes.options}`]: {
-    fontSize: "20px",
-    align: "right",
-    width: "50px",
-  },
-  [`& .${classes.icon}`]: {
-    fontSize: "20px",
-  },
-  [`& .${classes.dialog}`]: {
-    "& .MuiDialog-paper": {
-      minWidth: "300px",
-    },
-  },
-});
-
 const CuratorList = (props) => {
-  const [curator, setCurator] = useState([]);
+  const [curators, setCurators] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [curatorToDelete, setCuratorToDelete] = useState(null);
 
@@ -59,30 +30,12 @@ const CuratorList = (props) => {
   
 
   const curatorColumns = {
-    status: "Status",
-    givenName: "First",
-    familyName: "Last",
-    course: "Course",
-    exhibition: "Exhibition",
-    deactivationDays: "Deactivation in (Days)",
+    id: "ID",
+    displayName: "Name",
+    email: "Email",
+    type: "User Type"
   };
   
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:9000/api/courses", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      setCurator(response.data.data);
-      console.log("Curator:", response.data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-
   useEffect(() => {
     setSelectedNavItem("Curator Management");
     if(user.is_admin) {
@@ -90,7 +43,22 @@ const CuratorList = (props) => {
     }
   }, []); 
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const curatorData = response.data;
 
+      setCurators(curatorData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  
   // if need to display date
   const formatISODate = (isoDate) => {
     const date = new Date(isoDate);
@@ -122,17 +90,17 @@ const CuratorList = (props) => {
     };
   };
 
-  const handleDeleteClick = (curatorId, courseId) => {
-    setCuratorToDelete({ curatorId, courseId });
+  const handleDeleteClick = (curatorId) => {
+    setCuratorToDelete({ curatorId });
     setDeleteConfirmation(true);
   };
 
   const handleDelete = async () => {
     try {
-      const { curatorId, courseId } = curatorToDelete;
+      const { curatorId } = curatorToDelete;
 
       const response = await axios.delete(
-        `http://localhost:9000/api/courses/${courseId}/users/${curatorId}`,
+        `http://localhost:9000/api/users/${curatorId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -153,6 +121,7 @@ const CuratorList = (props) => {
     }
   };
 
+
   return !user.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
@@ -162,7 +131,12 @@ const CuratorList = (props) => {
       marginRight: '10%',
       paddingTop: '20px'
     }}>
-      <Root >
+      <Typography
+        align="center"
+        style={{ fontSize: "25px", padding: "15px" }}
+      >
+        List of Curators
+      </Typography>
         <TableContainer component={Paper} sx={{ width: "100%" }}>
           <Table size="small" aria-label="curator table" sx={{ width: "100%" }}>
             <TableHead
@@ -171,18 +145,10 @@ const CuratorList = (props) => {
                 "&": { backgroundColor: "lightgray" },
               }}
             >
-              <TableCell
-                colSpan={Object.keys(curatorColumns).length + 1}
-                className={classes.tableText}
-                align="center"
-                style={{ fontSize: "25px", padding: "15px" }}
-              >
-                List of Curators
-              </TableCell>
               <TableRow>
                 {Object.keys(curatorColumns).map((col) => (
-                  <TableCell className={classes.tableText}>
-                    {curatorColumns[col]}
+                  <TableCell key={col}>
+                    <Typography variant="h6">{curatorColumns[col]}</Typography>
                   </TableCell>
                 ))}
                 <TableCell>&nbsp;</TableCell>
@@ -190,63 +156,48 @@ const CuratorList = (props) => {
             </TableHead>
 
             <TableBody sx={{ "& tr:hover": { backgroundColor: "#EEE" } }}>
-              {curator.map((course) => {
-                const { status, color } = calculateDeactivationStatusAndColor(
-                  course.date_end
-                );
-
-                return course.Users.map((curatorUser) => (
-                  <TableRow key={curatorUser.id}>
-                    <TableCell
-                      className={classes.tableText}
-                      sx={{ color, fontWeight: "bold" }}
-                    >
-                      {status}
+              {curators.map((curator) => (
+                  <TableRow key={curator.id}>
+                    <TableCell>
+                      <Typography variant="body1">{curator.id}</Typography>
                     </TableCell>
-                    <TableCell className={classes.tableText}>
-                      {curatorUser.given_name}
+                    <TableCell>
+                      <Typography variant="body1">{curator.family_name}, {curator.given_name}</Typography>
                     </TableCell>
-                    <TableCell className={classes.tableText}>
-                      {curatorUser.family_name}
+                    <TableCell>
+                      <Typography variant="body1">{curator.email}</Typography>
                     </TableCell>
-                    <TableCell className={classes.tableText}>
-                      {course.name}
-                    </TableCell>
-                    <TableCell className={classes.tableText}>
-                      {/* holder for curator's exhibition number*/}
-                    </TableCell>
-                    <TableCell className={classes.tableText}>
-                      {calculateDeactivationInDays(course.date_end)}
+                    <TableCell>
+                      <Typography variant="body1">{curator.is_admin ? "Administrator" : "Curator"}</Typography>
                     </TableCell>
 
-                    <TableCell className={classes.options}>
+
+                    <TableCell>
                       <Stack direction="row">
                         <IconButton
                           color="primary"
                           variant="contained"
                           size="small"
-                          sx={{ color: "red" }}
+                          disabled={curator.is_admin}
                           onClick={() =>
-                            handleDeleteClick(curatorUser.id, course.id)
+                            handleDeleteClick(curator.id)
                           }
                         >
-                          <DeleteIcon className={classes.icon} />
+                          <DeleteIcon />
                         </IconButton>
                       </Stack>
                     </TableCell>
                   </TableRow>
-                ));
-              })}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
-      </Root>
 
       {/* Delete confirmation dialog */}
       <Dialog
         open={deleteConfirmation}
         onClose={() => setDeleteConfirmation(false)}
-        className={classes.dialog}
+        // className={classes.dialog}
       >
         <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
           Delete Curator
