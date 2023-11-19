@@ -3,10 +3,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const SearchBox = (props) => {
-    const { searchQuery, setSearchQuery, width } = props;
+    const { searchQuery, setSearchQuery, width, placeholder } = props;
 
     return (
-        <TextField variant="outlined" placeholder="Search" value={searchQuery} sx={{width}}
+        <TextField variant="outlined" placeholder={placeholder ?? "Search"} value={searchQuery} sx={{width}}
             onChange={(e) => {
               setSearchQuery(e.target.value)
             }}
