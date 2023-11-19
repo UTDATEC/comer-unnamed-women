@@ -44,6 +44,9 @@ const App = () => {
     updatedAt: '',
   });
 
+  const primaryColor = green;
+  const secondaryColor = orange;
+
   const theme = createTheme({
     typography: {
       fontFamily: [
@@ -58,15 +61,15 @@ const App = () => {
     palette: {
       mode: "light",
       primary: {
-        main: green['900'],
-        light: green['500'],
+        main: primaryColor['900'],
+        light: primaryColor['500'],
         contrastText: 'white',
-        "200": green['200']
+        "200": primaryColor['200']
       },
       secondary: {
-        main: orange['700'],
+        main: secondaryColor['700'],
         contrastText: 'black',
-        "200": orange['200']
+        "200": secondaryColor['200']
       }
     }
   })
