@@ -25,6 +25,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import LockResetIcon from "@mui/icons-material/LockReset"
 
 
 const UserManagement = (props) => {
@@ -132,6 +133,31 @@ const UserManagement = (props) => {
       console.error(`Error deactivating user ${userId}: ${error}`);
 
       setSnackbarText(`Error deactivating user ${userId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  const handleResetPassword = async(userId) => {
+    try {
+      await axios.put(
+        `http://localhost:9000/api/users/${userId}/resetpassword`, null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setSnackbarText(`Password reset for user ${userId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error resetting password for user ${userId}: ${error}`);
+
+      setSnackbarText(`Error resetting password for user ${userId}`)
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
@@ -283,23 +309,31 @@ const UserManagement = (props) => {
                     </TableCell>
                     <TableCell>
                       {curator.pw_temp ? (
-                        <IconButton onClick={() => {
-                          try {
-                            navigator.clipboard.writeText(curator.pw_temp);
-                            setSnackbarSeverity("success")
-                            setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
-                            setSnackbarOpen(true);
-                          } catch (error) {
-                            setSnackbarSeverity("error")
-                            setSnackbarText(`Error copying password`);
-                            setSnackbarOpen(true);
-                          }  
-                            
+                        <Button startIcon={<ContentCopyIcon />}
+                          variant="text"
+                          onClick={() => {
+                            try {
+                              navigator.clipboard.writeText(curator.pw_temp);
+                              setSnackbarSeverity("success")
+                              setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
+                              setSnackbarOpen(true);
+                            } catch (error) {
+                              setSnackbarSeverity("error")
+                              setSnackbarText(`Error copying password`);
+                              setSnackbarOpen(true);
+                            }
                           }}>
-                          <ContentCopyIcon />
-                        </IconButton>
+                          <Typography variant="body1">Copy</Typography>
+                        </Button>
                       ) : (
-                        <Button variant="outlined" disabled>
+                        <Button 
+                          startIcon={<LockResetIcon />}
+                          itemID={curator.id}
+                          variant="outlined" 
+                          disabled={user.id == curator.id}
+                          onClick={(e) => {
+                            handleResetPassword(e.target.parentElement.attributes.itemid.value);
+                          }}>
                           <Typography variant="body1">Reset</Typography>
                         </Button>
                       )}
