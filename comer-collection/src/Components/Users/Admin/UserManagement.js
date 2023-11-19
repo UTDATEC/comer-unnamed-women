@@ -310,7 +310,7 @@ const UserManagement = (props) => {
                     <TableCell>
                       {curator.pw_temp ? (
                         <Button startIcon={<ContentCopyIcon />}
-                          variant="text"
+                          variant="outlined"
                           onClick={() => {
                             try {
                               navigator.clipboard.writeText(curator.pw_temp);
