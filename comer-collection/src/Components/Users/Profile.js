@@ -7,10 +7,12 @@ import {
   Button,
   Stack,
 } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const Profile = (props) => {
 
   const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSelectedNavItem("Profile");
@@ -41,8 +43,10 @@ const Profile = (props) => {
               <strong>Password Last Updated: </strong>
               <span>{new Date(user.pw_updated).toLocaleString()}</span>
               <span style={{ paddingLeft: "10px" }}>
-                <Button variant="outlined" color="primary" disabled>
-                  Change Password
+                <Button variant="outlined" color="primary" onClick={() => {
+                  navigate('/Account/ChangePassword')
+                }}>
+                  <Typography>Change Password</Typography>
                 </Button>
               </span>
             </div>
