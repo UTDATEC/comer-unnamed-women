@@ -65,7 +65,7 @@ const Login = (props) => {
       <Box component="form" sx={{height: "100%"}} onSubmit={handleLogin}>
           <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
             sx={{width: "100%", height: "100%"}}>
-            <TextField sx={{minWidth: "400px"}}
+            <TextField sx={{minWidth: "400px"}} autoFocus
               error={Boolean(error)}
               label="Email"
               type="text"
