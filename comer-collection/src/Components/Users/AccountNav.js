@@ -11,6 +11,7 @@ import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import ImageIcon from '@mui/icons-material/Image';
 import SchoolIcon from '@mui/icons-material/School';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import LockIcon from '@mui/icons-material/Lock';
 
 
 const navLinks = [
@@ -18,6 +19,11 @@ const navLinks = [
       title: "Profile",
       icon: <AccountCircleIcon fontSize="large"/>,
       link: "/Account/Profile"
+  },
+  {
+      title: "Change Password",
+      icon: <LockIcon fontSize="large"/>,
+      link: "/Account/ChangePassword"
   },
 ]
   

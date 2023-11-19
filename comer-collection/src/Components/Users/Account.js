@@ -10,6 +10,7 @@ import InviteForm from './Admin/InviteForm';
 import Profile from './Profile';
 import { Box } from '@mui/material';
 import Unauthorized from '../ErrorPages/Unauthorized';
+import ChangePassword from './ChangePassword';
 
 
 const Account = (props) => {
@@ -38,6 +39,7 @@ const Account = (props) => {
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
             <Route path="Profile" element={<Profile user={user} setUser={setUser} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} />} />
+            <Route path="ChangePassword" element={<ChangePassword user={user} setUser={setUser} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="UserManagement" element={<UserManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ExhibitionList" element={<ExhibitionList user={user} setSelectedNavItem={setSelectedNavItem} />} />
             <Route path="ImageManagement" element={<ImageManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
