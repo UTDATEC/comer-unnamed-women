@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, IconButton, Alert, useTheme} from "@mui/material";
+  Switch, IconButton, Alert, useTheme, Box} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,6 +23,7 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch"
 
 
 const UserManagement = (props) => {
@@ -38,6 +39,14 @@ const UserManagement = (props) => {
 
   const [userTypeFilter, setUserTypeFilter] = useState(null);
   const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
+  const clearFilters = () => {
+    setSearchQuery("");
+    setUserTypeFilter(null);
+    setUserActivationStatusFilter(null);
+  }
+
+  const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
+  const [userActivationStatusMenuAnchorElement, setUserActivationStatusMenuAnchorElement] = useState(null);
 
   const [sortColumn, setSortColumn] = useState("ID");
   const [sortAscending, setSortAscending] = useState(true);
@@ -69,16 +78,22 @@ const UserManagement = (props) => {
     }
   };
 
-  const curatorsToDisplay = curators.filter((curator) => {
+  const curatorsToDisplay = curators
+  .filter((curator) => {
     return !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
-  }).filter((curator) => {
+  })
+  .filter((curator) => {
+    return !userActivationStatusFilter || userActivationStatusFilter == "Active" && curator.is_active || userActivationStatusFilter == "Inactive" && !curator.is_active
+  })
+  .filter((curator) => {
     return searchQuery == "" ||
     Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
     Boolean((curator.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
     Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
     Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
     Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
-  }).sort((a, b) => {
+  })
+  .sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
@@ -157,12 +172,9 @@ const UserManagement = (props) => {
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
           <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} width="50%" />
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={() => {
-              setSearchQuery("");
-              setUserTypeFilter(null);
-            }}
+            <Button variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
-                !Boolean(searchQuery || userTypeFilter)
+                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
@@ -320,6 +332,19 @@ const UserManagement = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+          {
+            curatorsToDisplay.length == 0 && (
+              <Box sx={{width: '100%'}}>
+                <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
+                  <PersonSearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
+                  <Typography variant="h4">No users found</Typography>
+                  <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
+                    <Typography variant="body1">Clear Filters</Typography>
+                  </Button>
+                </Stack>
+              </Box>
+            )
+          }
 
         <Snackbar 
           open={snackbarOpen} 
