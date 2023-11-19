@@ -224,8 +224,27 @@ const UserManagement = (props) => {
                     />
                   </Stack>
                 </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Active</Typography>
+                <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.secondary["200"] : "#CCC"}}>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h6">Active</Typography>
+                    <ColumnFilterButton 
+                      options={[
+                        {
+                          value: "Active",
+                          displayText: "Active"
+                        },
+                        {
+                          value: "Inactive",
+                          displayText: "Inactive"
+                        }
+                      ]}
+                      optionAll="All Users"
+                      filter={userActivationStatusFilter} 
+                      setFilter={setUserActivationStatusFilter} 
+                      menuAnchorElement={userActivationStatusMenuAnchorElement}
+                      setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
+                    />
+                  </Stack>
                 </TableCell>
               </TableRow>
             </TableHead>
