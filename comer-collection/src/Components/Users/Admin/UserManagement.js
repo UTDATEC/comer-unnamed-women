@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, Alert, useTheme, Box
+  Switch, Alert, useTheme, Box, IconButton, DialogContentText, TextField
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,6 +27,7 @@ import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import EditIcon from "@mui/icons-material/Edit"
 
 
 const UserManagement = (props) => {
@@ -35,6 +36,13 @@ const UserManagement = (props) => {
 
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [curatorToDelete, setCuratorToDelete] = useState(null);
+
+  const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
+  const [editDialogUser, setEditDialogUser] = useState(null);
+  const [editDialogFieldEmail, setEditDialogFieldEmail] = useState('');
+  const [editDialogFieldFamilyName, setEditDialogFieldFamilyName] = useState('');
+  const [editDialogFieldGivenName, setEditDialogFieldGivenName] = useState('');
+  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -122,6 +130,37 @@ const UserManagement = (props) => {
     setCuratorToDelete({ curatorId });
     setDeleteConfirmation(true);
   };
+
+  const handleUserEdit = async(userId, updateFields) => {
+    const { email, given_name, family_name } = updateFields;
+    try {
+      await axios.put(
+        `http://localhost:9000/api/users/${userId}`, { email, given_name, family_name },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setEditDialogIsOpen(false);
+      setEditDialogFieldEmail('')
+      setEditDialogFieldFamilyName('')
+      setEditDialogFieldGivenName('')
+
+      setSnackbarText(`Successfully edited user ${userId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error editing user ${userId}: ${error}`);
+
+      setSnackbarText(`Error editing for user ${userId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
 
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
     try {
@@ -312,6 +351,9 @@ const UserManagement = (props) => {
                       setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
                     />
                 </TableCell>
+                <TableCell sx={{backgroundColor: "#CCC"}}>
+                  <Typography variant="h6">Options</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
 
@@ -389,6 +431,21 @@ const UserManagement = (props) => {
                         }}
                       />
                     </TableCell>
+                    <TableCell>
+                      <IconButton 
+                        disabled={curator.is_admin} 
+                        onClick={(e) => {
+                          setEditDialogUser(curator);
+                          setEditDialogFieldEmail(curator.email);
+                          setEditDialogFieldFamilyName(curator.family_name);
+                          setEditDialogFieldGivenName(curator.given_name);
+                          setEditDialogSubmitEnabled(true);
+                          setEditDialogIsOpen(true)
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -425,6 +482,68 @@ const UserManagement = (props) => {
             </Stack>
           </Alert>
         </Snackbar>
+
+      <Dialog component="form"
+        open={editDialogIsOpen}
+        onClose={(event, reason) => {
+          if(reason == "backdropClick")
+            return;
+          setEditDialogIsOpen(false);
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUserEdit(editDialogUser.id, {
+            email: editDialogFieldEmail,
+            family_name: editDialogFieldFamilyName,
+            given_name: editDialogFieldGivenName
+          });
+        }}
+      >
+        <DialogTitle
+        sx={{
+          textAlign: "center"
+        }}>
+          <Typography variant="h4">Edit User</Typography>
+        </DialogTitle>
+        <DialogContent
+        sx={{
+          width: "500px",
+        }}>
+          <Stack spacing={2}>
+          <DialogContentText>
+            <Typography variant="body1">Edit the user fields, then click 'Save'.</Typography>
+          </DialogContentText>
+          <TextField label="First Name" value={editDialogFieldGivenName}
+            onChange={(e) => {
+              setEditDialogFieldGivenName(e.target.value)
+            }}>
+          </TextField>
+          <TextField label="Last Name" value={editDialogFieldFamilyName}
+            onChange={(e) => {
+              setEditDialogFieldFamilyName(e.target.value)
+            }}>
+          </TextField>
+          <TextField label="Email" value={editDialogFieldEmail}
+            onChange={(e) => {
+              setEditDialogFieldEmail(e.target.value)
+            }}>
+          </TextField>
+          <Stack direction="row" justifyContent="space-between" spacing={2}>
+            <Button color="primary" variant="outlined" sx={{width: "50%"}} onClick={() => {
+              setEditDialogIsOpen(false);
+              setEditDialogSubmitEnabled(false);
+            }}>
+              <Typography variant="body1">Cancel</Typography>
+            </Button>
+            <Button color="primary" variant="contained" size="large"  sx={{width: "50%"}}
+              disabled={!Boolean(editDialogSubmitEnabled && editDialogFieldEmail)}
+              type="submit">
+              <Typography variant="body1">Save</Typography>
+            </Button>
+          </Stack>
+          </Stack>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete confirmation dialog */}
       <Dialog
