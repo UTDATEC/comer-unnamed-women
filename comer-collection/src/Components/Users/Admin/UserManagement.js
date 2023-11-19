@@ -212,20 +212,20 @@ const UserManagement = (props) => {
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
           <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} width="50%" />
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
               fetchData();
             }}
               disabled={refreshInProgress}>
               <Typography variant="body1">Refresh</Typography>
             </Button>
-            <Button variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
-            <Button variant="contained" startIcon={<GroupAddIcon/>}>
+            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}>
               <Typography variant="body1">Create Users</Typography>
             </Button>
           </Stack>
