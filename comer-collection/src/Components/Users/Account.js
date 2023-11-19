@@ -32,19 +32,19 @@ const Account = (props) => {
       }}>
 
 
-        <AdminNav sx={{gridArea: 'sidebar'}} user={user} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem}/>
+        <AdminNav sx={{gridArea: 'sidebar'}} {...{user, selectedNavItem, setSelectedNavItem}} />
         
         <Box sx={{gridArea: 'main', position: 'relative', overflowY: "hidden", height: '100%'}}>
           
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
-            <Route path="Profile" element={<Profile user={user} setUser={setUser} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="ChangePassword" element={<ChangePassword user={user} setUser={setUser} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="UserManagement" element={<UserManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="ExhibitionList" element={<ExhibitionList user={user} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="ImageManagement" element={<ImageManagement user={user} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="Course" user={user} element={<Course user={user} setSelectedNavItem={setSelectedNavItem} />} />
-            <Route path="Invite" user={user} element={<InviteForm user={user} setSelectedNavItem={setSelectedNavItem} />} />
+            <Route path="Profile" element={<Profile {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ChangePassword" element={<ChangePassword {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="UserManagement" element={<UserManagement {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ExhibitionList" element={<ExhibitionList {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ImageManagement" element={<ImageManagement {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Course" user={user} element={<Course {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Invite" user={user} element={<InviteForm {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ImageEdit/:id" user={user} element={<ImageEdit />} />
 
           </Routes>
