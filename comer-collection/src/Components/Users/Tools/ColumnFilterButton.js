@@ -1,20 +1,27 @@
 import React from "react";
-import { Stack, Typography, IconButton, Menu, MenuItem, Divider } from "@mui/material";
+import { Stack, Typography, Menu, MenuItem, Divider, Button } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CheckIcon from "@mui/icons-material/Check";
 
 export const ColumnFilterButton = (props) => {
 
-  const { options, optionAll, filter, setFilter, menuAnchorElement, setMenuAnchorElement } = props;
+  const { columnName, options, optionAll, filter, setFilter, menuAnchorElement, setMenuAnchorElement } = props;
 
   return (
     <>
-      <IconButton onClick={(event) => {
+      <Button 
+        sx={{textTransform: "unset"}}  
+        color="primary"
+        endIcon={filter ? 
+          (<FilterAltIcon fontSize="large" color="primary" />) : 
+          (<FilterAltOutlinedIcon fontSize="large" />)
+        } 
+        onClick={(event) => {
         setMenuAnchorElement(event.currentTarget);
       }}>
-        {filter ? (<FilterAltIcon fontSize="large" color="secondary" />) : (<FilterAltOutlinedIcon fontSize="large" />)}
-      </IconButton>
+        <Typography variant="h6">{columnName}</Typography>
+      </Button>
       <Menu MenuListProps={{}} anchorEl={menuAnchorElement} anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center'

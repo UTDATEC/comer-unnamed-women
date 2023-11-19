@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, IconButton, Alert, useTheme, Box
+  Switch, Alert, useTheme, Box
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,8 +25,8 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
-import LockResetIcon from "@mui/icons-material/LockReset"
-import RefreshIcon from "@mui/icons-material/Refresh"
+import LockResetIcon from "@mui/icons-material/LockReset";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 
 const UserManagement = (props) => {
@@ -48,10 +48,14 @@ const UserManagement = (props) => {
     setSearchQuery("");
     setUserTypeFilter(null);
     setUserActivationStatusFilter(null);
+    setUserPasswordTypeFilter(null);
   }
 
   const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
   const [userActivationStatusMenuAnchorElement, setUserActivationStatusMenuAnchorElement] = useState(null);
+
+  const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
+  const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
 
   const [sortColumn, setSortColumn] = useState("ID");
   const [sortAscending, setSortAscending] = useState(true);
@@ -92,6 +96,9 @@ const UserManagement = (props) => {
   })
   .filter((curator) => {
     return !userActivationStatusFilter || userActivationStatusFilter == "Active" && curator.is_active || userActivationStatusFilter == "Inactive" && !curator.is_active
+  })
+  .filter((curator) => {
+    return !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && curator.pw_temp || userPasswordTypeFilter == "Permanent" && !curator.pw_temp
   })
   .filter((curator) => {
     return searchQuery == "" ||
@@ -214,7 +221,7 @@ const UserManagement = (props) => {
             </Button>
             <Button variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
-                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter)
+                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
@@ -242,8 +249,24 @@ const UserManagement = (props) => {
                     <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Password</Typography>
+                <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+                    <ColumnFilterButton columnName="Password"
+                      options={[
+                        {
+                          value: "Temporary",
+                          displayText: "Temporary password"
+                        },
+                        {
+                          value: "Permanent",
+                          displayText: "Password set by user"
+                        }
+                      ]}
+                      optionAll="All Users"
+                      filter={userPasswordTypeFilter} 
+                      setFilter={setUserPasswordTypeFilter} 
+                      menuAnchorElement={userPasswordTypeMenuAnchorElement}
+                      setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
+                    />
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Typography variant="h6">Courses</Typography>
@@ -251,10 +274,8 @@ const UserManagement = (props) => {
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Typography variant="h6">Exhibitions</Typography>
                 </TableCell>
-                <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.secondary["200"] : "#CCC"}}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6">User Type</Typography>
-                    <ColumnFilterButton 
+                <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+                    <ColumnFilterButton columnName="User Type"
                       options={[
                         {
                           value: "Administrator",
@@ -271,12 +292,9 @@ const UserManagement = (props) => {
                       menuAnchorElement={userTypeMenuAnchorElement}
                       setMenuAnchorElement={setUserTypeMenuAnchorElement}
                     />
-                  </Stack>
                 </TableCell>
-                <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.secondary["200"] : "#CCC"}}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6">Active</Typography>
-                    <ColumnFilterButton 
+                <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : "#CCC"}}>
+                    <ColumnFilterButton columnName="Active" 
                       options={[
                         {
                           value: "Active",
@@ -293,7 +311,6 @@ const UserManagement = (props) => {
                       menuAnchorElement={userActivationStatusMenuAnchorElement}
                       setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
                     />
-                  </Stack>
                 </TableCell>
               </TableRow>
             </TableHead>
