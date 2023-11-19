@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -9,7 +9,9 @@ export const ColumnSortButton = (props) => {
   const { columnName, sortColumn, setSortColumn, sortAscending, setSortAscending } = props;
 
   return (
-    <IconButton onClick={() => {
+    <Button size="large" variant="text" sx={{textTransform: "unset"}} endIcon={sortColumn == columnName ? (
+      sortAscending ? (<ArrowUpwardIcon fontSize="large" />) : (<ArrowDownwardIcon fontSize="large" />)
+    ) : (<SwapVertIcon fontSize="large" />)} onClick={() => {
       if (sortColumn == columnName)
         setSortAscending((current) => !current);
       else {
@@ -17,9 +19,7 @@ export const ColumnSortButton = (props) => {
         setSortAscending(true);
       }
     }}>
-      {sortColumn == columnName ? (
-        sortAscending ? (<ArrowUpwardIcon fontSize="medium" />) : (<ArrowDownwardIcon fontSize="medium" />)
-      ) : (<SwapVertIcon fontSize="medium" />)}
-    </IconButton>
+      <Typography variant="h6" fontWeight={sortColumn == columnName ? "bold" : ""}>{columnName}</Typography>
+    </Button>
   );
 };

@@ -9,7 +9,8 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, IconButton, Alert, useTheme, Box} from "@mui/material";
+  Switch, IconButton, Alert, useTheme, Box
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,7 +24,7 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
-import PersonSearchIcon from "@mui/icons-material/PersonSearch"
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 
 
 const UserManagement = (props) => {
@@ -189,19 +190,16 @@ const UserManagement = (props) => {
               <TableRow>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6" fontWeight={sortColumn == "ID" ? "bold" : ""}>ID</Typography>
                     <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6" fontWeight={sortColumn == "Name" ? "bold" : ""}>Name</Typography>
                     <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6" fontWeight={sortColumn == "Email" ? "bold" : ""}>Email</Typography>
                     <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
