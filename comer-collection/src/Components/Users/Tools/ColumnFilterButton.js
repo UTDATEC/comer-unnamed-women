@@ -35,7 +35,7 @@ export const ColumnFilterButton = (props) => {
         </MenuItem>
         <Divider />
         {options.map((option) => (
-          <MenuItem onClick={() => {
+          <MenuItem key={option.value} onClick={() => {
             setMenuAnchorElement(null);
             setFilter(option.value);
           }}>
