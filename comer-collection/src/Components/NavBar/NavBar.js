@@ -10,50 +10,15 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, Stack } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { useTheme } from '@emotion/react';
 
 const PREFIX = 'NavBar';
-
-const classes = {
-  abRoot: `${PREFIX}-abRoot`,
-  root: `${PREFIX}-root`,
-  menuButton: `${PREFIX}-menuButton`,
-  buttonText: `${PREFIX}-buttonText`,
-  title: `${PREFIX}-title`,
-  titleButton: `${PREFIX}-titleButton`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-
-
-  [`& .${classes.menuButton}`]: {
-    textAlign: 'right',
-  },
-  
-  [`& .${classes.buttonText}`]: {
-    color: 'white'
-  },
-
-  [`& .${classes.title}`]: {
-    flexGrow: 1,
-    textAlign: 'left',
-    color: 'white',
-  },
-
-  [`& .${classes.titleButton}`]: {
-    textAlign: 'left',
-    width: '20%',
-  }
-}));
-
 
 
 export default function NavBar(props) {
   
   const navigate = useNavigate();
+  const theme = useTheme();
   const { user, setUser } = props;
   
   const [buttons, setButtons] = useState([]);
@@ -84,19 +49,16 @@ export default function NavBar(props) {
   }, [user])
 
   return (
-    <Root className={classes.root}>
       <AppBar position="fixed" color="primary">
-        <Toolbar>
-          <Typography variant="h5" className={classes.title}>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+          <Typography variant="h5" sx={{paddingLeft: "25px"}}>
             UTD Comer Collection
           </Typography>
+          <Toolbar>
           <Stack spacing={1} direction={'row'}>
             {buttons.map((button) => (
-              <Button key={button.text} color="primary" variant="contained" onClick={() => navigate(button.link)}>
-                <Typography variant="body1" className={classes.buttonText}>
-                  {button.text}
-                </Typography>
-                {/* <div className={classes.buttonText}></div> */}
+              <Button key={button.text} color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => navigate(button.link)}>
+                <Typography variant="body1">{button.text}</Typography>
               </Button>
             ))}
             {user && (
@@ -142,8 +104,8 @@ export default function NavBar(props) {
               </>
             )}
           </Stack>
-        </Toolbar>
+          </Toolbar>
+        </Stack>
       </AppBar>
-    </Root>
   );
 }

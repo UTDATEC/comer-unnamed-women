@@ -59,6 +59,7 @@ const App = () => {
       mode: "light",
       primary: {
         main: green['900'],
+        light: green['500'],
         contrastText: 'white',
         "200": green['200']
       },
