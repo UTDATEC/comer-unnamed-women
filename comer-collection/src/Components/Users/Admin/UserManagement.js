@@ -186,22 +186,22 @@ const UserManagement = (props) => {
         <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
           <Table stickyHeader size="small" aria-label="curator table" sx={{ width: "100%" }}>
             <TableHead>
-              <TableRow sx={{backgroundColor: "#CCC"}}>
+              <TableRow>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6">ID</Typography>
+                    <Typography variant="h6" fontWeight={sortColumn == "ID" ? "bold" : ""}>ID</Typography>
                     <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6">Name</Typography>
+                    <Typography variant="h6" fontWeight={sortColumn == "Name" ? "bold" : ""}>Name</Typography>
                     <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="h6">Email</Typography>
+                    <Typography variant="h6" fontWeight={sortColumn == "Email" ? "bold" : ""}>Email</Typography>
                     <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                   </Stack>
                 </TableCell>
