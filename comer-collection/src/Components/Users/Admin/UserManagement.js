@@ -26,10 +26,13 @@ import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset"
+import RefreshIcon from "@mui/icons-material/Refresh"
 
 
 const UserManagement = (props) => {
   const [curators, setCurators] = useState([]);
+  const [refreshInProgress, setRefreshInProgress] = useState(true);
+
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [curatorToDelete, setCuratorToDelete] = useState(null);
 
@@ -75,6 +78,9 @@ const UserManagement = (props) => {
       const curatorData = response.data;
 
       setCurators(curatorData.data);
+      setTimeout(() => {
+        setRefreshInProgress(false);
+      }, 1000);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -199,6 +205,13 @@ const UserManagement = (props) => {
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
           <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} width="50%" />
           <Stack direction="row" spacing={2}>
+            <Button variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+              setRefreshInProgress(true);
+              fetchData();
+            }}
+              disabled={refreshInProgress}>
+              <Typography variant="body1">Refresh</Typography>
+            </Button>
             <Button variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter)
