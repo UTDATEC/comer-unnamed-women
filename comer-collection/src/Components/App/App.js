@@ -68,7 +68,7 @@ const App = () => {
       },
       secondary: {
         main: secondaryColor['700'],
-        contrastText: 'black',
+        contrastText: 'white',
         "200": secondaryColor['200']
       }
     }
