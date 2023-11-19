@@ -24,16 +24,6 @@ const Login = (props) => {
   const navigate = useNavigate();
 
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-    setError(false);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    setError(false);
-  };
-
   //Api call here
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -81,7 +71,10 @@ const Login = (props) => {
               type="text"
               name="email"
               value={email}
-              onChange={handleEmailChange}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setError(false);
+              }}
               required
             />
             <TextField sx={{minWidth: "400px"}}
@@ -90,7 +83,10 @@ const Login = (props) => {
               type="password"
               name="password"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setError(false);
+              }}
               required
             />
             <Divider />
