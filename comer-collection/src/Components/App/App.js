@@ -83,7 +83,7 @@ const App = () => {
 
 
   useEffect(() => {
-    const setAppUser = async() => {
+    const initializeAppUser = async() => {
       try {
         const response = await fetch("http://localhost:9000/api/account/profile", {
           headers: {
@@ -101,7 +101,7 @@ const App = () => {
       }
       
     }
-    setAppUser();
+    initializeAppUser();
   }, []);
 
 
