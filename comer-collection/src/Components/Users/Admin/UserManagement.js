@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, Alert, useTheme, Box, IconButton, DialogContentText, TextField
+  Switch, useTheme, Box, IconButton, DialogContentText, TextField
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,7 +19,6 @@ import TableRow from "@mui/material/TableRow";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
-import Snackbar from "@mui/material/Snackbar";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
@@ -27,7 +26,7 @@ import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import EditIcon from "@mui/icons-material/Edit"
+import EditIcon from "@mui/icons-material/Edit";
 
 
 const UserManagement = (props) => {
@@ -45,10 +44,6 @@ const UserManagement = (props) => {
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarText, setSnackbarText] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const [userTypeFilter, setUserTypeFilter] = useState(null);
   const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
@@ -69,7 +64,9 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+    snackbarOpen, snackbarText, snackbarSeverity,
+    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
   const theme = useTheme();
   
 
@@ -458,24 +455,6 @@ const UserManagement = (props) => {
               </Box>
             )
           }
-
-        <Snackbar 
-          open={snackbarOpen} 
-          autoHideDuration={3000} 
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center"
-          }}
-          onClose={() => {
-            setSnackbarOpen(false);
-          }}
-        >
-          <Alert severity={snackbarSeverity} variant="standard" sx={{width: "100%"}}>
-            <Stack direction="row" spacing={2}>
-              <Typography variant="body1">{snackbarText}</Typography>
-            </Stack>
-          </Alert>
-        </Snackbar>
 
       <Dialog component="form"
         open={editDialogIsOpen}

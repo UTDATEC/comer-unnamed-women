@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import Account from '../Users/Account';
 
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
-import { Box, ThemeProvider, createTheme } from '@mui/material';
+import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
 import { green, orange } from '@mui/material/colors';
 
 const App = () => {
@@ -75,6 +75,13 @@ const App = () => {
   })
 
   const [appUser, setAppUser] = useState(null);
+  
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+
   useEffect(() => {
     const setAppUser = async() => {
       try {
@@ -117,7 +124,12 @@ const App = () => {
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
-          <Route path="/Account/*" element={<Account {...{appUser, setAppUser}} />} />
+          <Route path="/Account/*" element={<Account {
+              ...{appUser, setAppUser, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+              }
+            } />} />
 
           <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
           
@@ -133,6 +145,25 @@ const App = () => {
         </Box>
         
       </BrowserRouter>
+      
+      <Snackbar 
+        open={snackbarOpen} 
+        autoHideDuration={3000} 
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+        onClose={() => {
+          setSnackbarOpen(false);
+        }}
+      >
+        <Alert severity={snackbarSeverity} variant="standard" sx={{width: "100%"}}>
+          <Stack direction="row" spacing={2}>
+            <Typography variant="body1">{snackbarText}</Typography>
+          </Stack>
+        </Alert>
+      </Snackbar>
+
       </ThemeProvider>
   );
 }

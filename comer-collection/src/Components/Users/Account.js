@@ -15,7 +15,10 @@ import ChangePassword from './ChangePassword';
 
 const Account = (props) => {
 
-  const { appUser, setAppUser } = props; 
+  const { appUser, setAppUser, 
+    snackbarOpen, snackbarText, snackbarSeverity,
+    setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+  } = props; 
 
   const [selectedNavItem, setSelectedNavItem] = useState("");
 
@@ -40,7 +43,12 @@ const Account = (props) => {
             <Route index element={<Navigate to='Profile' replace />} />
             <Route path="Profile" element={<Profile {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="UserManagement" element={<UserManagement {
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+                }
+              } />} />
             <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="Course" user={appUser} element={<Course {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
