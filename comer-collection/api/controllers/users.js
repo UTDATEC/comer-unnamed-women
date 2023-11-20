@@ -24,17 +24,20 @@ const createUser = async (req, res, next) => {
         try {
             if(req.body.id)
                 throw new Error("User id should not be included when creating a user")
+            const {email, given_name, family_name} = req.body;
             const newUser = await User.create({
-                email: req.body.email,
+                email, given_name, family_name,
                 pw_temp: randomPassword(),
                 ps_hash: null,
                 is_admin: false,
                 pw_updated: Date.now()
             });
-            // await newUser.set({pw_temp: tempPass});   
+            
             res.status(201).json({ data: {
                 id: newUser.id,
                 email: newUser.email, 
+                given_name: newUser.given_name,
+                family_name: newUser.family_name,
                 pw_temp: newUser.pw_temp,
                 is_admin: newUser.is_admin
             }});
