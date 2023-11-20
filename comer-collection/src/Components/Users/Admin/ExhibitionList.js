@@ -56,7 +56,6 @@ const ExhibitionList = (props) => {
   const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
 
   const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
-  setSelectedNavItem("Exhibition Management");
 
   const exhibitionColumns = {
     exhibitionTitle: "Exhibition Title",
