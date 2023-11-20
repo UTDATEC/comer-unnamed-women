@@ -63,15 +63,14 @@ export default function NavBar(props) {
             ))}
             {appUser && (
               <>
-                <Button variant="text" onClick={handleMenuOpen} sx={{textTransform: "unset"}}
+                <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
                   aria-haspopup={Boolean(anchorElement)}
                   aria-expanded={Boolean(anchorElement)}
                 >
                   <Stack direction="row" alignContent="center" alignItems="center">
-                    <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>
+                    <Typography variant="h6" sx={{color: "white"}}>
                       {Boolean(appUser.given_name && appUser.family_name) ? `${appUser.given_name} ${appUser.family_name}` : `${appUser.email}`}
                     </Typography>
-                    <ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>
                   </Stack>
                 </Button>
                 <Menu MenuListProps={{
