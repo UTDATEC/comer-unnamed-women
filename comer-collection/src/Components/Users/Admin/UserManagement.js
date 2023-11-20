@@ -274,19 +274,13 @@ const UserManagement = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
                     <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
                     <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
                     <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                  </Stack>
                 </TableCell>
                 <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
                     <ColumnFilterButton columnName="Password"
