@@ -117,9 +117,7 @@ const App = () => {
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
-          {/* <Route path="/Account" element={<Account />} /> */}
           <Route path="/Account/*" element={<Account {...{appUser, setAppUser}} />} />
-          {/* <Route path="/Curator/*" element={<Curator />} /> */}
 
           <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
           
