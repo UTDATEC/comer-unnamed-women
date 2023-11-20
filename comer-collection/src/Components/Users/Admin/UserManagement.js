@@ -69,13 +69,13 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
   const theme = useTheme();
   
 
   useEffect(() => {
     setSelectedNavItem("User Management");
-    if(user.is_admin) {
+    if(appUser.is_admin) {
       fetchData();
     }
   }, []); 
@@ -243,10 +243,10 @@ const UserManagement = (props) => {
   };
 
 
-  return !user.is_admin && (
+  return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  user.is_admin && (
+  appUser.is_admin && (
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
           <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by name or email" width="50%" />
@@ -396,7 +396,7 @@ const UserManagement = (props) => {
                           startIcon={<LockResetIcon />}
                           itemID={curator.id}
                           variant="outlined" 
-                          disabled={user.id == curator.id}
+                          disabled={appUser.id == curator.id}
                           onClick={(e) => {
                             handleResetPassword(e.target.parentElement.attributes.itemid.value);
                           }}>

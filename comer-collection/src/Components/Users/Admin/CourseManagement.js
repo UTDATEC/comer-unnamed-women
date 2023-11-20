@@ -13,7 +13,7 @@ const Course = (props) => {
   const [selectedCourse, setSelectedCourse] = useState('null');
   const [newCurators, setNewCurators] = useState([]);
 
-  const { user, setSelectedNavItem } = props;
+  const { appUser, setSelectedNavItem } = props;
   
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +38,7 @@ const Course = (props) => {
       }
 
       setSelectedNavItem("Course Management")
-      if(user.is_admin) {
+      if(appUser.is_admin) {
         fetchData();
       }
     }
@@ -113,10 +113,10 @@ const Course = (props) => {
     setSelectedCourse(event.target.value);
   };
 
-  return !user.is_admin && (
+  return !appUser.is_admin && (
       <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) ||
-    user.is_admin && (
+    appUser.is_admin && (
     <div style={{ maxWidth: "70%", margin: "auto", overflowY: "auto" }}>
       <h1 style={{ textAlign: "center" }}>Courses List</h1>
       <h3>Create Course</h3>

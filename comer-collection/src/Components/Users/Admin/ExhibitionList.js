@@ -55,7 +55,7 @@ const ExhibitionList = (props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
 
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
   setSelectedNavItem("Exhibition Management");
 
   const exhibitionColumns = {
@@ -82,7 +82,7 @@ const ExhibitionList = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("Exhibition Management");
-    if(user.is_admin) {
+    if(appUser.is_admin) {
       fetchData();
     }
   }, []);
@@ -109,10 +109,10 @@ const ExhibitionList = (props) => {
     }
   };
 
-  return !user.is_admin && (
+  return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  user.is_admin && (
+  appUser.is_admin && (
     <div style={{
       marginLeft: '10%',
       marginRight: '10%',

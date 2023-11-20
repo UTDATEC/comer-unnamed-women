@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 
 const Profile = (props) => {
 
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,15 +33,15 @@ const Profile = (props) => {
           </Typography>
             <div>
               <strong>Net ID: </strong>
-              <span>{user.email}</span>
+              <span>{appUser.email}</span>
             </div>
             <div>
               <strong>Name: </strong>
-              <span>{`${user.given_name} ${user.family_name}`}</span>
+              <span>{`${appUser.given_name} ${appUser.family_name}`}</span>
             </div>
             <div>
               <strong>Password Last Updated: </strong>
-              <span>{new Date(user.pw_updated).toLocaleString()}</span>
+              <span>{new Date(appUser.pw_updated).toLocaleString()}</span>
               <span style={{ paddingLeft: "10px" }}>
                 <Button variant="outlined" color="primary" onClick={() => {
                   navigate('/Account/ChangePassword')
@@ -52,7 +52,7 @@ const Profile = (props) => {
             </div>
             <div>
               <strong>User Type: </strong>
-              <span>{user.is_admin ? "Admin" : "Curator"}</span>
+              <span>{appUser.is_admin ? "Admin" : "Curator"}</span>
             </div>
           </Stack>
         </CardContent>

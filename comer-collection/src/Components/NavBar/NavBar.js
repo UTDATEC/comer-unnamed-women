@@ -19,7 +19,7 @@ export default function NavBar(props) {
   
   const navigate = useNavigate();
   const theme = useTheme();
-  const { user, setUser } = props;
+  const { appUser, setAppUser } = props;
   
   const [buttons, setButtons] = useState([]);
 
@@ -45,8 +45,8 @@ export default function NavBar(props) {
       }
       return output
     }
-    setButtons(getButtons(user));
-  }, [user])
+    setButtons(getButtons(appUser));
+  }, [appUser])
 
   return (
       <AppBar position="fixed" color="primary">
@@ -61,7 +61,7 @@ export default function NavBar(props) {
                 <Typography variant="body1">{button.text}</Typography>
               </Button>
             ))}
-            {user && (
+            {appUser && (
               <>
                 <Button variant="text" onClick={handleMenuOpen} sx={{textTransform: "unset"}}
                   aria-haspopup={Boolean(anchorElement)}
@@ -69,7 +69,7 @@ export default function NavBar(props) {
                 >
                   <Stack direction="row" alignContent="center" alignItems="center">
                     <Typography variant="h6" sx={{color: "white", marginLeft: '20px'}}>
-                      {Boolean(user.given_name && user.family_name) ? `${user.given_name} ${user.family_name}` : `${user.email}`}
+                      {Boolean(appUser.given_name && appUser.family_name) ? `${appUser.given_name} ${appUser.family_name}` : `${appUser.email}`}
                     </Typography>
                     <ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>
                   </Stack>
@@ -92,7 +92,7 @@ export default function NavBar(props) {
                   </MenuItem>
                   <MenuItem onClick={() => {
                     handleMenuClose();
-                    setUser(null);
+                    setAppUser(null);
                     localStorage.removeItem('token');
                     navigate('/')
                   }}>

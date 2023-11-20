@@ -15,7 +15,7 @@ async function loginUser(email, password) {
 
 const Login = (props) => {
   
-  const { user, setUser } = props;
+  const { appUser, setAppUser } = props;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,11 +40,11 @@ const Login = (props) => {
       })
       if(profileResponse.status == 200) {
         let profileResponseJson = await profileResponse.json();
-        setUser(profileResponseJson.data);
+        setAppUser(profileResponseJson.data);
         navigate('/Account');
       }
       else {
-        setUser(null);
+        setAppUser(null);
         localStorage.removeItem('token');
         setPassword("");
         setError(true);
@@ -59,9 +59,9 @@ const Login = (props) => {
     
   };
 
-    return user && (
+    return appUser && (
         <Navigate to="/Account" />
-      ) || !user && (
+      ) || !appUser && (
       <Box component="form" sx={{height: "100%"}} onSubmit={handleLogin}>
           <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
             sx={{width: "100%", height: "100%"}}>

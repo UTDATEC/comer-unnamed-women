@@ -16,7 +16,7 @@ const ImageManagement = (props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
   
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
   const navigate = useNavigate();
 
   const imageColumns = {
@@ -40,7 +40,7 @@ const ImageManagement = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("Image Managemeent")
-    if(user.is_admin) {
+    if(appUser.is_admin) {
       fetchImages();
     }
   });
@@ -69,10 +69,10 @@ const ImageManagement = (props) => {
     }
   };
 
-  return !user.is_admin && (
+  return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  user.is_admin && (
+  appUser.is_admin && (
     <div style={{
       marginLeft: '10%',
       marginRight: '10%',

@@ -74,7 +74,7 @@ const App = () => {
     }
   })
 
-  const [currentUserProfile, setCurrentUserProfile] = useState(null);
+  const [appUser, setAppUser] = useState(null);
   useEffect(() => {
     const setAppUser = async() => {
       try {
@@ -85,12 +85,12 @@ const App = () => {
         })
         if(response.status == 200) {
           let responseJson = await response.json();
-          setCurrentUserProfile(responseJson.data);
+          setAppUser(responseJson.data);
         } else {
           throw new Error("Response status was not 200")
         }
       } catch (error) {
-        setCurrentUserProfile(null);
+        setAppUser(null);
       }
       
     }
@@ -111,17 +111,17 @@ const App = () => {
             "body"
           `
         }}>
-        <NavBar user={currentUserProfile} setUser={setCurrentUserProfile} sx={{ gridArea: 'header' }} />
+        <NavBar {...{appUser, setAppUser}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
           {/* <Route path="/Account" element={<Account />} /> */}
-          <Route path="/Account/*" element={<Account  user={currentUserProfile} setUser={setCurrentUserProfile} />} />
+          <Route path="/Account/*" element={<Account {...{appUser, setAppUser}} />} />
           {/* <Route path="/Curator/*" element={<Curator />} /> */}
 
-          <Route path="/login" element={<Login user={currentUserProfile} setUser={setCurrentUserProfile} />} />
+          <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
           
           <Route path="/" element={
             <GridView

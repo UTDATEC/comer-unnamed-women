@@ -63,7 +63,7 @@ const AccountNav = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, selectedNavItem, setSelectedNavItem } = props;
 
   const theme = useTheme();
 
@@ -102,7 +102,7 @@ const AccountNav = (props) => {
             </ListItem>
           ))}
         </List>
-        {user.is_admin && (
+        {appUser.is_admin && (
           <>
           <Divider />
           <Typography variant="h5" alignSelf="center" paddingTop="10px">Admin</Typography>

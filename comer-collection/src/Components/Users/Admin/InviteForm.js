@@ -20,11 +20,11 @@ const InviteForm = (props) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
 
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
   
   useEffect(() => {
     setSelectedNavItem("Invite");
-    if(user.is_admin) {
+    if(appUser.is_admin) {
       const fetchData = async () => {
         try {
           const response = await axios.get("http://localhost:9000/api/courses", {
@@ -114,10 +114,10 @@ const InviteForm = (props) => {
     }
   };
 
-  return !user.is_admin && (
+  return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  user.is_admin && (
+  appUser.is_admin && (
     <Container maxWidth="sm">
       <div style={{ paddingTop: "30px" }}>
         <Typography

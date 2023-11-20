@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const ChangePassword = (props) => {
   
-  const { user, setUser, selectedNavItem, setSelectedNavItem } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -36,7 +36,7 @@ const ChangePassword = (props) => {
         })
         if(profileResponse.status == 200) {
           let profileResponseJson = await profileResponse.json();
-          setUser(profileResponseJson.data);
+          setAppUser(profileResponseJson.data);
           navigate('/Account');
         }
         else {

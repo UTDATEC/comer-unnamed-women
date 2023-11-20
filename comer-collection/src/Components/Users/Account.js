@@ -15,11 +15,11 @@ import ChangePassword from './ChangePassword';
 
 const Account = (props) => {
 
-  const { user, setUser } = props; 
+  const { appUser, setAppUser } = props; 
 
   const [selectedNavItem, setSelectedNavItem] = useState("");
 
-  return user && (
+  return appUser && (
     <>
 
       <Box sx={{
@@ -32,20 +32,20 @@ const Account = (props) => {
       }}>
 
 
-        <AdminNav sx={{gridArea: 'sidebar'}} {...{user, selectedNavItem, setSelectedNavItem}} />
+        <AdminNav sx={{gridArea: 'sidebar'}} {...{appUser, selectedNavItem, setSelectedNavItem}} />
         
         <Box sx={{gridArea: 'main', position: 'relative', overflowY: "hidden", height: '100%'}}>
           
           <Routes>
             <Route index element={<Navigate to='Profile' replace />} />
-            <Route path="Profile" element={<Profile {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ChangePassword" element={<ChangePassword {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="UserManagement" element={<UserManagement {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ExhibitionList" element={<ExhibitionList {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageManagement" element={<ImageManagement {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="Course" user={user} element={<Course {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="Invite" user={user} element={<InviteForm {...{user, setUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageEdit/:id" user={user} element={<ImageEdit />} />
+            <Route path="Profile" element={<Profile {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Course" user={appUser} element={<Course {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Invite" user={appUser} element={<InviteForm {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ImageEdit/:id" user={appUser} element={<ImageEdit />} />
 
           </Routes>
 
@@ -53,7 +53,7 @@ const Account = (props) => {
       
       </Box>
     </>
-  ) || !user && (
+  ) || !appUser && (
     <Unauthorized />
   );
 }
