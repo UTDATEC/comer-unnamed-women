@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
   Paper,
@@ -299,6 +299,20 @@ const UserManagement = (props) => {
   };
 
 
+  const handleCopyToClipboard = useCallback((curator) => {
+    try {
+      navigator.clipboard.writeText(curator.pw_temp);
+      setSnackbarSeverity("success")
+      setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarSeverity("error")
+      setSnackbarText(`Error copying password`);
+      setSnackbarOpen(true);
+    }
+  }, [])
+
+
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
@@ -437,18 +451,7 @@ const UserManagement = (props) => {
                       {curator.pw_temp ? (
                         <Button startIcon={<ContentCopyIcon />}
                           variant="outlined"
-                          onClick={() => {
-                            try {
-                              navigator.clipboard.writeText(curator.pw_temp);
-                              setSnackbarSeverity("success")
-                              setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
-                              setSnackbarOpen(true);
-                            } catch (error) {
-                              setSnackbarSeverity("error")
-                              setSnackbarText(`Error copying password`);
-                              setSnackbarOpen(true);
-                            }
-                          }}>
+                          onClick={() => {handleCopyToClipboard(curator)}}>
                           <Typography variant="body1">Copy</Typography>
                         </Button>
                       ) : (
