@@ -411,6 +411,19 @@ const CourseManagement = (props) => {
       )
     },
     {
+      columnDescription: "Notes",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Notes</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.notes}</Typography>
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
