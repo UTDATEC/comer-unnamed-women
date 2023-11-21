@@ -732,7 +732,10 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (course) => (
         <TableCell>
-          <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()} - {new Date (course.date_end).toLocaleDateString()}</Typography>
+          <Stack>
+            <Typography variant="body1">Start: {new Date (course.date_start).toLocaleDateString()}</Typography>
+            <Typography variant="body1">End: {new Date (course.date_end).toLocaleDateString()}</Typography>
+          </Stack>
         </TableCell>
       )
     }
