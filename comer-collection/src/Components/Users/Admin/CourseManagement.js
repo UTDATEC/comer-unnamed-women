@@ -14,7 +14,7 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
-import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import SearchIcon from "@mui/icons-material/Search";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
@@ -451,7 +451,7 @@ const CourseManagement = (props) => {
             coursesToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
                 <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
-                  <PersonSearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
+                  <SearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
                   <Typography variant="h4">No courses found</Typography>
                   <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
                     <Typography variant="body1">Clear Filters</Typography>
