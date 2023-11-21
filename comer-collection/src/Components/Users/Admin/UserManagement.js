@@ -391,6 +391,226 @@ const UserManagement = (props) => {
   }, [])
 
 
+  const tableFields = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Name",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          {
+            user.family_name || user.given_name ? (
+              <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
+            ) : (
+              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+            )
+          }
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Email",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.email}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Password",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+          <ColumnFilterButton columnName="Password"
+            options={[
+              {
+                value: "Temporary",
+                displayText: "Temporary password"
+              },
+              {
+                value: "Permanent",
+                displayText: "Password set by user"
+              }
+            ]}
+            optionAll="All Users"
+            filter={userPasswordTypeFilter} 
+            setFilter={setUserPasswordTypeFilter} 
+            menuAnchorElement={userPasswordTypeMenuAnchorElement}
+            setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
+          />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          {user.pw_temp ? (
+            <Button startIcon={<ContentCopyIcon />}
+              variant="outlined"
+              onClick={() => {handleCopyToClipboard(user)}}>
+              <Typography variant="body1">Copy</Typography>
+            </Button>
+          ) : (
+            <Button 
+              startIcon={<LockResetIcon />}
+              itemID={user.id}
+              variant="outlined" 
+              disabled={appUser.id == user.id}
+              onClick={(e) => {
+                handleResetPassword(e.target.parentElement.attributes.itemid.value);
+              }}>
+              <Typography variant="body1">Reset</Typography>
+            </Button>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Courses",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Courses</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.Courses.length}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Exhibitions",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Exhibitions</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.Exhibitions.length}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "User Type",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+          <ColumnFilterButton columnName="User Type"
+            options={[
+              {
+                value: "Administrator",
+                displayText: "Administrators"
+              },
+              {
+                value: "Curator",
+                displayText: "Curators"
+              }
+            ]}
+            optionAll="All Users"
+            filter={userTypeFilter} 
+            setFilter={setUserTypeFilter} 
+            menuAnchorElement={userTypeMenuAnchorElement}
+            setMenuAnchorElement={setUserTypeMenuAnchorElement}
+          />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Active",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : "#CCC"}}>
+          <ColumnFilterButton columnName="Active" 
+            options={[
+              {
+                value: "Active",
+                displayText: "Active"
+              },
+              {
+                value: "Inactive",
+                displayText: "Inactive"
+              }
+            ]}
+            optionAll="All Users"
+            filter={userActivationStatusFilter} 
+            setFilter={setUserActivationStatusFilter} 
+            menuAnchorElement={userActivationStatusMenuAnchorElement}
+            setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
+          />
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Switch 
+            itemID={user.id}
+            checked={user.is_active} 
+            disabled={user.is_admin} 
+            onClick={(e) => {
+              handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
+            }}
+          />
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Options",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Options</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <IconButton 
+            disabled={user.is_admin} 
+            onClick={(e) => {
+              setEditDialogUser(user);
+              const { email, family_name, given_name } = user;
+              setEditDialogFields({ email, family_name, given_name });
+              setEditDialogSubmitEnabled(true);
+              setEditDialogIsOpen(true)
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            disabled={user.is_admin || user.Courses.length > 0 || user.Exhibitions.length > 0} 
+            onClick={(e) => {
+              setDeleteDialogUser(user);
+              setDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
+      )
+    }
+  ]
+
+
+
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
@@ -422,84 +642,12 @@ const UserManagement = (props) => {
           </Stack>
         </Stack>
         <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
-          <Table stickyHeader size="small" aria-label="user table" sx={{ width: "100%" }}>
+          <Table stickyHeader size="small" sx={{ width: "100%" }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                    <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                    <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                    <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-                </TableCell>
-                <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
-                    <ColumnFilterButton columnName="Password"
-                      options={[
-                        {
-                          value: "Temporary",
-                          displayText: "Temporary password"
-                        },
-                        {
-                          value: "Permanent",
-                          displayText: "Password set by user"
-                        }
-                      ]}
-                      optionAll="All Users"
-                      filter={userPasswordTypeFilter} 
-                      setFilter={setUserPasswordTypeFilter} 
-                      menuAnchorElement={userPasswordTypeMenuAnchorElement}
-                      setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
-                    />
-                </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Courses</Typography>
-                </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Exhibitions</Typography>
-                </TableCell>
-                <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
-                    <ColumnFilterButton columnName="User Type"
-                      options={[
-                        {
-                          value: "Administrator",
-                          displayText: "Administrators"
-                        },
-                        {
-                          value: "Curator",
-                          displayText: "Curators"
-                        }
-                      ]}
-                      optionAll="All Users"
-                      filter={userTypeFilter} 
-                      setFilter={setUserTypeFilter} 
-                      menuAnchorElement={userTypeMenuAnchorElement}
-                      setMenuAnchorElement={setUserTypeMenuAnchorElement}
-                    />
-                </TableCell>
-                <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : "#CCC"}}>
-                    <ColumnFilterButton columnName="Active" 
-                      options={[
-                        {
-                          value: "Active",
-                          displayText: "Active"
-                        },
-                        {
-                          value: "Inactive",
-                          displayText: "Inactive"
-                        }
-                      ]}
-                      optionAll="All Users"
-                      filter={userActivationStatusFilter} 
-                      setFilter={setUserActivationStatusFilter} 
-                      menuAnchorElement={userActivationStatusMenuAnchorElement}
-                      setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
-                    />
-                </TableCell>
-                <TableCell sx={{backgroundColor: "#CCC"}}>
-                  <Typography variant="h6">Options</Typography>
-                </TableCell>
+                {tableFields.map((tf) => {
+                  return tf.generateTableHeaderCell()
+                })}
               </TableRow>
             </TableHead>
 
@@ -510,85 +658,9 @@ const UserManagement = (props) => {
                       backgroundColor: "#EEE"
                     }
                   }}>
-                    <TableCell>
-                      <Typography variant="body1">{user.id}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      {
-                        user.family_name || user.given_name ? (
-                          <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
-                        ) : (
-                          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-                        )
-                      }
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body1">{user.email}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      {user.pw_temp ? (
-                        <Button startIcon={<ContentCopyIcon />}
-                          variant="outlined"
-                          onClick={() => {handleCopyToClipboard(user)}}>
-                          <Typography variant="body1">Copy</Typography>
-                        </Button>
-                      ) : (
-                        <Button 
-                          startIcon={<LockResetIcon />}
-                          itemID={user.id}
-                          variant="outlined" 
-                          disabled={appUser.id == user.id}
-                          onClick={(e) => {
-                            handleResetPassword(e.target.parentElement.attributes.itemid.value);
-                          }}>
-                          <Typography variant="body1">Reset</Typography>
-                        </Button>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body1">{user.Courses.length}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body1">{user.Exhibitions.length}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-                    </TableCell>
-
-
-                    <TableCell>
-                      <Switch 
-                        itemID={user.id}
-                        checked={user.is_active} 
-                        disabled={user.is_admin} 
-                        onClick={(e) => {
-                          handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton 
-                        disabled={user.is_admin} 
-                        onClick={(e) => {
-                          setEditDialogUser(user);
-                          const { email, family_name, given_name } = user;
-                          setEditDialogFields({ email, family_name, given_name });
-                          setEditDialogSubmitEnabled(true);
-                          setEditDialogIsOpen(true)
-                        }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton 
-                        disabled={user.is_admin || user.Courses.length > 0 || user.Exhibitions.length > 0} 
-                        onClick={(e) => {
-                          setDeleteDialogUser(user);
-                          setDeleteDialogIsOpen(true);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
+                    {tableFields.map((tf) => {
+                      return tf.generateTableCell(user);
+                    })}
                   </TableRow>
                 ))}
             </TableBody>
