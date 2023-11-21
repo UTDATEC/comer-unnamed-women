@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import axios from "axios";
 import {
   Paper,
@@ -30,6 +30,36 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete"
 
 
+const addDialogReducer = (addDialogUsers, action) => {
+  switch (action.type) {
+    case 'add':
+      return [...addDialogUsers, {
+        family_name: "",
+        given_name: "",
+        email: ""
+      }]
+
+    case 'change':
+      return addDialogUsers.map((r, i) => {
+        if(action.index == i)
+          return {...r, [action.field]: action.newValue};
+        else
+          return r;
+      })
+      
+    case 'remove':
+      return addDialogUsers.filter((r, i) => {
+        return action.index != i;
+      })
+
+    case 'set':
+      return action.newArray;
+  
+    default:
+      throw Error("Unknown action type");
+  }
+}
+
 const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
@@ -45,7 +75,7 @@ const UserManagement = (props) => {
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
-  const [addDialogUsers, setAddDialogUsers] = useState([]);
+  const [addDialogUsers, addDialogDispatch] = useReducer(addDialogReducer, []);
   const [addDialogSubmitEnabled, setAddDialogSubmitEnabled] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -81,6 +111,7 @@ const UserManagement = (props) => {
       fetchData();
     }
   }, []); 
+
 
   const fetchData = async () => {
     try {
@@ -185,7 +216,10 @@ const UserManagement = (props) => {
 
     if(usersCreated == newUserArray.length) {
       setAddDialogIsOpen(false);
-      setAddDialogUsers([]);
+      addDialogDispatch({
+        type: "set",
+        newArray: []
+      })
 
       setSnackbarText(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
       setSnackbarSeverity("success");
@@ -203,9 +237,12 @@ const UserManagement = (props) => {
       }
       setSnackbarOpen(true);
 
-      setAddDialogUsers(newUserArray.filter((u, i) => {
-        return userIndicesWithErrors.includes(i);
-      }))
+      addDialogDispatch({
+        type: "set",
+        newArray: newUserArray.filter((u, i) => {
+          return userIndicesWithErrors.includes(i);
+        })
+      })
     }
 
 
@@ -570,38 +607,39 @@ const UserManagement = (props) => {
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
               <TextField label="First Name" autoFocus value={u.given_name} sx={{width: "100%"}}
                 onChange={(e) => {
-                  setAddDialogUsers(addDialogUsers.map((r, i) => {
-                    if(index == i)
-                      return {...r, given_name: e.target.value};
-                    else
-                      return r;
-                  }))
+                  addDialogDispatch({
+                    type: 'change',
+                    field: 'given_name',
+                    index: index,
+                    newValue: e.target.value
+                  })
                 }} 
               />
               <TextField label="Last Name" value={u.family_name} sx={{width: "100%"}}
                 onChange={(e) => {
-                  setAddDialogUsers(addDialogUsers.map((r, i) => {
-                    if(index == i)
-                      return {...r, family_name: e.target.value};
-                    else
-                      return r;
-                  }))
+                  addDialogDispatch({
+                    type: 'change',
+                    field: 'family_name',
+                    index: index,
+                    newValue: e.target.value
+                  })
                 }} 
               />
               <TextField label="Email" inputProps={{required: true}} value={u.email} sx={{width: "100%"}}
                 onChange={(e) => {
-                  setAddDialogUsers(addDialogUsers.map((r, i) => {
-                    if(index == i)
-                      return {...r, email: e.target.value};
-                    else
-                      return r;
-                  }))
+                  addDialogDispatch({
+                    type: 'change',
+                    field: 'email',
+                    index: index,
+                    newValue: e.target.value
+                  })
                 }} 
               />
               <IconButton onClick={() => {
-                setAddDialogUsers(addDialogUsers.filter((r, i) => {
-                  return index != i;
-                }))
+                addDialogDispatch({
+                  type: 'remove',
+                  index: index
+                })
               }}>
                 <DeleteIcon />
               </IconButton>
@@ -615,7 +653,10 @@ const UserManagement = (props) => {
             <Button color="primary" variant="outlined" size="large" onClick={() => {
               setAddDialogIsOpen(false);
               setAddDialogSubmitEnabled(false);
-              setAddDialogUsers([]);
+              addDialogDispatch({
+                type: "set",
+                newArray: []
+              })
             }}>
               <Typography variant="body1">Cancel</Typography>
             </Button>
@@ -623,12 +664,9 @@ const UserManagement = (props) => {
             <Button color="primary" 
               variant={addDialogUsers.length ? "outlined" : "contained"}
               size="large" sx={{width: "100%"}} onClick={(e) => {
-              setAddDialogUsers([...addDialogUsers, {
-                family_name: "",
-                given_name: "",
-                email: ""
-              }])
-              e.target.focus();
+              addDialogDispatch({
+                type: 'add'
+              })
             }}>
               <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
             </Button>
