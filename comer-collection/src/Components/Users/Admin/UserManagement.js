@@ -598,7 +598,7 @@ const UserManagement = (props) => {
   appUser.is_admin && (
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by name or email" width="50%" />
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="50%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
