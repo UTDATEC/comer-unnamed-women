@@ -73,6 +73,21 @@ const UserManagement = (props) => {
   const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
+  const editDialogFieldNames = [
+    {
+      fieldName: "given_name",
+      displayName: "First Name"
+    },
+    {
+      fieldName: "family_name",
+      displayName: "Last Name"
+    },
+    {
+      fieldName: "email",
+      displayName: "Email"
+    }
+  ]
+
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
 
@@ -615,21 +630,13 @@ const UserManagement = (props) => {
         }}>
           <Stack spacing={2}>
           <DialogContentText variant="body1">Edit the user fields, then click 'Save'.</DialogContentText>
-          <TextField label="First Name" value={editDialogFields.given_name}
-            onChange={(e) => {
-              setEditDialogFields({...editDialogFields, given_name: e.target.value});
-            }}>
-          </TextField>
-          <TextField label="Last Name" value={editDialogFields.family_name}
-            onChange={(e) => {
-              setEditDialogFields({...editDialogFields, family_name: e.target.value});
-            }}>
-          </TextField>
-          <TextField label="Email" value={editDialogFields.email}
-            onChange={(e) => {
-              setEditDialogFields({...editDialogFields, email: e.target.value});
-            }}>
-          </TextField>
+          {editDialogFieldNames.map((f) => (
+            <TextField key={f.fieldName} name={f.fieldName} label={f.displayName} value={editDialogFields[f.fieldName]}
+              onChange={(e) => {
+                setEditDialogFields({...editDialogFields, [f.fieldName]: e.target.value});
+              }}>
+            </TextField>
+          ))}
           </Stack>
         </DialogContent>
         <DialogActions>
