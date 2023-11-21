@@ -611,8 +611,9 @@ const UserManagement = (props) => {
             </Stack>
           ))}
           <Divider />
-          <Button color="primary" variant="contained" size="large" sx={{minWidth: "100px"}} onClick={(e) => {
-            console.log("old addDialogUsers", addDialogUsers)
+          <Button color="primary" 
+            variant={addDialogUsers.length ? "outlined" : "contained"}
+            size="large" sx={{minWidth: "100px"}} onClick={(e) => {
             setAddDialogUsers([...addDialogUsers, {
               family_name: "",
               given_name: "",
@@ -621,7 +622,7 @@ const UserManagement = (props) => {
             console.log("new addDialogUsers", addDialogUsers)
             e.target.focus();
           }}>
-            <Typography variant="body1">Add User</Typography>
+            <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
           </Button>
           </Stack>
         </DialogContent>
