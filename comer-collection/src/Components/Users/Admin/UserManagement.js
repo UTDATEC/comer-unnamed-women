@@ -87,6 +87,7 @@ const UserManagement = (props) => {
       displayName: "Email"
     }
   ]
+  const createDialogFieldNames = editDialogFieldNames;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
@@ -609,7 +610,7 @@ const UserManagement = (props) => {
             )
           }
 
-      <UserCreateDialog {...{ createDialogUsers, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }} />
+      <UserCreateDialog {...{ createDialogUsers, createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }} />
 
       <Dialog component="form"
         open={editDialogIsOpen}

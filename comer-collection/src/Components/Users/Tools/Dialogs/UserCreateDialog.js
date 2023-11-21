@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const UserCreateDialog = ({ createDialogUsers, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }) => {
+export const UserCreateDialog = ({ createDialogUsers, createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }) => {
   return (
     <Dialog component="form" fullWidth={true} maxWidth="lg"
       open={createDialogIsOpen}
@@ -32,33 +32,17 @@ export const UserCreateDialog = ({ createDialogUsers, createDialogIsOpen, setCre
           {createDialogUsers.map((u, index) => (
             <Stack key={index} direction="row" spacing={2} alignItems="center">
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
-              <TextField label="First Name" autoFocus value={u.given_name} sx={{ width: "100%" }}
+              {createDialogFieldNames.map((f, fi) => (
+                <TextField key={f.fieldName} name={f.fieldName} label={f.displayName} autoFocus={fi==0} value={u[f.fieldName]} sx={{ width: "100%" }}
                 onChange={(e) => {
                   createDialogDispatch({
                     type: 'change',
-                    field: 'given_name',
+                    field: f.fieldName,
                     index: index,
                     newValue: e.target.value
                   });
                 }} />
-              <TextField label="Last Name" value={u.family_name} sx={{ width: "100%" }}
-                onChange={(e) => {
-                  createDialogDispatch({
-                    type: 'change',
-                    field: 'family_name',
-                    index: index,
-                    newValue: e.target.value
-                  });
-                }} />
-              <TextField label="Email" inputProps={{ required: true }} value={u.email} sx={{ width: "100%" }}
-                onChange={(e) => {
-                  createDialogDispatch({
-                    type: 'change',
-                    field: 'email',
-                    index: index,
-                    newValue: e.target.value
-                  });
-                }} />
+              ))}
               <IconButton onClick={() => {
                 createDialogDispatch({
                   type: 'remove',
