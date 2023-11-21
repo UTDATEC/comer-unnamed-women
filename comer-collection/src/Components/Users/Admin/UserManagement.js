@@ -70,9 +70,7 @@ const UserManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
-  const [editDialogFieldEmail, setEditDialogFieldEmail] = useState('');
-  const [editDialogFieldFamilyName, setEditDialogFieldFamilyName] = useState('');
-  const [editDialogFieldGivenName, setEditDialogFieldGivenName] = useState('');
+  const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
@@ -263,9 +261,7 @@ const UserManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFieldEmail('')
-      setEditDialogFieldFamilyName('')
-      setEditDialogFieldGivenName('')
+      setEditDialogFields({email: '', given_name: '', family_name: ''})
 
       setSnackbarText(`Successfully edited user ${userId}`)
       setSnackbarSeverity("success");
@@ -561,9 +557,8 @@ const UserManagement = (props) => {
                         disabled={user.is_admin} 
                         onClick={(e) => {
                           setEditDialogUser(user);
-                          setEditDialogFieldEmail(user.email);
-                          setEditDialogFieldFamilyName(user.family_name);
-                          setEditDialogFieldGivenName(user.given_name);
+                          const { email, family_name, given_name } = user;
+                          setEditDialogFields({ email, family_name, given_name });
                           setEditDialogSubmitEnabled(true);
                           setEditDialogIsOpen(true)
                         }}
@@ -610,11 +605,7 @@ const UserManagement = (props) => {
         }}
         onSubmit={(e) => {
           e.preventDefault();
-          handleUserEdit(editDialogUser.id, {
-            email: editDialogFieldEmail,
-            family_name: editDialogFieldFamilyName,
-            given_name: editDialogFieldGivenName
-          });
+          handleUserEdit(editDialogUser.id, editDialogFields);
         }}
       >
         <DialogTitle variant="h4" textAlign="center">Edit User</DialogTitle>
@@ -624,19 +615,19 @@ const UserManagement = (props) => {
         }}>
           <Stack spacing={2}>
           <DialogContentText variant="body1">Edit the user fields, then click 'Save'.</DialogContentText>
-          <TextField label="First Name" value={editDialogFieldGivenName}
+          <TextField label="First Name" value={editDialogFields.given_name}
             onChange={(e) => {
-              setEditDialogFieldGivenName(e.target.value)
+              setEditDialogFields({...editDialogFields, given_name: e.target.value});
             }}>
           </TextField>
-          <TextField label="Last Name" value={editDialogFieldFamilyName}
+          <TextField label="Last Name" value={editDialogFields.family_name}
             onChange={(e) => {
-              setEditDialogFieldFamilyName(e.target.value)
+              setEditDialogFields({...editDialogFields, family_name: e.target.value});
             }}>
           </TextField>
-          <TextField label="Email" value={editDialogFieldEmail}
+          <TextField label="Email" value={editDialogFields.email}
             onChange={(e) => {
-              setEditDialogFieldEmail(e.target.value)
+              setEditDialogFields({...editDialogFields, email: e.target.value});
             }}>
           </TextField>
           </Stack>
@@ -650,7 +641,7 @@ const UserManagement = (props) => {
               <Typography variant="body1">Cancel</Typography>
             </Button>
             <Button color="primary" variant="contained" size="large"  startIcon={<EditIcon />} sx={{width: "100%"}}
-              disabled={!Boolean(editDialogSubmitEnabled && editDialogFieldEmail)}
+              disabled={!Boolean(editDialogSubmitEnabled && editDialogFields.email)}
               type="submit">
               <Typography variant="body1">Save</Typography>
             </Button>
