@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const UserDeleteDialog = ({ deleteDialogUser, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
+export const ItemSingleDeleteDialog = ({ entity, dialogTitle, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
   return (
     <Dialog fullWidth={true} maxWidth="sm"
       open={deleteDialogIsOpen}
@@ -19,10 +19,10 @@ export const UserDeleteDialog = ({ deleteDialogUser, deleteDialogIsOpen, setDele
         setDeleteDialogIsOpen(false);
       }}
     >
-      <DialogTitle variant="h4" textAlign="center">Delete User</DialogTitle>
+      <DialogTitle variant="h4" textAlign="center">{dialogTitle}</DialogTitle>
 
       <DialogContent>
-        <DialogContentText variant="body1">Are you sure you want to delete user {deleteDialogUser?.id}?</DialogContentText>
+        <DialogContentText variant="body1">Are you sure you want to delete {entity} {deleteDialogItem?.id}?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
@@ -32,7 +32,7 @@ export const UserDeleteDialog = ({ deleteDialogUser, deleteDialogIsOpen, setDele
             <Typography variant="body1">Cancel</Typography>
           </Button>
           <Button color="error" variant="contained" size="large" startIcon={<DeleteIcon />} sx={{ width: "100%" }} onClick={() => {
-            handleDelete(deleteDialogUser.id);
+            handleDelete(deleteDialogItem.id);
           }}>
             <Typography variant="body1">Delete</Typography>
 

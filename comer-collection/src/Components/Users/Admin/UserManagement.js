@@ -4,7 +4,8 @@ import {
   Stack,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton} from "@mui/material";
+  Switch, useTheme, Box, IconButton
+} from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
@@ -18,7 +19,7 @@ import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { UserEditDialog } from "../Tools/Dialogs/UserEditDialog";
 import { DataTable } from "../Tools/DataTable";
@@ -660,7 +661,11 @@ const UserManagement = (props) => {
 
       <UserEditDialog {...{ editDialogUser, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleUserEdit }} />
 
-      <UserDeleteDialog {...{ deleteDialogUser, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+      <ItemSingleDeleteDialog 
+        entity="user"
+        dialogTitle="Delete User"
+        deleteDialogItem={deleteDialogUser}
+        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
     </>
   );
