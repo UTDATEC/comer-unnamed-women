@@ -12,7 +12,11 @@ export const DataTable = ({ tableFields, items }) => {
         <TableHead>
           <TableRow>
             {tableFields.map((tf) => {
-              return tf.generateTableHeaderCell();
+              return (
+                <React.Fragment key={tf.columnDescription}>
+                  {tf.generateTableHeaderCell()}
+                </React.Fragment>
+              )
             })}
           </TableRow>
         </TableHead>
@@ -25,7 +29,11 @@ export const DataTable = ({ tableFields, items }) => {
               }
             }}>
               {tableFields.map((tf) => {
-                return tf.generateTableCell(item);
+                return (
+                  <React.Fragment key={tf.columnDescription}>
+                    {tf.generateTableCell(item)}
+                  </React.Fragment>
+                )
               })}
             </TableRow>
           ))}
