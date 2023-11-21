@@ -24,6 +24,10 @@ import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
+import SchoolIcon from '@mui/icons-material/School';
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check'
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -58,6 +62,7 @@ const createUserDialogReducer = (createDialogUsers, action) => {
 
 const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -67,6 +72,10 @@ const UserManagement = (props) => {
   const [editDialogUser, setEditDialogUser] = useState(null);
   const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+  const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
+  const [assignCourseDialogUser, setAssignCourseDialogUser] = useState(null);
+  const [assignCourseDialogCourses, setAssignCourseDialogCourses] = useState([]);
 
   const editDialogFieldNames = [
     {
@@ -130,8 +139,16 @@ const UserManagement = (props) => {
         },
       });
       const userData = response.data;
-
       setUsers(userData.data);
+
+      const response2 = await axios.get("http://localhost:9000/api/courses", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const courseData = response2.data;
+      setCourses(courseData.data);
+
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
@@ -139,6 +156,21 @@ const UserManagement = (props) => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const fetchUserCourses = async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:9000/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const userData = response.data;
+      setAssignCourseDialogCourses(userData.data.Courses);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   /*
     User display:
@@ -270,6 +302,67 @@ const UserManagement = (props) => {
       setSnackbarOpen(true);
     }
   }
+
+
+
+
+  const handleAssignCourseToUser = async(userId, courseId) => {
+    try {
+      await axios.put(
+        `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchUserCourses(userId);
+
+      setEditDialogIsOpen(false);
+      setEditDialogFields({email: '', given_name: '', family_name: ''})
+
+      setSnackbarText(`Successfully enrolled user ${userId} in course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
+
+      setSnackbarText(`Error enrolling user ${userId} in course ${courseId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  
+  const handleUnassignCourseFromUser = async(userId, courseId) => {
+    try {
+      await axios.delete(
+        `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchUserCourses(userId);
+
+      setEditDialogIsOpen(false);
+      setEditDialogFields({email: '', given_name: '', family_name: ''})
+
+      setSnackbarText(`Successfully unenrolled user ${userId} from course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
+
+      setSnackbarText(`Error unenrolling user ${userId} from course ${courseId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
 
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
     try {
@@ -473,7 +566,17 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.Courses.length}</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" color="primary" startIcon={<SchoolIcon />}
+              onClick={() => {
+                setAssignCourseDialogUser(user);
+                setAssignCourseDialogCourses(user.Courses);
+                setAssignCourseDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{user.Courses.length}</Typography>
+            </Button>
+          </Stack>
         </TableCell>
       )
     },
@@ -590,6 +693,91 @@ const UserManagement = (props) => {
     }
   ]
 
+  const courseTableFieldsForDialog = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          {/* <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
+          <Typography variant="h6">ID</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Name",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            {/* <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
+            <Typography variant="h6">Name</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.name}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Dates",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Dates</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()} - {new Date (course.date_end).toLocaleDateString()}</Typography>
+        </TableCell>
+      )
+    }
+  ]
+
+  const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
+    columnDescription: "Enroll",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: "#CCC"}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (course, extraProperties) => (
+      <TableCell>
+        {extraProperties.secondaryItemIdsAssigned.indexOf(course.id) == -1 ? 
+          <Button variant="outlined" color="primary" startIcon={<SchoolIcon />} onClick={() => {
+            handleAssignCourseToUser(extraProperties.primaryItem.id, course.id);
+          }}>
+            <Typography variant="body1">Enroll</Typography>
+          </Button> :
+          <Button variant="outlined" color="primary" disabled startIcon={<CheckIcon />}>
+          <Typography variant="body1">Enrolled</Typography>
+        </Button>
+        }
+      </TableCell>
+    )
+  }]
+
+  const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
+    columnDescription: "Options",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: "#CCC"}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (course, extraProperties) => (
+      <TableCell>
+        <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
+          handleUnassignCourseFromUser(extraProperties.primaryItem.id, course.id);
+        }}>
+          <Typography variant="body1">Remove</Typography>
+        </Button>
+      </TableCell>
+    )
+  }]
+
 
 
   return !appUser.is_admin && (
@@ -657,6 +845,23 @@ const UserManagement = (props) => {
         dialogTitle="Delete User"
         deleteDialogItem={deleteDialogUser}
         {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+
+      <AssociationManagementDialog
+        primaryEntity="user"
+        secondaryEntity="course"
+        primaryItem={assignCourseDialogUser}
+        secondaryItemsAll={courses}
+        secondaryItemsAssigned={assignCourseDialogCourses}
+        dialogTitle={`Manage Courses for User ${assignCourseDialogUser?.id}`}
+        dialogInstructions={`Enroll and unenroll`}
+        dialogIsOpen={assignCourseDialogIsOpen}
+        tableTitleAssigned={`Current Courses for User ${assignCourseDialogUser?.id}`}
+        tableTitleAll={`All Courses`}
+        setDialogIsOpen={setAssignCourseDialogIsOpen}
+        secondaryTableFieldsAll={courseTableFieldsForDialogAll}
+        secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
+        handleAssociationAssign={handleAssignCourseToUser}
+      />
 
     </>
   );

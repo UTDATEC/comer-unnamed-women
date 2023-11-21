@@ -5,9 +5,9 @@ import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-export const DataTable = ({ tableFields, items }) => {
+export const DataTable = ({ tableFields, items, extraProperties }) => {
   return (
-    <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
+    <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 0px)' }}>
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
         <TableHead>
           <TableRow>
@@ -31,7 +31,7 @@ export const DataTable = ({ tableFields, items }) => {
               {tableFields.map((tf) => {
                 return (
                   <React.Fragment key={tf.columnDescription}>
-                    {tf.generateTableCell(item)}
+                    {tf.generateTableCell(item, extraProperties)}
                   </React.Fragment>
                 )
               })}
