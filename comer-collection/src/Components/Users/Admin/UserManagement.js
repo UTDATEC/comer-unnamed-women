@@ -573,7 +573,7 @@ const UserManagement = (props) => {
                         <EditIcon />
                       </IconButton>
                       <IconButton 
-                        disabled={user.is_admin} 
+                        disabled={user.is_admin || user.Courses.length || user.Exhibitions.length} 
                         onClick={(e) => {
                           setDeleteDialogUser(user);
                           setDeleteDialogIsOpen(true);
