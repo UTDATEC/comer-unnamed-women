@@ -61,7 +61,7 @@ const CourseManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogCourse, setEditDialogCourse] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState({name: '', date_start: '', date_end: ''});
+  const [editDialogFields, setEditDialogFields] = useState({name: '', date_start: '', date_end: '', notes: ''});
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const editDialogFieldNames = [
@@ -71,11 +71,18 @@ const CourseManagement = (props) => {
     },
     {
       fieldName: "date_start",
-      displayName: "Start"
+      displayName: "Start",
+      inputType: "datetime-local"
     },
     {
       fieldName: "date_end",
-      displayName: "End"
+      displayName: "End",
+      inputType: "datetime-local"
+    },
+    {
+      fieldName: "notes",
+      displayName: "Notes",
+      inputType: "textarea"
     }
   ]
   const createDialogFieldNames = editDialogFieldNames;
@@ -191,9 +198,9 @@ const CourseManagement = (props) => {
     let courseIndicesWithErrors = []
     for(const [i, newCourseData] of newCourseArray.entries()) {
       try {
-        let { email, given_name, family_name } = newCourseData;
+        let { name, date_start, date_end, notes } = newCourseData;
         await axios.post(
-          `http://localhost:9000/api/courses`, { email, given_name, family_name },
+          `http://localhost:9000/api/courses`, { name, date_start, date_end, notes },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
