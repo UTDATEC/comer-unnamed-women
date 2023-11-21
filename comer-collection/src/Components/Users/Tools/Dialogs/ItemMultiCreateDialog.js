@@ -31,7 +31,20 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             <Stack key={index} direction="row" spacing={2} alignItems="center">
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
               {createDialogFieldNames.map((f, fi) => (
-                <TextField key={f.fieldName} name={f.fieldName} label={f.displayName} autoFocus={fi==0} value={u[f.fieldName]} sx={{ width: "100%" }}
+                <TextField key={f.fieldName} 
+                  name={f.fieldName} 
+                  label={f.displayName} 
+                  autoFocus={fi==0} 
+                  value={u[f.fieldName]} 
+                  sx={{ 
+                    width: "100%" 
+                  }}
+                  inputProps={{
+                    type: f.inputType ?? "text",
+                    sx: {...{
+                      textAlign: f.inputType == "datetime-local" ? "center" : ""
+                    }}
+                  }}
                 onChange={(e) => {
                   createDialogDispatch({
                     type: 'change',

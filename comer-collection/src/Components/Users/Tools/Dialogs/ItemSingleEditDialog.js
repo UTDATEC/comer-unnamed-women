@@ -9,6 +9,11 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 
+const getLocalISOString = (dateISOString) => {
+  const date = new Date(dateISOString);
+  return `${date.getFullYear()}-${date.getMonth() < 9 ? "0" + (1 + date.getMonth()) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + (date.getDate()) : date.getDate()}T${date.getHours() < 10 ? "0" + (date.getHours()) : date.getHours()}:${date.getMinutes() < 10 ? "0" + (date.getMinutes()) : date.getMinutes()}`
+}
+
 export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleItemEdit }) => {
   return (
     <Dialog component="form"
@@ -31,10 +36,22 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
         <Stack spacing={2}>
           <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
           {editDialogFieldNames.map((f) => (
-            <TextField key={f.fieldName} name={f.fieldName} label={f.displayName} value={editDialogFields[f.fieldName]}
-              onChange={(e) => {
-                setEditDialogFields({ ...editDialogFields, [f.fieldName]: e.target.value });
-              }}>
+            <TextField 
+              key={f.fieldName} 
+              name={f.fieldName} 
+              label={f.displayName} 
+              value={
+                f.inputType == "datetime-local" ? 
+                getLocalISOString(editDialogFields[f.fieldName]) :
+                editDialogFields[f.fieldName]
+              }
+              inputProps={{
+                type: f.inputType,
+                onChange: (e) => {
+                  setEditDialogFields({ ...editDialogFields, [f.fieldName]: e.target.value });
+                }
+              }}
+              >
             </TextField>
           ))}
         </Stack>
@@ -48,7 +65,7 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
             <Typography variant="body1">Cancel</Typography>
           </Button>
           <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
-            disabled={!Boolean(editDialogSubmitEnabled && editDialogFields.email)}
+            // disabled={!Boolean(editDialogSubmitEnabled && editDialogFields.email)}
             type="submit">
             <Typography variant="body1">Save {entity}</Typography>
           </Button>

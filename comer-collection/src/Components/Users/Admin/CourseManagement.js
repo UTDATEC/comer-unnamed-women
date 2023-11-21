@@ -67,7 +67,8 @@ const CourseManagement = (props) => {
   const editDialogFieldNames = [
     {
       fieldName: "name",
-      displayName: "Course Name"
+      displayName: "Course Name",
+      inputType: "textarea"
     },
     {
       fieldName: "date_start",
@@ -253,10 +254,10 @@ const CourseManagement = (props) => {
 
 
   const handleCourseEdit = async(courseId, updateFields) => {
-    const { name, date_start, date_end } = updateFields;
+    const { name, date_start, date_end, notes } = updateFields;
     try {
       await axios.put(
-        `http://localhost:9000/api/courses/${courseId}`, { name, date_start, date_end },
+        `http://localhost:9000/api/courses/${courseId}`, { name, date_start, date_end, notes },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -266,7 +267,7 @@ const CourseManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFields({name: '', date_start: '', date_end: ''})
+      setEditDialogFields({name: '', date_start: '', date_end: '', notes: ''})
 
       setSnackbarText(`Successfully edited course ${courseId}`)
       setSnackbarSeverity("success");
@@ -418,8 +419,8 @@ const CourseManagement = (props) => {
           <IconButton 
             onClick={(e) => {
               setEditDialogCourse(course);
-              const { name, date_start, date_end } = course;
-              setEditDialogFields({ name, date_start, date_end });
+              const { name, date_start, date_end, notes } = course;
+              setEditDialogFields({ name, date_start, date_end, notes });
               setEditDialogSubmitEnabled(true);
               setEditDialogIsOpen(true)
             }}
