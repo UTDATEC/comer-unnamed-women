@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
-import { UserEditDialog } from "../Tools/Dialogs/UserEditDialog";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
 
 
@@ -657,9 +657,15 @@ const UserManagement = (props) => {
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-       {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
-      <UserEditDialog {...{ editDialogUser, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleUserEdit }} />
+      <ItemSingleEditDialog 
+        entity="user"
+        dialogTitle={"Edit User"}
+        dialogInstructions={"Edit the user fields, then click 'Save'."}
+        editDialogItem={editDialogUser}
+        handleItemEdit={handleUserEdit}
+        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
       <ItemSingleDeleteDialog 
         entity="user"

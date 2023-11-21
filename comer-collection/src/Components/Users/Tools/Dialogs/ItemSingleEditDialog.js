@@ -7,9 +7,9 @@ import {
   Button,
   Typography, DialogContentText, TextField
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
-export const UserEditDialog = ({ editDialogUser, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleUserEdit }) => {
+export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleItemEdit }) => {
   return (
     <Dialog component="form"
       open={editDialogIsOpen}
@@ -20,16 +20,16 @@ export const UserEditDialog = ({ editDialogUser, editDialogFieldNames, editDialo
       }}
       onSubmit={(e) => {
         e.preventDefault();
-        handleUserEdit(editDialogUser.id, editDialogFields);
+        handleItemEdit(editDialogItem.id, editDialogFields);
       }}
     >
-      <DialogTitle variant="h4" textAlign="center">Edit User</DialogTitle>
+      <DialogTitle variant="h4" textAlign="center">{dialogTitle}</DialogTitle>
       <DialogContent
         sx={{
           width: "500px",
         }}>
         <Stack spacing={2}>
-          <DialogContentText variant="body1">Edit the user fields, then click 'Save'.</DialogContentText>
+          <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
           {editDialogFieldNames.map((f) => (
             <TextField key={f.fieldName} name={f.fieldName} label={f.displayName} value={editDialogFields[f.fieldName]}
               onChange={(e) => {
@@ -47,10 +47,10 @@ export const UserEditDialog = ({ editDialogUser, editDialogFieldNames, editDialo
           }}>
             <Typography variant="body1">Cancel</Typography>
           </Button>
-          <Button color="primary" variant="contained" size="large" startIcon={<EditIcon />} sx={{ width: "100%" }}
+          <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
             disabled={!Boolean(editDialogSubmitEnabled && editDialogFields.email)}
             type="submit">
-            <Typography variant="body1">Save</Typography>
+            <Typography variant="body1">Save {entity}</Typography>
           </Button>
         </Stack>
       </DialogActions>
