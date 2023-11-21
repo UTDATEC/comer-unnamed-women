@@ -102,7 +102,6 @@ const UserManagement = (props) => {
 
   const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery) => {
     return curators.filter((curator) => {
-      console.log("Called filterCurators");
       return (
         // filter by user type
         !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
