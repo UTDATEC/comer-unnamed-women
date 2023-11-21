@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import {
   Paper,
@@ -102,6 +102,7 @@ const UserManagement = (props) => {
 
   const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery) => {
     return curators.filter((curator) => {
+      console.log("Called filterCurators");
       return (
         // filter by user type
         !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
@@ -123,8 +124,13 @@ const UserManagement = (props) => {
     })
   }
 
-  const curatorsToDisplay = filterCurators(userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery)
-  .sort((a, b) => {
+  const filteredCurators = useMemo(() => filterCurators(
+    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery
+  ), [
+    curators, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery
+  ])
+
+  const curatorsToDisplay = filteredCurators.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
