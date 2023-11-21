@@ -745,7 +745,7 @@ const UserManagement = (props) => {
             }}>
               <Typography variant="body1">Cancel</Typography>
             </Button>
-            <Button color="primary" variant="contained" size="large"  sx={{width: "100%"}}
+            <Button color="primary" variant="contained" size="large"  startIcon={<EditIcon />} sx={{width: "100%"}}
               disabled={!Boolean(editDialogSubmitEnabled && editDialogFieldEmail)}
               type="submit">
               <Typography variant="body1">Save</Typography>
