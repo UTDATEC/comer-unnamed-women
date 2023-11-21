@@ -68,17 +68,20 @@ const CourseManagement = (props) => {
     {
       fieldName: "name",
       displayName: "Course Name",
-      inputType: "textarea"
+      inputType: "textarea",
+      isRequired: true
     },
     {
       fieldName: "date_start",
       displayName: "Start",
-      inputType: "datetime-local"
+      inputType: "datetime-local",
+      isRequired: true
     },
     {
       fieldName: "date_end",
       displayName: "End",
-      inputType: "datetime-local"
+      inputType: "datetime-local",
+      isRequired: true
     },
     {
       fieldName: "notes",

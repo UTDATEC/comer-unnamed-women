@@ -45,6 +45,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                       textAlign: f.inputType == "datetime-local" ? "center" : ""
                     }}
                   }}
+                  required={Boolean(f.isRequired)}
                 onChange={(e) => {
                   createDialogDispatch({
                     type: 'change',
