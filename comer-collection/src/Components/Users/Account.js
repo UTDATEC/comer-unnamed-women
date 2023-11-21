@@ -5,12 +5,12 @@ import UserManagement from './Admin/UserManagement';
 import ExhibitionList from './Admin/ExhibitionList';
 import ImageManagement from './Admin/ImageManagement';
 import ImageEdit from './Admin/ImageEdit';
-import Course from './Admin/CourseManagement'
 import InviteForm from './Admin/InviteForm';
 import Profile from './Profile';
 import { Box } from '@mui/material';
 import Unauthorized from '../ErrorPages/Unauthorized';
 import ChangePassword from './ChangePassword';
+import CourseManagement from './Admin/CourseManagement';
 
 
 const Account = (props) => {
@@ -51,7 +51,11 @@ const Account = (props) => {
               } />} />
             <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="Course" user={appUser} element={<Course {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="CourseManagement" element={<CourseManagement {
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity}
+              } />} />
             <Route path="Invite" user={appUser} element={<InviteForm {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ImageEdit/:id" user={appUser} element={<ImageEdit />} />
 

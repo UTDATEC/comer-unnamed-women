@@ -46,7 +46,7 @@ const adminNavLinks = [
   {
       title: "Course Management",
       icon: <SchoolIcon fontSize="large"/>,
-      link: "/Account/Course"
+      link: "/Account/CourseManagement"
   },
   {
       title: "Invite",
