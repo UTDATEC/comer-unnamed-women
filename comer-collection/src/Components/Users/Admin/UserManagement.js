@@ -28,6 +28,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check'
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
+import { useNavigate } from "react-router";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -121,7 +122,7 @@ const UserManagement = (props) => {
     snackbarOpen, snackbarText, snackbarSeverity,
     setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
   const theme = useTheme();
-  
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSelectedNavItem("User Management");
@@ -853,6 +854,13 @@ const UserManagement = (props) => {
         secondaryItemsAll={courses}
         secondaryItemsAssigned={assignCourseDialogCourses}
         dialogTitle={`Manage Course Enrollments for User ${assignCourseDialogUser?.id}`}
+        dialogButtonForSecondaryManagement={<>
+          <Button variant="outlined" onClick={() => {
+            navigate('/Account/CourseManagement')
+          }}>
+            <Typography>Go to course management</Typography>
+          </Button>
+        </>}
         dialogIsOpen={assignCourseDialogIsOpen}
         tableTitleAssigned={`Current Courses for User ${assignCourseDialogUser?.id}`}
         tableTitleAll={`All Courses`}

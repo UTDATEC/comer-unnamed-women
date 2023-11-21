@@ -5,12 +5,11 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography, IconButton, DialogContentText, TextField, Divider, Box
+  Typography, DialogContentText, Divider, Box
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { DataTable } from "../DataTable";
 
-export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, primaryItem, setPrimaryItem, secondaryItemsAll, secondaryItemsAssigned, secondaryTableFieldsAll, tableTitleAssigned, tableTitleAll, secondaryTableFieldsAssignedOnly, dialogTitle, dialogInstructions, dialogIsOpen, setDialogIsOpen }) => {
+export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, primaryItem, setPrimaryItem, secondaryItemsAll, secondaryItemsAssigned, secondaryTableFieldsAll, tableTitleAssigned, tableTitleAll, secondaryTableFieldsAssignedOnly, dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, dialogIsOpen, setDialogIsOpen }) => {
   return (
     <Dialog fullWidth={true} maxWidth="lg"
       open={dialogIsOpen}
@@ -40,13 +39,16 @@ export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, pr
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button type="submit" color="primary" variant="contained" size="large"
-          onClick={() => {
-            setDialogIsOpen(false);
-          }}
-        >
-          <Typography variant="body1">Close</Typography>
-        </Button>
+        <Stack direction="row" spacing={1} justifyContent="space-between" width="100%">
+          {dialogButtonForSecondaryManagement}
+          <Button type="submit" color="primary" variant="contained" size="large"
+            onClick={() => {
+              setDialogIsOpen(false);
+            }}
+          >
+            <Typography variant="body1">Close</Typography>
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   );
