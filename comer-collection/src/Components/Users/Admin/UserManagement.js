@@ -77,7 +77,6 @@ const UserManagement = (props) => {
 
   const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
   const [addDialogUsers, addDialogDispatch] = useReducer(addDialogReducer, []);
-  const [addDialogSubmitEnabled, setAddDialogSubmitEnabled] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -668,7 +667,6 @@ const UserManagement = (props) => {
           <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
             <Button color="primary" variant="outlined" size="large" onClick={() => {
               setAddDialogIsOpen(false);
-              setAddDialogSubmitEnabled(false);
               addDialogDispatch({
                 type: "set",
                 newArray: []
