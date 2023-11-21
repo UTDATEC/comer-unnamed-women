@@ -23,14 +23,14 @@ export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, pr
       <DialogContent>
         <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
         <Stack spacing={2} direction="row" padding={2}>
-          <Stack sx={{width: "100%"}} spacing={2} textAlign="center">
+          <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="400px">
               <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAll} extraProperties={{ primaryItem, secondaryItemIdsAssigned: secondaryItemsAssigned?.map((si) => si.id)}} />
             </Box>
           </Stack>
           <Divider sx={{borderWidth: "2px"}} />
-          <Stack sx={{width: "100%"}} spacing={2} textAlign="center">
+          <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
             <Box maxHeight="400px">
               <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssigned} extraProperties={{ primaryItem }} />
