@@ -559,8 +559,7 @@ const UserManagement = (props) => {
           handleUsersCreate([...addDialogUsers]);
         }}
       >
-        <DialogTitle sx={{textAlign: "center"}} variant="h4">Create Users
-        </DialogTitle>
+        <DialogTitle textAlign="center" variant="h4">Create Users</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
           <DialogContentText variant="body1">
@@ -659,7 +658,7 @@ const UserManagement = (props) => {
           });
         }}
       >
-        <DialogTitle variant="h4" sx={{textAlign: "center"}}>Edit User</DialogTitle>
+        <DialogTitle variant="h4" textAlign="center">Edit User</DialogTitle>
         <DialogContent
         sx={{
           width: "500px",
@@ -704,7 +703,7 @@ const UserManagement = (props) => {
         onClose={() => setDeleteConfirmation(false)}
         // className={classes.dialog}
       >
-        <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
+        <DialogTitle textAlign="center">
           Delete User
         </DialogTitle>
 
