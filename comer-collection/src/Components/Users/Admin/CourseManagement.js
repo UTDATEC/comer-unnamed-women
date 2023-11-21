@@ -16,6 +16,7 @@ const Course = (props) => {
   const { appUser, setSelectedNavItem } = props;
   
   useEffect(() => {
+    setSelectedNavItem("Course Management")
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:9000/api/courses', {
@@ -37,7 +38,6 @@ const Course = (props) => {
         console.error('Error fetching courses:', error);
       }
 
-      setSelectedNavItem("Course Management")
       if(appUser.is_admin) {
         fetchData();
       }
