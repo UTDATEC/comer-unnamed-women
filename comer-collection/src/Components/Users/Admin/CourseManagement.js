@@ -364,6 +364,29 @@ const CourseManagement = (props) => {
       )
     },
     {
+      columnDescription: "Status",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Status</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          {
+            new Date(course.date_start).getTime() > new Date().getTime() && (
+              <Typography variant="body1">Upcoming</Typography>
+            ) || 
+            new Date(course.date_end).getTime() < new Date().getTime() && (
+              <Typography variant="body1">Expired</Typography>
+            ) || 
+            new Date(course.date_end).getTime() >= new Date().getTime() && new Date(course.date_start).getTime() <= new Date().getTime() && (
+              <Typography variant="body1">Active</Typography>
+            )
+          }
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "Enrollment",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
