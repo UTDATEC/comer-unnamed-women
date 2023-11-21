@@ -108,7 +108,6 @@ const UserManagement = (props) => {
   */
 
   const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter) => {
-    console.log("called filter curators");
     return curators.filter((curator) => {
       return (
         // filter by user type
@@ -132,7 +131,6 @@ const UserManagement = (props) => {
 
 
   const searchCurators = (searchQuery) => {
-    console.log("called search curators");
     return filteredCurators.filter((curator) => {
       return searchQuery == "" ||
         Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -619,7 +617,6 @@ const UserManagement = (props) => {
               given_name: "",
               email: ""
             }])
-            console.log("new addDialogUsers", addDialogUsers)
             e.target.focus();
           }}>
             <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
