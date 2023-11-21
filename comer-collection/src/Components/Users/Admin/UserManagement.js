@@ -765,7 +765,7 @@ const UserManagement = (props) => {
   }]
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
-    columnDescription: "Options",
+    columnDescription: "",
     generateTableHeaderCell: () => (
       <TableCell sx={{backgroundColor: "#CCC"}}>
         <Typography variant="h6">&nbsp;</Typography>
