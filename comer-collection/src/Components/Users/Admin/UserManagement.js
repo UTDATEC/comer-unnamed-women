@@ -680,21 +680,23 @@ const UserManagement = (props) => {
               setEditDialogFieldEmail(e.target.value)
             }}>
           </TextField>
-          <Stack direction="row" justifyContent="space-between" spacing={2}>
-            <Button color="primary" variant="outlined" sx={{width: "50%"}} onClick={() => {
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
+          <Button color="primary" variant="outlined" sx={{width: "100%"}} onClick={() => {
               setEditDialogIsOpen(false);
               setEditDialogSubmitEnabled(false);
             }}>
               <Typography variant="body1">Cancel</Typography>
             </Button>
-            <Button color="primary" variant="contained" size="large"  sx={{width: "50%"}}
+            <Button color="primary" variant="contained" size="large"  sx={{width: "100%"}}
               disabled={!Boolean(editDialogSubmitEnabled && editDialogFieldEmail)}
               type="submit">
               <Typography variant="body1">Save</Typography>
             </Button>
           </Stack>
-          </Stack>
-        </DialogContent>
+          </DialogActions>
       </Dialog>
 
       {/* Delete confirmation dialog */}
