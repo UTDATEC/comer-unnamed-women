@@ -19,7 +19,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
-import { UserCreateDialog } from "../Tools/Dialogs/UserCreateDialog";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { UserEditDialog } from "../Tools/Dialogs/UserEditDialog";
 import { DataTable } from "../Tools/DataTable";
 
@@ -651,7 +651,12 @@ const UserManagement = (props) => {
             )
           }
 
-      <UserCreateDialog {...{ createDialogUsers, createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }} />
+      <ItemMultiCreateDialog entity="user" 
+        dialogTitle={"Create Users"}
+        dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
+        createDialogItems={createDialogUsers}
+        handleItemsCreate={handleUsersCreate}
+       {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
       <UserEditDialog {...{ editDialogUser, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleUserEdit }} />
 
