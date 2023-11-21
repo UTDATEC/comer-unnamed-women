@@ -31,7 +31,7 @@ import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
 import { UserCreateDialog } from "../Tools/Dialogs/UserCreateDialog";
 
 
-const createDialogReducer = (createDialogUsers, action) => {
+const createUserDialogReducer = (createDialogUsers, action) => {
   switch (action.type) {
     case 'add':
       return [...createDialogUsers, {
@@ -76,7 +76,7 @@ const UserManagement = (props) => {
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
-  const [createDialogUsers, createDialogDispatch] = useReducer(createDialogReducer, []);
+  const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
