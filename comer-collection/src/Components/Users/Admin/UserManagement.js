@@ -544,7 +544,7 @@ const UserManagement = (props) => {
               <DialogContentText>
                 <Typography variant="body1">{index + 1}</Typography>
               </DialogContentText>
-              <TextField label="First Name" value={u.given_name} sx={{width: "100%"}}
+              <TextField label="First Name" autoFocus value={u.given_name} sx={{width: "100%"}}
                 onChange={(e) => {
                   setAddDialogUsers(addDialogUsers.map((r, i) => {
                     if(index == i)
