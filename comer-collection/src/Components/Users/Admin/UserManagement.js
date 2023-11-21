@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton, DialogContentText, TextField
+  Switch, useTheme, Box, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,6 +27,7 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete"
 
 
 const UserManagement = (props) => {
@@ -42,6 +43,10 @@ const UserManagement = (props) => {
   const [editDialogFieldFamilyName, setEditDialogFieldFamilyName] = useState('');
   const [editDialogFieldGivenName, setEditDialogFieldGivenName] = useState('');
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+  const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
+  const [addDialogUsers, setAddDialogUsers] = useState([]);
+  const [addDialogSubmitEnabled, setAddDialogSubmitEnabled] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -127,6 +132,60 @@ const UserManagement = (props) => {
     setCuratorToDelete({ curatorId });
     setDeleteConfirmation(true);
   };
+
+
+  const handleUsersCreate = async(newUserArray) => {
+    let usersCreated = 0;
+    let userIndicesWithErrors = []
+    for(const [i, newUserData] of newUserArray.entries()) {
+      try {
+        let { email, given_name, family_name } = newUserData;
+        await axios.post(
+          `http://localhost:9000/api/users`, { email, given_name, family_name },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        usersCreated++;
+  
+      } catch (error) {
+        console.error(`Error creating user ${JSON.stringify(newUserData)}: ${error}`);
+        userIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(usersCreated == newUserArray.length) {
+      setAddDialogIsOpen(false);
+      setAddDialogUsers([]);
+
+      setSnackbarText(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(usersCreated < newUserArray.length) {
+
+      if(usersCreated > 0) {
+        setSnackbarText(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+      setAddDialogUsers(newUserArray.filter((u, i) => {
+        return userIndicesWithErrors.includes(i);
+      }))
+    }
+
+
+  }
+
 
   const handleUserEdit = async(userId, updateFields) => {
     const { email, given_name, family_name } = updateFields;
@@ -261,7 +320,11 @@ const UserManagement = (props) => {
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
-            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}>
+            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
+              onClick={() => {
+                setAddDialogIsOpen(true);
+              }}
+            >
               <Typography variant="body1">Create Users</Typography>
             </Button>
           </Stack>
@@ -455,6 +518,101 @@ const UserManagement = (props) => {
               </Box>
             )
           }
+
+      <Dialog component="form" fullWidth={true} maxWidth="lg"
+        open={addDialogIsOpen}
+        onClose={(event, reason) => {
+          if(reason == "backdropClick")
+            return;
+          setAddDialogIsOpen(false);
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUsersCreate([...addDialogUsers]);
+        }}
+      >
+        <DialogTitle>
+          <Typography variant="h4" sx={{textAlign: "center"}}>Create Users</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+          <DialogContentText>
+            <Typography variant="body1">Add users, edit the user fields, then click 'Save'.</Typography>
+          </DialogContentText>
+            {addDialogUsers.map((u, index) => (
+            <Stack key={index} direction="row" spacing={2} alignItems="center">
+              <DialogContentText>
+                <Typography variant="body1">{index + 1}</Typography>
+              </DialogContentText>
+              <TextField label="First Name" value={u.given_name} sx={{width: "100%"}}
+                onChange={(e) => {
+                  setAddDialogUsers(addDialogUsers.map((r, i) => {
+                    if(index == i)
+                      return {...r, given_name: e.target.value};
+                    else
+                      return r;
+                  }))
+                }} 
+              />
+              <TextField label="Last Name" value={u.family_name} sx={{width: "100%"}}
+                onChange={(e) => {
+                  setAddDialogUsers(addDialogUsers.map((r, i) => {
+                    if(index == i)
+                      return {...r, family_name: e.target.value};
+                    else
+                      return r;
+                  }))
+                }} 
+              />
+              <TextField label="Email" inputProps={{required: true}} value={u.email} sx={{width: "100%"}}
+                onChange={(e) => {
+                  setAddDialogUsers(addDialogUsers.map((r, i) => {
+                    if(index == i)
+                      return {...r, email: e.target.value};
+                    else
+                      return r;
+                  }))
+                }} 
+              />
+              <IconButton onClick={() => {
+                setAddDialogUsers(addDialogUsers.filter((r, i) => {
+                  return index != i;
+                }))
+              }}>
+                <DeleteIcon />
+              </IconButton>
+            </Stack>
+          ))}
+          <Divider />
+          <Button color="primary" variant="contained" size="large" sx={{minWidth: "100px"}} onClick={(e) => {
+            console.log("old addDialogUsers", addDialogUsers)
+            setAddDialogUsers([...addDialogUsers, {
+              family_name: "",
+              given_name: "",
+              email: ""
+            }])
+            console.log("new addDialogUsers", addDialogUsers)
+            e.target.focus();
+          }}>
+            <Typography variant="body1">Add User</Typography>
+          </Button>
+          </Stack>
+        </DialogContent>
+          <DialogActions>
+            <Button color="primary" variant="outlined" size="large" sx={{minWidth: "100px"}} onClick={() => {
+              setAddDialogIsOpen(false);
+              setAddDialogSubmitEnabled(false);
+              setAddDialogUsers([]);
+            }}>
+              <Typography variant="body1">Cancel</Typography>
+            </Button>
+            <Button type="submit" color="primary" variant="contained" size="large"  sx={{minWidth: "100px"}}
+              disabled={addDialogUsers.length == 0}>
+              <Typography variant="body1">Create</Typography>
+            </Button>
+          </DialogActions>
+      </Dialog>
+
 
       <Dialog component="form"
         open={editDialogIsOpen}
