@@ -119,7 +119,11 @@ const deleteUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId);
         if(user) {
-            if(user.is_admin)
+            const userCourses = await user.countCourses();
+            const userExhibitions = await user.countExhibitions();
+            if(userCourses || userExhibitions)
+                next(createError(422, {debugMessage: "User has at least one course enrollment or owns at least one exhibition."}))
+            else if(user.is_admin)
                 next(createError(401, {debugMessage: "Admin cannot delete admin"}));
             else {
                 await user.destroy();
