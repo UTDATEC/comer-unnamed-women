@@ -561,19 +561,16 @@ const UserManagement = (props) => {
           handleUsersCreate([...addDialogUsers]);
         }}
       >
-        <DialogTitle>
-          <Typography variant="h4" sx={{textAlign: "center"}}>Create Users</Typography>
+        <DialogTitle sx={{textAlign: "center"}} variant="h4">Create Users
         </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
-          <DialogContentText>
-            <Typography variant="body1">Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user.</Typography>
+          <DialogContentText variant="body1">
+            Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user.
           </DialogContentText>
             {addDialogUsers.map((u, index) => (
             <Stack key={index} direction="row" spacing={2} alignItems="center">
-              <DialogContentText>
-                <Typography variant="body1">{index + 1}</Typography>
-              </DialogContentText>
+              <DialogContentText variant="body1">{index + 1}</DialogContentText>
               <TextField label="First Name" autoFocus value={u.given_name} sx={{width: "100%"}}
                 onChange={(e) => {
                   setAddDialogUsers(addDialogUsers.map((r, i) => {
@@ -660,20 +657,13 @@ const UserManagement = (props) => {
           });
         }}
       >
-        <DialogTitle
-        sx={{
-          textAlign: "center"
-        }}>
-          <Typography variant="h4">Edit User</Typography>
-        </DialogTitle>
+        <DialogTitle variant="h4" sx={{textAlign: "center"}}>Edit User</DialogTitle>
         <DialogContent
         sx={{
           width: "500px",
         }}>
           <Stack spacing={2}>
-          <DialogContentText>
-            <Typography variant="body1">Edit the user fields, then click 'Save'.</Typography>
-          </DialogContentText>
+          <DialogContentText variant="body1">Edit the user fields, then click 'Save'.</DialogContentText>
           <TextField label="First Name" value={editDialogFieldGivenName}
             onChange={(e) => {
               setEditDialogFieldGivenName(e.target.value)
