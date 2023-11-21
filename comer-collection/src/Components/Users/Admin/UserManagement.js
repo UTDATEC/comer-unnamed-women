@@ -100,7 +100,15 @@ const UserManagement = (props) => {
     }
   };
 
-  const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery) => {
+  /*
+    Curator display:
+    Step 1: apply column filters
+    Step 2: apply search query
+    Step 3: apply sorting order
+  */
+
+  const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter) => {
+    console.log("called filter curators");
     return curators.filter((curator) => {
       return (
         // filter by user type
@@ -111,25 +119,33 @@ const UserManagement = (props) => {
       ) && (
         // filter by password type
         !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && curator.pw_temp || userPasswordTypeFilter == "Permanent" && !curator.pw_temp
-      ) && (
-        // filter by search query (name and email)
-        searchQuery == "" ||
+      )
+    })
+  }
+
+
+  const filteredCurators = useMemo(() => filterCurators(
+    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+  ), [
+    curators, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+  ])
+
+
+  const searchCurators = (searchQuery) => {
+    console.log("called search curators");
+    return filteredCurators.filter((curator) => {
+      return searchQuery == "" ||
         Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
         Boolean((curator.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
         Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
         Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
         Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
-      )
     })
   }
 
-  const filteredCurators = useMemo(() => filterCurators(
-    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery
-  ), [
-    curators, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery
-  ])
+  const filteredAndSearchedCurators = useMemo(() => searchCurators(searchQuery), [filteredCurators, searchQuery])
 
-  const curatorsToDisplay = filteredCurators.sort((a, b) => {
+  const curatorsToDisplay = filteredAndSearchedCurators.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
