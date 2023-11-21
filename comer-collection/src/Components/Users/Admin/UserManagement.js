@@ -64,8 +64,8 @@ const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogUser, setDeleteDialogUser] = useState(null);
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
@@ -185,8 +185,8 @@ const UserManagement = (props) => {
   
 
   const handleDeleteClick = (userId) => {
-    setUserToDelete({ userId });
-    setDeleteConfirmation(true);
+    setDeleteDialogUser({ userId });
+    setDeleteDialogIsOpen(true);
   };
 
 
@@ -336,28 +336,36 @@ const UserManagement = (props) => {
 
   const handleDelete = async () => {
     try {
-      const { userId } = userToDelete;
+      const user = deleteDialogUser;
 
       const response = await axios.delete(
-        `http://localhost:9000/api/users/${userId}`,
+        `http://localhost:9000/api/users/${user.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
+      fetchData();
+
+      setSnackbarSeverity("success")
+      setSnackbarText(`User ${user.id} has been deleted`);
+      setSnackbarOpen(true);
 
       if (response.status === 200 || response.status === 204) {
-        fetchData();
       } else {
         console.error("Error deleting user:", response.statusText);
       }
     } catch (error) {
       console.error("Error handling delete operation:", error);
-    } finally {
-      setDeleteConfirmation(false);
-      setUserToDelete(null);
+
+      setSnackbarSeverity("error")
+      setSnackbarText(`User ${user.id} could not be deleted`);
+      setSnackbarOpen(true);
     }
+
+    setDeleteDialogIsOpen(false);
+    setDeleteDialogUser(null);
   };
 
 
@@ -564,6 +572,15 @@ const UserManagement = (props) => {
                       >
                         <EditIcon />
                       </IconButton>
+                      <IconButton 
+                        disabled={user.is_admin} 
+                        onClick={(e) => {
+                          setDeleteDialogUser(user);
+                          setDeleteDialogIsOpen(true);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -739,47 +756,31 @@ const UserManagement = (props) => {
 
       {/* Delete confirmation dialog */}
       <Dialog
-        open={deleteConfirmation}
-        onClose={() => setDeleteConfirmation(false)}
-        // className={classes.dialog}
+        open={deleteDialogIsOpen}
+        onClose={(event, reason) => {
+          if(reason == "backdropClick")
+            return;
+          setDeleteDialogIsOpen(false);
+        }}
       >
-        <DialogTitle textAlign="center">
-          Delete User
-        </DialogTitle>
+        <DialogTitle textAlign="center">Delete User</DialogTitle>
 
         <DialogContent>
-          Are you sure you want to delete this user 
-          {/* "{userToDelete?.userId}" */}
-          ?
+          <DialogContentText variant="body1">Are you sure you want to delete user {deleteDialogUser?.id}?</DialogContentText>
         </DialogContent>
-
-        <DialogActions sx={{ justifyContent: "center" }}>
-          <Button
-            onClick={() => setDeleteConfirmation(false)}
-            color="primary"
-            sx={{
-              "&:hover": {
-                color: "white",
-                backgroundColor: "green",
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDelete}
-            color="primary"
-            sx={{
-              color: "red",
-              "&:hover": {
-                color: "white",
-                backgroundColor: "red",
-              },
-            }}
-          >
-            Delete
-          </Button>
-        </DialogActions>
+        <DialogActions>
+          <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
+          <Button color="primary" variant="outlined" sx={{width: "100%"}} onClick={() => {
+              setDeleteDialogIsOpen(false);
+            }}>
+              <Typography variant="body1">Cancel</Typography>
+            </Button>
+            <Button color="error" variant="contained" size="large" startIcon={<DeleteIcon />}  sx={{width: "100%"}} onClick={handleDelete}>
+              <Typography variant="body1">Delete</Typography>
+              
+            </Button>
+          </Stack>
+          </DialogActions>
       </Dialog>
     </>
   );
