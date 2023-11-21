@@ -23,6 +23,7 @@ import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog"
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
+import { searchItems } from "../Tools/SearchUtilities";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -169,18 +170,7 @@ const UserManagement = (props) => {
   ])
 
 
-  const searchUsers = (searchQuery) => {
-    return filteredUsers.filter((user) => {
-      return searchQuery == "" ||
-        Boolean((user.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean((user.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(user.given_name ?? "").toLowerCase()} ${(user.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(user.family_name ?? "").toLowerCase()}, ${(user.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(user.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
-    })
-  }
-
-  const filteredAndSearchedUsers = useMemo(() => searchUsers(searchQuery), [filteredUsers, searchQuery])
+  const filteredAndSearchedUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
 
   const usersToDisplay = filteredAndSearchedUsers.sort((a, b) => {
     if(sortColumn == "Name")

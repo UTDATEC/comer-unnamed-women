@@ -19,6 +19,7 @@ import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog"
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
+import { searchItems } from "../Tools/SearchUtilities";
 
 
 const createCourseDialogReducer = (createDialogCourses, action) => {
@@ -168,18 +169,7 @@ const CourseManagement = (props) => {
   ])
 
 
-  const searchCourses = (searchQuery) => {
-    return filteredCourses.filter((course) => {
-      return searchQuery == "" ||
-        Boolean((course.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean((course.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(course.given_name ?? "").toLowerCase()} ${(course.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(course.family_name ?? "").toLowerCase()}, ${(course.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(course.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
-    })
-  }
-
-  const filteredAndSearchedCourses = useMemo(() => searchCourses(searchQuery), [filteredCourses, searchQuery])
+  const filteredAndSearchedCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
 
   const coursesToDisplay = filteredAndSearchedCourses.sort((a, b) => {
     if(sortColumn == "Name")
@@ -465,7 +455,7 @@ const CourseManagement = (props) => {
   appUser.is_admin && (
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by name or email" width="50%" />
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by course name or notes" width="50%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
