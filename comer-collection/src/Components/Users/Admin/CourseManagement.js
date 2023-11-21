@@ -1,21 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import axios from "axios";
 import {
   Stack,
   Button,
-  Typography,
-  Switch, useTheme, Box, IconButton
+  Typography, useTheme, Box, IconButton
 } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
-import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import SearchIcon from "@mui/icons-material/Search";
-import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";

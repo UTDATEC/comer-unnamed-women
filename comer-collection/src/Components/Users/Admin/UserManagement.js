@@ -192,11 +192,6 @@ const UserManagement = (props) => {
   })
   
 
-  const handleDeleteClick = (userId) => {
-    setDeleteDialogUser({ userId });
-    setDeleteDialogIsOpen(true);
-  };
-
 
   const handleUsersCreate = async(newUserArray) => {
     let usersCreated = 0;
