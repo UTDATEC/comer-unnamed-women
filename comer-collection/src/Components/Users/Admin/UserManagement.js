@@ -852,8 +852,7 @@ const UserManagement = (props) => {
         primaryItem={assignCourseDialogUser}
         secondaryItemsAll={courses}
         secondaryItemsAssigned={assignCourseDialogCourses}
-        dialogTitle={`Manage Courses for User ${assignCourseDialogUser?.id}`}
-        dialogInstructions={`Enroll and unenroll`}
+        dialogTitle={`Manage Course Enrollments for User ${assignCourseDialogUser?.id}`}
         dialogIsOpen={assignCourseDialogIsOpen}
         tableTitleAssigned={`Current Courses for User ${assignCourseDialogUser?.id}`}
         tableTitleAll={`All Courses`}
