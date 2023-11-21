@@ -334,12 +334,10 @@ const UserManagement = (props) => {
   }
 
 
-  const handleDelete = async () => {
+  const handleDelete = async (userId) => {
     try {
-      const user = deleteDialogUser;
-
       const response = await axios.delete(
-        `http://localhost:9000/api/users/${user.id}`,
+        `http://localhost:9000/api/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -349,7 +347,7 @@ const UserManagement = (props) => {
       fetchData();
 
       setSnackbarSeverity("success")
-      setSnackbarText(`User ${user.id} has been deleted`);
+      setSnackbarText(`User ${userId} has been deleted`);
       setSnackbarOpen(true);
 
       if (response.status === 200 || response.status === 204) {
@@ -360,7 +358,7 @@ const UserManagement = (props) => {
       console.error("Error handling delete operation:", error);
 
       setSnackbarSeverity("error")
-      setSnackbarText(`User ${user.id} could not be deleted`);
+      setSnackbarText(`User ${userId} could not be deleted`);
       setSnackbarOpen(true);
     }
 
