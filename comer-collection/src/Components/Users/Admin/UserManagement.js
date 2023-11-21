@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import axios from "axios";
 import {
-  Paper,
   Stack,
-  TableContainer, 
   Button,
   Typography,
   Switch, useTheme, Box, IconButton} from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
@@ -27,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
 import { UserCreateDialog } from "../Tools/Dialogs/UserCreateDialog";
 import { UserEditDialog } from "../Tools/Dialogs/UserEditDialog";
+import { DataTable } from "../Tools/DataTable";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -391,7 +386,7 @@ const UserManagement = (props) => {
   }, [])
 
 
-  const tableFields = [
+  const userTableFields = [
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
@@ -641,31 +636,7 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
-          <Table stickyHeader size="small" sx={{ width: "100%" }}>
-            <TableHead>
-              <TableRow>
-                {tableFields.map((tf) => {
-                  return tf.generateTableHeaderCell()
-                })}
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {usersToDisplay.map((user) => (
-                  <TableRow key={user.id} sx={{
-                    [`&:hover`]: {
-                      backgroundColor: "#EEE"
-                    }
-                  }}>
-                    {tableFields.map((tf) => {
-                      return tf.generateTableCell(user);
-                    })}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DataTable items={usersToDisplay} tableFields={userTableFields} />
           {
             usersToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
