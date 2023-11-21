@@ -9,8 +9,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton, DialogContentText, TextField, Divider
-} from "@mui/material";
+  Switch, useTheme, Box, IconButton, DialogContentText, TextField} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -29,19 +28,20 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
+import { UserCreateDialog } from "../Tools/Dialogs/UserCreateDialog";
 
 
-const addDialogReducer = (addDialogUsers, action) => {
+const createDialogReducer = (createDialogUsers, action) => {
   switch (action.type) {
     case 'add':
-      return [...addDialogUsers, {
+      return [...createDialogUsers, {
         family_name: "",
         given_name: "",
         email: ""
       }]
 
     case 'change':
-      return addDialogUsers.map((r, i) => {
+      return createDialogUsers.map((r, i) => {
         if(action.index == i)
           return {...r, [action.field]: action.newValue};
         else
@@ -49,7 +49,7 @@ const addDialogReducer = (addDialogUsers, action) => {
       })
       
     case 'remove':
-      return addDialogUsers.filter((r, i) => {
+      return createDialogUsers.filter((r, i) => {
         return action.index != i;
       })
 
@@ -75,8 +75,8 @@ const UserManagement = (props) => {
   const [editDialogFieldGivenName, setEditDialogFieldGivenName] = useState('');
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
-  const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
-  const [addDialogUsers, addDialogDispatch] = useReducer(addDialogReducer, []);
+  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [createDialogUsers, createDialogDispatch] = useReducer(createDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -215,8 +215,8 @@ const UserManagement = (props) => {
     fetchData();
 
     if(usersCreated == newUserArray.length) {
-      setAddDialogIsOpen(false);
-      addDialogDispatch({
+      setCreateDialogIsOpen(false);
+      createDialogDispatch({
         type: "set",
         newArray: []
       })
@@ -237,7 +237,7 @@ const UserManagement = (props) => {
       }
       setSnackbarOpen(true);
 
-      addDialogDispatch({
+      createDialogDispatch({
         type: "set",
         newArray: newUserArray.filter((u, i) => {
           return userIndicesWithErrors.includes(i);
@@ -404,7 +404,7 @@ const UserManagement = (props) => {
             </Button>
             <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
               onClick={() => {
-                setAddDialogIsOpen(true);
+                setCreateDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Users</Typography>
@@ -599,100 +599,7 @@ const UserManagement = (props) => {
             )
           }
 
-      <Dialog component="form" fullWidth={true} maxWidth="lg"
-        open={addDialogIsOpen}
-        onClose={(event, reason) => {
-          if(reason == "backdropClick")
-            return;
-          setAddDialogIsOpen(false);
-        }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleUsersCreate([...addDialogUsers]);
-        }}
-      >
-        <DialogTitle textAlign="center" variant="h4">Create Users</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2}>
-          <DialogContentText variant="body1">
-            Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user.
-          </DialogContentText>
-            {addDialogUsers.map((u, index) => (
-            <Stack key={index} direction="row" spacing={2} alignItems="center">
-              <DialogContentText variant="body1">{index + 1}</DialogContentText>
-              <TextField label="First Name" autoFocus value={u.given_name} sx={{width: "100%"}}
-                onChange={(e) => {
-                  addDialogDispatch({
-                    type: 'change',
-                    field: 'given_name',
-                    index: index,
-                    newValue: e.target.value
-                  })
-                }} 
-              />
-              <TextField label="Last Name" value={u.family_name} sx={{width: "100%"}}
-                onChange={(e) => {
-                  addDialogDispatch({
-                    type: 'change',
-                    field: 'family_name',
-                    index: index,
-                    newValue: e.target.value
-                  })
-                }} 
-              />
-              <TextField label="Email" inputProps={{required: true}} value={u.email} sx={{width: "100%"}}
-                onChange={(e) => {
-                  addDialogDispatch({
-                    type: 'change',
-                    field: 'email',
-                    index: index,
-                    newValue: e.target.value
-                  })
-                }} 
-              />
-              <IconButton onClick={() => {
-                addDialogDispatch({
-                  type: 'remove',
-                  index: index
-                })
-              }}>
-                <DeleteIcon />
-              </IconButton>
-            </Stack>
-          ))}
-          <Divider />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
-            <Button color="primary" variant="outlined" size="large" onClick={() => {
-              setAddDialogIsOpen(false);
-              addDialogDispatch({
-                type: "set",
-                newArray: []
-              })
-            }}>
-              <Typography variant="body1">Cancel</Typography>
-            </Button>
-          <Stack direction="row" spacing={1} sx={{width: "50%"}}>
-            <Button color="primary" 
-              variant={addDialogUsers.length ? "outlined" : "contained"}
-              size="large" sx={{width: "100%"}} onClick={(e) => {
-              addDialogDispatch({
-                type: 'add'
-              })
-            }}>
-              <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
-            </Button>
-          <Button type="submit" color="primary" variant="contained" size="large"  sx={{width: "100%"}}
-            disabled={addDialogUsers.length == 0}>
-            <Typography variant="body1">Create</Typography>
-          </Button>
-          </Stack>
-          </Stack>
-          </DialogActions>
-      </Dialog>
-
+      <UserCreateDialog {...{ createDialogUsers, createDialogIsOpen, setCreateDialogIsOpen, handleUsersCreate, createDialogDispatch }} />
 
       <Dialog component="form"
         open={editDialogIsOpen}
@@ -756,5 +663,6 @@ const UserManagement = (props) => {
     </>
   );
 }
+
 
 export default UserManagement;
