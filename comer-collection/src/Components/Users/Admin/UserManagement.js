@@ -537,7 +537,7 @@ const UserManagement = (props) => {
         <DialogContent>
           <Stack spacing={2}>
           <DialogContentText>
-            <Typography variant="body1">Add users, edit the user fields, then click 'Save'.</Typography>
+            <Typography variant="body1">Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user.</Typography>
           </DialogContentText>
             {addDialogUsers.map((u, index) => (
             <Stack key={index} direction="row" spacing={2} alignItems="center">
