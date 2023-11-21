@@ -609,32 +609,36 @@ const UserManagement = (props) => {
             </Stack>
           ))}
           <Divider />
-          <Button color="primary" 
-            variant={addDialogUsers.length ? "outlined" : "contained"}
-            size="large" sx={{minWidth: "100px"}} onClick={(e) => {
-            setAddDialogUsers([...addDialogUsers, {
-              family_name: "",
-              given_name: "",
-              email: ""
-            }])
-            e.target.focus();
-          }}>
-            <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
-          </Button>
           </Stack>
         </DialogContent>
-          <DialogActions>
-            <Button color="primary" variant="outlined" size="large" sx={{minWidth: "100px"}} onClick={() => {
+        <DialogActions>
+          <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
+            <Button color="primary" variant="outlined" size="large" onClick={() => {
               setAddDialogIsOpen(false);
               setAddDialogSubmitEnabled(false);
               setAddDialogUsers([]);
             }}>
               <Typography variant="body1">Cancel</Typography>
             </Button>
-            <Button type="submit" color="primary" variant="contained" size="large"  sx={{minWidth: "100px"}}
-              disabled={addDialogUsers.length == 0}>
-              <Typography variant="body1">Create</Typography>
+          <Stack direction="row" spacing={1} sx={{width: "50%"}}>
+            <Button color="primary" 
+              variant={addDialogUsers.length ? "outlined" : "contained"}
+              size="large" sx={{width: "100%"}} onClick={(e) => {
+              setAddDialogUsers([...addDialogUsers, {
+                family_name: "",
+                given_name: "",
+                email: ""
+              }])
+              e.target.focus();
+            }}>
+              <Typography variant="body1">{addDialogUsers.length ? "Add another user" : "Add User"}</Typography>
             </Button>
+          <Button type="submit" color="primary" variant="contained" size="large"  sx={{width: "100%"}}
+            disabled={addDialogUsers.length == 0}>
+            <Typography variant="body1">Create</Typography>
+          </Button>
+          </Stack>
+          </Stack>
           </DialogActions>
       </Dialog>
 
