@@ -27,7 +27,8 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete"
+import DeleteIcon from "@mui/icons-material/Delete";
+import { UserDeleteDialog } from "../Tools/Dialogs/UserDeleteDialog";
 
 
 const addDialogReducer = (addDialogUsers, action) => {
@@ -752,35 +753,8 @@ const UserManagement = (props) => {
           </DialogActions>
       </Dialog>
 
-      <Dialog fullWidth={true} maxWidth="sm"
-        open={deleteDialogIsOpen}
-        onClose={(event, reason) => {
-          if(reason == "backdropClick")
-            return;
-          setDeleteDialogIsOpen(false);
-        }}
-      >
-        <DialogTitle variant="h4" textAlign="center">Delete User</DialogTitle>
+      <UserDeleteDialog {...{ deleteDialogUser, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
-        <DialogContent>
-          <DialogContentText variant="body1">Are you sure you want to delete user {deleteDialogUser?.id}?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Stack direction="row" justifyContent="space-between" spacing={1} sx={{width: "100%"}}>
-          <Button color="primary" variant="outlined" sx={{width: "100%"}} onClick={() => {
-              setDeleteDialogIsOpen(false);
-            }}>
-              <Typography variant="body1">Cancel</Typography>
-            </Button>
-            <Button color="error" variant="contained" size="large" startIcon={<DeleteIcon />}  sx={{width: "100%"}} onClick={() => {
-              handleDelete(deleteDialogUser.id);
-            }}>
-              <Typography variant="body1">Delete</Typography>
-              
-            </Button>
-          </Stack>
-          </DialogActions>
-      </Dialog>
     </>
   );
 }
