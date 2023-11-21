@@ -1,227 +1,490 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box, TextField, Typography, Button, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material";
-import Unauthorized from '../../ErrorPages/Unauthorized';
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import axios from "axios";
+import {
+  Stack,
+  Button,
+  Typography,
+  Switch, useTheme, Box, IconButton
+} from "@mui/material";
+import TableCell from "@mui/material/TableCell";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Unauthorized from "../../ErrorPages/Unauthorized";
+import SearchBox from "../Tools/SearchBox";
+import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { ColumnSortButton } from "../Tools/ColumnSortButton";
+import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import LockResetIcon from "@mui/icons-material/LockReset";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
+import { DataTable } from "../Tools/DataTable";
 
-const dateOptions = {month: "long", day: "numeric", year: "numeric"};
 
-const Course = (props) => {
-  const [courses, setCourses] = useState([]);
-  const [newCourseTitle, setNewCourseTitle] = useState('');
-  const [newCourseStartDate, setNewCourseStartDate] = useState('');
-  const [newCourseEndDate, setNewCourseEndDate] = useState('');
-  const [selectedCourse, setSelectedCourse] = useState('null');
-  const [newCurators, setNewCurators] = useState([]);
+const createCourseDialogReducer = (createDialogCourses, action) => {
+  switch (action.type) {
+    case 'add':
+      return [...createDialogCourses, {
+        name: "",
+        date_start: "",
+        date_end: "",
+        notes: ""
+      }]
 
-  const { appUser, setSelectedNavItem } = props;
+    case 'change':
+      return createDialogCourses.map((r, i) => {
+        if(action.index == i)
+          return {...r, [action.field]: action.newValue};
+        else
+          return r;
+      })
+      
+    case 'remove':
+      return createDialogCourses.filter((r, i) => {
+        return action.index != i;
+      })
+
+    case 'set':
+      return action.newArray;
   
+    default:
+      throw Error("Unknown action type");
+  }
+}
+
+const CourseManagement = (props) => {
+  const [courses, setCourses] = useState([]);
+  const [refreshInProgress, setRefreshInProgress] = useState(true);
+
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogCourse, setDeleteDialogCourse] = useState(null);
+
+  const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
+  const [editDialogCourse, setEditDialogCourse] = useState(null);
+  const [editDialogFields, setEditDialogFields] = useState({name: '', date_start: '', date_end: ''});
+  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+  const editDialogFieldNames = [
+    {
+      fieldName: "name",
+      displayName: "Course Name"
+    },
+    {
+      fieldName: "date_start",
+      displayName: "Start"
+    },
+    {
+      fieldName: "date_end",
+      displayName: "End"
+    }
+  ]
+  const createDialogFieldNames = editDialogFieldNames;
+
+  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const clearFilters = () => {
+    setSearchQuery("");
+  }
+
+
+  const [sortColumn, setSortColumn] = useState("ID");
+  const [sortAscending, setSortAscending] = useState(true);
+
+
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+    snackbarOpen, snackbarText, snackbarSeverity,
+    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const theme = useTheme();
+  
+
   useEffect(() => {
-    setSelectedNavItem("Course Management")
-    const fetchData = async () => {
+    setSelectedNavItem("Course Management");
+    if(appUser.is_admin) {
+      fetchData();
+    }
+  }, []); 
+
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/courses", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const courseData = response.data;
+
+      setCourses(courseData.data);
+      setTimeout(() => {
+        setRefreshInProgress(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  /*
+    Course display:
+    Step 1: apply column filters
+    Step 2: apply search query
+    Step 3: apply sorting order
+  */
+
+  const filterCourses = () => {
+    return courses.filter((course) => {
+      return true;
+      // return (
+      //   // filter by course type
+      //   !courseTypeFilter || courseTypeFilter == "Administrator" && course.is_admin || courseTypeFilter == "Curator" && !course.is_admin
+      // ) && (
+      //   // filter by course activation status
+      //   !courseActivationStatusFilter || courseActivationStatusFilter == "Active" && course.is_active || courseActivationStatusFilter == "Inactive" && !course.is_active
+      // ) && (
+      //   // filter by password type
+      //   !coursePasswordTypeFilter || coursePasswordTypeFilter == "Temporary" && course.pw_temp || coursePasswordTypeFilter == "Permanent" && !course.pw_temp
+      // )
+    })
+  }
+
+
+  const filteredCourses = useMemo(() => filterCourses(
+    // 
+  ), [
+    courses
+  ])
+
+
+  const searchCourses = (searchQuery) => {
+    return filteredCourses.filter((course) => {
+      return searchQuery == "" ||
+        Boolean((course.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean((course.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(course.given_name ?? "").toLowerCase()} ${(course.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(course.family_name ?? "").toLowerCase()}, ${(course.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(course.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
+    })
+  }
+
+  const filteredAndSearchedCourses = useMemo(() => searchCourses(searchQuery), [filteredCourses, searchQuery])
+
+  const coursesToDisplay = filteredAndSearchedCourses.sort((a, b) => {
+    if(sortColumn == "Name")
+      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+    else if(sortColumn == "ID")
+      return !sortAscending ^ (a.id > b.id);
+    else if(sortColumn == "Email")
+      return !sortAscending ^ (a.email > b.email)
+  })
+  
+
+  const handleDeleteClick = (courseId) => {
+    setDeleteDialogCourse({ courseId });
+    setDeleteDialogIsOpen(true);
+  };
+
+
+  const handleCoursesCreate = async(newCourseArray) => {
+    let coursesCreated = 0;
+    let courseIndicesWithErrors = []
+    for(const [i, newCourseData] of newCourseArray.entries()) {
       try {
-        const response = await axios.get('http://localhost:9000/api/courses', {
+        let { email, given_name, family_name } = newCourseData;
+        await axios.post(
+          `http://localhost:9000/api/courses`, { email, given_name, family_name },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        coursesCreated++;
+  
+      } catch (error) {
+        console.error(`Error creating course ${JSON.stringify(newCourseData)}: ${error}`);
+        courseIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(coursesCreated == newCourseArray.length) {
+      setCreateDialogIsOpen(false);
+      createDialogDispatch({
+        type: "set",
+        newArray: []
+      })
+
+      setSnackbarText(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(coursesCreated < newCourseArray.length) {
+
+      if(coursesCreated > 0) {
+        setSnackbarText(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+      createDialogDispatch({
+        type: "set",
+        newArray: newCourseArray.filter((u, i) => {
+          return courseIndicesWithErrors.includes(i);
+        })
+      })
+    }
+
+
+  }
+
+
+  const handleCourseEdit = async(courseId, updateFields) => {
+    const { name, date_start, date_end } = updateFields;
+    try {
+      await axios.put(
+        `http://localhost:9000/api/courses/${courseId}`, { name, date_start, date_end },
+        {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        });
-        
-        console.log('Fetched data:', response.data); 
-        setCourses(response.data);
-        
-        if (response.data && Array.isArray(response.data.data)) {
-          setCourses(response.data.data);
-          setSelectedCourse("");
-        } else {
-          console.error("Response Data Error:", response.data);
         }
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
+      );
+      fetchData();
 
-      if(appUser.is_admin) {
-        fetchData();
-      }
-    }
+      setEditDialogIsOpen(false);
+      setEditDialogFields({name: '', date_start: '', date_end: ''})
 
-  }, []);
+      setSnackbarText(`Successfully edited course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
 
-  const handleCreateCourse = async () => {
-    try {
-      // Log before making the request
-      const courseData = {
-        name: newCourseTitle,
-        date_start: newCourseStartDate,
-        date_end: newCourseEndDate,
-      };
-
-      await axios.post('http://localhost:9000/api/courses', courseData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const response = await axios.get('http://localhost:9000/api/courses', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-  
-      const updatedCourses = response.data.data;
-      setCourses(updatedCourses);
-  
-      // Clear input fields
-      setNewCourseTitle('');
-      setNewCourseStartDate('');
-      setNewCourseEndDate('');
     } catch (error) {
-      console.error('Error adding course:', error);
-      if (error.response) {
-        console.error('Response Data:', error.response.data);
-        console.error('Status Code:', error.response.status);
-      }
-    }
-  };
+      console.error(`Error editing course ${courseId}: ${error}`);
 
-  const handleAddUserToCourse = async () => {
-    if (!selectedCourse || newCurators.length === 0) {
-      alert('Please input the course and enter at least one Net ID.');
-      return;
+      setSnackbarText(`Error editing for course ${courseId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  }
 
+
+
+  const handleDelete = async (courseId) => {
     try {
-      await axios.post(`/api/courses/${selectedCourse}/users/${newCurators}`, {
-        userNames: newCurators,
+      const response = await axios.delete(
+        `http://localhost:9000/api/courses/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
 
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      setSnackbarSeverity("success")
+      setSnackbarText(`Course ${courseId} has been deleted`);
+      setSnackbarOpen(true);
 
-      await axios.post(`/api/courses/${selectedCourse}/users/${newCurators}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      setNewCurators([]);
+      if (response.status === 200 || response.status === 204) {
+      } else {
+        console.error("Error deleting course:", response.statusText);
+      }
     } catch (error) {
-      console.error('Error adding users to course:', error);
+      console.error("Error handling delete operation:", error);
+
+      setSnackbarSeverity("error")
+      setSnackbarText(`Course ${courseId} could not be deleted`);
+      setSnackbarOpen(true);
     }
+
+    setDeleteDialogIsOpen(false);
+    setDeleteDialogCourse(null);
   };
 
-  const handleCourseChange = (event) => {
-    setSelectedCourse(event.target.value);
-  };
+
+
+  const courseTableFields = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Name",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.name}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Start",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Start</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{new Date (course.date_start).toLocaleString()}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "End",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">End</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{new Date (course.date_end).toLocaleString()}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Enrollment",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Enrollment</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <Typography variant="body1">{course.Users.length}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Options",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Options</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (course) => (
+        <TableCell>
+          <IconButton 
+            onClick={(e) => {
+              setEditDialogCourse(course);
+              const { name, date_start, date_end } = course;
+              setEditDialogFields({ name, date_start, date_end });
+              setEditDialogSubmitEnabled(true);
+              setEditDialogIsOpen(true)
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            disabled={course.Users.length > 0} 
+            onClick={(e) => {
+              setDeleteDialogCourse(course);
+              setDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
+      )
+    }
+  ]
+
+
 
   return !appUser.is_admin && (
-      <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) ||
-    appUser.is_admin && (
-    <div style={{ maxWidth: "70%", margin: "auto", overflowY: "auto" }}>
-      <h1 style={{ textAlign: "center" }}>Courses List</h1>
-      <h3>Create Course</h3>
-      <Box component="form">
-        <Stack spacing={2}>
-          <TextField 
-            label="Course Title"
-            variant='outlined' 
-            value={newCourseTitle}
-            onChange={(e) => setNewCourseTitle(e.target.value)}
-          />
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography>Start:</Typography>
-            <TextField 
-              variant='outlined' 
-              size="small"
-              value={newCourseStartDate}
-              onChange={(e) => setNewCourseStartDate(e.target.value)}
-              inputProps={{type: 'datetime-local'}}
-            />
-            <Typography>End: </Typography>
-            <TextField 
-              variant='outlined' 
-              size="small"
-              value={newCourseEndDate}
-              onChange={(e) => setNewCourseEndDate(e.target.value)}
-              inputProps={{type: 'datetime-local'}}
-            />
-          </Stack>
-          <Stack
-            direction="row"
-            spacing={2}
-            style={{ display: "block", textAlign: "center" }}
-          >
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleCreateCourse}
-              disabled={
-                !Boolean(
-                  newCourseTitle && newCourseStartDate && newCourseEndDate
-                )
-              }
-            >
-              <Typography>Create Course</Typography>
+    <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  appUser.is_admin && (
+    <>
+        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by name or email" width="50%" />
+          <Stack direction="row" spacing={2}>
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+              setRefreshInProgress(true);
+              fetchData();
+            }}
+              disabled={refreshInProgress}>
+              <Typography variant="body1">Refresh</Typography>
             </Button>
-            <Button
-              variant="outlined"
-              size="large"
+            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+              disabled={
+                !Boolean(searchQuery)
+              }>
+              <Typography variant="body1">Clear Filters</Typography>
+            </Button>
+            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
               onClick={() => {
-                setNewCourseTitle('');
-                setNewCourseStartDate('');
-                setNewCourseEndDate('');
+                setCreateDialogIsOpen(true);
               }}
             >
-              <Typography>Clear</Typography>
+              <Typography variant="body1">Create Courses</Typography>
             </Button>
           </Stack>
         </Stack>
-      </Box>
+        <DataTable items={coursesToDisplay} tableFields={courseTableFields} />
+          {
+            coursesToDisplay.length == 0 && (
+              <Box sx={{width: '100%'}}>
+                <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
+                  <PersonSearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
+                  <Typography variant="h4">No courses found</Typography>
+                  <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
+                    <Typography variant="body1">Clear Filters</Typography>
+                  </Button>
+                </Stack>
+              </Box>
+            )
+          }
 
-      <h3>Enroll Curators in Course</h3>
+      <ItemMultiCreateDialog entity="course" 
+        dialogTitle={"Create Courses"}
+        dialogInstructions={"Add courses, edit the course fields, then click 'Create'."}
+        createDialogItems={createDialogCourses}
+        handleItemsCreate={handleCoursesCreate}
+        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
-      <Box component="form">
-        <Stack spacing={2}>
-        <FormControl variant="outlined" style={{ width: "100%" }}>
-          <InputLabel>Select Course</InputLabel>
-          <Select
-            value={selectedCourse}
-            onChange={handleCourseChange}
-            label="Select Course"
-          >
-            {courses.map((course) => (
-              <MenuItem key={course.id} value={course.id} sx={{textOverflow: "ellipsis"}}>
-                <Typography width="30%" sx={{textOverflow: "ellipsis"}}>{course.name}</Typography>
-                <Typography width="20%" sx={{opacity: 0.5}}>{
-                  new Date(course.date_start).toLocaleDateString("en-US", dateOptions)
-                } - {
-                  new Date(course.date_end).toLocaleDateString("en-US", dateOptions)
-                }</Typography>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <ItemSingleEditDialog 
+        entity="course"
+        dialogTitle={"Edit Course"}
+        dialogInstructions={"Edit the course fields, then click 'Save'."}
+        editDialogItem={editDialogCourse}
+        handleItemEdit={handleCourseEdit}
+        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
-        <TextField
-          label="Email"
-          variant="outlined"
-          value={newCurators.join(",")}
-          onChange={(e) => setNewCurators(e.target.value.split(","))}
-        />
-        <Stack spacing={2} direction="row" style={{ display: "block", textAlign: "center" }}>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleAddUserToCourse}
-          disabled={!Boolean(selectedCourse && newCurators.length > 0)}
-        >
-          <Typography>Enroll</Typography>
-        </Button>
-        </Stack>
-        </Stack>
-      </Box>
-    </div>
+      <ItemSingleDeleteDialog 
+        entity="course"
+        dialogTitle="Delete Course"
+        deleteDialogItem={deleteDialogCourse}
+        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+
+    </>
   );
-};
+}
 
-export default Course;
+
+export default CourseManagement;
