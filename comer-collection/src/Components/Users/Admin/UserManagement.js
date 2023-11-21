@@ -31,11 +31,11 @@ import DeleteIcon from "@mui/icons-material/Delete"
 
 
 const UserManagement = (props) => {
-  const [curators, setCurators] = useState([]);
+  const [users, setUsers] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [curatorToDelete, setCuratorToDelete] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
@@ -89,9 +89,9 @@ const UserManagement = (props) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const curatorData = response.data;
+      const userData = response.data;
 
-      setCurators(curatorData.data);
+      setUsers(userData.data);
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
@@ -101,49 +101,49 @@ const UserManagement = (props) => {
   };
 
   /*
-    Curator display:
+    User display:
     Step 1: apply column filters
     Step 2: apply search query
     Step 3: apply sorting order
   */
 
-  const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter) => {
-    return curators.filter((curator) => {
+  const filterUsers = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter) => {
+    return users.filter((user) => {
       return (
         // filter by user type
-        !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
+        !userTypeFilter || userTypeFilter == "Administrator" && user.is_admin || userTypeFilter == "Curator" && !user.is_admin
       ) && (
         // filter by user activation status
-        !userActivationStatusFilter || userActivationStatusFilter == "Active" && curator.is_active || userActivationStatusFilter == "Inactive" && !curator.is_active
+        !userActivationStatusFilter || userActivationStatusFilter == "Active" && user.is_active || userActivationStatusFilter == "Inactive" && !user.is_active
       ) && (
         // filter by password type
-        !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && curator.pw_temp || userPasswordTypeFilter == "Permanent" && !curator.pw_temp
+        !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && user.pw_temp || userPasswordTypeFilter == "Permanent" && !user.pw_temp
       )
     })
   }
 
 
-  const filteredCurators = useMemo(() => filterCurators(
+  const filteredUsers = useMemo(() => filterUsers(
     userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
   ), [
-    curators, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+    users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
   ])
 
 
-  const searchCurators = (searchQuery) => {
-    return filteredCurators.filter((curator) => {
+  const searchUsers = (searchQuery) => {
+    return filteredUsers.filter((user) => {
       return searchQuery == "" ||
-        Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean((curator.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-        Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
+        Boolean((user.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean((user.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(user.given_name ?? "").toLowerCase()} ${(user.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(user.family_name ?? "").toLowerCase()}, ${(user.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(user.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
     })
   }
 
-  const filteredAndSearchedCurators = useMemo(() => searchCurators(searchQuery), [filteredCurators, searchQuery])
+  const filteredAndSearchedUsers = useMemo(() => searchUsers(searchQuery), [filteredUsers, searchQuery])
 
-  const curatorsToDisplay = filteredAndSearchedCurators.sort((a, b) => {
+  const usersToDisplay = filteredAndSearchedUsers.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
@@ -153,8 +153,8 @@ const UserManagement = (props) => {
   })
   
 
-  const handleDeleteClick = (curatorId) => {
-    setCuratorToDelete({ curatorId });
+  const handleDeleteClick = (userId) => {
+    setUserToDelete({ userId });
     setDeleteConfirmation(true);
   };
 
@@ -299,10 +299,10 @@ const UserManagement = (props) => {
 
   const handleDelete = async () => {
     try {
-      const { curatorId } = curatorToDelete;
+      const { userId } = userToDelete;
 
       const response = await axios.delete(
-        `http://localhost:9000/api/users/${curatorId}`,
+        `http://localhost:9000/api/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -313,22 +313,22 @@ const UserManagement = (props) => {
       if (response.status === 200 || response.status === 204) {
         fetchData();
       } else {
-        console.error("Error deleting curator:", response.statusText);
+        console.error("Error deleting user:", response.statusText);
       }
     } catch (error) {
       console.error("Error handling delete operation:", error);
     } finally {
       setDeleteConfirmation(false);
-      setCuratorToDelete(null);
+      setUserToDelete(null);
     }
   };
 
 
-  const handleCopyToClipboard = useCallback((curator) => {
+  const handleCopyToClipboard = useCallback((user) => {
     try {
-      navigator.clipboard.writeText(curator.pw_temp);
+      navigator.clipboard.writeText(user.pw_temp);
       setSnackbarSeverity("success")
-      setSnackbarText(`Password for user ${curator.id} copied to clipboard`);
+      setSnackbarText(`Password for user ${user.id} copied to clipboard`);
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error")
@@ -369,7 +369,7 @@ const UserManagement = (props) => {
           </Stack>
         </Stack>
         <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 100px)' }}>
-          <Table stickyHeader size="small" aria-label="curator table" sx={{ width: "100%" }}>
+          <Table stickyHeader size="small" aria-label="user table" sx={{ width: "100%" }}>
             <TableHead>
               <TableRow>
                 <TableCell sx={{backgroundColor: "#CCC"}}>
@@ -451,40 +451,40 @@ const UserManagement = (props) => {
             </TableHead>
 
             <TableBody>
-              {curatorsToDisplay.map((curator) => (
-                  <TableRow key={curator.id} sx={{
+              {usersToDisplay.map((user) => (
+                  <TableRow key={user.id} sx={{
                     [`&:hover`]: {
                       backgroundColor: "#EEE"
                     }
                   }}>
                     <TableCell>
-                      <Typography variant="body1">{curator.id}</Typography>
+                      <Typography variant="body1">{user.id}</Typography>
                     </TableCell>
                     <TableCell>
                       {
-                        curator.family_name || curator.given_name ? (
-                          <Typography variant="body1">{curator.family_name ?? ""}, {curator.given_name ?? ""}</Typography>
+                        user.family_name || user.given_name ? (
+                          <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
                         ) : (
                           <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
                         )
                       }
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1">{curator.email}</Typography>
+                      <Typography variant="body1">{user.email}</Typography>
                     </TableCell>
                     <TableCell>
-                      {curator.pw_temp ? (
+                      {user.pw_temp ? (
                         <Button startIcon={<ContentCopyIcon />}
                           variant="outlined"
-                          onClick={() => {handleCopyToClipboard(curator)}}>
+                          onClick={() => {handleCopyToClipboard(user)}}>
                           <Typography variant="body1">Copy</Typography>
                         </Button>
                       ) : (
                         <Button 
                           startIcon={<LockResetIcon />}
-                          itemID={curator.id}
+                          itemID={user.id}
                           variant="outlined" 
-                          disabled={appUser.id == curator.id}
+                          disabled={appUser.id == user.id}
                           onClick={(e) => {
                             handleResetPassword(e.target.parentElement.attributes.itemid.value);
                           }}>
@@ -493,21 +493,21 @@ const UserManagement = (props) => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1">{curator.Courses.length}</Typography>
+                      <Typography variant="body1">{user.Courses.length}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1">{curator.Exhibitions.length}</Typography>
+                      <Typography variant="body1">{user.Exhibitions.length}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1">{curator.is_admin ? "Administrator" : "Curator"}</Typography>
+                      <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
                     </TableCell>
 
 
                     <TableCell>
                       <Switch 
-                        itemID={curator.id}
-                        checked={curator.is_active} 
-                        disabled={curator.is_admin} 
+                        itemID={user.id}
+                        checked={user.is_active} 
+                        disabled={user.is_admin} 
                         onClick={(e) => {
                           handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
                         }}
@@ -515,12 +515,12 @@ const UserManagement = (props) => {
                     </TableCell>
                     <TableCell>
                       <IconButton 
-                        disabled={curator.is_admin} 
+                        disabled={user.is_admin} 
                         onClick={(e) => {
-                          setEditDialogUser(curator);
-                          setEditDialogFieldEmail(curator.email);
-                          setEditDialogFieldFamilyName(curator.family_name);
-                          setEditDialogFieldGivenName(curator.given_name);
+                          setEditDialogUser(user);
+                          setEditDialogFieldEmail(user.email);
+                          setEditDialogFieldFamilyName(user.family_name);
+                          setEditDialogFieldGivenName(user.given_name);
                           setEditDialogSubmitEnabled(true);
                           setEditDialogIsOpen(true)
                         }}
@@ -534,7 +534,7 @@ const UserManagement = (props) => {
           </Table>
         </TableContainer>
           {
-            curatorsToDisplay.length == 0 && (
+            usersToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
                 <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
                   <PersonSearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
@@ -705,12 +705,12 @@ const UserManagement = (props) => {
         // className={classes.dialog}
       >
         <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
-          Delete Curator
+          Delete User
         </DialogTitle>
 
         <DialogContent>
-          Are you sure you want to delete this curator 
-          {/* "{curatorToDelete?.curatorId}" */}
+          Are you sure you want to delete this user 
+          {/* "{userToDelete?.userId}" */}
           ?
         </DialogContent>
 
