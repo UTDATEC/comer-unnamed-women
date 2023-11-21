@@ -100,24 +100,30 @@ const UserManagement = (props) => {
     }
   };
 
-  const curatorsToDisplay = curators
-  .filter((curator) => {
-    return !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
-  })
-  .filter((curator) => {
-    return !userActivationStatusFilter || userActivationStatusFilter == "Active" && curator.is_active || userActivationStatusFilter == "Inactive" && !curator.is_active
-  })
-  .filter((curator) => {
-    return !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && curator.pw_temp || userPasswordTypeFilter == "Permanent" && !curator.pw_temp
-  })
-  .filter((curator) => {
-    return searchQuery == "" ||
-    Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-    Boolean((curator.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
-    Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-    Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
-    Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
-  })
+  const filterCurators = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery) => {
+    return curators.filter((curator) => {
+      return (
+        // filter by user type
+        !userTypeFilter || userTypeFilter == "Administrator" && curator.is_admin || userTypeFilter == "Curator" && !curator.is_admin
+      ) && (
+        // filter by user activation status
+        !userActivationStatusFilter || userActivationStatusFilter == "Active" && curator.is_active || userActivationStatusFilter == "Inactive" && !curator.is_active
+      ) && (
+        // filter by password type
+        !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && curator.pw_temp || userPasswordTypeFilter == "Permanent" && !curator.pw_temp
+      ) && (
+        // filter by search query (name and email)
+        searchQuery == "" ||
+        Boolean((curator.family_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean((curator.given_name ?? "").toLowerCase().includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(curator.given_name ?? "").toLowerCase()} ${(curator.family_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(`${(curator.family_name ?? "").toLowerCase()}, ${(curator.given_name ?? "").toLowerCase()}`.includes(searchQuery.toLowerCase())) ||
+        Boolean(curator.email?.replace("@utdallas.edu", "").toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    })
+  }
+
+  const curatorsToDisplay = filterCurators(userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, searchQuery)
   .sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
