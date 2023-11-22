@@ -550,8 +550,8 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           {
-            user.family_name || user.given_name ? (
-              <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
+            user.has_name ? (
+              <Typography variant="body1">{user.full_name_reverse}</Typography>
             ) : (
               <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
             )

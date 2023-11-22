@@ -70,7 +70,7 @@ export default function NavBar(props) {
                 >
                   <Stack direction="row" alignContent="center" alignItems="center">
                     <Typography variant="h6" sx={{color: "white"}}>
-                      {Boolean(appUser.given_name && appUser.family_name) ? `${appUser.given_name} ${appUser.family_name}` : `${appUser.email}`}
+                      {appUser.safe_display_name}
                     </Typography>
                   </Stack>
                 </Button>
