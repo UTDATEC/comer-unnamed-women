@@ -26,6 +26,8 @@ import { getBlankItemFields } from "../Tools/HelperMethods";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import HeightIcon from "@mui/icons-material/Height";
 import PlaceIcon from "@mui/icons-material/Place";
+import SellIcon from "@mui/icons-material/Sell";
+import BrushIcon from "@mui/icons-material/Brush"
 import { filterItemFields } from "../Tools/HelperMethods";
 
 
@@ -367,19 +369,6 @@ const ImageManagement = (props) => {
       )
     },
     {
-      columnDescription: "Accession Number",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
-            <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
-      generateTableCell: (image) => (
-        <TableCell>
-          <Typography variant="body1">{image.accessionNumber}</Typography>
-        </TableCell>
-      )
-    },
-    {
       columnDescription: "Title",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
@@ -393,10 +382,23 @@ const ImageManagement = (props) => {
       )
     },
     {
+      columnDescription: "Accession Number",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Typography variant="body1">{image.accessionNumber}</Typography>
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "Year",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-            <ColumnSortButton columnName="Year" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+          <Typography variant="h6">Year</Typography>
         </TableCell>
       ),
       generateTableCell: (image) => (
@@ -409,7 +411,7 @@ const ImageManagement = (props) => {
       columnDescription: "Location",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-            <ColumnSortButton columnName="Location" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+          <Typography variant="h6">Location</Typography>
         </TableCell>
       ),
       generateTableCell: (image) => (
@@ -427,17 +429,17 @@ const ImageManagement = (props) => {
       columnDescription: "Dimensions",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-            <ColumnSortButton columnName="Dimensions" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+          <Typography variant="h6">Dimensions</Typography>
         </TableCell>
       ),
       generateTableCell: (image) => (
         <TableCell>
-          <Stack direction="row" spacing={1}>
-            <Stack direction="row" spacing={1} sx={{width: "40%"}}>
+          <Stack direction="column" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{width: "100%"}}>
               <HeightIcon sx={{transform: "rotate(90deg)"}} />
               <Typography variant="body1">{parseFloat(image.width)} in.</Typography>
             </Stack>
-            <Stack direction="row" spacing={0} sx={{width: "40%"}}>
+            <Stack direction="row" spacing={1} sx={{width: "100%"}}>
               <HeightIcon />
               <Typography variant="body1">{parseFloat(image.height)} in.</Typography>
             </Stack>
@@ -446,10 +448,35 @@ const ImageManagement = (props) => {
       )
     },
     {
+      columnDescription: "Tags",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Tags</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" 
+              color="primary"
+              disabled startIcon={<SellIcon />}
+              onClick={() => {
+                // setAssignCourseDialogUser(user);
+                // setAssignCourseDialogCourses([...user.Courses]);
+                // setAssignCourseDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{image.Tags.length}</Typography>
+            </Button>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "View",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-          <Typography variant="h6">View</Typography>
+          <Typography variant="h6">&nbsp;</Typography>
         </TableCell>
       ),
       generateTableCell: (image) => (
@@ -462,7 +489,7 @@ const ImageManagement = (props) => {
                 setBackdropOpen(true);
               }}
             >
-              <Typography variant="body1">Preview</Typography>
+              <Typography variant="body1">View</Typography>
             </Button>
           )}
         </TableCell>
@@ -477,26 +504,28 @@ const ImageManagement = (props) => {
       ),
       generateTableCell: (image) => (
         <TableCell>
-          <IconButton 
-            onClick={(e) => {
-              setEditDialogImage(image);
-              const filteredImage = filterItemFields(imageFieldNames, image);
-              setEditDialogFields(filteredImage);
-              setEditDialogSubmitEnabled(true);
-              setEditDialogIsOpen(true)
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton 
-            // disabled={course.Users.length > 0} 
-            onClick={(e) => {
-              setDeleteDialogImage(image);
-              setDeleteDialogIsOpen(true);
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Stack direction="row">
+            <IconButton 
+              onClick={(e) => {
+                setEditDialogImage(image);
+                const filteredImage = filterItemFields(imageFieldNames, image);
+                setEditDialogFields(filteredImage);
+                setEditDialogSubmitEnabled(true);
+                setEditDialogIsOpen(true)
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton 
+              // disabled={course.Users.length > 0} 
+              onClick={(e) => {
+                setDeleteDialogImage(image);
+                setDeleteDialogIsOpen(true);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
         </TableCell>
       )
     }
@@ -509,7 +538,7 @@ const ImageManagement = (props) => {
   appUser.is_admin && (
     <>
         <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by image title, accession number, or notes" width="50%" />
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search image fields and notes" width="30%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
@@ -523,6 +552,20 @@ const ImageManagement = (props) => {
                 !Boolean(searchQuery)
               }>
               <Typography variant="body1">Clear Filters</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<SellIcon />}
+              onClick={() => {
+                // setCreateDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Tags</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
+              onClick={() => {
+                // setCreateDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Artists</Typography>
             </Button>
             <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
               onClick={() => {
