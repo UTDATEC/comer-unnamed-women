@@ -82,12 +82,13 @@ const changePassword = async(req, res, next) => {
 };
 
 const getCurrentUser = async(req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
+    userOperation(req, res, next, async(user_id, password_change_required) => {
         try {
             const user = await User.findByPk(user_id, {
                 include: [Course]
             });
-            res.status(200).json({ data: user });
+            const dataToSend = {...user.toJSON(), password_change_required}
+            res.status(200).json({ data: dataToSend });
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
         }

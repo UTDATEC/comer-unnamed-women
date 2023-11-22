@@ -40,7 +40,7 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
         else if(requireAdmin && !user.is_admin) 
             next(createError(403), { debugMessage: "Non-admin account in use when admin account is required"});
         
-        callback(user.id);
+        callback(user.id, Boolean(!user.getDataValue('pw_hash')));
 
     } 
     catch(err) {
