@@ -668,6 +668,31 @@ const ImageManagement = (props) => {
       )
     },
     {
+      columnDescription: "Artists",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Artists</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" 
+              color="primary"
+              disabled startIcon={<BrushIcon />}
+              onClick={() => {
+                // setAssignCourseDialogUser(user);
+                // setAssignCourseDialogCourses([...user.Courses]);
+                // setAssignCourseDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{image.Artists.length}</Typography>
+            </Button>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "Tags",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
