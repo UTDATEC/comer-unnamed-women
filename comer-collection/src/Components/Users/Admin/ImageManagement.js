@@ -1,194 +1,606 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Button, IconButton, Paper, Stack, TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
+import {
+  Stack,
+  Button,
+  Typography, useTheme, Box, IconButton
+} from "@mui/material";
 import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import Unauthorized from "../../ErrorPages/Unauthorized";
+import SearchBox from "../Tools/SearchBox";
+import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
+import { ColumnSortButton } from "../Tools/ColumnSortButton";
+import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Unauthorized from "../../ErrorPages/Unauthorized";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
+import { DataTable } from "../Tools/DataTable";
+import { searchItems } from "../Tools/SearchUtilities";
+import { useNavigate } from "react-router";
+import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
+import { getBlankItemFields } from "../Tools/HelperMethods";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import HeightIcon from "@mui/icons-material/Height";
+import PlaceIcon from "@mui/icons-material/Place";
+import { filterItemFields } from "../Tools/HelperMethods";
+
+
+const imageFieldNames = [
+  {
+    fieldName: "title",
+    displayName: "Image Title",
+    isRequired: true
+  },
+  {
+    fieldName: "accessionNumber",
+    displayName: "Accession Number",
+    isRequired: false
+  },
+  {
+    fieldName: "location",
+    displayName: "Location",
+    isRequired: false
+  },
+  {
+    fieldName: "width",
+    displayName: "Image Width",
+    isRequired: true,
+    inputType: "number"
+  },
+  {
+    fieldName: "height",
+    displayName: "Image Height",
+    isRequired: true,
+    inputType: "number"
+  },
+  {
+    fieldName: "year",
+    displayName: "Year",
+    isRequired: false,
+    inputType: "number"
+  },
+  {
+    fieldName: "url",
+    displayName: "URL",
+    inputType: "url"
+  },
+  {
+    fieldName: "notes",
+    displayName: "Notes",
+    inputType: "textarea"
+  }
+]
+
+
+const createImageDialogReducer = (createDialogImages, action) => {
+  switch (action.type) {
+    case 'add':
+      return [...createDialogImages, {
+        name: "",
+        date_start: "",
+        date_end: "",
+        notes: ""
+      }]
+
+    case 'change':
+      return createDialogImages.map((r, i) => {
+        if(action.index == i)
+          return {...r, [action.field]: action.newValue};
+        else
+          return r;
+      })
+      
+    case 'remove':
+      return createDialogImages.filter((r, i) => {
+        return action.index != i;
+      })
+
+    case 'set':
+      return action.newArray;
+  
+    default:
+      throw Error("Unknown action type");
+  }
+}
 
 const ImageManagement = (props) => {
   const [images, setImages] = useState([]);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState(null);
-  
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
-  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [refreshInProgress, setRefreshInProgress] = useState(true);
 
-  const imageColumns = {
-    id: "ID",
-    accessionNumber: "Accession Number",
-    title: "Title",
-    year: "Year",
-    medium: "Medium",
-    subject: "Subject",
-  };
-  const fetchImages = async () => {
-    try {
-      const response = await axios.get('http://localhost:9000/api/images');
-      const imageData = response.data;
-      console.log('Fetched image data:', imageData); 
-      setImages(response.data);
-    } catch (error) {
-      console.error('Error fetching images:', error);
-    }
-  };
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogImage, setDeleteDialogImage] = useState(null);
+
+  const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
+  const [editDialogImage, setEditDialogImage] = useState(null);
+  const [editDialogFields, setEditDialogFields] = useState(getBlankItemFields(imageFieldNames));
+  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+  const [backdropImage, setBackdropImage] = useState(null);
+  const [backdropOpen, setBackdropOpen] = useState(false);
+
+  const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
+  const [assignUserDialogImage, setAssignUserDialogImage] = useState(null);
+  const [assignUserDialogUsers, setAssignUserDialogUsers] = useState([]);
+  
+
+  const editDialogFieldNames = imageFieldNames;
+  const createDialogFieldNames = imageFieldNames;
+
+  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [createDialogImages, createDialogDispatch] = useReducer(createImageDialogReducer, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const clearFilters = () => {
+    setSearchQuery("");
+  }
+
+
+  const [sortColumn, setSortColumn] = useState("ID");
+  const [sortAscending, setSortAscending] = useState(true);
+
+
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+    snackbarOpen, snackbarText, snackbarSeverity,
+    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const theme = useTheme();
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
-    setSelectedNavItem("Image Managemeent")
+    setSelectedNavItem("Image Management");
     if(appUser.is_admin) {
-      fetchImages();
+      fetchData();
     }
-  });
+  }, []); 
 
-  const handleDelete = async () => {
+
+  const fetchData = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/images/${imageToDelete.id}`,
+      const response = await axios.get("http://localhost:9000/api/images", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const imageData = response.data;
+      setImages(imageData.data);
+
+      setTimeout(() => {
+        setRefreshInProgress(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  /*
+    Image display:
+    Step 1: apply column filters
+    Step 2: apply search query
+    Step 3: apply sorting order
+  */
+
+  const filterImages = () => {
+    return images.filter((image) => {
+      return true;
+      // return (
+      //   // filter by image type
+      //   !imageTypeFilter || imageTypeFilter == "Administrator" && image.is_admin || imageTypeFilter == "Curator" && !image.is_admin
+      // ) && (
+      //   // filter by image activation status
+      //   !imageActivationStatusFilter || imageActivationStatusFilter == "Active" && image.is_active || imageActivationStatusFilter == "Inactive" && !image.is_active
+      // ) && (
+      //   // filter by password type
+      //   !imagePasswordTypeFilter || imagePasswordTypeFilter == "Temporary" && image.pw_temp || imagePasswordTypeFilter == "Permanent" && !image.pw_temp
+      // )
+    })
+  }
+
+
+  const filteredImages = useMemo(() => filterImages(
+    // 
+  ), [
+    images
+  ])
+
+
+  const filteredAndSearchedImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
+
+  const imagesToDisplay = filteredAndSearchedImages.sort((a, b) => {
+    if(sortColumn == "Name")
+      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+    else if(sortColumn == "ID")
+      return !sortAscending ^ (a.id > b.id);
+    else if(sortColumn == "Email")
+      return !sortAscending ^ (a.email > b.email)
+  })
+  
+
+  const handleDeleteClick = (imageId) => {
+    setDeleteDialogImage({ imageId });
+    setDeleteDialogIsOpen(true);
+  };
+
+
+  const handleImagesCreate = async(newImageArray) => {
+    let imagesCreated = 0;
+    let imageIndicesWithErrors = []
+    for(const [i, newImageData] of newImageArray.entries()) {
+      try {
+        let filteredImage = filterItemFields(imageFieldNames, newImageData);
+        await axios.post(
+          `http://localhost:9000/api/images`, filteredImage,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        imagesCreated++;
+  
+      } catch (error) {
+        console.error(`Error creating image ${JSON.stringify(newImageData)}: ${error}`);
+        imageIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(imagesCreated == newImageArray.length) {
+      setCreateDialogIsOpen(false);
+      createDialogDispatch({
+        type: "set",
+        newArray: []
+      })
+
+      setSnackbarText(`Successfully created ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(imagesCreated < newImageArray.length) {
+
+      if(imagesCreated > 0) {
+        setSnackbarText(`Created ${imagesCreated} of ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to create ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+      createDialogDispatch({
+        type: "set",
+        newArray: newImageArray.filter((u, i) => {
+          return imageIndicesWithErrors.includes(i);
+        })
+      })
+    }
+
+
+  }
+
+
+  
+  const handleImageEdit = async(imageId, updateFields) => {
+    try {
+      let filteredImage = filterItemFields(imageFieldNames, updateFields);
+      await axios.put(
+        `http://localhost:9000/api/images/${imageId}`, filteredImage,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
-          }
+          },
         }
       );
+      fetchData();
+
+      setEditDialogIsOpen(false);
+      setEditDialogFields(getBlankItemFields(imageFieldNames));
+
+      setSnackbarText(`Successfully edited image ${imageId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error editing image ${imageId}: ${error}`);
+
+      setSnackbarText(`Error editing for image ${imageId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+
+
+  const handleDelete = async (imageId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/api/images/${imageId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setSnackbarSeverity("success")
+      setSnackbarText(`Image ${imageId} has been deleted`);
+      setSnackbarOpen(true);
+
       if (response.status === 200 || response.status === 204) {
-        fetchImages();
       } else {
         console.error("Error deleting image:", response.statusText);
       }
     } catch (error) {
       console.error("Error handling delete operation:", error);
-    } finally {
-      // Close the confirmation dialog
-      setDeleteConfirmation(false);
-      setImageToDelete(null);
+
+      setSnackbarSeverity("error")
+      setSnackbarText(`Image ${imageId} could not be deleted`);
+      setSnackbarOpen(true);
     }
+
+    setDeleteDialogIsOpen(false);
+    setDeleteDialogImage(null);
   };
+
+
+
+  const imageTableFields = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Typography variant="body1">{image.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Accession Number",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Typography variant="body1">{image.accessionNumber}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Title",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Title" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Typography variant="body1">{image.title}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Year",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Year" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Typography variant="body1">{image.year}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Location",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Location" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          {image.location && (
+            <Stack direction="row" spacing={1}>
+              <PlaceIcon />
+              <Typography variant="body1">{image.location}</Typography>
+            </Stack>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Dimensions",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Dimensions" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{width: "40%"}}>
+              <HeightIcon sx={{transform: "rotate(90deg)"}} />
+              <Typography variant="body1">{parseFloat(image.width)} in.</Typography>
+            </Stack>
+            <Stack direction="row" spacing={0} sx={{width: "40%"}}>
+              <HeightIcon />
+              <Typography variant="body1">{parseFloat(image.height)} in.</Typography>
+            </Stack>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "View",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">View</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          {image.url && (
+            <Button variant="outlined" color="primary" 
+              startIcon={<VisibilityIcon />}
+              onClick={() => {
+                setBackdropImage(image);
+                setBackdropOpen(true);
+              }}
+            >
+              <Typography variant="body1">Preview</Typography>
+            </Button>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Options",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Options</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <IconButton 
+            onClick={(e) => {
+              setEditDialogImage(image);
+              const filteredImage = filterItemFields(imageFieldNames, image);
+              setEditDialogFields(filteredImage);
+              setEditDialogSubmitEnabled(true);
+              setEditDialogIsOpen(true)
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            // disabled={course.Users.length > 0} 
+            onClick={(e) => {
+              setDeleteDialogImage(image);
+              setDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
+      )
+    }
+  ]
+
 
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
   appUser.is_admin && (
-    <div style={{
-      marginLeft: '10%',
-      marginRight: '10%',
-      paddingTop: '20px'
-    }}>
-        <Typography
-          align="center"
-          style={{ fontSize: "25px", padding: "15px" }}
-        >
-          List of Images
-        </Typography>
-
-        <TableContainer component={Paper} >
-          <Table size="small" aria-label="test table">
-            <TableHead
-              sx={{
-                "& th": { fontWeight: "bold" },
-                "&": { backgroundColor: "lightgray" },
+    <>
+        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by image title, accession number, or notes" width="50%" />
+          <Stack direction="row" spacing={2}>
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+              setRefreshInProgress(true);
+              fetchData();
+            }}
+              disabled={refreshInProgress}>
+              <Typography variant="body1">Refresh</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+              disabled={
+                !Boolean(searchQuery)
+              }>
+              <Typography variant="body1">Clear Filters</Typography>
+            </Button>
+            <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
+              onClick={() => {
+                setCreateDialogIsOpen(true);
               }}
             >
-              <TableRow>
-                {Object.keys(imageColumns).map((col) => (
-                  <TableCell key={col}>
-                    <Typography variant="h6">{imageColumns[col]}</Typography>
-                  </TableCell>
-                ))}
-                <TableCell>&nbsp;</TableCell>
-              </TableRow>
-            </TableHead>
+              <Typography variant="body1">Create Images</Typography>
+            </Button>
+          </Stack>
+        </Stack>
+        <DataTable items={imagesToDisplay} tableFields={imageTableFields} rowSelectionEnabled={true} />
+          {
+            imagesToDisplay.length == 0 && (
+              <Box sx={{width: '100%'}}>
+                <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
+                  <SearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
+                  <Typography variant="h4">No images found</Typography>
+                  <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
+                    <Typography variant="body1">Clear Filters</Typography>
+                  </Button>
+                </Stack>
+              </Box>
+            )
+          }
 
-            <TableBody sx={{ "& tr:hover": { backgroundColor: "#EEE" } }}>
-              {images.data?.map((image) => (
-                <TableRow key={image.id}>
-                  {Object.keys(imageColumns).map((col) => (
-                    <TableCell key={col}>
-                      <Typography variant="body1">{image[col]}</Typography>
-                    </TableCell>
-                  ))}
-                  <TableCell>
-                    <Stack direction="row">
-                      <IconButton
-                        color="primary"
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                          navigate(`../ImageEdit/${image.id}`);
-                        }}
-                      >
-                        <EditIcon/>
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                          // Set the image to delete and open the confirmation dialog
-                          setImageToDelete(image);
-                          setDeleteConfirmation(true);
-                        }}
-                      >
-                        <DeleteIcon/>
-                      </IconButton>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+      <ItemMultiCreateDialog entity="image" 
+        dialogTitle={"Create Images"}
+        dialogInstructions={"Add images, edit the image fields, then click 'Create'."}
+        createDialogItems={createDialogImages}
+        handleItemsCreate={handleImagesCreate}
+        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
-            <Dialog
-              open={deleteConfirmation}
-              onClose={() => setDeleteConfirmation(false)}
-            >
-              <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
-                Delete Image
-              </DialogTitle>
+      <ItemSingleEditDialog 
+        entity="image"
+        dialogTitle={"Edit Image"}
+        dialogInstructions={"Edit the image fields, then click 'Save'."}
+        editDialogItem={editDialogImage}
+        handleItemEdit={handleImageEdit}
+        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
-              <DialogContent>
-                Are you sure you want to delete the image 
-                "{imageToDelete?.title}"
-                ?
-              </DialogContent>
+      <ItemSingleDeleteDialog 
+        entity="image"
+        dialogTitle="Delete Image"
+        deleteDialogItem={deleteDialogImage}
+        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
-              <DialogActions sx={{ justifyContent: "center" }}>
-                <Button
-                  onClick={() => setDeleteConfirmation(false)}
-                  color="primary"
-                  sx={{
-                    "&:hover": {
-                      color: "white",
-                      backgroundColor: "green",
-                    },
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleDelete}
-                  color="primary"
-                  sx={{
-                    color: "red",
-                    "&:hover": {
-                      color: "white",
-                      backgroundColor: "red",
-                    },
-                  }}
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </Table>
-        </TableContainer>
 
-      {/* Delete confirmation dialog */}
-    </div>
+      {/* <AssociationManagementDialog
+        primaryEntity="course"
+        secondaryEntity="user"
+        primaryItem={assignUserDialogCourse}
+        secondaryItemsAll={users}
+        secondaryItemsAssigned={assignUserDialogUsers}
+        dialogTitle={`Manage Roster for Course ${assignUserDialogCourse?.id}`}
+        dialogButtonForSecondaryManagement={<>
+          <Button variant="outlined" onClick={() => {
+            navigate('/Account/UserManagement')
+          }}>
+            <Typography>Go to user management</Typography>
+          </Button>
+        </>}
+        dialogIsOpen={assignUserDialogIsOpen}
+        tableTitleAssigned={`Current Users for Course ${assignUserDialogCourse?.id}`}
+        tableTitleAll={`All Users`}
+        setDialogIsOpen={setAssignUserDialogIsOpen}
+        secondaryTableFieldsAll={userTableFieldsForDialogAll}
+        secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
+      /> */}
+
+      <ImageFullScreenViewer 
+        image={backdropImage} 
+        backdropOpen={backdropOpen}
+        setBackdropOpen={setBackdropOpen}
+      />
+
+    </>
   );
 }
+
 
 export default ImageManagement;
