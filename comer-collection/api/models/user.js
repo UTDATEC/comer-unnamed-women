@@ -1,3 +1,5 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
     const User = sequelize.define("User", {
@@ -21,6 +23,30 @@ module.exports = (db) => {
         given_name: {
             type: Sequelize.TEXT('tiny'),
             field: "user_given_name"
+        },
+        full_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.given_name} ${this.family_name}`
+            }
+        },
+        full_name_reverse: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.family_name}, ${this.given_name}`
+            }
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.has_name ? `${this.full_name}` : `${this.email}`
+            }
+        },
+        has_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return Boolean(this.family_name || this.given_name)
+            }
         },
         pw_hash: {
             type: Sequelize.TEXT('tiny'),
