@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import axios from "axios";
 import {
   Stack,
@@ -28,8 +28,37 @@ import HeightIcon from "@mui/icons-material/Height";
 import PlaceIcon from "@mui/icons-material/Place";
 import SellIcon from "@mui/icons-material/Sell";
 import BrushIcon from "@mui/icons-material/Brush"
+import ImageIcon from "@mui/icons-material/Image"
+import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import { filterItemFields } from "../Tools/HelperMethods";
+import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
+
+const artistFieldNames = [
+  {
+    fieldName: "familyName",
+    displayName: "Last Name",
+    isRequired: true
+  },
+  {
+    fieldName: "givenName",
+    displayName: "First Name",
+    isRequired: true
+  },
+  {
+    fieldName: "website",
+    displayName: "Website",
+    isRequired: false,
+    inputType: "url"
+  },
+  {
+    fieldName: "notes",
+    displayName: "Notes",
+    isRequired: false,
+    inputType: "textarea"
+  }
+]
 
 const imageFieldNames = [
   {
@@ -111,7 +140,7 @@ const createImageDialogReducer = (createDialogImages, action) => {
 
 const ImageManagement = (props) => {
   const [images, setImages] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [artists, setArtists] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -125,9 +154,7 @@ const ImageManagement = (props) => {
   const [backdropImage, setBackdropImage] = useState(null);
   const [backdropOpen, setBackdropOpen] = useState(false);
 
-  const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
-  const [assignUserDialogImage, setAssignUserDialogImage] = useState(null);
-  const [assignUserDialogUsers, setAssignUserDialogUsers] = useState([]);
+  const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
   
 
   const editDialogFieldNames = imageFieldNames;
@@ -171,6 +198,14 @@ const ImageManagement = (props) => {
       });
       const imageData = response.data;
       setImages(imageData.data);
+
+      const response2 = await axios.get("http://localhost:9000/api/artists", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const artistData = response2.data;
+      setArtists(artistData.data);
 
       setTimeout(() => {
         setRefreshInProgress(false);
@@ -352,6 +387,191 @@ const ImageManagement = (props) => {
     setDeleteDialogImage(null);
   };
 
+
+  
+  const handleCreateArtist = async(newArtist) => {
+    try {
+      let filteredArtist = filterItemFields(artistFieldNames, newArtist);
+      await axios.post(
+        `http://localhost:9000/api/artists/`, filteredArtist,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setSnackbarText(`Artist created`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error creating artist: ${error}`);
+
+      setSnackbarText(`Error creating artist`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  
+  const handleDeleteArtist = async(artistId) => {
+    try {
+      await axios.delete(
+        `http://localhost:9000/api/artists/${artistId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setSnackbarText(`Artist ${artistId} deleted`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error deleting artist ${artistId}: ${error}`);
+
+      setSnackbarText(`Error deleting artist ${artistId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  
+  const handleCopyToClipboard = useCallback((item, fieldName) => {
+    try {
+      navigator.clipboard.writeText(item[fieldName]);
+      setSnackbarSeverity("success")
+      setSnackbarText(`Text copied to clipboard`);
+
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarSeverity("error")
+      setSnackbarText(`Error copying text to clipboard`);
+      setSnackbarOpen(true);
+    }
+  }, [])
+
+
+  const artistTableFields = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Typography variant="body1">{artist.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Name",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Images",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Images</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ImageIcon />
+            <Typography variant="body1">{artist.Images.length}</Typography>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Website",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Website</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          {artist.website && (
+            <Button size="small" 
+              sx={{textTransform: "unset"}}
+              endIcon={<ContentCopyIcon />} onClick={() => {
+              handleCopyToClipboard(artist, "website")
+            }}>
+              <Typography variant="body1">{artist.website}</Typography>
+            </Button>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Notes",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Notes</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          {artist.notes && (
+            <Typography variant="body1">{artist.notes}</Typography>
+          ) || !artist.notes && (
+            <Typography variant="body1" sx={{opacity: 0.5}}>None</Typography>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Options",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">&nbsp;</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Stack direction="row">
+            <IconButton disabled
+              onClick={(e) => {
+                // setEditDialogImage(image);
+                // const filteredImage = filterItemFields(imageFieldNames, image);
+                // setEditDialogFields(filteredImage);
+                // setEditDialogSubmitEnabled(true);
+                // setEditDialogIsOpen(true)
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton 
+              // disabled={course.Users.length > 0} 
+              onClick={(e) => {
+                handleDeleteArtist(artist.id);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
+        </TableCell>
+      )
+    }
+  ]
 
 
   const imageTableFields = [
@@ -562,7 +782,7 @@ const ImageManagement = (props) => {
             </Button>
             <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
               onClick={() => {
-                // setCreateDialogIsOpen(true);
+                setManageArtistDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Artists</Typography>
@@ -613,27 +833,21 @@ const ImageManagement = (props) => {
         {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
 
-      {/* <AssociationManagementDialog
-        primaryEntity="course"
-        secondaryEntity="user"
-        primaryItem={assignUserDialogCourse}
-        secondaryItemsAll={users}
-        secondaryItemsAssigned={assignUserDialogUsers}
-        dialogTitle={`Manage Roster for Course ${assignUserDialogCourse?.id}`}
-        dialogButtonForSecondaryManagement={<>
-          <Button variant="outlined" onClick={() => {
-            navigate('/Account/UserManagement')
-          }}>
-            <Typography>Go to user management</Typography>
-          </Button>
-        </>}
-        dialogIsOpen={assignUserDialogIsOpen}
-        tableTitleAssigned={`Current Users for Course ${assignUserDialogCourse?.id}`}
-        tableTitleAll={`All Users`}
-        setDialogIsOpen={setAssignUserDialogIsOpen}
-        secondaryTableFieldsAll={userTableFieldsForDialogAll}
-        secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
-      /> */}
+      <EntityManageDialog 
+        entity="artist"
+        dialogTitle="Manage Artists"
+        dialogInstructionsTable="Edit or delete existing artists."
+        dialogInstructionsForm="Create new artists."
+        dialogItems={artists}
+        setDialogItems={setArtists}
+        dialogFieldNames={artistFieldNames}
+        dialogTableFields={artistTableFields}
+        dialogIsOpen={manageArtistDialogIsOpen}
+        setDialogIsOpen={setManageArtistDialogIsOpen}
+        handleItemCreate={handleCreateArtist}
+        handleItemEdit={null}
+        handleItemDelete={null}
+      />
 
       <ImageFullScreenViewer 
         image={backdropImage} 
