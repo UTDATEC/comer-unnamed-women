@@ -15,11 +15,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PersonIcon from "@mui/icons-material/Person";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import CheckIcon from "@mui/icons-material/Check";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
+import { useNavigate } from "react-router";
 
 
 const createCourseDialogReducer = (createDialogCourses, action) => {
@@ -55,6 +61,7 @@ const createCourseDialogReducer = (createDialogCourses, action) => {
 
 const CourseManagement = (props) => {
   const [courses, setCourses] = useState([]);
+  const [users, setUsers] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -64,6 +71,12 @@ const CourseManagement = (props) => {
   const [editDialogCourse, setEditDialogCourse] = useState(null);
   const [editDialogFields, setEditDialogFields] = useState({name: '', date_start: '', date_end: '', notes: ''});
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+
+  const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
+  const [assignUserDialogCourse, setAssignUserDialogCourse] = useState(null);
+  const [assignUserDialogUsers, setAssignUserDialogUsers] = useState([]);
+  
 
   const editDialogFieldNames = [
     {
@@ -110,6 +123,7 @@ const CourseManagement = (props) => {
     snackbarOpen, snackbarText, snackbarSeverity,
     setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
   const theme = useTheme();
+  const navigate = useNavigate();
   
 
   useEffect(() => {
@@ -128,8 +142,16 @@ const CourseManagement = (props) => {
         },
       });
       const courseData = response.data;
-
       setCourses(courseData.data);
+
+      const response2 = await axios.get("http://localhost:9000/api/users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const userData = response2.data;
+      setUsers(userData.data);
+
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
@@ -137,6 +159,22 @@ const CourseManagement = (props) => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const fetchCourseUsers = async (courseId) => {
+    try {
+      const response = await axios.get(`http://localhost:9000/api/courses/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const courseData = await response.data;
+      setAssignUserDialogUsers([...courseData.data.Users]);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    fetchData();
+  }
 
   /*
     Course display:
@@ -246,6 +284,66 @@ const CourseManagement = (props) => {
   }
 
 
+  const handleAssignCourseToUser = async(userId, courseId) => {
+    try {
+      await axios.put(
+        `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchCourseUsers(courseId);
+
+      setEditDialogIsOpen(false);
+      setEditDialogFields({email: '', given_name: '', family_name: ''})
+
+      setSnackbarText(`Successfully enrolled user ${userId} in course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
+
+      setSnackbarText(`Error enrolling user ${userId} in course ${courseId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  
+  const handleUnassignCourseFromUser = async(userId, courseId) => {
+    try {
+      await axios.delete(
+        `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchCourseUsers(courseId);
+
+      setEditDialogIsOpen(false);
+      setEditDialogFields({email: '', given_name: '', family_name: ''})
+
+      setSnackbarText(`Successfully unenrolled user ${userId} from course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } catch (error) {
+      console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
+
+      setSnackbarText(`Error unenrolling user ${userId} from course ${courseId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+
+
+  
   const handleCourseEdit = async(courseId, updateFields) => {
     const { name, date_start, date_end, notes } = updateFields;
     try {
@@ -396,7 +494,17 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (course) => (
         <TableCell>
-          <Typography variant="body1">{course.Users.length}</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" color="primary" startIcon={<PersonIcon />}
+              onClick={() => {
+                setAssignUserDialogCourse(course);
+                setAssignUserDialogUsers(course.Users);
+                setAssignUserDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{course.Users.length}</Typography>
+            </Button>
+          </Stack>
         </TableCell>
       )
     },
@@ -446,6 +554,96 @@ const CourseManagement = (props) => {
       )
     }
   ]
+
+
+  const userTableFieldsForDialog = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">ID</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Name",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Name</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          {
+            user.family_name || user.given_name ? (
+              <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
+            ) : (
+              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+            )
+          }
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Email",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: "#CCC"}}>
+          <Typography variant="h6">Email</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (user) => (
+        <TableCell>
+          <Typography variant="body1">{user.email}</Typography>
+        </TableCell>
+      )
+    }
+  ]
+
+  const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
+    columnDescription: "Enroll",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: "#CCC"}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (user, extraProperties) => (
+      <TableCell>
+        {extraProperties.secondaryItemIdsAssigned.indexOf(user.id) == -1 ? 
+          <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignCourseToUser(user.id, extraProperties.primaryItem.id);
+          }}>
+            <Typography variant="body1">Enroll</Typography>
+          </Button> :
+          <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
+          <Typography variant="body1">Enrolled</Typography>
+        </Button>
+        }
+      </TableCell>
+    )
+  }]
+
+  const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
+    columnDescription: "",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: "#CCC"}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (user, extraProperties) => (
+      <TableCell>
+        <Button variant="outlined" color="primary" startIcon={<PersonRemoveIcon />} onClick={() => {
+            handleUnassignCourseFromUser(user.id, extraProperties.primaryItem.id);
+          }}>
+          <Typography variant="body1">Remove</Typography>
+        </Button>
+      </TableCell>
+    )
+  }]
 
 
 
@@ -514,6 +712,29 @@ const CourseManagement = (props) => {
         dialogTitle="Delete Course"
         deleteDialogItem={deleteDialogCourse}
         {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+
+
+      <AssociationManagementDialog
+        primaryEntity="course"
+        secondaryEntity="user"
+        primaryItem={assignUserDialogCourse}
+        secondaryItemsAll={users}
+        secondaryItemsAssigned={assignUserDialogUsers}
+        dialogTitle={`Manage Roster for Course ${assignUserDialogCourse?.id}`}
+        dialogButtonForSecondaryManagement={<>
+          <Button variant="outlined" onClick={() => {
+            navigate('/Account/UserManagement')
+          }}>
+            <Typography>Go to user management</Typography>
+          </Button>
+        </>}
+        dialogIsOpen={assignUserDialogIsOpen}
+        tableTitleAssigned={`Current Users for Course ${assignUserDialogCourse?.id}`}
+        tableTitleAll={`All Users`}
+        setDialogIsOpen={setAssignUserDialogIsOpen}
+        secondaryTableFieldsAll={userTableFieldsForDialogAll}
+        secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
+      />
 
     </>
   );

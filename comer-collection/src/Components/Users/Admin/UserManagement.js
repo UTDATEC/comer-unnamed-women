@@ -139,7 +139,7 @@ const UserManagement = (props) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const userData = response.data;
+      const userData = await response.data;
       setUsers(userData.data);
 
       const response2 = await axios.get("http://localhost:9000/api/courses", {
@@ -147,7 +147,7 @@ const UserManagement = (props) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const courseData = response2.data;
+      const courseData = await response2.data;
       setCourses(courseData.data);
 
       setTimeout(() => {
@@ -165,12 +165,13 @@ const UserManagement = (props) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const userData = response.data;
-      setAssignCourseDialogCourses(userData.data.Courses);
+      const userData = await response.data;
+      setAssignCourseDialogCourses([... userData.data.Courses]);
 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+    fetchData();
   }
 
   /*
@@ -571,7 +572,7 @@ const UserManagement = (props) => {
             <Button variant="text" color="primary" startIcon={<SchoolIcon />}
               onClick={() => {
                 setAssignCourseDialogUser(user);
-                setAssignCourseDialogCourses(user.Courses);
+                setAssignCourseDialogCourses([...user.Courses]);
                 setAssignCourseDialogIsOpen(true);
               }}
             >
@@ -756,7 +757,7 @@ const UserManagement = (props) => {
           }}>
             <Typography variant="body1">Enroll</Typography>
           </Button> :
-          <Button variant="outlined" color="primary" disabled startIcon={<CheckIcon />}>
+          <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
           <Typography variant="body1">Enrolled</Typography>
         </Button>
         }
