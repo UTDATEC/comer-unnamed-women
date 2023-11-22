@@ -25,7 +25,7 @@ import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 
 
 const createCourseDialogReducer = (createDialogCourses, action) => {
@@ -649,6 +649,9 @@ const CourseManagement = (props) => {
 
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  appUser.password_change_required && (
+    <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
     <>

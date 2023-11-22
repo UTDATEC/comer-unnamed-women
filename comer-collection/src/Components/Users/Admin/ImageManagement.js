@@ -20,7 +20,7 @@ import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
 import { getBlankItemFields } from "../Tools/HelperMethods";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -779,6 +779,9 @@ const ImageManagement = (props) => {
 
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  appUser.password_change_required && (
+    <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
     <>

@@ -28,7 +28,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import SecurityIcon from "@mui/icons-material/Security";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
@@ -877,6 +877,9 @@ const UserManagement = (props) => {
 
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+  ) ||
+  appUser.password_change_required && (
+    <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
     <>
