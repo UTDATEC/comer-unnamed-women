@@ -36,7 +36,8 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
         <Stack spacing={2}>
           <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
           {editDialogFieldNames.map((f) => (
-            <TextField 
+            <TextField multiline={f.multiline}
+              minRows={2}
               key={f.fieldName} 
               name={f.fieldName} 
               label={f.displayName} 

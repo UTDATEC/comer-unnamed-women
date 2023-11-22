@@ -28,33 +28,39 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
         <Stack spacing={2}>
           <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
           {createDialogItems.map((u, index) => (
-            <Stack key={index} direction="row" spacing={2} alignItems="center">
+            <>
+            <Divider />
+            <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
-              {createDialogFieldNames.map((f, fi) => (
-                <TextField key={f.fieldName} 
-                  name={f.fieldName} 
-                  label={f.displayName} 
-                  autoFocus={fi==0} 
-                  value={u[f.fieldName]} 
-                  sx={{ 
-                    width: "100%" 
-                  }}
-                  inputProps={{
-                    type: f.inputType ?? "text",
-                    sx: {...{
-                      textAlign: f.inputType == "datetime-local" ? "center" : ""
+              <Stack key={index} direction="row" spacing={{xs: 1, sm: 2}} alignItems="center" useFlexGap flexWrap="wrap">
+                {createDialogFieldNames.map((f, fi) => (
+                  <TextField key={f.fieldName} 
+                    name={f.fieldName} 
+                    label={f.displayName} 
+                    autoFocus={fi==0} 
+                    value={u[f.fieldName]} 
+                    multiline={f.multiline}
+                    minRows={2}
+                    sx={{ 
+                      minWidth: "330px"
                     }}
-                  }}
-                  required={Boolean(f.isRequired)}
-                onChange={(e) => {
-                  createDialogDispatch({
-                    type: 'change',
-                    field: f.fieldName,
-                    index: index,
-                    newValue: e.target.value
-                  });
-                }} />
-              ))}
+                    inputProps={{
+                      type: f.inputType ?? "text",
+                      sx: {...{
+                        textAlign: f.inputType == "datetime-local" ? "center" : ""
+                      }}
+                    }}
+                    required={Boolean(f.isRequired)}
+                  onChange={(e) => {
+                    createDialogDispatch({
+                      type: 'change',
+                      field: f.fieldName,
+                      index: index,
+                      newValue: e.target.value
+                    });
+                  }} />
+                ))}
+              </Stack>
               <IconButton onClick={() => {
                 createDialogDispatch({
                   type: 'remove',
@@ -64,6 +70,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                 <DeleteIcon />
               </IconButton>
             </Stack>
+            </>
           ))}
           <Divider />
         </Stack>
@@ -77,7 +84,9 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
               newArray: []
             });
           }}>
-            <Typography variant="body1">Cancel</Typography>
+            <Typography variant="body1">
+              {createDialogItems.length > 0 ? "Cancel" : "Close"}
+            </Typography>
           </Button>
           <Stack direction="row" spacing={1} sx={{ width: "50%" }}>
             <Button color="primary"
@@ -91,7 +100,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             </Button>
             <Button type="submit" color="primary" variant="contained" size="large" sx={{ width: "100%" }}
               disabled={createDialogItems.length == 0}>
-              <Typography variant="body1">Create</Typography>
+              <Typography variant="body1">{createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}</Typography>
             </Button>
           </Stack>
         </Stack>

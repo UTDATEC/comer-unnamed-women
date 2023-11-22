@@ -887,7 +887,7 @@ const ImageManagement = (props) => {
 
       <ItemMultiCreateDialog entity="image" 
         dialogTitle={"Create Images"}
-        dialogInstructions={"Add images, edit the image fields, then click 'Create'."}
+        dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
         createDialogItems={createDialogImages}
         handleItemsCreate={handleImagesCreate}
         {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />

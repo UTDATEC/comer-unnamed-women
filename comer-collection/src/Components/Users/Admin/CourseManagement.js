@@ -100,7 +100,8 @@ const CourseManagement = (props) => {
     {
       fieldName: "notes",
       displayName: "Notes",
-      inputType: "textarea"
+      inputType: "textarea",
+      multiline: true
     }
   ]
   const createDialogFieldNames = editDialogFieldNames;
