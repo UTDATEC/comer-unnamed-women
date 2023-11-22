@@ -472,7 +472,7 @@ const UserManagement = (props) => {
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error")
-      setSnackbarText(`Error copying password`);
+      setSnackbarText(`Error copying text to clipboard`);
       setSnackbarOpen(true);
     }
   }, [])
