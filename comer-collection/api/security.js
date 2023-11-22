@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const createError = require('http-errors');
 const jwt = require('jsonwebtoken')
 const { User } = require('./sequelize')
@@ -73,4 +74,9 @@ const filterUserData = (user) => {
 }
 
 
-module.exports = {userOperation, adminOperation, generateTokenDataFromUserInstance, filterUserData};
+const verifyPasswordWithHash = async(password, pw_hash) => {
+    return await bcrypt.compare(password ?? "", pw_hash)
+}
+
+
+module.exports = {userOperation, adminOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash};

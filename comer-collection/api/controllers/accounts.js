@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
 const { User, Course } = require('../sequelize')
-const { userOperation, generateTokenDataFromUserInstance, filterUserData } = require("../security.js");
+const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
 
 const signIn = async(req, res, next) => {
     try {
@@ -16,7 +16,7 @@ const signIn = async(req, res, next) => {
             }
         });
         
-        const match = user && ((password == user.pw_temp) || (user.pw_hash && await bcrypt.compare(password, user.pw_hash)));
+        const match = user && ((password == user.pw_temp) || (user.pw_hash && await verifyPasswordWithHash(password, user.pw_hash)));
 
         if(match && user.is_active) {
             token = generateTokenDataFromUserInstance(user);
