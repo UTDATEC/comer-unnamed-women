@@ -685,7 +685,7 @@ const UserManagement = (props) => {
           <Switch 
             itemID={user.id}
             checked={user.is_active} 
-            disabled={user.is_admin} 
+            disabled={user.id == appUser.id} 
             color={user.is_admin ? "secondary" : "primary"}
             onClick={(e) => {
               handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
@@ -704,7 +704,7 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           <IconButton 
-            disabled={user.is_admin} 
+            disabled={user.id == appUser.id} 
             onClick={(e) => {
               setEditDialogUser(user);
               const { email, family_name, given_name } = user;
