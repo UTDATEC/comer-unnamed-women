@@ -7,6 +7,7 @@ import {
   Button,
   Typography, DialogContentText, Divider, Box
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info"
 import { DataTable } from "../DataTable";
 
 export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, primaryItem, setPrimaryItem, secondaryItemsAll, secondaryItemsAssigned, secondaryTableFieldsAll, tableTitleAssigned, tableTitleAll, secondaryTableFieldsAssignedOnly, dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, dialogIsOpen, setDialogIsOpen }) => {
@@ -33,7 +34,16 @@ export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, pr
           <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
             <Box maxHeight="400px">
-              <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssigned} extraProperties={{ primaryItem }} />
+              {secondaryItemsAssigned.length > 0 && (
+                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssigned} extraProperties={{ primaryItem }} />
+              ) || secondaryItemsAssigned.length == 0 && (
+                <Box sx={{width: '100%', height: '100%'}}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                        <InfoIcon sx={{fontSize: '150pt'}} />
+                        <Typography variant="h4">This list is empty.</Typography>
+                    </Stack>
+                </Box>
+              )}
             </Box>
           </Stack>
         </Stack>
