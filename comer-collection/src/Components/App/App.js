@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
 import GridView from '../GridView/GridView';
 import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';

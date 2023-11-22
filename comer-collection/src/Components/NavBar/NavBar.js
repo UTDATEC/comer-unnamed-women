@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import '../App/App.css';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
