@@ -29,6 +29,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check'
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { useNavigate } from "react-router";
+import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
+import SecurityIcon from "@mui/icons-material/Security"
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -90,6 +92,7 @@ const UserManagement = (props) => {
     {
       fieldName: "email",
       displayName: "Email",
+      isRequired: true,
       inputType: "email"
     }
   ]
@@ -454,11 +457,18 @@ const UserManagement = (props) => {
   };
 
 
-  const handleCopyToClipboard = useCallback((user) => {
+  const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
-      navigator.clipboard.writeText(user.pw_temp);
+      navigator.clipboard.writeText(user[fieldName]);
       setSnackbarSeverity("success")
-      setSnackbarText(`Password for user ${user.id} copied to clipboard`);
+      if(fieldName == "pw_temp") {
+        setSnackbarText(`Password for user ${user.id} copied to clipboard`);
+      } else if(fieldName == "email") {
+        setSnackbarText(`Email address for user ${user.id} copied to clipboard`);
+      } else {
+        setSnackbarText(`Text copied to clipboard`);
+      }
+
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error")
@@ -510,7 +520,11 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.email}</Typography>
+          <Button color="grey"
+            variant="text" sx={{textTransform: "unset"}}
+            onClick={() => {handleCopyToClipboard(user, "email")}}>
+            <Typography variant="body1">{user.email}</Typography>
+          </Button>
         </TableCell>
       )
     },
@@ -540,14 +554,15 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           {user.pw_temp ? (
-            <Button startIcon={<ContentCopyIcon />}
+            <Button startIcon={<ContentCopyIcon />} color={user.is_admin ? "secondary" : "primary"}
               variant="outlined"
-              onClick={() => {handleCopyToClipboard(user)}}>
+              onClick={() => {handleCopyToClipboard(user, "pw_temp")}}>
               <Typography variant="body1">Copy</Typography>
             </Button>
           ) : (
             <Button 
               startIcon={<LockResetIcon />}
+              color={user.is_admin ? "secondary" : "primary"}
               itemID={user.id}
               variant="outlined" 
               disabled={appUser.id == user.id}
@@ -570,7 +585,9 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" color="primary" startIcon={<SchoolIcon />}
+            <Button variant="text" 
+              color={user.is_admin ? "secondary" : "primary"}
+              startIcon={<SchoolIcon />}
               onClick={() => {
                 setAssignCourseDialogUser(user);
                 setAssignCourseDialogCourses([...user.Courses]);
@@ -592,7 +609,19 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.Exhibitions.length}</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" 
+              color={user.is_admin ? "secondary" : "primary"}
+              disabled startIcon={<PhotoCameraBackIcon />}
+              onClick={() => {
+                // setAssignCourseDialogUser(user);
+                // setAssignCourseDialogCourses([...user.Courses]);
+                // setAssignCourseDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{user.Exhibitions.length}</Typography>
+            </Button>
+          </Stack>
         </TableCell>
       )
     },
@@ -621,7 +650,10 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+            {user.is_admin && (<SecurityIcon color="secondary" />)}
+          </Stack>
         </TableCell>
       )
     },
@@ -654,6 +686,7 @@ const UserManagement = (props) => {
             itemID={user.id}
             checked={user.is_active} 
             disabled={user.is_admin} 
+            color={user.is_admin ? "secondary" : "primary"}
             onClick={(e) => {
               handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
             }}
@@ -778,7 +811,7 @@ const UserManagement = (props) => {
         <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
           handleUnassignCourseFromUser(extraProperties.primaryItem.id, course.id);
         }}>
-          <Typography variant="body1">Remove</Typography>
+          <Typography variant="body1">Drop</Typography>
         </Button>
       </TableCell>
     )
