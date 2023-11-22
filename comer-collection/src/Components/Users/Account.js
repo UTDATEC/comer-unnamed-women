@@ -50,7 +50,12 @@ const Account = (props) => {
                 }
               } />} />
             <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ImageManagement" element={<ImageManagement {
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+                }
+             } />} />
             <Route path="CourseManagement" element={<CourseManagement {
               ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
                 snackbarOpen, snackbarText, snackbarSeverity,
