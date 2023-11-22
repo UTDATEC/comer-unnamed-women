@@ -11,8 +11,6 @@ import { Menu, MenuItem, Stack } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useTheme } from '@emotion/react';
 
-const PREFIX = 'NavBar';
-
 
 export default function NavBar(props) {
   
