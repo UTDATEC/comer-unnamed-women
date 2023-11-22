@@ -26,11 +26,12 @@ import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
 import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check'
+import CheckIcon from '@mui/icons-material/Check';
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { useNavigate } from "react-router";
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-import SecurityIcon from "@mui/icons-material/Security"
+import SecurityIcon from "@mui/icons-material/Security";
+import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -67,6 +68,9 @@ const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
+
+  const [privilegesDialogIsOpen, setPrivilegesDialogIsOpen] = useState(false);
+  const [privilegesDialogUser, setPrivilegesDialogUser] = useState(null);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogUser, setDeleteDialogUser] = useState(null);
@@ -398,6 +402,50 @@ const UserManagement = (props) => {
     }
   }
 
+
+  const handleChangeUserPrivileges = async(userId, verifyPassword, isPromotion) => {
+    try {
+      await axios.put(
+        (isPromotion ? 
+          `http://localhost:9000/api/users/${userId}/promote` : 
+          `http://localhost:9000/api/users/${userId}/demote`
+          ), {
+            verifyPassword: verifyPassword
+          },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+      
+      setPrivilegesDialogIsOpen(false);
+
+      setSnackbarText(`User ${userId} is ${isPromotion ? "now" : "no longer"} an administrator.`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+
+    } catch (error) {
+      console.error(`Error changing privileges for user ${userId}: ${error}`);
+
+      setSnackbarText(`Error changing privileges for user ${userId}`)
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  }
+
+  const handleUserPromote = async(userId, verifyPassword) => {
+    await handleChangeUserPrivileges(userId, verifyPassword, true);
+  }
+
+  const handleUserDemote = async(userId, verifyPassword) => {
+    await handleChangeUserPrivileges(userId, verifyPassword, false);
+  }
+
+
+
   const handleResetPassword = async(userId) => {
     try {
       await axios.put(
@@ -650,10 +698,18 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-            {user.is_admin && (<SecurityIcon color="secondary" />)}
-          </Stack>
+          <Button color="grey" sx={{textTransform: "unset"}}
+            disabled={user.id == appUser.id}
+            onClick={() => {
+              setPrivilegesDialogUser(user);
+              setPrivilegesDialogIsOpen(true);
+            }}
+          >
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+              {user.is_admin && (<SecurityIcon color="secondary" />)}
+            </Stack>
+          </Button>
         </TableCell>
       )
     },
@@ -906,6 +962,14 @@ const UserManagement = (props) => {
         secondaryTableFieldsAll={courseTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
         handleAssociationAssign={handleAssignCourseToUser}
+      />
+
+      <UserChangePrivilegesDialog
+        dialogUser={privilegesDialogUser}
+        dialogIsOpen={privilegesDialogIsOpen}
+        setDialogIsOpen={setPrivilegesDialogIsOpen}
+        handlePromote={handleUserPromote}
+        handleDemote={handleUserDemote}
       />
 
     </>
