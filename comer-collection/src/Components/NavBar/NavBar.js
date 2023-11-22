@@ -50,9 +50,13 @@ export default function NavBar(props) {
   return (
       <AppBar position="fixed" color="primary">
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-          <Typography variant="h5" sx={{paddingLeft: "25px"}}>
-            UTD Comer Collection
-          </Typography>
+          <Stack direction="row" alignItems="center" paddingLeft={2}>
+            {/* Placeholder for logo */}
+            {/* <img src={utd_logo} height="48px" /> */}
+            <Typography variant="h5" sx={{paddingLeft: "25px"}}>
+              UTD Comer Collection
+            </Typography>
+          </Stack>
           <Toolbar>
           <Stack spacing={1} direction={'row'}>
             {buttons.map((button) => (
