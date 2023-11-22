@@ -89,7 +89,8 @@ const UserManagement = (props) => {
     },
     {
       fieldName: "email",
-      displayName: "Email"
+      displayName: "Email",
+      inputType: "email"
     }
   ]
   const createDialogFieldNames = editDialogFieldNames;
