@@ -32,7 +32,7 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
               }
             }}>
             {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-              <Checkbox size="large" />
+              <Checkbox disabled size="medium" />
             </TableCell>)}
               {tableFields.map((tf) => {
                 return (
