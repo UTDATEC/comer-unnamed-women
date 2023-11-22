@@ -80,11 +80,11 @@ const updateUser = async (req, res, next) => {
 };
 
 const deactivateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
+    adminOperation(req, res, next, async (user_id) => {
         const user = await User.findByPk(req.params.userId);
         if(user) {
-            if(user.is_admin)
-                next(createError(401, {debugMessage: "Admin cannot change activation status of admin"}));
+            if(user_id == req.params.userId)
+                next(createError(401, {debugMessage: "Admin cannot deactivate self"}));
             else {
                 await user.update({
                     is_active: false
@@ -98,11 +98,11 @@ const deactivateUser = async (req, res, next) => {
 };
 
 const activateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
+    adminOperation(req, res, next, async (user_id) => {
         const user = await User.findByPk(req.params.userId);
         if(user) {
-            if(user.is_admin)
-                next(createError(401, {debugMessage: "Admin cannot change activation status of admin"}));
+            if(user_id == req.params.userId)
+                next(createError(401, {debugMessage: "Admin cannot activate self"}));
             else {
                 await user.update({
                     is_active: true
