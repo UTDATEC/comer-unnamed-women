@@ -9,7 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import AddIcon from "@mui/icons-material/Add";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -668,7 +668,7 @@ const CourseManagement = (props) => {
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
-            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
+            <Button color="primary" variant="contained" startIcon={<AddIcon/>}
               onClick={() => {
                 setCreateDialogIsOpen(true);
               }}
