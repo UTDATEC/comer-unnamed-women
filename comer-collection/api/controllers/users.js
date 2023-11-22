@@ -48,7 +48,7 @@ const createUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
+    adminOperation(req, res, next, async (user_id) => {
         try {
             const user = await User.findByPk(req.params.userId, {
                 attributes: {
@@ -59,8 +59,8 @@ const updateUser = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
                 }
-                if(user.is_admin) {
-                    next(createError(401));
+                if(user_id == req.params.userId) {
+                    next(createError(401, {debugMessage: "Admin cannot update self through this method.  Use profile edit instead."}));
                 } else {
                     await user.update({
                         email: req.body.email,
