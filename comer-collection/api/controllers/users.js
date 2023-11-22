@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const { User, Course, Exhibition } = require("../sequelize.js");
-const { adminOperation } = require('../security.js');
+const { adminOperation, verifyPasswordWithHash } = require('../security.js');
 
 const randomPassword = () => {
     return Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -115,6 +115,58 @@ const activateUser = async (req, res, next) => {
     })
 };
 
+const promoteUser = async (req, res, next) => {
+    adminOperation(req, res, next, async (user_id) => {
+        const user = await User.findByPk(req.params.userId);
+        const appUser = await User.findByPk(user_id, {
+            attributes: {
+                include: ['pw_hash']
+            }
+        });
+        if(user) {
+            const passwordVerified = await verifyPasswordWithHash(req.body.verifyPassword, appUser.pw_hash);
+            if(!passwordVerified)
+                next(createError(401, {debugMessage: "Password verification failed"}));
+            else if(user_id == req.params.userId)
+                next(createError(401, {debugMessage: "Admin cannot promote self"}));
+            else {
+                await user.update({
+                    is_admin: true
+                })
+                res.status(200).json({ data: user })
+            }
+        }
+        else
+            next(createError(404))
+    })
+}
+
+const demoteUser = async (req, res, next) => {
+    adminOperation(req, res, next, async (user_id) => {
+        const user = await User.findByPk(req.params.userId);
+        const appUser = await User.findByPk(user_id, {
+            attributes: {
+                include: ['pw_hash']
+            }
+        });
+        if(user) {
+            const passwordVerified = await verifyPasswordWithHash(req.body.verifyPassword, appUser.pw_hash);
+            if(!passwordVerified)
+                next(createError(401, {debugMessage: "Password verification failed"}));
+            else if(user_id == req.params.userId)
+                next(createError(401, {debugMessage: "Admin cannot demote self"}));
+            else {
+                await user.update({
+                    is_admin: false
+                })
+                res.status(200).json({ data: user })
+            }
+        }
+        else
+            next(createError(404))
+    })
+}
+
 const deleteUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId);
@@ -184,4 +236,4 @@ const resetUserPassword = async(req, res, next) => {
     });
 }
 
-module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser }
+module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }
