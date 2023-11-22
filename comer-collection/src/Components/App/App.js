@@ -9,7 +9,7 @@ import Account from '../Users/Account';
 
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
-import { green, orange } from '@mui/material/colors';
+import { green, grey, orange } from '@mui/material/colors';
 
 const App = () => {
   const [searchParams, setSearchParams] = useState({
@@ -70,6 +70,9 @@ const App = () => {
         main: secondaryColor['700'],
         contrastText: 'white',
         "200": secondaryColor['200']
+      },
+      grey: {
+        main: grey['800']
       }
     }
   })
