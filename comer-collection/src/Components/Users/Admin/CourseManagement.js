@@ -639,7 +639,7 @@ const CourseManagement = (props) => {
         <Button variant="outlined" color="primary" startIcon={<PersonRemoveIcon />} onClick={() => {
             handleUnassignCourseFromUser(user.id, extraProperties.primaryItem.id);
           }}>
-          <Typography variant="body1">Remove</Typography>
+          <Typography variant="body1">Unenroll</Typography>
         </Button>
       </TableCell>
     )
