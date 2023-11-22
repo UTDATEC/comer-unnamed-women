@@ -72,8 +72,26 @@ const imageFieldNames = [
     isRequired: false
   },
   {
-    fieldName: "location",
-    displayName: "Location",
+    fieldName: "year",
+    displayName: "Year",
+    isRequired: false,
+    inputType: "number"
+  },
+  {
+    fieldName: "additionalPrintYear",
+    displayName: "Additional Print Year",
+    isRequired: false,
+    inputType: "number"
+  },
+  {
+    fieldName: "url",
+    displayName: "URL",
+    inputType: "url",
+    multiline: true
+  },
+  {
+    fieldName: "medium",
+    displayName: "Medium",
     isRequired: false
   },
   {
@@ -89,20 +107,48 @@ const imageFieldNames = [
     inputType: "number"
   },
   {
-    fieldName: "year",
-    displayName: "Year",
-    isRequired: false,
+    fieldName: "matWidth",
+    displayName: "Mat Width",
     inputType: "number"
   },
   {
-    fieldName: "url",
-    displayName: "URL",
-    inputType: "url"
+    fieldName: "matHeight",
+    displayName: "Mat Height",
+    inputType: "number"
   },
   {
-    fieldName: "notes",
-    displayName: "Notes",
+    fieldName: "location",
+    displayName: "Location",
+    isRequired: false
+  },
+  {
+    fieldName: "condition",
+    displayName: "Condition",
     inputType: "textarea"
+  },
+  {
+    fieldName: "valuationNotes",
+    displayName: "Valuation Notes",
+    inputType: "textarea",
+    multiline: true
+  },
+  {
+    fieldName: "otherNotes",
+    displayName: "Other Notes",
+    inputType: "textarea",
+    multiline: true
+  },
+  {
+    fieldName: "copyright",
+    displayName: "Copyright",
+    inputType: "textarea",
+    multiline: true
+  },
+  {
+    fieldName: "subject",
+    displayName: "Subject",
+    inputType: "textarea",
+    multiline: true
   }
 ]
 
