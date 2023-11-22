@@ -65,6 +65,12 @@ const ChangePassword = (props) => {
       <Box component="form" sx={{height: "100%"}} onSubmit={handleChangePassword}>
           <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
             sx={{width: "100%", height: "100%"}}>
+              {appUser.password_change_required && (
+                <>
+                  <Typography variant="h5">Please change your password.</Typography>
+                  <Divider />
+                </>
+              )}
             <TextField sx={{minWidth: "400px"}} autoFocus
               error={Boolean(error)}
               label="Old Password"
@@ -110,14 +116,14 @@ const ChangePassword = (props) => {
             >
               <Typography variant="body1">Change Password</Typography>
             </Button>
-            <Button onClick={() => {
+            {!appUser.password_change_required && (<Button onClick={() => {
               navigate('/Account')
             }} 
               variant="outlined" 
               sx={{minWidth: "400px"}} 
             >
               <Typography variant="body1">Return to Profile</Typography>
-            </Button>
+            </Button>)}
           </Stack>
       </Box>
     );
