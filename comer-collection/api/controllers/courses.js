@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const { User, Course } = require("../sequelize.js");
-const { adminOperation } = require("../security.js");
+const { adminOperation, userOperation } = require("../security.js");
 
 
 const listCourses = async (req, res, next) => {
@@ -11,6 +11,22 @@ const listCourses = async (req, res, next) => {
         res.status(200).json({ data: courses });
     })
 };
+
+const listMyCourses = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        const user = await User.findByPk(user_id);
+        const myCourses = await user.getCourses();
+        if(user) {
+            try {
+                res.status(200).json({ data: myCourses });
+            } catch(e) {
+                next(createError(400, {debugMessage: e.message}));
+            }
+        }
+        else
+            next(createError(404));
+    })
+}
 
 const createCourse = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
@@ -105,4 +121,4 @@ const unassignUserFromCourse = async (req, res, next) => {
     })
 }
 
-module.exports = { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse }
+module.exports = { createCourse, getCourse, listCourses, listMyCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse }

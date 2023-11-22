@@ -7,7 +7,7 @@ const { listImages, createImage, getImage, updateImage, deleteImage, assignArtis
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
-const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
+const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition } = require('./controllers/exhibitions.js');
 
@@ -88,6 +88,7 @@ router.delete("/exhibitions/:exhibitionId", deleteExhibition)
 router.put("/account/signin", signIn);
 router.put("/account/changepassword", changePassword);
 router.get("/account/profile", getCurrentUser);
+router.get("/account/courses", listMyCourses);
 
 
 
