@@ -40,7 +40,10 @@ const Account = (props) => {
         <Box sx={{gridArea: 'main', position: 'relative', overflowY: "hidden", height: '100%'}}>
           
           <Routes>
-            <Route index element={<Navigate to='Profile' replace />} />
+            <Route index element={
+              !appUser.password_change_required && (<Navigate to='Profile' replace />) ||
+              appUser.password_change_required && (<Navigate to='ChangePassword' replace />)
+            } />
             <Route path="Profile" element={<Profile {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="UserManagement" element={<UserManagement {

@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Stack, Divider, styled } from "@mui/material";
+import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider, styled } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 
@@ -18,7 +18,8 @@ const navLinks = [
   {
       title: "Profile",
       icon: <AccountCircleIcon fontSize="large"/>,
-      link: "/Account/Profile"
+      link: "/Account/Profile",
+      requirePermanentPassword: true
   },
   {
       title: "Change Password",
@@ -31,27 +32,32 @@ const adminNavLinks = [
   {
       title: "User Management",
       icon: <GroupsIcon fontSize="large"/>,
-      link: "/Account/UserManagement"
+      link: "/Account/UserManagement",
+      requirePermanentPassword: true
   },
   {
       title: "Exhibition Management",
       icon: <PhotoCameraBackIcon fontSize="large"/>,
-      link: "/Account/ExhibitionList"
+      link: "/Account/ExhibitionList",
+      requirePermanentPassword: true
   },
   {
       title: "Image Management",
       icon: <ImageIcon fontSize="large"/>,
-      link: "/Account/ImageManagement"
+      link: "/Account/ImageManagement",
+      requirePermanentPassword: true
   },
   {
       title: "Course Management",
       icon: <SchoolIcon fontSize="large"/>,
-      link: "/Account/CourseManagement"
+      link: "/Account/CourseManagement",
+      requirePermanentPassword: true
   },
   {
       title: "Invite",
       icon: <GroupAddIcon fontSize="large"/>,
-      link: "/Account/Invite"
+      link: "/Account/Invite",
+      requirePermanentPassword: true
   }
 
 ]
@@ -72,7 +78,7 @@ const AccountNav = (props) => {
       <Typography variant="h5" alignSelf="center" paddingTop="10px">Account</Typography>
         <List>
           {navLinks.map((item) => (
-            <ListItem
+            <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.password_change_required)}
               key={item.title}
               onClick={() => {
                 setSelectedNavItem(item.title);
@@ -99,7 +105,7 @@ const AccountNav = (props) => {
                     location.pathname === item.link ? "underline" : "none",
                 }}
               />
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
         {appUser.is_admin && (
@@ -108,7 +114,7 @@ const AccountNav = (props) => {
           <Typography variant="h5" alignSelf="center" paddingTop="10px">Admin</Typography>
           <List>
             {adminNavLinks.map((item) => (
-              <ListItem
+              <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.password_change_required)}
                 key={item.title}
                 onClick={() => {
                   setSelectedNavItem(item.title);
@@ -135,7 +141,7 @@ const AccountNav = (props) => {
                       location.pathname === item.link ? "underline" : "none",
                   }}
                 />
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
           </>
