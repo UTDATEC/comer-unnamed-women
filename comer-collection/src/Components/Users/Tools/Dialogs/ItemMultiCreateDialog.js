@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
+export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
   return (
     <Dialog component="form" fullWidth={true} maxWidth="lg"
       open={createDialogIsOpen}
@@ -33,7 +33,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
               <Stack key={index} direction="row" spacing={{xs: 1, sm: 2}} alignItems="center" useFlexGap flexWrap="wrap">
-                {createDialogFieldNames.map((f, fi) => (
+                {createDialogFieldDefinitions.map((f, fi) => (
                   <TextField key={f.fieldName} 
                     name={f.fieldName} 
                     label={f.displayName} 

@@ -14,7 +14,7 @@ const getLocalISOString = (dateISOString) => {
   return `${date.getFullYear()}-${date.getMonth() < 9 ? "0" + (1 + date.getMonth()) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + (date.getDate()) : date.getDate()}T${date.getHours() < 10 ? "0" + (date.getHours()) : date.getHours()}:${date.getMinutes() < 10 ? "0" + (date.getMinutes()) : date.getMinutes()}`
 }
 
-export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleItemEdit }) => {
+export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleItemEdit }) => {
   return (
     <Dialog component="form"
       open={editDialogIsOpen}
@@ -35,7 +35,7 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
         }}>
         <Stack spacing={2}>
           <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
-          {editDialogFieldNames.map((f) => (
+          {editDialogFieldDefinitions.map((f) => (
             <TextField multiline={f.multiline}
               minRows={2}
               key={f.fieldName} 

@@ -60,7 +60,7 @@ const UserManagement = (props) => {
 
   const [coursesByUser, setCoursesByUser] = useState({});
 
-  const editDialogFieldNames = [
+  const editDialogFieldDefinitions = [
     {
       fieldName: "given_name",
       displayName: "First Name"
@@ -76,7 +76,7 @@ const UserManagement = (props) => {
       inputType: "email"
     }
   ]
-  const createDialogFieldNames = editDialogFieldNames;
+  const createDialogFieldDefinitions = editDialogFieldDefinitions;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
@@ -1114,7 +1114,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="user"
@@ -1122,7 +1122,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Edit the user fields, then click 'Save'."}
         editDialogItem={editDialogUser}
         handleItemEdit={handleUserEdit}
-        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
       <ItemSingleDeleteDialog 
         entity="user"

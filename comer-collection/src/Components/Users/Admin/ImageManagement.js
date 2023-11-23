@@ -203,8 +203,8 @@ const ImageManagement = (props) => {
   const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
   
 
-  const editDialogFieldNames = imageFieldNames;
-  const createDialogFieldNames = imageFieldNames;
+  const editDialogFieldDefinitions = imageFieldNames;
+  const createDialogFieldDefinitions = imageFieldNames;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogImages, createDialogDispatch] = useReducer(createImageDialogReducer, []);
@@ -890,7 +890,7 @@ const ImageManagement = (props) => {
         dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
         createDialogItems={createDialogImages}
         handleItemsCreate={handleImagesCreate}
-        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="image"
@@ -898,7 +898,7 @@ const ImageManagement = (props) => {
         dialogInstructions={"Edit the image fields, then click 'Save'."}
         editDialogItem={editDialogImage}
         handleItemEdit={handleImageEdit}
-        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
       <ItemSingleDeleteDialog 
         entity="image"
@@ -914,7 +914,7 @@ const ImageManagement = (props) => {
         dialogInstructionsForm="Create new artists."
         dialogItems={artists}
         setDialogItems={setArtists}
-        dialogFieldNames={artistFieldNames}
+        dialogFieldDefinitions={artistFieldNames}
         dialogTableFields={artistTableFields}
         dialogIsOpen={manageArtistDialogIsOpen}
         setDialogIsOpen={setManageArtistDialogIsOpen}

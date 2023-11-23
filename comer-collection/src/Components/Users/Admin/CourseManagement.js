@@ -82,7 +82,7 @@ const CourseManagement = (props) => {
   const [usersByCourse, setUsersByCourse] = useState({});
   
 
-  const editDialogFieldNames = [
+  const editDialogFieldDefinitions = [
     {
       fieldName: "name",
       displayName: "Course Name",
@@ -108,7 +108,7 @@ const CourseManagement = (props) => {
       multiline: true
     }
   ]
-  const createDialogFieldNames = editDialogFieldNames;
+  const createDialogFieldDefinitions = editDialogFieldDefinitions;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
@@ -888,7 +888,7 @@ const CourseManagement = (props) => {
         dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
         createDialogItems={createDialogCourses}
         handleItemsCreate={handleCoursesCreate}
-        {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="course"
@@ -896,7 +896,7 @@ const CourseManagement = (props) => {
         dialogInstructions={"Edit the course fields, then click 'Save'."}
         editDialogItem={editDialogCourse}
         handleItemEdit={handleCourseEdit}
-        {...{ editDialogFieldNames, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
       <ItemSingleDeleteDialog 
         entity="course"

@@ -12,9 +12,9 @@ import AddIcon from "@mui/icons-material/Add"
 import { getBlankItemFields } from "../HelperMethods/fields";
 import { DataTable } from "../DataTable";
 
-export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTable, dialogInstructionsForm, dialogItems, setDialogItems, dialogFieldNames, dialogTableFields, dialogIsOpen, setDialogIsOpen, handleItemCreate, handleItemEdit, handleItemDelete }) => {
+export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTable, dialogInstructionsForm, dialogItems, setDialogItems, dialogFieldDefinitions, dialogTableFields, dialogIsOpen, setDialogIsOpen, handleItemCreate, handleItemEdit, handleItemDelete }) => {
 
-  const [itemToAdd, setItemToAdd] = useState(getBlankItemFields(dialogFieldNames));
+  const [itemToAdd, setItemToAdd] = useState(getBlankItemFields(dialogFieldDefinitions));
   
   return (
     <Dialog fullWidth={true} maxWidth="lg"
@@ -31,7 +31,7 @@ export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTabl
         <DialogContentText textAlign="left" variant="body1">{dialogInstructionsForm}</DialogContentText>
           <Stack component="form" direction="row" alignItems="center" spacing={2}>
             <DialogContentText variant="body1"></DialogContentText>
-            {dialogFieldNames.map((f, fi) => (
+            {dialogFieldDefinitions.map((f, fi) => (
               <TextField key={f.fieldName} 
                 name={f.fieldName} 
                 label={f.displayName} 
@@ -60,7 +60,7 @@ export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTabl
               onClick={(e) => {
                 e.preventDefault();
                 handleItemCreate(itemToAdd);
-                setItemToAdd(getBlankItemFields(dialogFieldNames))
+                setItemToAdd(getBlankItemFields(dialogFieldDefinitions))
               }}>
               <Typography variant="body1">{`Create ${entity}`}</Typography>
             </Button>
