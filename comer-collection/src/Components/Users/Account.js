@@ -44,7 +44,12 @@ const Account = (props) => {
               !appUser.password_change_required && (<Navigate to='Profile' replace />) ||
               appUser.password_change_required && (<Navigate to='ChangePassword' replace />)
             } />
-            <Route path="Profile" element={<Profile {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Profile" element={<Profile {
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+                }
+              } />} />
             <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="UserManagement" element={<UserManagement {
               ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
