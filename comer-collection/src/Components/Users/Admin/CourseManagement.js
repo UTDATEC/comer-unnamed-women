@@ -698,7 +698,7 @@ const CourseManagement = (props) => {
 
       <ItemMultiCreateDialog entity="course" 
         dialogTitle={"Create Courses"}
-        dialogInstructions={"Add courses, edit the course fields, then click 'Create'."}
+        dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
         createDialogItems={createDialogCourses}
         handleItemsCreate={handleCoursesCreate}
         {...{ createDialogFieldNames, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
