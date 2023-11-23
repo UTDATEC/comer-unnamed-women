@@ -47,7 +47,7 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
         <TableBody>
           {items.map((item) => {
 
-            const isSelected = selectedItems.map((si) => si.id).includes(item.id);
+            const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
             const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
 
             return (
