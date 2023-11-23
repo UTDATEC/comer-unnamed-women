@@ -55,8 +55,6 @@ const UserManagement = (props) => {
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
-  const [assignCourseDialogUser, setAssignCourseDialogUser] = useState(null);
-  const [assignCourseDialogCourses, setAssignCourseDialogCourses] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [assignCourseDialogUsers, setAssignCourseDialogUsers] = useState([]);
 
@@ -86,9 +84,7 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setSelectedNavItem, 
-    
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const { appUser, setSelectedNavItem, showSnackbar } = props;
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -210,24 +206,19 @@ const UserManagement = (props) => {
         newArray: []
       })
 
-      setSnackbarText(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`, "success");
 
     } else if(usersCreated < newUserArray.length) {
 
       if(usersCreated > 0) {
-        setSnackbarText(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure the email addresses are unique, and try again.`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure the email addresses are unique, and try again.`, "warning");
       }
       else {
-        setSnackbarText(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  
+        showSnackbar(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  
           ${newUserArray.length == 1 ? 
             "Make sure the email address is not already in use, and try again." : 
-            "Make sure the email address is not already in use, and try again."}`)
-        setSnackbarSeverity("error");
+            "Make sure the email address is not already in use, and try again."}`, "error")
       }
-      setSnackbarOpen(true);
 
       createDialogDispatch({
         type: "set",
@@ -257,16 +248,12 @@ const UserManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields({email: '', given_name: '', family_name: ''})
 
-      setSnackbarText(`Successfully edited user ${userId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully edited user ${userId}`, "success");
 
     } catch (error) {
       console.error(`Error editing user ${userId}: ${error}`);
 
-      setSnackbarText(`Error editing for user ${userId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error editing for user ${userId}`, "error")
     }
   }
 
@@ -298,22 +285,14 @@ const UserManagement = (props) => {
 
     if(coursesAdded == courseIds.length) {
       setCreateDialogIsOpen(false);
-
-      setSnackbarText(`Successfully removed user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
+      showSnackbar(`Successfully removed user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success")
     } else if(coursesAdded < courseIds.length) {
-
       if(coursesAdded > 0) {
-        setSnackbarText(`Removed user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Removed user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning")
       }
       else {
-        setSnackbarText(`Failed to remove user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to remove user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error")
       }
-      setSnackbarOpen(true);
 
     }
   }
@@ -344,21 +323,16 @@ const UserManagement = (props) => {
     if(usersEnrolled == userIds.length) {
       setCreateDialogIsOpen(false);
 
-      setSnackbarText(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
     } else if(usersEnrolled < userIds.length) {
 
       if(usersEnrolled > 0) {
-        setSnackbarText(`Enrolled ${usersEnrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Enrolled ${usersEnrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "warning")
       }
       else {
-        setSnackbarText(`Failed to enroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to enroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "error")
       }
-      setSnackbarOpen(true);
 
     }
 
@@ -391,21 +365,16 @@ const UserManagement = (props) => {
     if(usersUnenrolled == userIds.length) {
       setCreateDialogIsOpen(false);
 
-      setSnackbarText(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "success")
 
     } else if(usersUnenrolled < userIds.length) {
 
       if(usersUnenrolled > 0) {
-        setSnackbarText(`Unenrolled ${usersUnenrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Unenrolled ${usersUnenrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "warning")
       }
       else {
-        setSnackbarText(`Failed to unenroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to unenroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "error")
       }
-      setSnackbarOpen(true);
 
     }
 
@@ -439,21 +408,16 @@ const UserManagement = (props) => {
     if(coursesAdded == courseIds.length) {
       setCreateDialogIsOpen(false);
 
-      setSnackbarText(`Successfully added user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully added user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success")
 
     } else if(coursesAdded < courseIds.length) {
 
       if(coursesAdded > 0) {
-        setSnackbarText(`Added user ${userId} to ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Added user ${userId} to ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning")
       }
       else {
-        setSnackbarText(`Failed to add user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to add user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error")
       }
-      setSnackbarOpen(true);
 
     }
 
@@ -478,16 +442,12 @@ const UserManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarText(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`, "success")
 
     } catch (error) {
       console.error(`Error deactivating user ${userId}: ${error}`);
 
-      setSnackbarText(`Error deactivating user ${userId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error deactivating user ${userId}`, "error")
     }
   }
 
@@ -511,17 +471,13 @@ const UserManagement = (props) => {
       
       setPrivilegesDialogIsOpen(false);
 
-      setSnackbarText(`User ${userId} is ${isPromotion ? "now" : "no longer"} an administrator.`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`User ${userId} is ${isPromotion ? "now" : "no longer"} an administrator.`, "success")
 
 
     } catch (error) {
       console.error(`Error changing privileges for user ${userId}: ${error}`);
 
-      setSnackbarText(`Error changing privileges for user ${userId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error changing privileges for user ${userId}`, "error")
     }
   }
 
@@ -547,16 +503,12 @@ const UserManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarText(`Password reset for user ${userId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Password reset for user ${userId}`, "success");
 
     } catch (error) {
       console.error(`Error resetting password for user ${userId}: ${error}`);
 
-      setSnackbarText(`Error resetting password for user ${userId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error resetting password for user ${userId}`, "error");
     }
   }
 
@@ -573,9 +525,7 @@ const UserManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarSeverity("success")
-      setSnackbarText(`User ${userId} has been deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`User ${userId} has been deleted`, "success")
 
       if (response.status === 200 || response.status === 204) {
       } else {
@@ -584,9 +534,7 @@ const UserManagement = (props) => {
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
-      setSnackbarSeverity("error")
-      setSnackbarText(`User ${userId} could not be deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`User ${userId} could not be deleted`, "error")
     }
 
     setDeleteDialogIsOpen(false);
@@ -597,20 +545,16 @@ const UserManagement = (props) => {
   const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
       navigator.clipboard.writeText(user[fieldName]);
-      setSnackbarSeverity("success")
       if(fieldName == "pw_temp") {
-        setSnackbarText(`Password for user ${user.id} copied to clipboard`);
+        showSnackbar(`Password for user ${user.id} copied to clipboard`, "success");
       } else if(fieldName == "email") {
-        setSnackbarText(`Email address for user ${user.id} copied to clipboard`);
+        showSnackbar(`Email address for user ${user.id} copied to clipboard`, "success");
       } else {
-        setSnackbarText(`Text copied to clipboard`);
+        showSnackbar(`Text copied to clipboard`, "success");
       }
 
-      setSnackbarOpen(true);
     } catch (error) {
-      setSnackbarSeverity("error")
-      setSnackbarText(`Error copying text to clipboard`);
-      setSnackbarOpen(true);
+      showSnackbar(`Error copying text to clipboard`, "error");
     }
   }, [])
 

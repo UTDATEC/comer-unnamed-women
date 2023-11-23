@@ -86,6 +86,13 @@ const App = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
 
+  const showSnackbar = (message, severity="info") => {
+    setSnackbarText(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  }
+  
+
   useEffect(() => {
     const initializeAppUser = async() => {
       try {
@@ -129,7 +136,7 @@ const App = () => {
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
           <Route path="/Account/*" element={<Account {
-              ...{appUser, setAppUser, 
+              ...{appUser, setAppUser, showSnackbar,
                 snackbarOpen, snackbarText, snackbarSeverity,
                 setSnackbarOpen, setSnackbarText, setSnackbarSeverity
               }

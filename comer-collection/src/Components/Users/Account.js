@@ -16,7 +16,7 @@ import MyExhibitions from './MyExhibitions';
 
 const Account = (props) => {
 
-  const { appUser, setAppUser, 
+  const { appUser, setAppUser, showSnackbar,
     snackbarOpen, snackbarText, snackbarSeverity,
     setSnackbarOpen, setSnackbarText, setSnackbarSeverity
   } = props; 
@@ -59,7 +59,7 @@ const Account = (props) => {
                 }
               } />} />
             <Route path="UserManagement" element={<UserManagement {
-              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar,
                 snackbarOpen, snackbarText, snackbarSeverity,
                 setSnackbarOpen, setSnackbarText, setSnackbarSeverity
                 }
