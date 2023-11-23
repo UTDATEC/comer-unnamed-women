@@ -1092,7 +1092,7 @@ const UserManagement = (props) => {
         "bottom"
       `
     }}>
-        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2} sx={{gridArea: "top"}}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
           <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="50%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
@@ -1141,7 +1141,7 @@ const UserManagement = (props) => {
             <Stack direction="row" alignItems="center" spacing={2}>
               <CheckIcon fontSize="large" sx={{opacity: 0.5}}/>
               <Typography variant="body1">{selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"} selected</Typography>
-              <Button variant="text" onClick={() => {
+              <Button variant="outlined" onClick={() => {
                 setSelectedUsers([])
               }}>
                 <Typography variant="body1">Clear</Typography>

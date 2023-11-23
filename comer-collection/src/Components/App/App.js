@@ -63,12 +63,14 @@ const App = () => {
         main: primaryColor['900'],
         light: primaryColor['500'],
         contrastText: 'white',
-        "200": primaryColor['200']
+        "200": primaryColor['200'],
+        "100": primaryColor['100']
       },
       secondary: {
         main: secondaryColor['700'],
         contrastText: 'white',
-        "200": secondaryColor['200']
+        "200": secondaryColor['200'],
+        "100": secondaryColor['100']
       },
       grey: {
         main: grey['800']

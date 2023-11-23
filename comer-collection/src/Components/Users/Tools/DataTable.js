@@ -4,10 +4,11 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTheme } from "@emotion/react";
 
 export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems }) => {
 
-
+  const theme = useTheme();
 
   return (
     <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 0px)' }}>
@@ -44,16 +45,23 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
         </TableHead>
 
         <TableBody>
-          {items.map((item) => (
+          {items.map((item) => {
+
+            const isSelected = selectedItems.map((si) => si.id).includes(item.id);
+            const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
+
+            return (
             <TableRow key={item.id} sx={{
               [`&:hover`]: {
-                backgroundColor: "#EEE"
+                backgroundColor: isSelected ? theme.palette[themeColor]['200'] : "#EEE"
+              },
+              [`&:not(:hover)`]: {
+                backgroundColor: isSelected ? theme.palette[themeColor]['100'] : ""
               }
             }}>
             {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-              <Checkbox checked={
-                selectedItems.map((si) => si.id).includes(item.id)
-              } 
+              <Checkbox checked={isSelected} 
+              color={themeColor}
               onChange={(e) => {
                 if(e.target.checked) {
                   setSelectedItems([...selectedItems, item])
@@ -71,7 +79,7 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
                 )
               })}
             </TableRow>
-          ))}
+          )})}
         </TableBody>
       </Table>
     </TableContainer>
