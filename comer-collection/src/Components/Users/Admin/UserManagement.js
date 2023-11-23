@@ -1117,12 +1117,12 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <React.Fragment  sx={{gridArea: "table"}}>
         <DataTable items={usersToDisplay} tableFields={userTableFields} 
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
+          sx={{gridArea: "table"}}
         />
-          {
+          {/* {
             usersToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
                 <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
@@ -1134,8 +1134,7 @@ const UserManagement = (props) => {
                 </Stack>
               </Box>
             )
-          }
-        </React.Fragment>
+          } */}
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
           {selectedUsers.length > 0 && (
             <Stack direction="row" alignItems="center" spacing={2}>
