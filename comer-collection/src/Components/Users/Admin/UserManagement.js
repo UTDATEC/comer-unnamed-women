@@ -28,11 +28,13 @@ import { searchItems } from "../Tools/SearchUtilities";
 import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import SecurityIcon from "@mui/icons-material/Security";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 
 const createUserDialogReducer = (createDialogUsers, action) => {
@@ -84,6 +86,10 @@ const UserManagement = (props) => {
   const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
   const [assignCourseDialogUser, setAssignCourseDialogUser] = useState(null);
   const [assignCourseDialogCourses, setAssignCourseDialogCourses] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [assignCourseDialogUsers, setAssignCourseDialogUsers] = useState([]);
+
+  const [coursesByUser, setCoursesByUser] = useState({});
 
   const editDialogFieldNames = [
     {
@@ -127,8 +133,8 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
-    snackbarOpen, snackbarText, snackbarSeverity,
+  const { appUser, setSelectedNavItem, 
+    
     setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
   const theme = useTheme();
   const navigate = useNavigate();
@@ -162,6 +168,15 @@ const UserManagement = (props) => {
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
+
+
+      const coursesByUserDraft = {}
+      for(const c of userData.data) {
+        coursesByUserDraft[c.id] = c.Courses;
+      }
+      setCoursesByUser({...coursesByUserDraft});
+
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -317,62 +332,194 @@ const UserManagement = (props) => {
 
 
 
-  const handleAssignCourseToUser = async(userId, courseId) => {
-    try {
-      await axios.put(
-        `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      fetchUserCourses(userId);
+  const handleUnassignCoursesFromUser = async(userId, courseIds) => {
+    let coursesAdded = 0;
+    let courseIndicesWithErrors = []
+    for(const [i, courseId] of courseIds.entries()) {
+      try {
+        await axios.delete(
+          `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
 
-      setEditDialogIsOpen(false);
-      setEditDialogFields({email: '', given_name: '', family_name: ''})
+        coursesAdded++;
+  
+      } catch (error) {
+        console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
+        courseIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
 
-      setSnackbarText(`Successfully enrolled user ${userId} in course ${courseId}`)
+    if(coursesAdded == courseIds.length) {
+      setCreateDialogIsOpen(false);
+
+      setSnackbarText(`Successfully removed user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
 
-    } catch (error) {
-      console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
+    } else if(coursesAdded < courseIds.length) {
 
-      setSnackbarText(`Error enrolling user ${userId} in course ${courseId}`)
-      setSnackbarSeverity("error");
+      if(coursesAdded > 0) {
+        setSnackbarText(`Removed user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to remove user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("error");
+      }
       setSnackbarOpen(true);
+
     }
   }
+
+  const handleAssignUsersToCourse = async(courseId, userIds) => {
+    let usersEnrolled = 0;
+    let userIndicesWithErrors = []
+    for(const [i, userId] of userIds.entries()) {
+      try {
+        await axios.put(
+          `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        usersEnrolled++;
+  
+      } catch (error) {
+        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
+        userIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(usersEnrolled == userIds.length) {
+      setCreateDialogIsOpen(false);
+
+      setSnackbarText(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(usersEnrolled < userIds.length) {
+
+      if(usersEnrolled > 0) {
+        setSnackbarText(`Enrolled ${usersEnrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to enroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+    }
+
+
+  }
+
+  const handleUnassignUsersFromCourse = async(courseId, userIds) => {
+    let usersUnenrolled = 0;
+    let userIndicesWithErrors = []
+    for(const [i, userId] of userIds.entries()) {
+      try {
+        await axios.delete(
+          `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        usersUnenrolled++;
+  
+      } catch (error) {
+        console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
+        userIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(usersUnenrolled == userIds.length) {
+      setCreateDialogIsOpen(false);
+
+      setSnackbarText(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(usersUnenrolled < userIds.length) {
+
+      if(usersUnenrolled > 0) {
+        setSnackbarText(`Unenrolled ${usersUnenrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to unenroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+    }
+
+
+  }
+
+
+  const handleAssignCoursesToUser = async(userId, courseIds) => {
+    let coursesAdded = 0;
+    let courseIndicesWithErrors = []
+    for(const [i, courseId] of courseIds.entries()) {
+      try {
+        await axios.put(
+          `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        coursesAdded++;
+  
+      } catch (error) {
+        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
+        courseIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(coursesAdded == courseIds.length) {
+      setCreateDialogIsOpen(false);
+
+      setSnackbarText(`Successfully added user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+    } else if(coursesAdded < courseIds.length) {
+
+      if(coursesAdded > 0) {
+        setSnackbarText(`Added user ${userId} to ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("warning");
+      }
+      else {
+        setSnackbarText(`Failed to add user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+
+    }
+
+  }
+
 
   
-  const handleUnassignCourseFromUser = async(userId, courseId) => {
-    try {
-      await axios.delete(
-        `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      fetchUserCourses(userId);
-
-      setEditDialogIsOpen(false);
-      setEditDialogFields({email: '', given_name: '', family_name: ''})
-
-      setSnackbarText(`Successfully unenrolled user ${userId} from course ${courseId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
-    } catch (error) {
-      console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
-
-      setSnackbarText(`Error unenrolling user ${userId} from course ${courseId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-    }
-  }
 
 
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
@@ -646,8 +793,9 @@ const UserManagement = (props) => {
               color={user.is_admin ? "secondary" : "primary"}
               startIcon={<SchoolIcon />}
               onClick={() => {
-                setAssignCourseDialogUser(user);
-                setAssignCourseDialogCourses([...user.Courses]);
+                // setAssignCourseDialogUser(user);
+                // setAssignCourseDialogCourses([...user.Courses]);
+                setAssignCourseDialogUsers([user])
                 setAssignCourseDialogIsOpen(true);
               }}
             >
@@ -767,10 +915,10 @@ const UserManagement = (props) => {
         </TableCell>
       ),
       generateTableCell: (user) => (
-        <TableCell>
+        <TableCell sx={{minWidth: "100px"}}>
           <IconButton 
             disabled={user.id == appUser.id} 
-            onClick={(e) => {
+            onClick={() => {
               setEditDialogUser(user);
               const { email, family_name, given_name } = user;
               setEditDialogFields({ email, family_name, given_name });
@@ -782,7 +930,7 @@ const UserManagement = (props) => {
           </IconButton>
           <IconButton 
             disabled={user.is_admin || user.Courses.length > 0 || user.Exhibitions.length > 0} 
-            onClick={(e) => {
+            onClick={() => {
               setDeleteDialogUser(user);
               setDeleteDialogIsOpen(true);
             }}
@@ -833,8 +981,8 @@ const UserManagement = (props) => {
       generateTableCell: (course) => (
         <TableCell>
           <Stack>
-            <Typography variant="body1">Start: {new Date (course.date_start).toLocaleDateString()}</Typography>
-            <Typography variant="body1">End: {new Date (course.date_end).toLocaleDateString()}</Typography>
+            <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
+            <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
           </Stack>
         </TableCell>
       )
@@ -848,20 +996,49 @@ const UserManagement = (props) => {
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
-    generateTableCell: (course, extraProperties) => (
+    generateTableCell: (course, extraProperties) => {
+      const quantity = Object.entries(extraProperties.secondariesByPrimary)
+        .filter(([userId]) => (
+          assignCourseDialogUsers.map((u) => u.id).includes(parseInt(userId))
+        ))
+        .filter(([, courses]) => (
+          courses.map((c) => c.id).includes(course.id)
+        )).length
+      return (
       <TableCell>
-        {extraProperties.secondaryItemIdsAssigned.indexOf(course.id) == -1 ? 
-          <Button variant="outlined" color="primary" startIcon={<SchoolIcon />} onClick={() => {
-            handleAssignCourseToUser(extraProperties.primaryItem.id, course.id);
-          }}>
-            <Typography variant="body1">Enroll</Typography>
-          </Button> :
+        {quantity == assignCourseDialogUsers.length && (
           <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
-          <Typography variant="body1">Enrolled</Typography>
-        </Button>
+            {assignCourseDialogUsers.length == 1 ? (
+              <Typography variant="body1">Enrolled</Typography>
+            ) : (
+              <Typography variant="body1">All {quantity} users enrolled</Typography>
+            )}
+          </Button>) || 
+          quantity == 0 && (
+            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+              handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+            }}>
+              {assignCourseDialogUsers.length == 1 ? (
+                <Typography variant="body1">Enroll</Typography>
+                ) : (
+                <Typography variant="body1">Enroll {assignCourseDialogUsers.length} users</Typography>
+              )}
+            </Button>
+          ) || 
+          quantity > 0 && quantity < assignCourseDialogUsers.length && (
+            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+              handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+            }}>
+              {assignCourseDialogUsers.length == 1 ? (
+                <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
+              ) : (
+                <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more users</Typography>
+              )}
+            </Button>
+          )
         }
       </TableCell>
-    )
+    )}
   }]
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
@@ -871,15 +1048,29 @@ const UserManagement = (props) => {
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
-    generateTableCell: (course, extraProperties) => (
-      <TableCell>
-        <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
-          handleUnassignCourseFromUser(extraProperties.primaryItem.id, course.id);
-        }}>
-          <Typography variant="body1">Drop</Typography>
-        </Button>
-      </TableCell>
-    )
+    generateTableCell: (course, extraProperties) => {
+      const quantity = Object.entries(extraProperties.secondariesByPrimary)
+        .filter(([userId]) => (
+          assignCourseDialogUsers.map((u) => u.id).includes(parseInt(userId))
+        ))
+        .filter(([, courses]) => (
+          courses.map((c) => c.id).includes(course.id)
+        )).length
+
+      return (
+        <TableCell>
+          <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
+            handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+          }}>
+          {quantity == 1 ? (
+            <Typography variant="body1">Unenroll {quantity} user</Typography>
+          ) : (
+            <Typography variant="body1">Unenroll {quantity} users</Typography>
+          )}
+          </Button>
+        </TableCell>
+      )
+    }
   }]
 
 
@@ -891,8 +1082,17 @@ const UserManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <>
-        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
+    <Box sx={{
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '80px calc(100vh - 224px) 80px',
+      gridTemplateAreas: `
+        "top"
+        "table"
+        "bottom"
+      `
+    }}>
+        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2} sx={{gridArea: "top"}}>
           <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="50%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
@@ -917,7 +1117,11 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={usersToDisplay} tableFields={userTableFields} />
+        <React.Fragment  sx={{gridArea: "table"}}>
+        <DataTable items={usersToDisplay} tableFields={userTableFields} 
+          rowSelectionEnabled={true}
+          selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
+        />
           {
             usersToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
@@ -931,6 +1135,57 @@ const UserManagement = (props) => {
               </Box>
             )
           }
+        </React.Fragment>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
+          {selectedUsers.length > 0 && (
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <CheckIcon fontSize="large" sx={{opacity: 0.5}}/>
+              <Typography variant="body1">{selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"} selected</Typography>
+              <Button variant="text" onClick={() => {
+                setSelectedUsers([])
+              }}>
+                <Typography variant="body1">Clear</Typography>
+              </Button>
+            </Stack>
+          ) || selectedUsers.length == 0 && (
+            <Stack direction="row" alignItems="center" spacing={2} >
+              <ArrowUpwardIcon fontSize="large" sx={{opacity: 0.5}}/>
+              <Typography variant="body1" sx={{opacity: 0.5}}>Select users to use bulk actions</Typography>
+            </Stack>
+
+          )}
+          <Stack direction="row" spacing={2} >
+            <Button variant="outlined"
+              disabled={selectedUsers.length == 0}
+              startIcon={<SchoolIcon />}
+              onClick={() => {
+              setAssignCourseDialogUsers([...selectedUsers])
+              setAssignCourseDialogIsOpen(true);
+            }}>
+              <Typography variant="body1">Bulk Enroll</Typography>
+            </Button>
+            {/* <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+              setRefreshInProgress(true);
+              fetchData();
+            }}
+              disabled={refreshInProgress}>
+              <Typography variant="body1">Refresh</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+              disabled={
+                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
+              }>
+              <Typography variant="body1">Clear Filters</Typography>
+            </Button>
+            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
+              onClick={() => {
+                setCreateDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Create Users</Typography>
+            </Button> */}
+          </Stack>
+        </Stack>
 
       <ItemMultiCreateDialog entity="user" 
         dialogTitle={"Create Users"}
@@ -956,10 +1211,15 @@ const UserManagement = (props) => {
       <AssociationManagementDialog
         primaryEntity="user"
         secondaryEntity="course"
-        primaryItem={assignCourseDialogUser}
+        primaryItems={assignCourseDialogUsers}
         secondaryItemsAll={courses}
-        secondaryItemsAssigned={assignCourseDialogCourses}
-        dialogTitle={`Manage Course Enrollments for User ${assignCourseDialogUser?.id}`}
+        // secondaryItemsAssigned={assignCourseDialogCourses}
+        secondariesByPrimary={coursesByUser}
+        dialogTitle={
+          assignCourseDialogUsers.length == 1 ?
+            `Manage Courses for User ${assignCourseDialogUsers[0].id}` :
+            `Manage Courses for ${assignCourseDialogUsers.length} Selected Users`
+        }
         dialogButtonForSecondaryManagement={<>
           <Button variant="outlined" onClick={() => {
             navigate('/Account/CourseManagement')
@@ -968,12 +1228,16 @@ const UserManagement = (props) => {
           </Button>
         </>}
         dialogIsOpen={assignCourseDialogIsOpen}
-        tableTitleAssigned={`Current Courses for User ${assignCourseDialogUser?.id}`}
+        tableTitleAssigned={
+          assignCourseDialogUsers.length == 1 ?
+            `Current Courses for User ${assignCourseDialogUsers[0].id}` :
+            `Current Courses with Selected Users`
+        }
         tableTitleAll={`All Courses`}
         setDialogIsOpen={setAssignCourseDialogIsOpen}
         secondaryTableFieldsAll={courseTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
-        handleAssociationAssign={handleAssignCourseToUser}
+        // handleAssociationAssign={handleAssignCourseToUser}
         secondarySearchFields={['name']}
         secondarySearchBoxPlaceholder="Search courses by name"
       />
@@ -986,7 +1250,7 @@ const UserManagement = (props) => {
         handleDemote={handleUserDemote}
       />
 
-    </>
+    </Box>
   );
 }
 
