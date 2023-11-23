@@ -37,13 +37,24 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
       <DialogContent>
         <Stack direction="column" spacing={2}>
         {dialogUser?.is_admin && (
+          <>
           <DialogContentText variant="body1">
-            You are about to remove administrator privileges for user {dialogUser?.id}.  This user will no longer be able to manage images, users, exhibitions, or courses.  The user will still be able to access and edit their own exhibitions. 
+            You are about to remove administrator privileges for {dialogUser?.safe_display_name}.
           </DialogContentText>
+          <DialogContentText variant="body1">
+            This user will no longer be able to manage images, users, exhibitions, or courses.  The user will still be able to access and edit their own exhibitions. 
+          </DialogContentText>
+          </>
+          
         ) || !dialogUser?.is_admin && (
+          <>
           <DialogContentText variant="body1">
-            You are about to grant administrator privileges to user {dialogUser?.id}.  This user will be able to manage images, users, exhibitions, and courses.  The user will continue to have curator privileges, as well.
+            You are about to grant administrator privileges to {dialogUser?.safe_display_name}.
           </DialogContentText>
+          <DialogContentText variant="body1">
+            This user will be able to manage images, users, exhibitions, and courses.  The user will continue to have curator privileges, as well.
+          </DialogContentText>
+          </>
         )}
           <DialogContentText variant="body1">
             Please type your password to confirm this operation.
