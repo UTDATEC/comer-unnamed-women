@@ -16,6 +16,7 @@ import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import LockIcon from "@mui/icons-material/Lock";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -601,7 +602,15 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          {user.pw_temp ? (
+          {appUser.id == user.id ? (
+            <Button startIcon={<LockIcon />} color={user.is_admin ? "secondary" : "primary"}
+            variant="outlined"
+            onClick={() => {
+              navigate('/Account/ChangePassword');
+            }}>
+            <Typography variant="body1">Change</Typography>
+          </Button>
+          ) : user.pw_temp ? (
             <Button startIcon={<ContentCopyIcon />} color={user.is_admin ? "secondary" : "primary"}
               variant="outlined"
               onClick={() => {handleCopyToClipboard(user, "pw_temp")}}>
@@ -966,6 +975,7 @@ const UserManagement = (props) => {
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
         handleAssociationAssign={handleAssignCourseToUser}
         secondarySearchFields={['name']}
+        secondarySearchBoxPlaceholder="Search courses by name"
       />
 
       <UserChangePrivilegesDialog

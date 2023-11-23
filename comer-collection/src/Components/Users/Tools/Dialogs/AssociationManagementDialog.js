@@ -20,17 +20,18 @@ export const AssociationManagementDialog = ({
   secondaryTableFieldsAll, secondaryTableFieldsAssignedOnly,
   tableTitleAssigned, tableTitleAll, 
   dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, 
-  dialogIsOpen, setDialogIsOpen, secondarySearchFields
+  dialogIsOpen, setDialogIsOpen, 
+  secondarySearchFields, secondarySearchBoxPlaceholder
   }) => {
 
   const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
-  const [secondaryItemsAllResults, setSecondaryItemsAllResults] = useState(secondaryItemsAll);
-  const [secondaryItemsAssignedResults, setSecondaryItemsAssignedResults] = useState(secondaryItemsAssigned)
+  const [secondaryItemsAllResults, setSecondaryItemsAllResults] = useState([...secondaryItemsAll]);
+  const [secondaryItemsAssignedResults, setSecondaryItemsAssignedResults] = useState([...secondaryItemsAssigned])
 
   useEffect(() => {
-    setSecondaryItemsAssignedResults(searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields));
-    setSecondaryItemsAllResults(searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields));
+    setSecondaryItemsAssignedResults(searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []));
+    setSecondaryItemsAllResults(searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []));
   }, [secondaryItemsAssigned, secondaryItemsAll, secondarySearchQuery])
     
     
@@ -48,7 +49,7 @@ export const AssociationManagementDialog = ({
         <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
         <Stack direction="column" padding={1}>
           {secondarySearchFields?.length > 0 && (
-            <SearchBox width="100%" placeholder="Search courses by name" 
+            <SearchBox width="100%" placeholder={secondarySearchBoxPlaceholder ?? "Search"}
               searchQuery={secondarySearchQuery}
               setSearchQuery={setSecondarySearchQuery}
             />
@@ -58,23 +59,21 @@ export const AssociationManagementDialog = ({
           <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
-              {secondaryItemsAllResults.length > 0 && (
+              {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
                 <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAllResults} extraProperties={{ primaryItem, secondaryItemIdsAssigned: secondaryItemsAssigned?.map((si) => si.id)}} />
-              ) || secondaryItemsAllResults.length == 0 && (
+              ) || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
-                      {secondaryItemsAll.length > 0 ? (
-                        <>
-                          <SearchIcon sx={{fontSize: '150pt'}} />
-                          <Typography variant="h4">No results.</Typography>
-                        </>
-                      ) : (
-                        <>
-                          <InfoIcon sx={{fontSize: '150pt'}} />
-                          <Typography variant="h4">This list is empty.</Typography>
-                        </>
-                      )}
-                    </Stack>
+                  <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                  <SearchIcon sx={{fontSize: '150pt'}} />
+                  <Typography variant="h4">No results</Typography>
+                  </Stack>
+                </Box>
+              ) || secondaryItemsAll.length == 0 && (
+                <Box sx={{width: '100%', height: '100%'}}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                  <InfoIcon sx={{fontSize: '150pt'}} />
+                  <Typography variant="h4">This list is empty</Typography>
+                  </Stack>
                 </Box>
               )}
             </Box>
@@ -82,27 +81,23 @@ export const AssociationManagementDialog = ({
           <Divider sx={{borderWidth: "2px"}} />
           <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
-            <Box maxHeight="350px">
-              {secondaryItemsAssignedResults.length > 0 && (
-                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssignedResults} extraProperties={{ primaryItem }} />
-              ) || secondaryItemsAssignedResults.length == 0 && (
+            {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && (
+                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssignedResults} extraProperties={{ primaryItem, secondaryItemIdsAssigned: secondaryItemsAssigned?.map((si) => si.id)}} />
+              ) || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
-                      {secondaryItemsAssigned.length > 0 ? (
-                        <>
-                          <SearchIcon sx={{fontSize: '150pt'}} />
-                          <Typography variant="h4">No results.</Typography>
-                        </>
-                      ) : (
-                        <>
-                          <InfoIcon sx={{fontSize: '150pt'}} />
-                          <Typography variant="h4">This list is empty.</Typography>
-                        </>
-                      )}
-                    </Stack>
+                  <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                  <SearchIcon sx={{fontSize: '150pt'}} />
+                  <Typography variant="h4">No results</Typography>
+                  </Stack>
+                </Box>
+              ) || secondaryItemsAssigned.length == 0 && (
+                <Box sx={{width: '100%', height: '100%'}}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                  <InfoIcon sx={{fontSize: '150pt'}} />
+                  <Typography variant="h4">This list is empty</Typography>
+                  </Stack>
                 </Box>
               )}
-            </Box>
           </Stack>
         </Stack>
       </DialogContent>

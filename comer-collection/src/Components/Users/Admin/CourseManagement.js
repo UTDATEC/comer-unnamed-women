@@ -738,6 +738,8 @@ const CourseManagement = (props) => {
         setDialogIsOpen={setAssignUserDialogIsOpen}
         secondaryTableFieldsAll={userTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
+        secondarySearchFields={['given_name']}
+        secondarySearchBoxPlaceholder={"Search users by name or email"}
       />
 
     </>
