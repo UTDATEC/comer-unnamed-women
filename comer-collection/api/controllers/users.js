@@ -7,14 +7,25 @@ const randomPassword = () => {
 }
 
 
+const isUserDeletable = (userJSON) => {
+    return Boolean(!userJSON.is_admin && userJSON.Courses?.length == 0 && userJSON.Exhibitions?.length == 0);
+}
+
+
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const users = await User.findAll({
+        const users = Array.from(await User.findAll({
             include: [Course, Exhibition],
             attributes: {
                 include: ['pw_temp']
             }
-        });
+        })).map((u) => {
+            const userJSON = u.toJSON();
+            return {
+                ...userJSON, 
+                is_deletable: isUserDeletable(userJSON)
+            };
+        })
         res.status(200).json({ data: users });
     })
 };
@@ -196,7 +207,8 @@ const getUser = async (req, res, next) => {
             }
         });
         if (user) {
-            res.status(200).json({ data: user });
+            const userData = {...user.toJSON(), is_deletable: isUserDeletable(user.toJSON())}
+            res.status(200).json({ data: userData });
         }
         else {
             next(createError(404));
