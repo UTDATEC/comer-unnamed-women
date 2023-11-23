@@ -22,7 +22,7 @@ export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visib
             `${items.length} ${items.length == 1 ? entitySingular : entityPlural}`}
         </Typography>
         {selectedItems.length > 0 && (
-          <Typography variant="body1">{selectedItems.length} {items.length == 1 ? entitySingular : entityPlural} selected</Typography>
+          <Typography variant="body1">{selectedItems.length} {selectedItems.length == 1 ? entitySingular : entityPlural} selected</Typography>
         ) || selectedItems.length == 0 && (
           <Typography variant="body1" sx={{ opacity: 0.5 }}>Select items to use bulk actions</Typography>
         )}
@@ -32,7 +32,7 @@ export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visib
         <Button variant="outlined" onClick={() => {
           setSelectedItems([]);
         }}>
-          <Typography variant="body1">Clear</Typography>
+          <Typography variant="body1">Clear Selection</Typography>
         </Button>
       )}
     </Stack>
