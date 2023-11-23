@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const { User, Course, Exhibition } = require("../sequelize.js");
-const { adminOperation } = require('../security.js');
+const { adminOperation, userOperation } = require('../security.js');
 
 
 
@@ -15,6 +15,22 @@ const listExhibitions = async (req, res, next) => {
             next(createError(500), {debugMessage: e.message});
         }
     });
+}
+
+const listMyExhibitions = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        const user = await User.findByPk(user_id);
+        const myExhibitions = await user.getExhibitions();
+        if(user) {
+            try {
+                res.status(200).json({ data: myExhibitions });
+            } catch(e) {
+                next(createError(400, {debugMessage: e.message}));
+            }
+        }
+        else
+            next(createError(404));
+    })
 }
 
 const getExhibition = async (req, res, next) => {
@@ -82,4 +98,4 @@ const loadExhibition = async (req, res, next) => {
     }
 }
 
-module.exports = { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition }
+module.exports = { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions }
