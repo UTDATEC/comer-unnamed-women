@@ -32,7 +32,8 @@ export const ItemSingleDeleteDialog = ({ entity, dialogTitle, deleteDialogItem, 
             <Typography variant="body1">Cancel</Typography>
           </Button>
           <Button color="error" variant="contained" size="large" startIcon={<DeleteIcon />} sx={{ width: "100%" }} onClick={() => {
-            handleDelete(deleteDialogItem.id);
+            if(deleteDialogItem)
+              handleDelete(deleteDialogItem.id);
           }}>
             <Typography variant="body1">Delete</Typography>
 

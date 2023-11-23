@@ -36,6 +36,25 @@ import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilege
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 
+
+const userFieldDefinitions = [
+  {
+    fieldName: "given_name",
+    displayName: "First Name"
+  },
+  {
+    fieldName: "family_name",
+    displayName: "Last Name"
+  },
+  {
+    fieldName: "email",
+    displayName: "Email",
+    isRequired: true,
+    inputType: "email"
+  }
+]
+
+
 const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -59,24 +78,6 @@ const UserManagement = (props) => {
   const [assignCourseDialogUsers, setAssignCourseDialogUsers] = useState([]);
 
   const [coursesByUser, setCoursesByUser] = useState({});
-
-  const editDialogFieldDefinitions = [
-    {
-      fieldName: "given_name",
-      displayName: "First Name"
-    },
-    {
-      fieldName: "family_name",
-      displayName: "Last Name"
-    },
-    {
-      fieldName: "email",
-      displayName: "Email",
-      isRequired: true,
-      inputType: "email"
-    }
-  ]
-  const createDialogFieldDefinitions = editDialogFieldDefinitions;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
@@ -233,11 +234,14 @@ const UserManagement = (props) => {
     } else if(usersCreated < newUserArray.length) {
 
       if(usersCreated > 0) {
-        setSnackbarText(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
+        setSnackbarText(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure the email addresses are unique, and try again.`)
         setSnackbarSeverity("warning");
       }
       else {
-        setSnackbarText(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`)
+        setSnackbarText(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  
+          ${newUserArray.length == 1 ? 
+            "Make sure the email address is not already in use, and try again." : 
+            "Make sure the email address is not already in use, and try again."}`)
         setSnackbarSeverity("error");
       }
       setSnackbarOpen(true);
@@ -1104,7 +1108,7 @@ const UserManagement = (props) => {
               setAssignCourseDialogUsers([...selectedUsers])
               setAssignCourseDialogIsOpen(true);
             }}>
-              <Typography variant="body1">Bulk Enroll</Typography>
+              <Typography variant="body1">Enroll selected users in course</Typography>
             </Button>
           </Stack>
         </Stack>
@@ -1114,7 +1118,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions: userFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="user"
@@ -1122,7 +1126,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Edit the user fields, then click 'Save'."}
         editDialogItem={editDialogUser}
         handleItemEdit={handleUserEdit}
-        {...{ editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
       <ItemSingleDeleteDialog 
         entity="user"

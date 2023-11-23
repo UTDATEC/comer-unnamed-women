@@ -913,7 +913,7 @@ const CourseManagement = (props) => {
         secondariesByPrimary={usersByCourse}
         dialogTitle={
           assignUserDialogCourses.length == 1 ?
-            `Manage Enrollment for Course ${assignUserDialogCourses[0].id}` :
+            `Manage Enrollment for ${assignUserDialogCourses[0].safe_display_name}` :
             `Manage Enrollment for ${assignUserDialogCourses.length} Selected Courses`
         }
         dialogButtonForSecondaryManagement={<>
@@ -926,7 +926,7 @@ const CourseManagement = (props) => {
         dialogIsOpen={assignUserDialogIsOpen}
         tableTitleAssigned={
           assignUserDialogCourses.length == 1 ?
-            `Current Users for Course ${assignUserDialogCourses[0].id}` :
+            `Current Users for ${assignUserDialogCourses[0].safe_display_name}` :
             `Current Users in Selected Courses`
         }
         tableTitleAll={`All Users`}
