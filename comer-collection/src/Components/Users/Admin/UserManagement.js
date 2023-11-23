@@ -28,6 +28,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonIcon from '@mui/icons-material/Person';
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
@@ -569,7 +570,12 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.id}</Typography>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="body1">{user.id}</Typography>
+            {user.id == appUser.id && (
+              <PersonIcon color="secondary" />
+            )}
+          </Stack>
         </TableCell>
       )
     },
