@@ -847,20 +847,6 @@ const CourseManagement = (props) => {
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
           sx={{gridArea: "table"}}
         />
-          {/* {
-            coursesToDisplay.length == 0 && (
-              <Box sx={{width: '100%'}}>
-                <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
-                  <SearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
-                  <Typography variant="h4">No courses found</Typography>
-                  <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
-                    <Typography variant="body1">Clear Filters</Typography>
-                  </Button>
-                </Stack>
-              </Box>
-            )
-          } */}
-
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
           <SelectionSummary 
             items={courses}
