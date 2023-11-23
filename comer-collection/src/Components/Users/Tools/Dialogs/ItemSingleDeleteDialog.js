@@ -22,7 +22,7 @@ export const ItemSingleDeleteDialog = ({ entity, dialogTitle, deleteDialogItem, 
       <DialogTitle variant="h4" textAlign="center">{dialogTitle}</DialogTitle>
 
       <DialogContent>
-        <DialogContentText variant="body1">Are you sure you want to delete {entity} {deleteDialogItem?.id}?</DialogContentText>
+        <DialogContentText variant="body1">Are you sure you want to delete {entity} {deleteDialogItem?.safe_display_name}?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
