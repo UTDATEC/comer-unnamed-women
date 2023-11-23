@@ -182,21 +182,6 @@ const UserManagement = (props) => {
     }
   };
 
-  const fetchUserCourses = async (userId) => {
-    try {
-      const response = await axios.get(`http://localhost:9000/api/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const userData = await response.data;
-      setAssignCourseDialogCourses([... userData.data.Courses]);
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-    fetchData();
-  }
 
   /*
     User display:
