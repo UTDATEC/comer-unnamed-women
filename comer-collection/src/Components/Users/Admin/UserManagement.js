@@ -35,24 +35,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
-
-
-const userFieldDefinitions = [
-  {
-    fieldName: "given_name",
-    displayName: "First Name"
-  },
-  {
-    fieldName: "family_name",
-    displayName: "Last Name"
-  },
-  {
-    fieldName: "email",
-    displayName: "Email",
-    isRequired: true,
-    inputType: "email"
-  }
-]
+import { userFieldDefinitions } from "../Tools/HelperMethods/fields";
 
 
 const UserManagement = (props) => {
@@ -967,7 +950,9 @@ const UserManagement = (props) => {
             {assignCourseDialogUsers.length == 1 ? (
               <Typography variant="body1">Enrolled</Typography>
             ) : (
-              <Typography variant="body1">All {quantity} users enrolled</Typography>
+              <Typography variant="body1">
+                {quantity == 2 ? `Both users enrolled` : `All ${quantity} users enrolled`}
+              </Typography>
             )}
           </Button>) || 
           quantity == 0 && (
@@ -1019,7 +1004,11 @@ const UserManagement = (props) => {
             handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
           }}>
           {quantity == 1 ? (
-            <Typography variant="body1">Unenroll {quantity} user</Typography>
+            assignCourseDialogUsers.length == 1 ? (
+              <Typography variant="body1">Unenroll</Typography>
+            ) : (
+              <Typography variant="body1">Unenroll {quantity} user</Typography>
+            )
           ) : (
             <Typography variant="body1">Unenroll {quantity} users</Typography>
           )}
@@ -1095,7 +1084,7 @@ const UserManagement = (props) => {
               setAssignCourseDialogUsers([...selectedUsers])
               setAssignCourseDialogIsOpen(true);
             }}>
-              <Typography variant="body1">Enroll selected users in course</Typography>
+              <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"}</Typography>
             </Button>
           </Stack>
         </Stack>
@@ -1129,8 +1118,8 @@ const UserManagement = (props) => {
         secondariesByPrimary={coursesByUser}
         dialogTitle={
           assignCourseDialogUsers.length == 1 ?
-            `Manage Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
-            `Manage Courses for ${assignCourseDialogUsers.length} Selected Users`
+            `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
+            `Manage Course Enrollments for ${assignCourseDialogUsers.length} Selected Users`
         }
         dialogButtonForSecondaryManagement={<>
           <Button variant="outlined" onClick={() => {

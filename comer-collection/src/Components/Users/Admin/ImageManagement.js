@@ -33,156 +33,10 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import { filterItemFields } from "../Tools/HelperMethods/fields";
 import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { imageFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
 
-
-const artistFieldNames = [
-  {
-    fieldName: "familyName",
-    displayName: "Last Name",
-    isRequired: true
-  },
-  {
-    fieldName: "givenName",
-    displayName: "First Name",
-    isRequired: true
-  },
-  {
-    fieldName: "website",
-    displayName: "Website",
-    isRequired: false,
-    inputType: "url"
-  },
-  {
-    fieldName: "notes",
-    displayName: "Notes",
-    isRequired: false,
-    inputType: "textarea"
-  }
-]
-
-const imageFieldNames = [
-  {
-    fieldName: "title",
-    displayName: "Image Title",
-    isRequired: true
-  },
-  {
-    fieldName: "accessionNumber",
-    displayName: "Accession Number",
-    isRequired: false
-  },
-  {
-    fieldName: "year",
-    displayName: "Year",
-    isRequired: false,
-    inputType: "number"
-  },
-  {
-    fieldName: "additionalPrintYear",
-    displayName: "Additional Print Year",
-    isRequired: false,
-    inputType: "number"
-  },
-  {
-    fieldName: "url",
-    displayName: "URL",
-    inputType: "url",
-    multiline: true
-  },
-  {
-    fieldName: "medium",
-    displayName: "Medium",
-    isRequired: false
-  },
-  {
-    fieldName: "width",
-    displayName: "Image Width",
-    isRequired: true,
-    inputType: "number"
-  },
-  {
-    fieldName: "height",
-    displayName: "Image Height",
-    isRequired: true,
-    inputType: "number"
-  },
-  {
-    fieldName: "matWidth",
-    displayName: "Mat Width",
-    inputType: "number"
-  },
-  {
-    fieldName: "matHeight",
-    displayName: "Mat Height",
-    inputType: "number"
-  },
-  {
-    fieldName: "location",
-    displayName: "Location",
-    isRequired: false
-  },
-  {
-    fieldName: "condition",
-    displayName: "Condition",
-    inputType: "textarea"
-  },
-  {
-    fieldName: "valuationNotes",
-    displayName: "Valuation Notes",
-    inputType: "textarea",
-    multiline: true
-  },
-  {
-    fieldName: "otherNotes",
-    displayName: "Other Notes",
-    inputType: "textarea",
-    multiline: true
-  },
-  {
-    fieldName: "copyright",
-    displayName: "Copyright",
-    inputType: "textarea",
-    multiline: true
-  },
-  {
-    fieldName: "subject",
-    displayName: "Subject",
-    inputType: "textarea",
-    multiline: true
-  }
-]
-
-
-const createImageDialogReducer = (createDialogImages, action) => {
-  switch (action.type) {
-    case 'add':
-      return [...createDialogImages, {
-        name: "",
-        date_start: "",
-        date_end: "",
-        notes: ""
-      }]
-
-    case 'change':
-      return createDialogImages.map((r, i) => {
-        if(action.index == i)
-          return {...r, [action.field]: action.newValue};
-        else
-          return r;
-      })
-      
-    case 'remove':
-      return createDialogImages.filter((r, i) => {
-        return action.index != i;
-      })
-
-    case 'set':
-      return action.newArray;
-  
-    default:
-      throw Error("Unknown action type");
-  }
-}
 
 const ImageManagement = (props) => {
   const [images, setImages] = useState([]);
@@ -194,7 +48,7 @@ const ImageManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogImage, setEditDialogImage] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState(getBlankItemFields(imageFieldNames));
+  const [editDialogFields, setEditDialogFields] = useState(getBlankItemFields(imageFieldDefinitions));
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [backdropImage, setBackdropImage] = useState(null);
@@ -203,8 +57,8 @@ const ImageManagement = (props) => {
   const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
   
 
-  const editDialogFieldDefinitions = imageFieldNames;
-  const createDialogFieldDefinitions = imageFieldNames;
+  const editDialogFieldDefinitions = imageFieldDefinitions;
+  const createDialogFieldDefinitions = imageFieldDefinitions;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogImages, createDialogDispatch] = useReducer(createImageDialogReducer, []);
@@ -315,7 +169,7 @@ const ImageManagement = (props) => {
     let imageIndicesWithErrors = []
     for(const [i, newImageData] of newImageArray.entries()) {
       try {
-        let filteredImage = filterItemFields(imageFieldNames, newImageData);
+        let filteredImage = filterItemFields(imageFieldDefinitions, newImageData);
         await axios.post(
           `http://localhost:9000/api/images`, filteredImage,
           {
@@ -372,7 +226,7 @@ const ImageManagement = (props) => {
   
   const handleImageEdit = async(imageId, updateFields) => {
     try {
-      let filteredImage = filterItemFields(imageFieldNames, updateFields);
+      let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
       await axios.put(
         `http://localhost:9000/api/images/${imageId}`, filteredImage,
         {
@@ -384,7 +238,7 @@ const ImageManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFields(getBlankItemFields(imageFieldNames));
+      setEditDialogFields(getBlankItemFields(imageFieldDefinitions));
 
       setSnackbarText(`Successfully edited image ${imageId}`)
       setSnackbarSeverity("success");
@@ -437,7 +291,7 @@ const ImageManagement = (props) => {
   
   const handleCreateArtist = async(newArtist) => {
     try {
-      let filteredArtist = filterItemFields(artistFieldNames, newArtist);
+      let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
       await axios.post(
         `http://localhost:9000/api/artists/`, filteredArtist,
         {
@@ -799,7 +653,7 @@ const ImageManagement = (props) => {
             <IconButton 
               onClick={(e) => {
                 setEditDialogImage(image);
-                const filteredImage = filterItemFields(imageFieldNames, image);
+                const filteredImage = filterItemFields(imageFieldDefinitions, image);
                 setEditDialogFields(filteredImage);
                 setEditDialogSubmitEnabled(true);
                 setEditDialogIsOpen(true)
@@ -914,7 +768,7 @@ const ImageManagement = (props) => {
         dialogInstructionsForm="Create new artists."
         dialogItems={artists}
         setDialogItems={setArtists}
-        dialogFieldDefinitions={artistFieldNames}
+        dialogFieldDefinitions={artistFieldDefinitions}
         dialogTableFields={artistTableFields}
         dialogIsOpen={manageArtistDialogIsOpen}
         setDialogIsOpen={setManageArtistDialogIsOpen}

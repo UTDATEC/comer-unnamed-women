@@ -28,38 +28,9 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
+import { courseFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
 
-
-const createCourseDialogReducer = (createDialogCourses, action) => {
-  switch (action.type) {
-    case 'add':
-      return [...createDialogCourses, {
-        name: "",
-        date_start: "",
-        date_end: "",
-        notes: ""
-      }]
-
-    case 'change':
-      return createDialogCourses.map((r, i) => {
-        if(action.index == i)
-          return {...r, [action.field]: action.newValue};
-        else
-          return r;
-      })
-      
-    case 'remove':
-      return createDialogCourses.filter((r, i) => {
-        return action.index != i;
-      })
-
-    case 'set':
-      return action.newArray;
-  
-    default:
-      throw Error("Unknown action type");
-  }
-}
 
 const CourseManagement = (props) => {
   const [courses, setCourses] = useState([]);
@@ -82,33 +53,8 @@ const CourseManagement = (props) => {
   const [usersByCourse, setUsersByCourse] = useState({});
   
 
-  const editDialogFieldDefinitions = [
-    {
-      fieldName: "name",
-      displayName: "Course Name",
-      inputType: "textarea",
-      isRequired: true
-    },
-    {
-      fieldName: "date_start",
-      displayName: "Start",
-      inputType: "datetime-local",
-      isRequired: true
-    },
-    {
-      fieldName: "date_end",
-      displayName: "End",
-      inputType: "datetime-local",
-      isRequired: true
-    },
-    {
-      fieldName: "notes",
-      displayName: "Notes",
-      inputType: "textarea",
-      multiline: true
-    }
-  ]
-  const createDialogFieldDefinitions = editDialogFieldDefinitions;
+  const editDialogFieldDefinitions = courseFieldDefinitions;
+  const createDialogFieldDefinitions = courseFieldDefinitions;
 
   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
   const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
@@ -861,7 +807,7 @@ const CourseManagement = (props) => {
               disabled={selectedCourses.length == 0}
               startIcon={<GroupAddIcon />}
               onClick={() => {
-              setAssignUserDialogCourses([...selectedUsers])
+              setAssignUserDialogCourses([...selectedCourses])
               setAssignUserDialogIsOpen(true);
             }}>
               <Typography variant="body1">Bulk Enroll</Typography>
