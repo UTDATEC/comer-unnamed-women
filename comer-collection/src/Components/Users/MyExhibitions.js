@@ -6,6 +6,8 @@ import { Navigate } from "react-router";
 import axios from "axios";
 import { DataTable } from "./Tools/DataTable";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
+import LockIcon from "@mui/icons-material/Lock"
+import PublicIcon from "@mui/icons-material/Public"
 
 
 const MyExhibitions = (props) => {
@@ -85,7 +87,16 @@ const MyExhibitions = (props) => {
       ),
       generateTableCell: (exhibition) => (
         <TableCell>
-          <Typography variant="body1">{exhibition.privacy}</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            {exhibition.privacy == "PRIVATE" && (
+                <LockIcon />
+              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+                <PublicIcon />
+              ) || exhibition.privacy == "PUBLIC" && (
+                <PublicIcon />
+              )}
+              <Typography variant="body1">{exhibition.privacy}</Typography>
+          </Stack>
         </TableCell>
       )
     },
