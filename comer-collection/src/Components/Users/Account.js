@@ -11,6 +11,7 @@ import { Box } from '@mui/material';
 import Unauthorized from '../ErrorPages/Unauthorized';
 import ChangePassword from './ChangePassword';
 import CourseManagement from './Admin/CourseManagement';
+import MyExhibitions from './MyExhibitions';
 
 
 const Account = (props) => {
@@ -51,6 +52,12 @@ const Account = (props) => {
                 }
               } />} />
             <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="MyExhibitions" element={<MyExhibitions {
+              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+                }
+              } />} />
             <Route path="UserManagement" element={<UserManagement {
               ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
                 snackbarOpen, snackbarText, snackbarSeverity,

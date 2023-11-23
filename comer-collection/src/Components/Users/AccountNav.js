@@ -22,6 +22,11 @@ const navLinks = [
       requirePermanentPassword: true
   },
   {
+      title: "My Exhibitions",
+      icon: <PhotoCameraBackIcon fontSize="large"/>,
+      link: "/Account/MyExhibitions"
+  },
+  {
       title: "Change Password",
       icon: <LockIcon fontSize="large"/>,
       link: "/Account/ChangePassword"
