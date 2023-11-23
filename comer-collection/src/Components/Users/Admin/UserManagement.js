@@ -1047,7 +1047,9 @@ const UserManagement = (props) => {
               disabled={refreshInProgress}>
               <Typography variant="body1">Refresh</Typography>
             </Button>
-            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            <Button color="primary" variant={
+              visibleUsers.length > 0 ? "outlined" : "contained"
+            } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
               }>
