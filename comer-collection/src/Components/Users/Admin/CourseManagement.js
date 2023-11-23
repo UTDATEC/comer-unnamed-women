@@ -774,7 +774,9 @@ const CourseManagement = (props) => {
               disabled={refreshInProgress}>
               <Typography variant="body1">Refresh</Typography>
             </Button>
-            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            <Button color="primary" variant={
+              visibleCourses.length > 0 ? "outlined" : "contained"
+            } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery)
               }>
@@ -810,7 +812,7 @@ const CourseManagement = (props) => {
               setAssignUserDialogCourses([...selectedCourses])
               setAssignUserDialogIsOpen(true);
             }}>
-              <Typography variant="body1">Bulk Enroll</Typography>
+              <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length == 1 ? "course" : "courses"}</Typography>
             </Button>
           </Stack>
         </Stack>
