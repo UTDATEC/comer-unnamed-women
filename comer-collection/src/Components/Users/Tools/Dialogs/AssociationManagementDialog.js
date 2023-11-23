@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stack, Dialog,
   DialogTitle,
@@ -8,9 +8,32 @@ import {
   Typography, DialogContentText, Divider, Box
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info"
+import SearchIcon from "@mui/icons-material/Search"
 import { DataTable } from "../DataTable";
+import SearchBox from "../SearchBox";
+import { searchItems } from "../SearchUtilities";
 
-export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, primaryItem, setPrimaryItem, secondaryItemsAll, secondaryItemsAssigned, secondaryTableFieldsAll, tableTitleAssigned, tableTitleAll, secondaryTableFieldsAssignedOnly, dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, dialogIsOpen, setDialogIsOpen }) => {
+export const AssociationManagementDialog = ({ 
+  primaryEntity, secondaryEntity, 
+  primaryItem, setPrimaryItem, 
+  secondaryItemsAll, secondaryItemsAssigned, 
+  secondaryTableFieldsAll, secondaryTableFieldsAssignedOnly,
+  tableTitleAssigned, tableTitleAll, 
+  dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, 
+  dialogIsOpen, setDialogIsOpen, secondarySearchFields
+  }) => {
+
+  const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
+
+  const [secondaryItemsAllResults, setSecondaryItemsAllResults] = useState(secondaryItemsAll);
+  const [secondaryItemsAssignedResults, setSecondaryItemsAssignedResults] = useState(secondaryItemsAssigned)
+
+  useEffect(() => {
+    setSecondaryItemsAssignedResults(searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields));
+    setSecondaryItemsAllResults(searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields));
+  }, [secondaryItemsAssigned, secondaryItemsAll, secondarySearchQuery])
+    
+    
   return (
     <Dialog fullWidth={true} maxWidth="lg"
       open={dialogIsOpen}
@@ -21,26 +44,61 @@ export const AssociationManagementDialog = ({ primaryEntity, secondaryEntity, pr
       }}
     >
       <DialogTitle textAlign="center" variant="h4">{dialogTitle}</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{minHeight: "450px"}}>
         <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
+        <Stack direction="column" padding={1}>
+          {secondarySearchFields?.length > 0 && (
+            <SearchBox width="100%" placeholder="Search courses by name" 
+              searchQuery={secondarySearchQuery}
+              setSearchQuery={setSecondarySearchQuery}
+            />
+          )}
+        </Stack>
         <Stack spacing={2} direction="row" padding={2}>
           <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAll}</Typography>
-            <Box maxHeight="400px">
-              <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAll} extraProperties={{ primaryItem, secondaryItemIdsAssigned: secondaryItemsAssigned?.map((si) => si.id)}} />
+            <Box maxHeight="350px">
+              {secondaryItemsAllResults.length > 0 && (
+                <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAllResults} extraProperties={{ primaryItem, secondaryItemIdsAssigned: secondaryItemsAssigned?.map((si) => si.id)}} />
+              ) || secondaryItemsAllResults.length == 0 && (
+                <Box sx={{width: '100%', height: '100%'}}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
+                      {secondaryItemsAll.length > 0 ? (
+                        <>
+                          <SearchIcon sx={{fontSize: '150pt'}} />
+                          <Typography variant="h4">No results.</Typography>
+                        </>
+                      ) : (
+                        <>
+                          <InfoIcon sx={{fontSize: '150pt'}} />
+                          <Typography variant="h4">This list is empty.</Typography>
+                        </>
+                      )}
+                    </Stack>
+                </Box>
+              )}
             </Box>
           </Stack>
           <Divider sx={{borderWidth: "2px"}} />
           <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
-            <Box maxHeight="400px">
-              {secondaryItemsAssigned.length > 0 && (
-                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssigned} extraProperties={{ primaryItem }} />
-              ) || secondaryItemsAssigned.length == 0 && (
+            <Box maxHeight="350px">
+              {secondaryItemsAssignedResults.length > 0 && (
+                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssignedResults} extraProperties={{ primaryItem }} />
+              ) || secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
                     <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
-                        <InfoIcon sx={{fontSize: '150pt'}} />
-                        <Typography variant="h4">This list is empty.</Typography>
+                      {secondaryItemsAssigned.length > 0 ? (
+                        <>
+                          <SearchIcon sx={{fontSize: '150pt'}} />
+                          <Typography variant="h4">No results.</Typography>
+                        </>
+                      ) : (
+                        <>
+                          <InfoIcon sx={{fontSize: '150pt'}} />
+                          <Typography variant="h4">This list is empty.</Typography>
+                        </>
+                      )}
                     </Stack>
                 </Box>
               )}

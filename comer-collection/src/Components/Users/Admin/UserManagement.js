@@ -965,6 +965,7 @@ const UserManagement = (props) => {
         secondaryTableFieldsAll={courseTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
         handleAssociationAssign={handleAssignCourseToUser}
+        secondarySearchFields={['name']}
       />
 
       <UserChangePrivilegesDialog
