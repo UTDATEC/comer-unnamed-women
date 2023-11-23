@@ -18,7 +18,7 @@ module.exports = (db) => {
         data: {
             type: Sequelize.BLOB('medium'),
             field: "exhibition_data",
-            allowNull: false
+            allowNull: true
         },
         date_created: {
             type: Sequelize.DATE(3),
