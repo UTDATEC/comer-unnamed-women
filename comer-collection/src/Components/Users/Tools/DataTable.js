@@ -10,6 +10,10 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
 
   const theme = useTheme();
 
+  const visibleSelectedItems = (selectedItems ?? []).filter((si) => (
+    items.map((i) => i.id).includes(parseInt(si.id))
+  ));
+
   return (
     <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 0px)' }}>
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
@@ -18,17 +22,21 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
             {Boolean(rowSelectionEnabled) && (<TableCell sx={{backgroundColor: "#CCC"}}>
               <Typography variant="body1">
                 <Checkbox checked={
-                  items.length && selectedItems.length == items.length
+                  visibleSelectedItems.length == items.length
                 } 
                 disabled={items.length == 0}
                 indeterminate={
-                  selectedItems.length > 0 && selectedItems.length < items.length
+                  visibleSelectedItems.length > 0 && visibleSelectedItems.length < items.length
                 }
                 onChange={(e) => {
                   if(e.target.checked) {
-                    setSelectedItems([...items])
+                    setSelectedItems([...selectedItems, ...items.filter((i) => (
+                      !selectedItems.map((si) => si.id).includes(parseInt(i.id))
+                    ))])
                   } else {
-                    setSelectedItems([])
+                    setSelectedItems(selectedItems.filter((si) => (
+                      !visibleSelectedItems.map((vsi) => vsi.id).includes(parseInt(si.id))
+                    )))
                   }
                 }}
                 size="medium" />

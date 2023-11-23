@@ -26,6 +26,8 @@ import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
+import { SelectionSummary } from "../Tools/SelectionSummary";
+import GroupAddIcon from "@mui/icons-material/GroupAdd"
 
 
 const createCourseDialogReducer = (createDialogCourses, action) => {
@@ -221,7 +223,7 @@ const CourseManagement = (props) => {
 
   const filteredAndSearchedCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
 
-  const coursesToDisplay = filteredAndSearchedCourses.sort((a, b) => {
+  const visibleCourses = filteredAndSearchedCourses.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
@@ -601,7 +603,7 @@ const CourseManagement = (props) => {
               onClick={() => {
                 // setSelectedCourses([course]);
                 // setAssignUserDialogCourses([course]);
-                setAssignUserDialogCourses([...selectedCourses]);
+                setAssignUserDialogCourses([course]);
                 setAssignUserDialogIsOpen(true);
               }}
             >
@@ -722,7 +724,6 @@ const CourseManagement = (props) => {
         .filter(([courseId, users]) => (
           users.map((u) => u.id).includes(user.id)
         )).length
-        console.log("assignUserDialogCourses", assignUserDialogCourses, assignUserDialogCourses.length)
       return (
       <TableCell>
         {quantity == assignUserDialogCourses.length && (
@@ -771,7 +772,6 @@ const CourseManagement = (props) => {
         .filter(([courseId, users]) => (
           users.map((u) => u.id).includes(user.id)
         )).length
-        console.log("assignUserDialogCourses", assignUserDialogCourses, assignUserDialogCourses.length)
 
       return (
         <TableCell>
@@ -808,8 +808,17 @@ const CourseManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <>
-        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
+    <Box sx={{
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '80px calc(100vh - 224px) 80px',
+      gridTemplateAreas: `
+        "top"
+        "table"
+        "bottom"
+      `
+    }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
           <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by course name or notes" width="50%" />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
@@ -834,10 +843,11 @@ const CourseManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={coursesToDisplay} tableFields={courseTableFields} rowSelectionEnabled={true}
+        <DataTable items={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
+          sx={{gridArea: "table"}}
         />
-          {
+          {/* {
             coursesToDisplay.length == 0 && (
               <Box sx={{width: '100%'}}>
                 <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
@@ -849,7 +859,29 @@ const CourseManagement = (props) => {
                 </Stack>
               </Box>
             )
-          }
+          } */}
+
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
+          <SelectionSummary 
+            items={courses}
+            selectedItems={selectedCourses}
+            setSelectedItems={setSelectedCourses}
+            visibleItems={visibleCourses}
+            entitySingular="course"
+            entityPlural="courses"
+          />
+         <Stack direction="row" spacing={2} >
+            <Button variant="outlined"
+              disabled={selectedCourses.length == 0}
+              startIcon={<GroupAddIcon />}
+              onClick={() => {
+              setAssignUserDialogCourses([...selectedUsers])
+              setAssignUserDialogIsOpen(true);
+            }}>
+              <Typography variant="body1">Bulk Enroll</Typography>
+            </Button>
+          </Stack>
+        </Stack>
 
       <ItemMultiCreateDialog entity="course" 
         dialogTitle={"Create Courses"}
@@ -906,7 +938,7 @@ const CourseManagement = (props) => {
         secondarySearchBoxPlaceholder={"Search users by name or email"}
       />
 
-    </>
+    </Box>
   );
 }
 

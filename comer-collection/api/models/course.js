@@ -1,3 +1,5 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
     const Course = sequelize.define("Course", {
@@ -26,6 +28,12 @@ module.exports = (db) => {
         notes: {
             type: Sequelize.TEXT('tiny'),
             field: "course_notes"
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.name ? this.name : `Course ${this.id}`
+            }
         }
     }, {
         tableName: "comer_courses"

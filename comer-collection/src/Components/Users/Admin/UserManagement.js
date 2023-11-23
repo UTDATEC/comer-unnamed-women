@@ -14,7 +14,6 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
-import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import LockIcon from "@mui/icons-material/Lock";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -34,38 +33,8 @@ import { Navigate, useNavigate } from "react-router";
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import SecurityIcon from "@mui/icons-material/Security";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-
-
-const createUserDialogReducer = (createDialogUsers, action) => {
-  switch (action.type) {
-    case 'add':
-      return [...createDialogUsers, {
-        family_name: "",
-        given_name: "",
-        email: ""
-      }]
-
-    case 'change':
-      return createDialogUsers.map((r, i) => {
-        if(action.index == i)
-          return {...r, [action.field]: action.newValue};
-        else
-          return r;
-      })
-      
-    case 'remove':
-      return createDialogUsers.filter((r, i) => {
-        return action.index != i;
-      })
-
-    case 'set':
-      return action.newArray;
-  
-    default:
-      throw Error("Unknown action type");
-  }
-}
+import { SelectionSummary } from "../Tools/SelectionSummary";
+import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 
 const UserManagement = (props) => {
   const [users, setUsers] = useState([]);
@@ -215,7 +184,7 @@ const UserManagement = (props) => {
 
   const filteredAndSearchedUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
 
-  const usersToDisplay = filteredAndSearchedUsers.sort((a, b) => {
+  const visibleUsers = filteredAndSearchedUsers.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
@@ -778,8 +747,6 @@ const UserManagement = (props) => {
               color={user.is_admin ? "secondary" : "primary"}
               startIcon={<SchoolIcon />}
               onClick={() => {
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
                 setAssignCourseDialogUsers([user])
                 setAssignCourseDialogIsOpen(true);
               }}
@@ -1102,7 +1069,7 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={usersToDisplay} tableFields={userTableFields} 
+        <DataTable items={visibleUsers} tableFields={userTableFields} 
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
           sx={{gridArea: "table"}}
@@ -1121,24 +1088,15 @@ const UserManagement = (props) => {
             )
           } */}
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
-          {selectedUsers.length > 0 && (
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <CheckIcon fontSize="large" sx={{opacity: 0.5}}/>
-              <Typography variant="body1">{selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"} selected</Typography>
-              <Button variant="outlined" onClick={() => {
-                setSelectedUsers([])
-              }}>
-                <Typography variant="body1">Clear</Typography>
-              </Button>
-            </Stack>
-          ) || selectedUsers.length == 0 && (
-            <Stack direction="row" alignItems="center" spacing={2} >
-              <ArrowUpwardIcon fontSize="large" sx={{opacity: 0.5}}/>
-              <Typography variant="body1" sx={{opacity: 0.5}}>Select users to use bulk actions</Typography>
-            </Stack>
-
-          )}
-          <Stack direction="row" spacing={2} >
+          <SelectionSummary 
+            items={users}
+            selectedItems={selectedUsers}
+            setSelectedItems={setSelectedUsers}
+            visibleItems={visibleUsers}
+            entitySingular="user"
+            entityPlural="users"
+          />
+         <Stack direction="row" spacing={2} >
             <Button variant="outlined"
               disabled={selectedUsers.length == 0}
               startIcon={<SchoolIcon />}
@@ -1148,26 +1106,6 @@ const UserManagement = (props) => {
             }}>
               <Typography variant="body1">Bulk Enroll</Typography>
             </Button>
-            {/* <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
-              setRefreshInProgress(true);
-              fetchData();
-            }}
-              disabled={refreshInProgress}>
-              <Typography variant="body1">Refresh</Typography>
-            </Button>
-            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
-              disabled={
-                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
-              }>
-              <Typography variant="body1">Clear Filters</Typography>
-            </Button>
-            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
-              onClick={() => {
-                setCreateDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">Create Users</Typography>
-            </Button> */}
           </Stack>
         </Stack>
 
@@ -1197,11 +1135,10 @@ const UserManagement = (props) => {
         secondaryEntity="course"
         primaryItems={assignCourseDialogUsers}
         secondaryItemsAll={courses}
-        // secondaryItemsAssigned={assignCourseDialogCourses}
         secondariesByPrimary={coursesByUser}
         dialogTitle={
           assignCourseDialogUsers.length == 1 ?
-            `Manage Courses for User ${assignCourseDialogUsers[0].id}` :
+            `Manage Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
             `Manage Courses for ${assignCourseDialogUsers.length} Selected Users`
         }
         dialogButtonForSecondaryManagement={<>
@@ -1214,7 +1151,7 @@ const UserManagement = (props) => {
         dialogIsOpen={assignCourseDialogIsOpen}
         tableTitleAssigned={
           assignCourseDialogUsers.length == 1 ?
-            `Current Courses for User ${assignCourseDialogUsers[0].id}` :
+            `Current Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
             `Current Courses with Selected Users`
         }
         tableTitleAll={`All Courses`}

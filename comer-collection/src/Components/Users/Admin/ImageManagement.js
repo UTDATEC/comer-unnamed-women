@@ -22,7 +22,7 @@ import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
 import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
-import { getBlankItemFields } from "../Tools/HelperMethods";
+import { getBlankItemFields } from "../Tools/HelperMethods/fields";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import HeightIcon from "@mui/icons-material/Height";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -30,7 +30,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import BrushIcon from "@mui/icons-material/Brush"
 import ImageIcon from "@mui/icons-material/Image"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
-import { filterItemFields } from "../Tools/HelperMethods";
+import { filterItemFields } from "../Tools/HelperMethods/fields";
 import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 

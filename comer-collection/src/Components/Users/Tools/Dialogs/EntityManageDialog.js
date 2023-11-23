@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete"
 import AddIcon from "@mui/icons-material/Add"
-import { getBlankItemFields } from "../HelperMethods";
+import { getBlankItemFields } from "../HelperMethods/fields";
 import { DataTable } from "../DataTable";
 
 export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTable, dialogInstructionsForm, dialogItems, setDialogItems, dialogFieldNames, dialogTableFields, dialogIsOpen, setDialogIsOpen, handleItemCreate, handleItemEdit, handleItemDelete }) => {

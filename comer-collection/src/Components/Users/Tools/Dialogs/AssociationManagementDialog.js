@@ -67,10 +67,7 @@ export const AssociationManagementDialog = ({
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
-                <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAllResults} extraProperties={{ primaryItems: primaryItems, 
-                  secondariesByPrimary
-                  // quantity: Object.entries(secondariesByPrimary).filter((entry) => entry[1].includes()),
-                  // secondaryItemIdsAssigned: [].map((si) => si.id)
+                <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAllResults} extraProperties={{ primaryItems: primaryItems, secondariesByPrimary
                 }} /> 
               ) || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
@@ -96,8 +93,6 @@ export const AssociationManagementDialog = ({
               {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && (
                 <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssignedResults} extraProperties={{ primaryItems: primaryItems, 
                   secondariesByPrimary
-                  // quantity: Object.entries(secondariesByPrimary).filter((entry) => entry[1].includes()),
-                  // secondaryItemIdsAssigned: [].map((si) => si.id)
                 }} /> 
               ) || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
