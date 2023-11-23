@@ -970,7 +970,7 @@ const UserManagement = (props) => {
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
               handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
             }}>
-              {assignCourseDialogUsers.length == 1 ? (
+              {assignCourseDialogUsers.length - quantity == 1 ? (
                 <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
               ) : (
                 <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more users</Typography>
