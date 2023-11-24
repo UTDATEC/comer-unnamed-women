@@ -10,7 +10,6 @@ import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
-import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,12 +23,10 @@ import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
 import { getBlankItemFields } from "../Tools/HelperMethods/fields";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import HeightIcon from "@mui/icons-material/Height";
 import PlaceIcon from "@mui/icons-material/Place";
 import SellIcon from "@mui/icons-material/Sell";
-import BrushIcon from "@mui/icons-material/Brush"
-import ImageIcon from "@mui/icons-material/Image"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import BrushIcon from "@mui/icons-material/Brush";
+import ImageIcon from "@mui/icons-material/Image";
 import { filterItemFields } from "../Tools/HelperMethods/fields";
 import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
