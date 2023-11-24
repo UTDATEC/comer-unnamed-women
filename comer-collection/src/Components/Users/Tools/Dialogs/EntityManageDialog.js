@@ -26,58 +26,65 @@ export const EntityManageDialog = ({ entity, dialogTitle, dialogInstructionsTabl
       }}
     >
       <DialogTitle textAlign="center" variant="h4">{dialogTitle}
-      <DialogContent>
-        <Stack spacing={2}>
-        <DialogContentText textAlign="left" variant="body1">{dialogInstructionsForm}</DialogContentText>
-          <Stack component="form" direction="row" alignItems="center" spacing={2}>
-            <DialogContentText variant="body1"></DialogContentText>
-            {dialogFieldDefinitions.map((f, fi) => (
-              <TextField key={f.fieldName} 
-                name={f.fieldName} 
-                label={f.displayName} 
-                autoFocus={fi==0} 
-                value={itemToAdd[f.fieldName]} 
-                sx={{ 
-                  width: "100%" 
-                }}
-                inputProps={{
-                  type: f.inputType ?? "text",
-                  sx: {...{
-                    textAlign: f.inputType == "datetime-local" ? "center" : ""
-                  }}
-                }}
-                required={Boolean(f.isRequired)}
-              onChange={(e) => {
-                setItemToAdd({
-                  ...itemToAdd,
-                  [f.fieldName]: e.target.value
-                })
-              }} />
-            ))}
-            <Button type="submit" variant="contained" 
-              startIcon={<AddIcon />}
-              sx={{minWidth: "200px", height: "100%"}}
-              onClick={(e) => {
-                e.preventDefault();
-                handleItemCreate(itemToAdd);
-                setItemToAdd(getBlankItemFields(dialogFieldDefinitions))
-              }}>
-              <Typography variant="body1">{`Create ${entity}`}</Typography>
-            </Button>
-          </Stack>
-        {/* </Stack>
-          <Stack spacing={2} maxHeight="200px"> */}
-      <Divider />
-            <DialogContentText textAlign="left" variant="body1">{dialogInstructionsTable}</DialogContentText>
-          </Stack>
-      </DialogContent>
       </DialogTitle>
-      <DialogContent sx={{maxHeight: "200px"}}>
-            <Box overflow="scroll" sx={{maxHeight: "200px"}}>
-              <DataTable tableFields={dialogTableFields} items={dialogItems} />
-            </Box>
-
-      </DialogContent>
+      <Box sx={{ 
+        display: "grid",
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto auto',
+        gridTemplateAreas: `
+          "create"
+          "update"
+        `
+      }}>
+        <DialogContent sx={{gridArea: "create"}}>
+          <Stack spacing={2}>
+          <DialogContentText textAlign="left" variant="body1">{dialogInstructionsForm}</DialogContentText>
+            <Stack component="form" direction="row" alignItems="center" spacing={2}>
+              <DialogContentText variant="body1"></DialogContentText>
+              {dialogFieldDefinitions.map((f, fi) => (
+                <TextField key={f.fieldName} 
+                  name={f.fieldName} 
+                  label={f.displayName} 
+                  autoFocus={fi==0} 
+                  value={itemToAdd[f.fieldName]} 
+                  sx={{ 
+                    width: "100%" 
+                  }}
+                  inputProps={{
+                    type: f.inputType ?? "text",
+                    sx: {...{
+                      textAlign: f.inputType == "datetime-local" ? "center" : ""
+                    }}
+                  }}
+                  required={Boolean(f.isRequired)}
+                onChange={(e) => {
+                  setItemToAdd({
+                    ...itemToAdd,
+                    [f.fieldName]: e.target.value
+                  })
+                }} />
+              ))}
+              <Button type="submit" variant="contained" 
+                startIcon={<AddIcon />}
+                sx={{minWidth: "200px", height: "100%"}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleItemCreate(itemToAdd);
+                  setItemToAdd(getBlankItemFields(dialogFieldDefinitions))
+                }}>
+                <Typography variant="body1">{`Create ${entity}`}</Typography>
+              </Button>
+            </Stack>
+          {/* </Stack>
+            <Stack spacing={2} maxHeight="200px"> */}
+        <Divider />
+              <DialogContentText textAlign="left" variant="body1">{dialogInstructionsTable}</DialogContentText>
+            </Stack>
+        </DialogContent>
+        <DialogContent sx={{gridArea: "update", maxHeight: "300px"}}>
+            <DataTable tableFields={dialogTableFields} items={dialogItems} visibleItems={dialogItems} />
+        </DialogContent>
+      </Box>
       <Divider />
       <DialogActions>
         <Button sx={{
