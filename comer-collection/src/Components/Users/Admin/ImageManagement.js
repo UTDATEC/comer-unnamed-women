@@ -36,6 +36,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { imageFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
+import { SelectionSummary } from "../Tools/SelectionSummary";
 
 
 const ImageManagement = (props) => {
@@ -50,6 +51,8 @@ const ImageManagement = (props) => {
   const [editDialogImage, setEditDialogImage] = useState(null);
   const [editDialogFields, setEditDialogFields] = useState(getBlankItemFields(imageFieldDefinitions));
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const [backdropImage, setBackdropImage] = useState(null);
   const [backdropOpen, setBackdropOpen] = useState(false);
@@ -693,60 +696,84 @@ const ImageManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <>
-        <Stack direction="row" justifyContent="space-between" spacing={2} padding={2}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search image fields and notes" width="30%" />
-          <Stack direction="row" spacing={2}>
-            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
-              setRefreshInProgress(true);
-              fetchData();
+    <Box sx={{
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '80px calc(100vh - 224px) 80px',
+      gridTemplateAreas: `
+        "top"
+        "table"
+        "bottom"
+      `
+    }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
+        <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search image fields and notes" width="30%" />
+        <Stack direction="row" spacing={2}>
+          <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+            setRefreshInProgress(true);
+            fetchData();
+          }}
+            disabled={refreshInProgress}>
+            <Typography variant="body1">Refresh</Typography>
+          </Button>
+          <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            disabled={
+              !Boolean(searchQuery)
+            }>
+            <Typography variant="body1">Clear Filters</Typography>
+          </Button>
+          <Button color="primary" variant="outlined" startIcon={<SellIcon />}
+            onClick={() => {
+              // setCreateDialogIsOpen(true);
             }}
-              disabled={refreshInProgress}>
-              <Typography variant="body1">Refresh</Typography>
-            </Button>
-            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
-              disabled={
-                !Boolean(searchQuery)
-              }>
-              <Typography variant="body1">Clear Filters</Typography>
-            </Button>
-            <Button color="primary" variant="outlined" startIcon={<SellIcon />}
-              onClick={() => {
-                // setCreateDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">Tags</Typography>
-            </Button>
-            <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
-              onClick={() => {
-                setManageArtistDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">Artists</Typography>
-            </Button>
-            <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
-              onClick={() => {
-                setCreateDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">Create Images</Typography>
-            </Button>
-          </Stack>
+          >
+            <Typography variant="body1">Tags</Typography>
+          </Button>
+          <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
+            onClick={() => {
+              setManageArtistDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">Artists</Typography>
+          </Button>
+          <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
+            onClick={() => {
+              setCreateDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">Create Images</Typography>
+          </Button>
         </Stack>
-        <DataTable items={images} visibleItems={visibleImages} tableFields={imageTableFields} rowSelectionEnabled={true} />
-          {
-            visibleImages.length == 0 && (
-              <Box sx={{width: '100%'}}>
-                <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
-                  <SearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
-                  <Typography variant="h4">No images found</Typography>
-                  <Button variant="contained" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}>
-                    <Typography variant="body1">Clear Filters</Typography>
-                  </Button>
-                </Stack>
-              </Box>
-            )
-          }
+      </Stack>
+      <DataTable items={images} visibleItems={visibleImages} 
+        tableFields={imageTableFields} 
+        rowSelectionEnabled={true} 
+        selectedItems={selectedImages}
+        setSelectedItems={setSelectedImages}
+        sx={{gridArea: "table"}}
+      />
+
+      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
+        <SelectionSummary
+          items={images}
+          selectedItems={selectedImages}
+          setSelectedItems={setSelectedImages}
+          visibleItems={visibleImages}
+          entitySingular="image"
+          entityPlural="images"
+        />
+        <Stack direction="row" spacing={2} >
+          {/* <Button variant="outlined"
+            disabled={selectedImages.length == 0}
+            startIcon={<GroupAddIcon />}
+            onClick={() => {
+            setAssignUserDialogCourses([...selectedCourses])
+            setAssignUserDialogIsOpen(true);
+          }}>
+            <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length == 1 ? "course" : "courses"}</Typography>
+          </Button> */}
+        </Stack>
+      </Stack>
 
       <ItemMultiCreateDialog entity="image"
         dialogTitle={"Create Images"}
@@ -808,7 +835,8 @@ const ImageManagement = (props) => {
         setBackdropOpen={setBackdropOpen}
       />
 
-    </>
+      </Box>
+
   );
 }
 
