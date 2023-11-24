@@ -37,6 +37,7 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
               key={f.fieldName} 
               name={f.fieldName} 
               label={f.displayName} 
+              required={f.isRequired}
               value={
                 f.inputType == "datetime-local" ? 
                 getLocalISOString(editDialogFields[f.fieldName]) :
