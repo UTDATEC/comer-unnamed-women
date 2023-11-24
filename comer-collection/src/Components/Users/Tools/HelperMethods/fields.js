@@ -9,8 +9,7 @@ export const getBlankItemFields = (fields) => {
 export const filterItemFields = (fields, unfilteredItem) => {
   const output = {};
   for (let f of fields) {
-    if(unfilteredItem[f.fieldName] != null && unfilteredItem[f.fieldName] != "")
-      output[f.fieldName] = unfilteredItem[f.fieldName];
+    output[f.fieldName] = unfilteredItem[f.fieldName];
   }
   return output;
 };
