@@ -28,7 +28,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
         <Stack spacing={2}>
           <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
           {createDialogItems.map((u, index) => (
-            <>
+            <React.Fragment key={index}>
             <Divider />
             <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
               <DialogContentText variant="body1">{index + 1}</DialogContentText>
@@ -70,7 +70,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                 <DeleteIcon />
               </IconButton>
             </Stack>
-            </>
+            </React.Fragment>
           ))}
           <Divider />
         </Stack>
