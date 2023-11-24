@@ -63,7 +63,7 @@ const App = () => {
     palette: {
       mode: appDarkTheme ? "dark" : "light",
       primary: {
-        main: primaryColor['700'],
+        main: appDarkTheme ? primaryColor['700'] : primaryColor['900'],
         light: primaryColor['500'],
         contrastText: 'white',
         "200": primaryColor['200'],
