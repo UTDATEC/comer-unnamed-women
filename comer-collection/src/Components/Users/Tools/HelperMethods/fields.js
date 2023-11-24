@@ -9,7 +9,8 @@ export const getBlankItemFields = (fields) => {
 export const filterItemFields = (fields, unfilteredItem) => {
   const output = {};
   for (let f of fields) {
-    output[f.fieldName] = unfilteredItem[f.fieldName];
+    if(unfilteredItem[f.fieldName] != null && unfilteredItem[f.fieldName] != "")
+      output[f.fieldName] = unfilteredItem[f.fieldName];
   }
   return output;
 };
@@ -82,7 +83,8 @@ export const imageFieldDefinitions = [
     fieldName: "url",
     displayName: "URL",
     inputType: "url",
-    multiline: true
+    multiline: true,
+    blank: "https://atecquilt01.utdallas.edu/comer/public/images/"
   },
   {
     fieldName: "medium",

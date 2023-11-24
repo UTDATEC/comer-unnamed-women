@@ -9,6 +9,7 @@ import Account from '../Users/Account';
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
 import { green, grey, orange } from '@mui/material/colors';
+import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
 
 const App = () => {
   const [searchParams, setSearchParams] = useState({
@@ -132,6 +133,7 @@ const App = () => {
         <NavBar {...{appUser, setAppUser}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
+          <Route path="/BrowseCollection" element={<CollectionBrowser {...{showSnackbar}} />} />
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 

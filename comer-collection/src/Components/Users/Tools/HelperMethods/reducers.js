@@ -1,3 +1,5 @@
+import { getBlankItemFields, imageFieldDefinitions } from "./fields";
+
 export const createUserDialogReducer = (createDialogUsers, action) => {
   switch (action.type) {
     case 'add':
@@ -30,12 +32,7 @@ export const createUserDialogReducer = (createDialogUsers, action) => {
 };export const createImageDialogReducer = (createDialogImages, action) => {
   switch (action.type) {
     case 'add':
-      return [...createDialogImages, {
-        name: "",
-        date_start: "",
-        date_end: "",
-        notes: ""
-      }];
+      return [...createDialogImages, getBlankItemFields(imageFieldDefinitions)];
 
     case 'change':
       return createDialogImages.map((r, i) => {
