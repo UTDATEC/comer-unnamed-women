@@ -56,7 +56,11 @@ const ImageManagement = (props) => {
 
   const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
   const [artistDeleteDialogIsOpen, setArtistDeleteDialogIsOpen] = useState(false);
-  const [artistDeleteDialogItem, setArtistDeleteDialogItem] = useState(false);
+  const [artistDeleteDialogItem, setArtistDeleteDialogItem] = useState(null);
+  const [artistEditDialogIsOpen, setArtistEditDialogIsOpen] = useState(false);
+  const [artistEditDialogItem, setArtistEditDialogItem] = useState(null);
+  const [artistEditDialogFields, setArtistEditDialogFields] = useState(getBlankItemFields(artistFieldDefinitions));
+  const [artistEditDialogSubmitEnabled, setArtistEditDialogSubmitEnabled] = useState(false);
   const [artistDialogSearchQuery, setArtistDialogSearchQuery] = useState("");
 
   const editDialogFieldDefinitions = imageFieldDefinitions;
@@ -299,6 +303,32 @@ const ImageManagement = (props) => {
   }
 
   
+  const handleEditArtist = async(artistId, updateFields) => {
+    try {
+      let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
+      await axios.put(
+        `http://localhost:9000/api/artists/${artistId}`, filteredartist,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setArtistEditDialogIsOpen(false);
+      setArtistEditDialogFields(getBlankItemFields(artistFieldDefinitions));
+
+      showSnackbar(`Successfully edited artist ${artistId}`, "success");
+
+    } catch (error) {
+      console.error(`Error editing artist ${artistId}: ${error}`);
+
+      showSnackbar(`Error editing for artist ${artistId}`, "error");
+    }
+  }
+
+
   const handleDeleteArtist = async(artistId) => {
     try {
       await axios.delete(
@@ -426,13 +456,13 @@ const ImageManagement = (props) => {
       generateTableCell: (artist) => (
         <TableCell>
           <Stack direction="row">
-            <IconButton disabled
+            <IconButton
               onClick={(e) => {
-                // setEditDialogImage(image);
-                // const filteredImage = filterItemFields(imageFieldNames, image);
-                // setEditDialogFields(filteredImage);
-                // setEditDialogSubmitEnabled(true);
-                // setEditDialogIsOpen(true)
+                setArtistEditDialogItem(artist);
+                const filteredArtist = filterItemFields(artistFieldDefinitions, artist);
+                setArtistEditDialogFields(filteredArtist);
+                setArtistEditDialogSubmitEnabled(true);
+                setArtistEditDialogIsOpen(true);
               }}
             >
               <EditIcon />
@@ -752,7 +782,7 @@ const ImageManagement = (props) => {
         dialogIsOpen={manageArtistDialogIsOpen}
         setDialogIsOpen={setManageArtistDialogIsOpen}
         handleItemCreate={handleCreateArtist}
-        handleItemEdit={null}
+        handleItemEdit={handleEditArtist}
         handleItemDelete={handleDeleteArtist}
         searchBoxFields={['fullName', 'fullNameReverse', 'notes']}
         searchBoxPlaceholder="Search artists by name or notes"
@@ -760,6 +790,14 @@ const ImageManagement = (props) => {
         setInternalDeleteDialogIsOpen={setArtistDeleteDialogIsOpen}
         internalDeleteDialogItem={artistDeleteDialogItem}
         setInternalDeleteDialogItem={setArtistDeleteDialogItem}
+        internalEditDialogIsOpen={artistEditDialogIsOpen}
+        setInternalEditDialogIsOpen={setArtistEditDialogIsOpen}
+        internalEditDialogItem={artistEditDialogItem}
+        setInternalEditDialogItem={setArtistEditDialogItem}
+        internalEditDialogFields={artistEditDialogFields}
+        setInternalEditDialogFields={setArtistEditDialogFields}
+        internalEditDialogSubmitEnabled={artistEditDialogSubmitEnabled}
+        setInternalEditDialogSubmitEnabled={setArtistEditDialogSubmitEnabled}
         itemSearchQuery={artistDialogSearchQuery}
         setItemSearchQuery={setArtistDialogSearchQuery}
       />

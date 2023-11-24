@@ -14,6 +14,7 @@ import { DataTable } from "../DataTable";
 import SearchBox from "../SearchBox";
 import { searchItems } from "../SearchUtilities";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog";
+import { ItemSingleEditDialog } from "./ItemSingleEditDialog";
 
 export const EntityManageDialog = ({ entitySingular, entityPlural, 
     dialogTitle, dialogInstructionsTable, dialogInstructionsForm, 
@@ -22,7 +23,14 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
     dialogIsOpen, setDialogIsOpen, 
     handleItemCreate, handleItemEdit, handleItemDelete, 
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
-    internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen, internalDeleteDialogItem, setInternalDeleteDialogItem
+    
+    internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen, 
+    internalDeleteDialogItem, setInternalDeleteDialogItem,
+
+    internalEditDialogIsOpen, setInternalEditDialogIsOpen, 
+    internalEditDialogItem, setInternalEditDialogItem, 
+    internalEditDialogFields, setInternalEditDialogFields,
+    internalEditDialogSubmitEnabled, setInternalEditDialogSubmitEnabled
   }) => {
 
   const blankItem = getBlankItemFields(dialogFieldDefinitions)
@@ -129,6 +137,23 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
           </Stack>
         </DialogActions>
       </Dialog>
+
+
+      <ItemSingleEditDialog
+        editDialogIsOpen={internalEditDialogIsOpen}
+        setEditDialogIsOpen={setInternalEditDialogIsOpen}
+        editDialogItem={internalEditDialogItem}
+        entity="artist"
+        dialogTitle="Edit Artist"
+        dialogInstructions="Update"
+        handleItemEdit={handleItemEdit}
+        editDialogFields={internalEditDialogFields}
+        setEditDialogFields={setInternalEditDialogFields}
+        editDialogFieldDefinitions={dialogFieldDefinitions}
+        editDialogSubmitEnabled={internalEditDialogSubmitEnabled}
+        setEditDialogSubmitEnabled={setInternalEditDialogSubmitEnabled}
+        />
+      
 
       <ItemSingleDeleteDialog 
         deleteDialogIsOpen={internalDeleteDialogIsOpen} 
