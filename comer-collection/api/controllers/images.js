@@ -1,13 +1,32 @@
 const createError = require('http-errors');
-const { Image, Artist, Tag } = require("../sequelize.js");
+const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 
 
-const listImages = async (req, res, next) => {
+const isImageDeletable = (imageJSON) => {
+    return Boolean(imageJSON.Exhibitions?.length == 0);
+}
+
+const listImagesPublic = async (req, res, next) => {
     const images = await Image.findAll({
         include: [Artist, Tag]
     });
     res.status(200).json({ data: images });
+};
+
+const listImages = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const images = Array.from(await Image.findAll({
+            include: [Artist, Tag, Exhibition]
+        })).map((i) => {
+            const imageJSON = i.toJSON();
+            return {
+                ...imageJSON, 
+                is_deletable: isImageDeletable(imageJSON)
+            };
+        })
+        res.status(200).json({ data: images });
+    })
 };
 
 const createImage = async (req, res, next) => {
@@ -23,7 +42,7 @@ const createImage = async (req, res, next) => {
     })
 };
 
-const getImage = async (req, res, next) => {
+const getImagePublic = async (req, res, next) => {
     const image = await Image.findByPk(req.params.imageId, {
         include: [Artist, Tag]
     });
@@ -31,6 +50,25 @@ const getImage = async (req, res, next) => {
         res.status(200).json({ data: image });
     else
         next(createError(404));
+};
+
+const getImage = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        const image = await Image.findByPk(req.params.imageId, {
+            include: [Artist, Tag, Exhibition]
+        });
+        if(image) {
+            const imageJSON = image.toJSON();
+            res.status(200).json({ 
+                data: {
+                    ...imageJSON, 
+                    is_deletable: isImageDeletable(imageJSON)
+                } 
+            });
+        }
+        else
+            next(createError(404));
+    })
 };
 
 const updateImage = async (req, res, next) => {
@@ -153,4 +191,4 @@ const unassignTagFromImage = async (req, res, next) => {
 // Assign tag to image
 // Unassign tag from imaage
 
-module.exports = { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }
+module.exports = { listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }
