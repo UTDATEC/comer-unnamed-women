@@ -9,6 +9,7 @@ import { Navigate, useNavigate } from "react-router";
 import axios from "axios";
 import { DataTable } from "./Tools/DataTable";
 import SecurityIcon from "@mui/icons-material/Security";
+import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SchoolIcon from '@mui/icons-material/School';
@@ -206,7 +207,7 @@ const Profile = (props) => {
         <TableCell>
           <Stack direction="row" spacing={1}>
             <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-            {user.is_admin && (<SecurityIcon color="secondary" />)}
+            {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
           </Stack>
         </TableCell>
       )
