@@ -35,6 +35,7 @@ import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
+import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 
 
 const ImageManagement = (props) => {
@@ -499,22 +500,6 @@ const ImageManagement = (props) => {
       )
     },
     {
-      columnDescription: "Thumbnail",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Thumbnail</Typography>
-        </TableCell>
-      ),
-      generateTableCell: (image) => (
-        <TableCell>
-          <Stack sx={{height: "50px", maxWidth: "100px"}} alignItems="center">
-            <img height="50px" src={image.url} loading="lazy" />
-          </Stack>
-          {/* <Typography variant="body1">{image.title}</Typography> */}
-        </TableCell>
-      )
-    },
-    {
       columnDescription: "Title",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
@@ -524,6 +509,41 @@ const ImageManagement = (props) => {
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.title}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Preview",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6"></Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
+            justifyContent="center" alignItems="center">
+          {(image.thumbnailUrl) && (
+            <Button 
+              onClick={() => {
+                setBackdropImage(image);
+                setBackdropOpen(true);
+              }}
+            >
+            <img height="50px" src={image.thumbnailUrl} loading="lazy" />
+            </Button>
+          ) || image.url && (
+            <Button variant="outlined" color="primary" 
+              startIcon={<VisibilityIcon />}
+              onClick={() => {
+                setBackdropImage(image);
+                setBackdropOpen(true);
+              }}
+            >
+              <Typography variant="body1">View</Typography>
+            </Button>
+          )}
+          </Stack>
         </TableCell>
       )
     },
@@ -571,28 +591,6 @@ const ImageManagement = (props) => {
         </TableCell>
       )
     },
-    // {
-    //   columnDescription: "Dimensions",
-    //   generateTableHeaderCell: () => (
-    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-    //       <Typography variant="h6">Dimensions</Typography>
-    //     </TableCell>
-    //   ),
-    //   generateTableCell: (image) => (
-    //     <TableCell>
-    //       <Stack direction="column" spacing={1}>
-    //         <Stack direction="row" spacing={1} sx={{width: "100%"}}>
-    //           <HeightIcon sx={{transform: "rotate(90deg)"}} />
-    //           <Typography variant="body1">{parseFloat(image.width)} in.</Typography>
-    //         </Stack>
-    //         <Stack direction="row" spacing={1} sx={{width: "100%"}}>
-    //           <HeightIcon />
-    //           <Typography variant="body1">{parseFloat(image.height)} in.</Typography>
-    //         </Stack>
-    //       </Stack>
-    //     </TableCell>
-    //   )
-    // },
     {
       columnDescription: "Artists",
       generateTableHeaderCell: () => (
@@ -665,29 +663,6 @@ const ImageManagement = (props) => {
               <Typography variant="body1">{image.Exhibitions.length}</Typography>
             </Button>
           </Stack>
-        </TableCell>
-      )
-    },
-    {
-      columnDescription: "View",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">&nbsp;</Typography>
-        </TableCell>
-      ),
-      generateTableCell: (image) => (
-        <TableCell>
-          {image.url && (
-            <Button variant="outlined" color="primary" 
-              startIcon={<VisibilityIcon />}
-              onClick={() => {
-                setBackdropImage(image);
-                setBackdropOpen(true);
-              }}
-            >
-              <Typography variant="body1">View</Typography>
-            </Button>
-          )}
         </TableCell>
       )
     },
