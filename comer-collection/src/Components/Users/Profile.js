@@ -267,7 +267,7 @@ const Profile = (props) => {
           <Typography variant="h4">Profile Information</Typography>
         </Stack>
         <DataTable
-          items={[appUser]}
+          visibleItems={[appUser]}
           tableFields={userTableFields}
         />
       </Stack>
