@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import GridView from '../GridView/GridView';
 import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
@@ -8,7 +8,7 @@ import Account from '../Users/Account';
 
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
-import { green, grey, orange } from '@mui/material/colors';
+import { blue, green, grey, orange } from '@mui/material/colors';
 import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
 
 const App = () => {
@@ -44,6 +44,8 @@ const App = () => {
     updatedAt: '',
   });
 
+  const [appDarkTheme, setAppDarkTheme] = useState(true);
+
   const primaryColor = green;
   const secondaryColor = orange;
 
@@ -59,25 +61,32 @@ const App = () => {
       }
     },
     palette: {
-      mode: "light",
+      mode: appDarkTheme ? "dark" : "light",
       primary: {
-        main: primaryColor['900'],
+        main: primaryColor['700'],
         light: primaryColor['500'],
         contrastText: 'white',
         "200": primaryColor['200'],
-        "100": primaryColor['100']
+        "100": primaryColor['100'],
+        translucent: `${primaryColor['700']}40`,
+        veryTranslucent: `${primaryColor['700']}20`
       },
       secondary: {
         main: secondaryColor['700'],
         contrastText: 'white',
         "200": secondaryColor['200'],
-        "100": secondaryColor['100']
+        "100": secondaryColor['100'],
+        translucent: `${secondaryColor['700']}40`,
+        veryTranslucent: `${secondaryColor['700']}20`
       },
       grey: {
-        main: grey['800']
+        main: grey['600'],
+        translucent: appDarkTheme ? grey['800'] : '#CCC',
+        veryTranslucent: appDarkTheme ? '#333' : '#EEE',
       }
     }
   })
+
 
   const [appUser, setAppUser] = useState(null);
   
@@ -130,10 +139,22 @@ const App = () => {
             "body"
           `
         }}>
-        <NavBar {...{appUser, setAppUser}} sx={{ gridArea: 'header' }} />
+        <NavBar {...{appUser, setAppUser, appDarkTheme, setAppDarkTheme}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
-          <Route path="/BrowseCollection" element={<CollectionBrowser {...{showSnackbar}} />} />
+          <Route path="/BrowseCollection" element={
+            <ThemeProvider theme={(mainTheme) => {
+              return {
+                ...mainTheme, 
+                palette: {
+                  ...mainTheme.palette, 
+                  mode: "dark"
+                }
+              };
+            }}>
+              <CollectionBrowser {...{showSnackbar}} />
+            </ThemeProvider>
+          } />
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
@@ -146,12 +167,11 @@ const App = () => {
 
           <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
           
-          <Route path="/" element={
-            <GridView
-            searchParams={searchParams}
-            setSelectedImage={setSelectedImage}
-          />
-          } />
+          <Route index element={() => {
+            const navigate = useNavigate();
+            return <Navigate to="/login" />
+          }} />
+
               
           </Routes>
         </Box>

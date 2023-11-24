@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 
 const ChangePassword = (props) => {
@@ -62,6 +62,7 @@ const ChangePassword = (props) => {
   });
 
     return (
+      <Box component={Paper} square sx={{height: "100%"}}>
       <Box component="form" sx={{height: "100%"}} onSubmit={handleChangePassword}>
           <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
             sx={{width: "100%", height: "100%"}}>
@@ -125,6 +126,7 @@ const ChangePassword = (props) => {
               <Typography variant="body1">Return to Profile</Typography>
             </Button>)}
           </Stack>
+      </Box>
       </Box>
     );
 }

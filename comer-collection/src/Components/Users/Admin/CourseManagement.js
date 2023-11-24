@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Stack,
   Button,
-  Typography, useTheme, Box, IconButton
+  Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
@@ -426,7 +426,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -439,7 +439,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -452,7 +452,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Start",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Start</Typography>
         </TableCell>
       ),
@@ -465,7 +465,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "End",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">End</Typography>
         </TableCell>
       ),
@@ -478,7 +478,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Status",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Status</Typography>
         </TableCell>
       ),
@@ -501,7 +501,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Enrollment",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Enrollment</Typography>
         </TableCell>
       ),
@@ -525,7 +525,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Notes",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Notes</Typography>
         </TableCell>
       ),
@@ -538,7 +538,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Options</Typography>
         </TableCell>
       ),
@@ -574,7 +574,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">ID</Typography>
         </TableCell>
       ),
@@ -587,7 +587,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Name</Typography>
         </TableCell>
       ),
@@ -606,7 +606,7 @@ const CourseManagement = (props) => {
     {
       columnDescription: "Email",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Email</Typography>
         </TableCell>
       ),
@@ -621,7 +621,7 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
     columnDescription: "Enroll",
     generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: "#CCC"}}>
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
@@ -669,7 +669,7 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
     generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: "#CCC"}}>
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
@@ -717,7 +717,7 @@ const CourseManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <Box sx={{
+    <Box component={Paper} square sx={{
       display: 'grid',
       gridTemplateColumns: '1fr',
       gridTemplateRows: '80px calc(100vh - 224px) 80px',

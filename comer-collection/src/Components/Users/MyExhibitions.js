@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-  Typography, Stack, TableCell
+  Typography, Stack, TableCell, Paper, Box
 } from "@mui/material";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import axios from "axios";
 import { DataTable } from "./Tools/DataTable";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import LockIcon from "@mui/icons-material/Lock"
 import PublicIcon from "@mui/icons-material/Public"
+import { useTheme } from "@emotion/react";
 
 
 const MyExhibitions = (props) => {
@@ -36,13 +37,15 @@ const MyExhibitions = (props) => {
     fetchMyExhibitions();
   }, [])
 
+  const theme = useTheme();
+  const navigate = useNavigate();
 
   
   const exhibitionTableFields = [
     {
       columnDescription: "Title",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Title</Typography>
         </TableCell>
       ),
@@ -55,7 +58,7 @@ const MyExhibitions = (props) => {
     {
       columnDescription: "Date Created",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Date Created</Typography>
         </TableCell>
       ),
@@ -68,7 +71,7 @@ const MyExhibitions = (props) => {
     {
       columnDescription: "Date Modified",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Date Modified</Typography>
         </TableCell>
       ),
@@ -81,7 +84,7 @@ const MyExhibitions = (props) => {
     {
       columnDescription: "Access",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Access</Typography>
         </TableCell>
       ),
@@ -108,9 +111,8 @@ const MyExhibitions = (props) => {
   return appUser.password_change_required && (
     <Navigate to="/Account/ChangePassword" />
   ) || !appUser.password_change_required && (
-    <>
-    <Stack spacing={4} margin={5}>
-      <Stack spacing={2} margin={5}>
+    <Box component={Paper} square sx={{height: "100%"}}>
+    <Stack spacing={4} padding={5}>
       <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
           <PhotoCameraBackIcon fontSize="large" />
           <Typography variant="h4">My Exhibitions</Typography>
@@ -120,8 +122,7 @@ const MyExhibitions = (props) => {
           tableFields={exhibitionTableFields}
         />
       </Stack>
-    </Stack>
-    </>
+    </Box>
   );
 }
 

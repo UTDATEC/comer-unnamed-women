@@ -19,7 +19,7 @@ export const DataTable = ({ tableFields, items, visibleItems, extraProperties, r
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
         <TableHead>
           <TableRow>
-            {Boolean(rowSelectionEnabled) && (<TableCell sx={{backgroundColor: "#CCC"}}>
+            {Boolean(rowSelectionEnabled) && (<TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
               <Typography variant="body1">
                 <Checkbox checked={
                   visibleSelectedItems.length == visibleItems.length
@@ -61,10 +61,11 @@ export const DataTable = ({ tableFields, items, visibleItems, extraProperties, r
             return (
             <TableRow key={item.id} sx={{
               [`&:hover`]: {
-                backgroundColor: isSelected ? theme.palette[themeColor]['200'] : "#EEE"
+                backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
+                
               },
               [`&:not(:hover)`]: {
-                backgroundColor: isSelected ? theme.palette[themeColor]['100'] : ""
+                backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
               }
             }}>
             {Boolean(rowSelectionEnabled) && (<TableCell width="10px">

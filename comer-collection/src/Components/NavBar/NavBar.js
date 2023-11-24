@@ -16,7 +16,7 @@ export default function NavBar(props) {
   
   const navigate = useNavigate();
   const theme = useTheme();
-  const { appUser, setAppUser } = props;
+  const { appUser, setAppUser, appDarkTheme, setAppDarkTheme } = props;
   
   const [buttons, setButtons] = useState([]);
 
@@ -34,8 +34,9 @@ export default function NavBar(props) {
     const getButtons = (user) => {
       const output = [
         { text: "Home", link: "/" },
+        { text: "Browse Collection", link: "/BrowseCollection" },
         { text: "Exhibit Viewer", link: "/exhibition_viewer" },
-        { text: "Search", link: "/searchBy" }
+        // { text: "Search", link: "/searchBy" }
       ]
       if(!user) {
         output.push({ text: "Log in", link: "/login" })
@@ -62,6 +63,11 @@ export default function NavBar(props) {
                 <Typography variant="body1">{button.text}</Typography>
               </Button>
             ))}
+            <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
+              setAppDarkTheme((current) => !current)
+            }}>
+              <Typography variant="body1">Change theme</Typography>
+            </Button>
             {appUser && (
               <>
                 <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}

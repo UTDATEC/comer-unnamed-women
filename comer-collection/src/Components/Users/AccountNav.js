@@ -58,12 +58,6 @@ const adminNavLinks = [
       icon: <SchoolIcon fontSize="large"/>,
       link: "/Account/CourseManagement",
       requirePermanentPassword: true
-  },
-  {
-      title: "Invite",
-      icon: <GroupAddIcon fontSize="large"/>,
-      link: "/Account/Invite",
-      requirePermanentPassword: true
   }
 
 ]

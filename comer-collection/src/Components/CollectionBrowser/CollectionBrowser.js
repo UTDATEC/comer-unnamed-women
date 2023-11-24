@@ -1,7 +1,8 @@
-import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from "@mui/material";
+import { Box, ImageList, ImageListItem, ImageListItemBar, Paper, Stack, ThemeProvider, Typography, createTheme } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import imageComingSoon from './utd.jpg';
+import { useTheme } from "@emotion/react";
 
 
 export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem}) => {
@@ -10,11 +11,7 @@ export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem})
 
     const fetchImageData = async() => {
         try {
-            const response = await axios.get("http://localhost:9000/api/images", {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            });
+            const response = await axios.get("http://localhost:9000/api/collection/images");
             const imageData = response.data;
             setImages(imageData.data);
       
@@ -30,17 +27,21 @@ export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem})
         fetchImageData();
     }, [])
 
+    const theme = useTheme();
+    console.log(theme);
+
     return (
-        <Box justifyItems="center" sx={{
+        <Box component={Paper} square justifyItems="center" sx={{
             display: "grid",
             gridTemplateColumns: '1fr',
             gridTemplateRows: '80px calc(100vh - 144px)',
             gridTemplateAreas: `
-              "toolbar"
-              "gallery"
-            `
+            "toolbar"
+            "gallery"
+            `,
+            
             }} >
-            <ImageList sx={{gridArea: "gallery", maxWidth: "50%"}} rowHeight={200} cols={4}>
+            <ImageList sx={{gridArea: "gallery", maxWidth: "60%", overflowY: "scroll"}} rowHeight={200} cols={4}>
                 {images.map((image) => (
                     <ImageListItem sx={{maxWidth: "50%"}} key={image.id}>
                         {image.url && (

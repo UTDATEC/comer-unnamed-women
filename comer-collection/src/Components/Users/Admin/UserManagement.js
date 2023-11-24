@@ -4,7 +4,7 @@ import {
   Stack,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton
+  Switch, useTheme, Box, IconButton, Paper
 } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -570,7 +570,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -588,7 +588,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -607,7 +607,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Email",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -624,7 +624,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Password",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+        <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
           <ColumnFilterButton columnName="Password"
             options={[
               {
@@ -679,7 +679,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Courses",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Courses</Typography>
         </TableCell>
       ),
@@ -703,7 +703,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Exhibitions",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Exhibitions</Typography>
         </TableCell>
       ),
@@ -728,7 +728,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "User Type",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : "#CCC"}}>
+        <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
           <ColumnFilterButton columnName="User Type"
             options={[
               {
@@ -768,7 +768,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Active",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : "#CCC"}}>
+        <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
           <ColumnFilterButton columnName="Active" 
             options={[
               {
@@ -805,7 +805,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Options</Typography>
         </TableCell>
       ),
@@ -841,7 +841,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           {/* <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
           <Typography variant="h6">ID</Typography>
         </TableCell>
@@ -855,7 +855,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             {/* <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
             <Typography variant="h6">Name</Typography>
         </TableCell>
@@ -869,7 +869,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Dates",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Dates</Typography>
         </TableCell>
       ),
@@ -887,7 +887,7 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
     columnDescription: "Enroll",
     generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: "#CCC"}}>
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
@@ -941,7 +941,7 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
     generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: "#CCC"}}>
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
         <Typography variant="h6">&nbsp;</Typography>
       </TableCell>
     ),
@@ -983,7 +983,7 @@ const UserManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <Box sx={{
+    <Box component={Paper} square sx={{
       display: 'grid',
       gridTemplateColumns: '1fr',
       gridTemplateRows: '80px calc(100vh - 224px) 80px',

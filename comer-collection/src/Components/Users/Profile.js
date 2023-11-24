@@ -3,7 +3,9 @@ import {
   Typography,
   Button,
   Stack, TableCell,
-  IconButton
+  IconButton,
+  Paper,
+  Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import axios from "axios";
@@ -13,6 +15,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SchoolIcon from '@mui/icons-material/School';
+import { useTheme } from "@emotion/react";
 
 const Profile = (props) => {
 
@@ -21,6 +24,7 @@ const Profile = (props) => {
     setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
 
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const [myCourses, setMyCourses] = useState([]);
   const fetchMyCourses = async() => {
@@ -47,7 +51,7 @@ const Profile = (props) => {
     {
       columnDescription: "Course Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Course Name</Typography>
         </TableCell>
       ),
@@ -60,7 +64,7 @@ const Profile = (props) => {
     {
       columnDescription: "Start",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Start</Typography>
         </TableCell>
       ),
@@ -73,7 +77,7 @@ const Profile = (props) => {
     {
       columnDescription: "End",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">End</Typography>
         </TableCell>
       ),
@@ -86,7 +90,7 @@ const Profile = (props) => {
     {
       columnDescription: "Status",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Status</Typography>
         </TableCell>
       ),
@@ -109,7 +113,7 @@ const Profile = (props) => {
     {
       columnDescription: "Notes",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Notes</Typography>
         </TableCell>
       ),
@@ -126,7 +130,7 @@ const Profile = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Name</Typography>
         </TableCell>
       ),
@@ -145,7 +149,7 @@ const Profile = (props) => {
     {
       columnDescription: "Email",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Email</Typography>
         </TableCell>
       ),
@@ -162,7 +166,7 @@ const Profile = (props) => {
     {
       columnDescription: "Password",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Password Last Changed</Typography>
         </TableCell>
       ),
@@ -184,7 +188,7 @@ const Profile = (props) => {
     // {
     //   columnDescription: "Exhibitions",
     //   generateTableHeaderCell: () => (
-    //     <TableCell sx={{backgroundColor: "#CCC"}}>
+    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
     //       <Typography variant="h6">Exhibitions</Typography>
     //     </TableCell>
     //   ),
@@ -199,7 +203,7 @@ const Profile = (props) => {
     {
       columnDescription: "User Type",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">User Type</Typography>
         </TableCell>
       ),
@@ -215,7 +219,7 @@ const Profile = (props) => {
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Options</Typography>
         </TableCell>
       ),
@@ -259,9 +263,9 @@ const Profile = (props) => {
   return appUser.password_change_required && (
     <Navigate to="/Account/ChangePassword" />
   ) || !appUser.password_change_required && (
-    <>
-    <Stack spacing={4} margin={5}>
-      <Stack spacing={2} margin={5}>
+    <Box component={Paper} square sx={{height: "100%"}}>
+    <Stack spacing={4} padding={5}>
+      <Stack spacing={2}>
         <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
           <AccountCircleIcon fontSize="large" />
           <Typography variant="h4">Profile Information</Typography>
@@ -271,7 +275,7 @@ const Profile = (props) => {
           tableFields={userTableFields}
         />
       </Stack>
-      <Stack spacing={2} margin={5}>
+      <Stack spacing={2}>
       <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
           <SchoolIcon fontSize="large" />
           <Typography variant="h4">My Courses</Typography>
@@ -282,7 +286,7 @@ const Profile = (props) => {
         />
       </Stack>
     </Stack>
-    </>
+    </Box>
   );
 }
 

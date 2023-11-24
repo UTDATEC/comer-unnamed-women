@@ -60,15 +60,8 @@ const Account = (props) => {
               } />} />
             <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
             <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageManagement" element={<ImageManagement {
-              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem,  showSnackbar,
-                snackbarOpen, snackbarText, snackbarSeverity,
-                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
-                }
-             } />} />
+            <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar }} />} />
             <Route path="CourseManagement" element={<CourseManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
-            <Route path="Invite" user={appUser} element={<InviteForm {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageEdit/:id" user={appUser} element={<ImageEdit />} />
 
           </Routes>
 

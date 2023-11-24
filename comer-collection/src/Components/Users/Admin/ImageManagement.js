@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Stack,
   Button,
-  Typography, useTheme, Box, IconButton
+  Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
@@ -372,7 +372,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">ID</Typography>
         </TableCell>
       ),
@@ -385,7 +385,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Name</Typography>
         </TableCell>
       ),
@@ -398,7 +398,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Images",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Images</Typography>
         </TableCell>
       ),
@@ -414,7 +414,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Website",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Website</Typography>
         </TableCell>
       ),
@@ -435,7 +435,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Notes",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Notes</Typography>
         </TableCell>
       ),
@@ -452,7 +452,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">&nbsp;</Typography>
         </TableCell>
       ),
@@ -490,7 +490,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -503,7 +503,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Title",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             <ColumnSortButton columnName="Title" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -516,7 +516,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Accession Number",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
@@ -529,7 +529,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Year",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Year</Typography>
         </TableCell>
       ),
@@ -542,7 +542,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Location",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Location</Typography>
         </TableCell>
       ),
@@ -560,7 +560,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Dimensions",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Dimensions</Typography>
         </TableCell>
       ),
@@ -582,7 +582,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Artists",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Artists</Typography>
         </TableCell>
       ),
@@ -607,7 +607,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Tags",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Tags</Typography>
         </TableCell>
       ),
@@ -632,7 +632,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "View",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">&nbsp;</Typography>
         </TableCell>
       ),
@@ -655,7 +655,7 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: "#CCC"}}>
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6">Options</Typography>
         </TableCell>
       ),
@@ -696,7 +696,7 @@ const ImageManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <Box sx={{
+    <Box component={Paper} square sx={{
       display: 'grid',
       gridTemplateColumns: '1fr',
       gridTemplateRows: '80px calc(100vh - 224px) 80px',
