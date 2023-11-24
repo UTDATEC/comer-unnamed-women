@@ -180,12 +180,12 @@ const demoteUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const user = await User.findByPk(req.params.userId);
+        const user = await User.findByPk(req.params.userId, {
+            include: [Course, Exhibition]
+        });
         if(user) {
-            const userCourses = await user.countCourses();
-            const userExhibitions = await user.countExhibitions();
-            if(userCourses || userExhibitions)
-                next(createError(422, {debugMessage: "User has at least one course enrollment or owns at least one exhibition."}))
+            if(!isUserDeletable(user.toJSON()))
+                next(createError(422, {debugMessage: "User is not eligible for deletion."}))
             else if(user.is_admin)
                 next(createError(401, {debugMessage: "Admin cannot delete admin"}));
             else {
