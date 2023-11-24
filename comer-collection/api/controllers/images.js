@@ -80,9 +80,16 @@ const updateImage = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.imageId) {
                     throw new Error("Image id in request body does not match Image id in URL");
                 }
-                image.set(req.body)
+                const imageData = {};
+                for(let [field, value] of Object.entries(req.body)) {
+                    if (value !== "")
+                        imageData[field] = value;
+                    else
+                        imageData[field] = null;
+                }
+                image.set(imageData)
                 await image.save();
-                res.status(200).json({ data: image });
+                res.status(200).json({ data: imageData });
             }
             else
                 next(createError(404));
