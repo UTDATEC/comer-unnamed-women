@@ -55,7 +55,9 @@ const ImageManagement = (props) => {
   const [backdropOpen, setBackdropOpen] = useState(false);
 
   const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
-  
+  const [artistDeleteDialogIsOpen, setArtistDeleteDialogIsOpen] = useState(false);
+  const [artistDeleteDialogItem, setArtistDeleteDialogItem] = useState(false);
+  const [artistDialogSearchQuery, setArtistDialogSearchQuery] = useState("");
 
   const editDialogFieldDefinitions = imageFieldDefinitions;
   const createDialogFieldDefinitions = imageFieldDefinitions;
@@ -74,9 +76,7 @@ const ImageManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
-    snackbarOpen, snackbarText, snackbarSeverity,
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   
@@ -195,21 +195,16 @@ const ImageManagement = (props) => {
         newArray: []
       })
 
-      setSnackbarText(`Successfully created ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully created ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "success");
 
     } else if(imagesCreated < newImageArray.length) {
 
       if(imagesCreated > 0) {
-        setSnackbarText(`Created ${imagesCreated} of ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Created ${imagesCreated} of ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "warning");
       }
       else {
-        setSnackbarText(`Failed to create ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to create ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "error");
       }
-      setSnackbarOpen(true);
 
       createDialogDispatch({
         type: "set",
@@ -240,16 +235,12 @@ const ImageManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields(getBlankItemFields(imageFieldDefinitions));
 
-      setSnackbarText(`Successfully edited image ${imageId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully edited image ${imageId}`, "success");
 
     } catch (error) {
       console.error(`Error editing image ${imageId}: ${error}`);
 
-      setSnackbarText(`Error editing for image ${imageId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error editing for image ${imageId}`, "error");
     }
   }
 
@@ -267,9 +258,7 @@ const ImageManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarSeverity("success")
-      setSnackbarText(`Image ${imageId} has been deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`Image ${imageId} has been deleted`, "success")
 
       if (response.status === 200 || response.status === 204) {
       } else {
@@ -278,9 +267,7 @@ const ImageManagement = (props) => {
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
-      setSnackbarSeverity("error")
-      setSnackbarText(`Image ${imageId} could not be deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`Image ${imageId} could not be deleted`, "error")
     }
 
     setDeleteDialogIsOpen(false);
@@ -302,16 +289,12 @@ const ImageManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarText(`Artist created`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Artist created`, "success");
 
     } catch (error) {
       console.error(`Error creating artist: ${error}`);
 
-      setSnackbarText(`Error creating artist`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error creating artist`, "error");
     }
   }
 
@@ -328,16 +311,15 @@ const ImageManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarText(`Artist ${artistId} deleted`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      setArtistDeleteDialogIsOpen(false);
+      setArtistDeleteDialogItem(null);
+
+      showSnackbar(`Artist ${artistId} deleted`, "success");
 
     } catch (error) {
       console.error(`Error deleting artist ${artistId}: ${error}`);
 
-      setSnackbarText(`Error deleting artist ${artistId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error deleting artist ${artistId}`, "error");
     }
   }
 
@@ -345,14 +327,10 @@ const ImageManagement = (props) => {
   const handleCopyToClipboard = useCallback((item, fieldName) => {
     try {
       navigator.clipboard.writeText(item[fieldName]);
-      setSnackbarSeverity("success")
-      setSnackbarText(`Text copied to clipboard`);
+      showSnackbar(`Text copied to clipboard`, "success")
 
-      setSnackbarOpen(true);
     } catch (error) {
-      setSnackbarSeverity("error")
-      setSnackbarText(`Error copying text to clipboard`);
-      setSnackbarOpen(true);
+      showSnackbar(`Error copying text to clipboard`, "error")
     }
   }, [])
 
@@ -362,7 +340,7 @@ const ImageManagement = (props) => {
       columnDescription: "ID",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+          <Typography variant="h6">ID</Typography>
         </TableCell>
       ),
       generateTableCell: (artist) => (
@@ -375,7 +353,7 @@ const ImageManagement = (props) => {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: "#CCC"}}>
-            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+          <Typography variant="h6">Name</Typography>
         </TableCell>
       ),
       generateTableCell: (artist) => (
@@ -460,9 +438,10 @@ const ImageManagement = (props) => {
               <EditIcon />
             </IconButton>
             <IconButton 
-              // disabled={course.Users.length > 0} 
+              disabled={!artist.is_deletable} 
               onClick={(e) => {
-                handleDeleteArtist(artist.id);
+                setArtistDeleteDialogItem(artist);
+                setArtistDeleteDialogIsOpen(true);
               }}
             >
               <DeleteIcon />
@@ -739,7 +718,7 @@ const ImageManagement = (props) => {
             )
           }
 
-      <ItemMultiCreateDialog entity="image" 
+      <ItemMultiCreateDialog entity="image"
         dialogTitle={"Create Images"}
         dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
         createDialogItems={createDialogImages}
@@ -762,10 +741,10 @@ const ImageManagement = (props) => {
 
 
       <EntityManageDialog 
-        entity="artist"
+        entitySingular="artist" entityPlural="artists"
         dialogTitle="Manage Artists"
-        dialogInstructionsTable="Edit or delete existing artists."
-        dialogInstructionsForm="Create new artists."
+        dialogInstructionsTable="Edit or delete existing artists"
+        dialogInstructionsForm="Create a new artist"
         dialogItems={artists}
         setDialogItems={setArtists}
         dialogFieldDefinitions={artistFieldDefinitions}
@@ -774,7 +753,15 @@ const ImageManagement = (props) => {
         setDialogIsOpen={setManageArtistDialogIsOpen}
         handleItemCreate={handleCreateArtist}
         handleItemEdit={null}
-        handleItemDelete={null}
+        handleItemDelete={handleDeleteArtist}
+        searchBoxFields={['fullName', 'fullNameReverse', 'notes']}
+        searchBoxPlaceholder="Search artists by name or notes"
+        internalDeleteDialogIsOpen={artistDeleteDialogIsOpen}
+        setInternalDeleteDialogIsOpen={setArtistDeleteDialogIsOpen}
+        internalDeleteDialogItem={artistDeleteDialogItem}
+        setInternalDeleteDialogItem={setArtistDeleteDialogItem}
+        itemSearchQuery={artistDialogSearchQuery}
+        setItemSearchQuery={setArtistDialogSearchQuery}
       />
 
       <ImageFullScreenViewer 
