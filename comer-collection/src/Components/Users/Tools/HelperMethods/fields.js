@@ -167,7 +167,8 @@ export const artistFieldDefinitions = [
     fieldName: "notes",
     displayName: "Notes",
     isRequired: false,
-    inputType: "textarea"
+    inputType: "textarea",
+    multiline: true
   }
 ];
 
