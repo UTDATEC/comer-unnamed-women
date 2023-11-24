@@ -70,9 +70,7 @@ const CourseManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
-    snackbarOpen, snackbarText, snackbarSeverity,
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   
@@ -216,21 +214,16 @@ const CourseManagement = (props) => {
         newArray: []
       })
 
-      setSnackbarText(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "success");
 
     } else if(coursesCreated < newCourseArray.length) {
 
       if(coursesCreated > 0) {
-        setSnackbarText(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "warning");
       }
       else {
-        setSnackbarText(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "error");
       }
-      setSnackbarOpen(true);
 
       createDialogDispatch({
         type: "set",
@@ -275,28 +268,17 @@ const CourseManagement = (props) => {
         newArray: []
       })
 
-      setSnackbarText(`Successfully enrolled user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully enrolled user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
 
     } else if(coursesAdded < courseIds.length) {
 
       if(coursesAdded > 0) {
-        setSnackbarText(`Enrolled user ${userId} in ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Enrolled user ${userId} in ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
       }
       else {
-        setSnackbarText(`Failed to enroll user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to enroll user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
       }
-      setSnackbarOpen(true);
 
-      // createDialogDispatch({
-      //   type: "set",
-      //   newArray: newCourseArray.filter((u, i) => {
-      //     return userIndicesWithErrors.includes(i);
-      //   })
-      // })
     }
 
 
@@ -334,30 +316,18 @@ const CourseManagement = (props) => {
         newArray: []
       })
 
-      setSnackbarText(`Successfully unenrolled user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully unenrolled user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
 
     } else if(coursesAdded < courseIds.length) {
 
       if(coursesAdded > 0) {
-        setSnackbarText(`Unenrolled user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("warning");
+        showSnackbar(`Unenrolled user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
       }
       else {
-        setSnackbarText(`Failed to unenroll user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`)
-        setSnackbarSeverity("error");
+        showSnackbar(`Failed to unenroll user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
       }
-      setSnackbarOpen(true);
-
-      // createDialogDispatch({
-      //   type: "set",
-      //   newArray: newCourseArray.filter((u, i) => {
-      //     return userIndicesWithErrors.includes(i);
-      //   })
-      // })
+      
     }
-
 
   }
 
@@ -378,16 +348,12 @@ const CourseManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields({email: '', given_name: '', family_name: ''})
 
-      setSnackbarText(`Successfully unenrolled user ${userId} from course ${courseId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully unenrolled user ${userId} from course ${courseId}`, "success");
 
     } catch (error) {
       console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
 
-      setSnackbarText(`Error unenrolling user ${userId} from course ${courseId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error unenrolling user ${userId} from course ${courseId}`, "error");
     }
   }
 
@@ -410,16 +376,12 @@ const CourseManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields({name: '', date_start: '', date_end: '', notes: ''})
 
-      setSnackbarText(`Successfully edited course ${courseId}`)
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      showSnackbar(`Successfully edited course ${courseId}`, "success");
 
     } catch (error) {
       console.error(`Error editing course ${courseId}: ${error}`);
 
-      setSnackbarText(`Error editing for course ${courseId}`)
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      showSnackbar(`Error editing for course ${courseId}`, "error");
     }
   }
 
@@ -437,9 +399,7 @@ const CourseManagement = (props) => {
       );
       fetchData();
 
-      setSnackbarSeverity("success")
-      setSnackbarText(`Course ${courseId} has been deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`Course ${courseId} has been deleted`, "success")
 
       if (response.status === 200 || response.status === 204) {
       } else {
@@ -448,9 +408,7 @@ const CourseManagement = (props) => {
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
-      setSnackbarSeverity("error")
-      setSnackbarText(`Course ${courseId} could not be deleted`);
-      setSnackbarOpen(true);
+      showSnackbar(`Course ${courseId} could not be deleted`, "error")
     }
 
     setDeleteDialogIsOpen(false);
