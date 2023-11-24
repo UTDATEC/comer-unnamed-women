@@ -9,7 +9,7 @@ export const ImageFullScreenViewer = ({ image, backdropOpen, setBackdropOpen }) 
         }}>
             <Stack direction="row">
                 <Box>
-                    <img src={image?.url} />
+                    <img src={image?.url ? image?.url : image?.thumbnailUrl} />
                 </Box>
                 <Box>
                     Information
