@@ -44,7 +44,7 @@ const adminNavLinks = [
   {
       title: "Exhibition Management",
       icon: <PhotoCameraBackIcon fontSize="large"/>,
-      link: "/Account/ExhibitionList",
+      link: "/Account/ExhibitionManagement",
       requirePermanentPassword: true
   },
   {

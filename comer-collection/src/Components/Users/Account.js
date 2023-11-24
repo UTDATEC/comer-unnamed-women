@@ -12,6 +12,7 @@ import Unauthorized from '../ErrorPages/Unauthorized';
 import ChangePassword from './ChangePassword';
 import CourseManagement from './Admin/CourseManagement';
 import MyExhibitions from './MyExhibitions';
+import ExhibitionManagement from './Admin/ExhibitionManagement';
 
 
 const Account = (props) => {
@@ -59,7 +60,7 @@ const Account = (props) => {
                 }
               } />} />
             <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
-            <Route path="ExhibitionList" element={<ExhibitionList {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ExhibitionManagement" element={<ExhibitionManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
             <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar }} />} />
             <Route path="CourseManagement" element={<CourseManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
 
