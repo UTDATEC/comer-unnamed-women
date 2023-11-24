@@ -8,11 +8,7 @@ import {
   Typography, DialogContentText, TextField
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-
-const getLocalISOString = (dateISOString) => {
-  const date = new Date(dateISOString);
-  return `${date.getFullYear()}-${date.getMonth() < 9 ? "0" + (1 + date.getMonth()) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + (date.getDate()) : date.getDate()}T${date.getHours() < 10 ? "0" + (date.getHours()) : date.getHours()}:${date.getMinutes() < 10 ? "0" + (date.getMinutes()) : date.getMinutes()}`
-}
+import { getLocalISOString } from "../HelperMethods/getLocalISOString";
 
 export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled, handleItemEdit }) => {
   return (
