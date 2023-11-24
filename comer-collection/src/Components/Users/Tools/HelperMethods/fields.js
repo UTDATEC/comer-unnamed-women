@@ -120,9 +120,21 @@ export const imageFieldDefinitions = [
     inputType: "number"
   },
   {
+    fieldName: "copyright",
+    displayName: "Copyright",
+    inputType: "textarea",
+    multiline: true
+  },
+  {
     fieldName: "location",
     displayName: "Location",
     isRequired: false
+  },
+  {
+    fieldName: "subject",
+    displayName: "Subject",
+    inputType: "textarea",
+    multiline: true
   },
   {
     fieldName: "condition",
@@ -138,18 +150,6 @@ export const imageFieldDefinitions = [
   {
     fieldName: "otherNotes",
     displayName: "Other Notes",
-    inputType: "textarea",
-    multiline: true
-  },
-  {
-    fieldName: "copyright",
-    displayName: "Copyright",
-    inputType: "textarea",
-    multiline: true
-  },
-  {
-    fieldName: "subject",
-    displayName: "Subject",
     inputType: "textarea",
     multiline: true
   }
