@@ -156,16 +156,16 @@ const ExhibitionManagement = (props) => {
   }
 
 
-  const filteredExhibitions = useMemo(() => filterExhibitions(
-    // userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
-  ), [
-    // users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
-  ])
+//   const filteredExhibitions = useMemo(() => filterExhibitions(
+//     // userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+//   ), [
+//     // users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+//   ])
 
 
 //   const filteredAndSearchedExhibitions = useMemo(() => searchItems(searchQuery, filteredExhibitions, ['family_name', 'given_name', 'email']), [filteredExhibitions, searchQuery])
 
-  const filteredAndSearchedExhibitions = Array.from(filteredExhibitions);
+  const filteredAndSearchedExhibitions = Array.from(exhibitions);
 
   const visibleExhibitions = filteredAndSearchedExhibitions.sort((a, b) => {
     if(sortColumn == "Name")
