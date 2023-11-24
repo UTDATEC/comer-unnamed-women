@@ -502,6 +502,22 @@ const ImageManagement = (props) => {
       )
     },
     {
+      columnDescription: "Thumbnail",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Thumbnail</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack sx={{height: "50px", maxWidth: "100px"}} alignItems="center">
+            <img height="50px" src={image.url} loading="lazy" />
+          </Stack>
+          {/* <Typography variant="body1">{image.title}</Typography> */}
+        </TableCell>
+      )
+    },
+    {
       columnDescription: "Title",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
