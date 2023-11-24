@@ -87,6 +87,13 @@ export const imageFieldDefinitions = [
     blank: "https://atecquilt01.utdallas.edu/comer/public/images/"
   },
   {
+    fieldName: "thumbnailUrl",
+    displayName: "Thumbnail URL",
+    inputType: "url",
+    multiline: true,
+    blank: "https://atecquilt01.utdallas.edu/comer/public/images/"
+  },
+  {
     fieldName: "medium",
     displayName: "Medium",
     isRequired: false
