@@ -37,6 +37,7 @@ import { imageFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
 import { SelectionSummary } from "../Tools/SelectionSummary";
+import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 
 
 const ImageManagement = (props) => {
@@ -557,28 +558,28 @@ const ImageManagement = (props) => {
         </TableCell>
       )
     },
-    {
-      columnDescription: "Dimensions",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Dimensions</Typography>
-        </TableCell>
-      ),
-      generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="column" spacing={1}>
-            <Stack direction="row" spacing={1} sx={{width: "100%"}}>
-              <HeightIcon sx={{transform: "rotate(90deg)"}} />
-              <Typography variant="body1">{parseFloat(image.width)} in.</Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} sx={{width: "100%"}}>
-              <HeightIcon />
-              <Typography variant="body1">{parseFloat(image.height)} in.</Typography>
-            </Stack>
-          </Stack>
-        </TableCell>
-      )
-    },
+    // {
+    //   columnDescription: "Dimensions",
+    //   generateTableHeaderCell: () => (
+    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+    //       <Typography variant="h6">Dimensions</Typography>
+    //     </TableCell>
+    //   ),
+    //   generateTableCell: (image) => (
+    //     <TableCell>
+    //       <Stack direction="column" spacing={1}>
+    //         <Stack direction="row" spacing={1} sx={{width: "100%"}}>
+    //           <HeightIcon sx={{transform: "rotate(90deg)"}} />
+    //           <Typography variant="body1">{parseFloat(image.width)} in.</Typography>
+    //         </Stack>
+    //         <Stack direction="row" spacing={1} sx={{width: "100%"}}>
+    //           <HeightIcon />
+    //           <Typography variant="body1">{parseFloat(image.height)} in.</Typography>
+    //         </Stack>
+    //       </Stack>
+    //     </TableCell>
+    //   )
+    // },
     {
       columnDescription: "Artists",
       generateTableHeaderCell: () => (
@@ -624,6 +625,31 @@ const ImageManagement = (props) => {
               }}
             >
               <Typography variant="body1">{image.Tags.length}</Typography>
+            </Button>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Exhibitions",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Exhibitions</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (image) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant="text" 
+              color="primary"
+              disabled startIcon={<PhotoCameraBackIcon />}
+              onClick={() => {
+                // setAssignCourseDialogUser(user);
+                // setAssignCourseDialogCourses([...user.Courses]);
+                // setAssignCourseDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">{image.Exhibitions.length}</Typography>
             </Button>
           </Stack>
         </TableCell>
