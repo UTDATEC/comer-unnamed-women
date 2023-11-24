@@ -67,8 +67,12 @@ export const AssociationManagementDialog = ({
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
-                <DataTable tableFields={secondaryTableFieldsAll} items={secondaryItemsAllResults} extraProperties={{ primaryItems: primaryItems, secondariesByPrimary
-                }} /> 
+                <DataTable 
+                  tableFields={secondaryTableFieldsAll} 
+                  items={secondaryItemsAll} 
+                  visibleItems={secondaryItemsAllResults} 
+                  extraProperties={{ primaryItems, secondariesByPrimary }} 
+                /> 
               ) || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
                   <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
@@ -91,9 +95,12 @@ export const AssociationManagementDialog = ({
             <Typography variant="h5">{tableTitleAssigned}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && (
-                <DataTable tableFields={secondaryTableFieldsAssignedOnly} items={secondaryItemsAssignedResults} extraProperties={{ primaryItems: primaryItems, 
-                  secondariesByPrimary
-                }} /> 
+                <DataTable 
+                  tableFields={secondaryTableFieldsAssignedOnly} 
+                  items={secondaryItemsAssigned} 
+                  visibleItems={secondaryItemsAssignedResults} 
+                  extraProperties={{  primaryItems, secondariesByPrimary}} 
+                /> 
               ) || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
                   <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>

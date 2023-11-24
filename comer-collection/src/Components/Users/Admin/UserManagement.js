@@ -104,8 +104,14 @@ const UserManagement = (props) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
+
       const userData = await response.data;
       setUsers(userData.data);
+
+      setSelectedUsers(selectedUsers.filter((su) => (
+        userData.data.map((u) => u.id).includes(parseInt(su.id))
+      )));
+
 
       const response2 = await axios.get("http://localhost:9000/api/courses", {
         headers: {
@@ -1014,7 +1020,7 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={visibleUsers} tableFields={userTableFields} 
+        <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields} 
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
           sx={{gridArea: "table"}}

@@ -6,12 +6,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@emotion/react";
 
-export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems }) => {
+export const DataTable = ({ tableFields, items, visibleItems, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems }) => {
 
   const theme = useTheme();
 
   const visibleSelectedItems = (selectedItems ?? []).filter((si) => (
-    items.map((i) => i.id).includes(parseInt(si.id))
+    visibleItems.map((i) => i.id).includes(parseInt(si.id))
   ));
 
   return (
@@ -22,15 +22,15 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
             {Boolean(rowSelectionEnabled) && (<TableCell sx={{backgroundColor: "#CCC"}}>
               <Typography variant="body1">
                 <Checkbox checked={
-                  visibleSelectedItems.length == items.length
+                  visibleSelectedItems.length == visibleItems.length
                 } 
-                disabled={items.length == 0}
+                disabled={visibleItems.length == 0}
                 indeterminate={
-                  visibleSelectedItems.length > 0 && visibleSelectedItems.length < items.length
+                  visibleSelectedItems.length > 0 && visibleSelectedItems.length < visibleItems.length
                 }
                 onChange={(e) => {
                   if(e.target.checked) {
-                    setSelectedItems([...selectedItems, ...items.filter((i) => (
+                    setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
                       !selectedItems.map((si) => si.id).includes(parseInt(i.id))
                     ))])
                   } else {
@@ -53,7 +53,7 @@ export const DataTable = ({ tableFields, items, extraProperties, rowSelectionEna
         </TableHead>
 
         <TableBody>
-          {items.map((item) => {
+          {(visibleItems ?? []).map((item) => {
 
             const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
             const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"

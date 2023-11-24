@@ -93,6 +93,11 @@ const CourseManagement = (props) => {
       const courseData = response.data;
       setCourses(courseData.data);
 
+      setSelectedCourses(selectedCourses.filter((sc) => (
+        courseData.data.map((c) => c.id).includes(parseInt(sc.id))
+      )));
+
+
       const response2 = await axios.get("http://localhost:9000/api/users", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -749,7 +754,7 @@ const CourseManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
+        <DataTable items={courses} visibleItems={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
           sx={{gridArea: "table"}}
         />
@@ -818,7 +823,7 @@ const CourseManagement = (props) => {
         dialogIsOpen={assignUserDialogIsOpen}
         tableTitleAssigned={
           assignUserDialogCourses.length == 1 ?
-            `Current Users for ${assignUserDialogCourses[0].safe_display_name}` :
+            `Current Users in ${assignUserDialogCourses[0].safe_display_name}` :
             `Current Users in Selected Courses`
         }
         tableTitleAll={`All Users`}

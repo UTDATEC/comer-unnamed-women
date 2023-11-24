@@ -148,7 +148,7 @@ const ImageManagement = (props) => {
 
   const filteredAndSearchedImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
 
-  const imagesToDisplay = filteredAndSearchedImages.sort((a, b) => {
+  const visibleImages = filteredAndSearchedImages.sort((a, b) => {
     if(sortColumn == "Name")
       return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
     else if(sortColumn == "ID")
@@ -724,9 +724,9 @@ const ImageManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={imagesToDisplay} tableFields={imageTableFields} rowSelectionEnabled={true} />
+        <DataTable items={images} visibleItems={visibleImages} tableFields={imageTableFields} rowSelectionEnabled={true} />
           {
-            imagesToDisplay.length == 0 && (
+            visibleImages.length == 0 && (
               <Box sx={{width: '100%'}}>
                 <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
                   <SearchIcon sx={{fontSize: '150pt', opacity: 0.5}} />
