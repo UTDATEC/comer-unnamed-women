@@ -18,7 +18,55 @@ export const blankExhibitionData = {
         "width_ft": 25,
         "height_ft": 10
     },
+    images: []
 };
+
+export const getBlankExhibitionImageData = (image_id) => {
+    return {
+        image_id,
+        position: {
+            custom_position: false,
+            custom_x: 0,
+            custom_y: 0
+        },
+        size: {
+            width: 0,
+            height: 0
+        },
+        matte: {
+            color: '#ffffff',
+            weighted: false,
+            weighted_value: 0
+        },
+        frame: {
+            custom: false,
+            width: 0,
+            height: 0,
+            color: '#000000'
+        },
+        light: {
+            intensity: 0,
+            color: '#ffffff'
+        },
+        metadata: {
+            title: "",
+            artist: "",
+            description: "",
+            year: 0,
+            medium: "",
+            additionalInformation: null,
+            direction: 1
+        }
+    }
+}
+
+export const getImageStateById = (exhibitionData, image_id) => {
+    for(const i of (exhibitionData.images ?? [])) {
+        if(i.image_id == image_id)
+            return i;
+    }
+    return null;
+}
 
 
 const width_ft_min = 10;
@@ -111,11 +159,66 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             height_ft: action.newValue >= height_ft_min ? action.newValue : height_ft_min
                         }
                     };
+                case "add_image":
+                    return {
+                        ...exhibitionData,
+                        images: [
+                            ...exhibitionData.images,
+                            getBlankExhibitionImageData(action.image_id)
+                        ]
+                    };
+                case "remove_image":
+                    return {
+                        ...exhibitionData,
+                        images: exhibitionData.images.filter((image) => {
+                            return image.image_id != action.image_id;
+                        })
+                    };
                 default:
                     console.log("Unrecognized exhibition edit action: ", action.type, action);
                     return exhibitionData;
             }
-            
+        
+        case "image":
+            if(!action.image_id) {
+                console.log(`image ID ${action.image_id} is not valid`);
+                return exhibitionData;
+            }
+            return {
+                ...exhibitionData,
+                images: exhibitionData.images.map((image) => {
+                    if(image.image_id != action.image_id)
+                        return image;
+
+                    switch (action.type) {
+                        case 'set_position_custom_x':
+                            return {
+                                ...image,
+                                position: {
+                                    ...image.position,
+                                    custom_position: true,
+                                    custom_x: action.newValue
+                                }
+                            }
+                    
+                        case 'set_position_custom_y':
+                            return {
+                                ...image,
+                                position: {
+                                    ...image.position,
+                                    custom_position: true,
+                                    custom_y: action.newValue
+                                }
+                            }
+                    
+                        default:
+                            console.log("Unrecognized image edit action: ", action.type, action);
+                            return exhibitionData;
+
+                    }
+                    
+                })
+            }
     
         default:
             console.log("Unrecognized exhibition edit scope: ", action.scope, action);

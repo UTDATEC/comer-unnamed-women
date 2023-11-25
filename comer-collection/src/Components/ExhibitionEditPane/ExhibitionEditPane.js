@@ -2,12 +2,17 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, In
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
 import { useTheme } from "@emotion/react";
+import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 
 
 const ColorInput = ({value, onChange}) => {
     return (
-        <input type="color" sx={{width: "100%"}} {...{value, onChange}} />
+        <input type="color" sx={{width: "100%"}} 
+            value={value ?? ""}
+            {...{onChange}} 
+        />
     )
 }
 
@@ -184,7 +189,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     <AccordionSubHeading text="Ambient Lighting" />
 
                     <ExhibitionOption description="Moodiness">
-                        <Select value={exhibitionState.appearance.moodiness} 
+                        <Select value={exhibitionState.appearance.moodiness ?? ''} 
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -213,7 +218,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     <AccordionSubHeading text="Exhibition Dimensions" />
 
                     <ExhibitionOption description="Length">
-                        <Input type="number" value={exhibitionState.size.length_ft}
+                        <Input type="number" value={exhibitionState.size.length_ft ?? 0}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -224,7 +229,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         />
                     </ExhibitionOption>
                     <ExhibitionOption description="Width">
-                        <Input type="number" value={exhibitionState.size.width_ft}
+                        <Input type="number" value={exhibitionState.size.width_ft ?? 0}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -235,7 +240,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         />
                     </ExhibitionOption>
                     <ExhibitionOption description="Height">
-                        <Input type="number" value={exhibitionState.size.height_ft}
+                        <Input type="number" value={exhibitionState.size.height_ft ?? 0}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -253,6 +258,64 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     description="Image Settings"
                     {...{expandedSection, setExpandedSection, selectedImageId, setSelectedImageId}}
                 >
+
+                    <Stack direction="row" alignItems="center" justifyContent="center">
+
+                        <Select value={selectedImageId ?? ""} 
+                            onChange={(e) => {
+                                setSelectedImageId(e.target.value)
+                            }}
+                        >
+                            {(exhibitionState.images ?? []).map((image) => (
+                                <MenuItem key={image.image_id} value={image.image_id ?? ''}>{image.image_id}</MenuItem>
+                            ))}
+                        </Select>
+                        
+                        <Button variant="contained" 
+                            startIcon={<AddPhotoAlternateIcon />}
+                            onClick={() => {
+                                exhibitionEditDispatch({
+                                    scope: "exhibition",
+                                    type: "add_image",
+                                    image_id: exhibitionState.images.length + 1
+                                })
+                            }}
+                        >
+                            <Typography variant="body1">Add Image</Typography>
+                        </Button>
+                    </Stack>
+
+                    <AccordionSubHeading text="Position" />
+                    <ExhibitionOption description="X">
+
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_position_custom_x",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+
+                    </ExhibitionOption>
+                    <ExhibitionOption description="Y">
+
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_y ?? ""}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_position_custom_y",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+
+                    </ExhibitionOption>
 
                 </ExhibitionOptionGroup>
 
