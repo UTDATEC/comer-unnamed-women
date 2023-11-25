@@ -36,7 +36,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
-import { userFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
 
 
 const UserManagement = (props) => {
@@ -187,9 +187,9 @@ const UserManagement = (props) => {
     let userIndicesWithErrors = []
     for(const [i, newUserData] of newUserArray.entries()) {
       try {
-        let { email, given_name, family_name } = newUserData;
+        let filteredUser = filterItemFields(userFieldDefinitions, newUserData)
         await axios.post(
-          `http://localhost:9000/api/users`, { email, given_name, family_name },
+          `http://localhost:9000/api/users`, filteredUser,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
