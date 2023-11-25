@@ -53,8 +53,8 @@ const ImageManagement = (props) => {
 
   const [selectedImages, setSelectedImages] = useState([]);
 
-  const [backdropImage, setBackdropImage] = useState(null);
-  const [backdropOpen, setBackdropOpen] = useState(false);
+  const [previewerImage, setPreviewerImage] = useState(null);
+  const [previewerOpen, setPreviewerOpen] = useState(false);
 
   const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
   const [artistDeleteDialogIsOpen, setArtistDeleteDialogIsOpen] = useState(false);
@@ -526,8 +526,8 @@ const ImageManagement = (props) => {
           {(image.thumbnailUrl) && (
             <Button 
               onClick={() => {
-                setBackdropImage(image);
-                setBackdropOpen(true);
+                setPreviewerImage(image);
+                setPreviewerOpen(true);
               }}
             >
             <img height="50px" src={image.thumbnailUrl} loading="lazy" />
@@ -536,8 +536,8 @@ const ImageManagement = (props) => {
             <Button variant="outlined" color="primary" 
               startIcon={<VisibilityIcon />}
               onClick={() => {
-                setBackdropImage(image);
-                setBackdropOpen(true);
+                setPreviewerImage(image);
+                setPreviewerOpen(true);
               }}
             >
               <Typography variant="body1">View</Typography>
@@ -844,9 +844,10 @@ const ImageManagement = (props) => {
       />
 
       <ImageFullScreenViewer 
-        image={backdropImage} 
-        backdropOpen={backdropOpen}
-        setBackdropOpen={setBackdropOpen}
+        image={previewerImage} 
+        setImage={setPreviewerImage}
+        previewerOpen={previewerOpen}
+        setPreviewerOpen={setPreviewerOpen}
       />
 
       </Box>
