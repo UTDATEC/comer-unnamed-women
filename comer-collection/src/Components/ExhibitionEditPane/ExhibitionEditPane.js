@@ -12,10 +12,11 @@ const ColorInput = ({value, onChange}) => {
 }
 
 const AccordionSubHeading = ({text}) => {
+    const theme = useTheme();
     return (
         <>
             <Divider />
-            <Typography variant="h6" align="center" sx={{opacity: 0.5}}>{text}</Typography>
+            <Typography variant="h6" align="center" color={theme.palette.grey.main}>{text}</Typography>
         </>
     )
 }
@@ -54,19 +55,31 @@ const ExhibitionOption = ({description, children}) => {
 
 
 const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSection, children}) => {
+
+    const theme = useTheme();
+    
     return (
         <Accordion disableGutters expanded={expandedSection == id}
             onChange={(e, isExpanded) => {
                 setExpandedSection(isExpanded ? id : null);
-            }} >
-
-            <ListItemButton sx={{width: "100%"}}>
-                <AccordionSummary sx={{width: "100%"}}
-                    expandIcon={<ExpandMoreIcon />}
-                >
-                    <Typography variant="h6">{description}</Typography>
-                </AccordionSummary>
-            </ListItemButton>
+            }}>
+            <Box square sx={{
+                width: "100%",
+                position: "sticky",
+                top: "0px",
+                background: theme.palette.grey.translucent,
+            }}
+                component={Paper}
+            >
+                <ListItemButton
+                > 
+                    <AccordionSummary sx={{width: "100%"}}
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography variant="h6">{description}</Typography>
+                    </AccordionSummary>
+                </ListItemButton>
+            </Box>
 
             <AccordionDetails >
                 <Stack direction="column" spacing={1}>
@@ -107,7 +120,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                 gridArea: "header",
                 backgroundColor: theme.palette.grey.veryTranslucent
             }}>
-                <Typography variant="h5" align="center">Exhibition Editor</Typography>
+                <Typography variant="h5" align="center">Exhibition ID: {exhibitionId}</Typography>
             </Box>
 
             <Box sx={{gridArea: "accordions", overflowY: "scroll"}} >
