@@ -443,7 +443,7 @@ const ImageManagement = (props) => {
           {artist.notes && (
             <Typography variant="body1">{artist.notes}</Typography>
           ) || !artist.notes && (
-            <Typography variant="body1" sx={{opacity: 0.5}}>None</Typography>
+            <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
           )}
         </TableCell>
       )
