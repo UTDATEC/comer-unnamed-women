@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useReducer, useState } from "react";
-import axios from "axios";
 import {
   Stack,
   Button,
@@ -28,9 +27,10 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
-import { courseFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields";
 import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
 import SecurityIcon from "@mui/icons-material/Security"
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 
 
 const CourseManagement = (props) => {
@@ -71,7 +71,7 @@ const CourseManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar } = props;
+  const { appUser, setSelectedNavItem, showSnackbar } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   
@@ -86,12 +86,7 @@ const CourseManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/courses", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const courseData = response.data;
+      const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
       setCourses(courseData.data);
 
       setSelectedCourses(selectedCourses.filter((sc) => (
@@ -99,12 +94,7 @@ const CourseManagement = (props) => {
       )));
 
 
-      const response2 = await axios.get("http://localhost:9000/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const userData = response2.data;
+      const userData = await sendAuthenticatedRequest("GET", "/api/users");
       setUsers(userData.data);
 
       setTimeout(() => {
@@ -127,12 +117,7 @@ const CourseManagement = (props) => {
 
   const fetchCourseUsers = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/courses/`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const courseData = await response.data;
+      const response = await sendAuthenticatedRequest("GET", `/api/courses/`);
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -148,7 +133,7 @@ const CourseManagement = (props) => {
   */
 
   const filterCourses = () => {
-    return courses.filter((course) => {
+    return courses.filter(() => {
       return true;
       // return (
       //   // filter by course type
@@ -183,10 +168,6 @@ const CourseManagement = (props) => {
   })
   
 
-  const handleDeleteClick = (courseId) => {
-    setDeleteDialogCourse({ courseId });
-    setDeleteDialogIsOpen(true);
-  };
 
 
   const handleCoursesCreate = async(newCourseArray) => {
@@ -194,15 +175,8 @@ const CourseManagement = (props) => {
     let courseIndicesWithErrors = []
     for(const [i, newCourseData] of newCourseArray.entries()) {
       try {
-        let { name, date_start, date_end, notes } = newCourseData;
-        await axios.post(
-          `http://localhost:9000/api/courses`, { name, date_start, date_end, notes },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
+        let filteredCourse = filterItemFields(courseFieldDefinitions, newCourseData)
+        await sendAuthenticatedRequest("POST", '/api/courses', filteredCourse);
 
         coursesCreated++;
   
@@ -249,15 +223,7 @@ const CourseManagement = (props) => {
     let courseIndicesWithErrors = []
     for(const [i, courseId] of courseIds.entries()) {
       try {
-        await axios.put(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
+        await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}/users/${userId}`)
         coursesAdded++;
   
       } catch (error) {
@@ -293,20 +259,12 @@ const CourseManagement = (props) => {
 
   
   const handleUnassignCoursesFromUser = async(userId, courseIds) => {
-    let coursesAdded = 0;
+    let coursesRemoved = 0;
     let courseIndicesWithErrors = []
     for(const [i, courseId] of courseIds.entries()) {
       try {
-        await axios.delete(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
-        coursesAdded++;
+        await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}/users/${userId}`)
+        coursesRemoved++;
   
       } catch (error) {
         console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
@@ -315,7 +273,7 @@ const CourseManagement = (props) => {
     }
     fetchData();
 
-    if(coursesAdded == courseIds.length) {
+    if(coursesRemoved == courseIds.length) {
       setCreateDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
@@ -324,10 +282,10 @@ const CourseManagement = (props) => {
 
       showSnackbar(`Successfully unenrolled user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
 
-    } else if(coursesAdded < courseIds.length) {
+    } else if(coursesRemoved < courseIds.length) {
 
-      if(coursesAdded > 0) {
-        showSnackbar(`Unenrolled user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
+      if(coursesRemoved > 0) {
+        showSnackbar(`Unenrolled user ${userId} from ${coursesRemoved} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
       }
       else {
         showSnackbar(`Failed to unenroll user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
@@ -339,44 +297,14 @@ const CourseManagement = (props) => {
 
 
   
-  const handleUnassignCourseFromUser = async(userId, courseId) => {
-    try {
-      await axios.delete(
-        `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      fetchCourseUsers(courseId);
-
-      setEditDialogIsOpen(false);
-      setEditDialogFields({email: '', given_name: '', family_name: ''})
-
-      showSnackbar(`Successfully unenrolled user ${userId} from course ${courseId}`, "success");
-
-    } catch (error) {
-      console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
-
-      showSnackbar(`Error unenrolling user ${userId} from course ${courseId}`, "error");
-    }
-  }
 
 
 
   
   const handleCourseEdit = async(courseId, updateFields) => {
-    const { name, date_start, date_end, notes } = updateFields;
     try {
-      await axios.put(
-        `http://localhost:9000/api/courses/${courseId}`, { name, date_start, date_end, notes },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const filteredCourse = filterItemFields(courseFieldDefinitions, updateFields);
+      await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}`, filteredCourse);
       fetchData();
 
       setEditDialogIsOpen(false);
@@ -395,14 +323,7 @@ const CourseManagement = (props) => {
 
   const handleDelete = async (courseId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/courses/${courseId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const response = await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}`);
       fetchData();
 
       showSnackbar(`Course ${courseId} has been deleted`, "success")
@@ -546,7 +467,7 @@ const CourseManagement = (props) => {
       generateTableCell: (course) => (
         <TableCell>
           <IconButton 
-            onClick={(e) => {
+            onClick={() => {
               setEditDialogCourse(course);
               const { name, date_start, date_end, notes } = course;
               setEditDialogFields({ name, date_start, date_end, notes });
@@ -558,7 +479,7 @@ const CourseManagement = (props) => {
           </IconButton>
           <IconButton 
             disabled={course.Users.length > 0} 
-            onClick={(e) => {
+            onClick={() => {
               setDeleteDialogCourse(course);
               setDeleteDialogIsOpen(true);
             }}
