@@ -259,7 +259,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     {...{expandedSection, setExpandedSection, selectedImageId, setSelectedImageId}}
                 >
 
-                    <Stack direction="row" alignItems="center" justifyContent="center">
+                    <ExhibitionOption direction="row" alignItems="center" justifyContent="center">
 
                         <Select value={selectedImageId ?? ""} 
                             onChange={(e) => {
@@ -283,7 +283,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         >
                             <Typography variant="body1">Add Image</Typography>
                         </Button>
-                    </Stack>
+                    </ExhibitionOption>
 
                     <AccordionSubHeading text="Position" />
                     <ExhibitionOption description="Custom Position">
