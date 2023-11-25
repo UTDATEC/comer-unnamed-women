@@ -8,7 +8,6 @@ import {
   Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import axios from "axios";
 import { DataTable } from "./Tools/DataTable";
 import SecurityIcon from "@mui/icons-material/Security";
 import PersonIcon from "@mui/icons-material/Person";
@@ -16,6 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SchoolIcon from '@mui/icons-material/School';
 import { useTheme } from "@emotion/react";
+import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 
 const Profile = (props) => {
 
@@ -29,12 +29,8 @@ const Profile = (props) => {
   const [myCourses, setMyCourses] = useState([]);
   const fetchMyCourses = async() => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/account/courses`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }
-      });
-      setMyCourses(response.data.data);
+      const response = await sendAuthenticatedRequest("GET", `/api/account/courses`);
+      setMyCourses(response.data);
     } catch(e) {
       console.log(`Error fetching courses: ${e.message}`);
     }
