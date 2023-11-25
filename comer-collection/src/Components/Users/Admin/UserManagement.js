@@ -892,13 +892,7 @@ const UserManagement = (props) => {
       </TableCell>
     ),
     generateTableCell: (course, extraProperties) => {
-      const quantity = Object.entries(extraProperties.secondariesByPrimary)
-        .filter(([userId]) => (
-          assignCourseDialogUsers.map((u) => u.id).includes(parseInt(userId))
-        ))
-        .filter(([, courses]) => (
-          courses.map((c) => c.id).includes(course.id)
-        )).length
+      const quantity = extraProperties.getQuantityAssigned(course);
       return (
       <TableCell>
         {quantity == assignCourseDialogUsers.length && (

@@ -42,6 +42,18 @@ export const AssociationManagementDialog = ({
   const secondaryItemsAssignedResults = searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []);
   const secondaryItemsAllResults = searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []);
 
+
+  const getQuantityAssigned = (secondary) => {
+    return Object.entries(secondariesByPrimary)
+    .filter(([primaryId]) => (
+      primaryItems.map((pi) => pi.id).includes(parseInt(primaryId))
+    ))
+    .filter(([, secondaries]) => (
+      secondaries.map((si) => si.id).includes(secondary.id)
+    )).length;
+  }
+
+
   return (
     <Dialog fullWidth={true} maxWidth="lg"
       open={dialogIsOpen}
@@ -71,7 +83,7 @@ export const AssociationManagementDialog = ({
                   tableFields={secondaryTableFieldsAll} 
                   items={secondaryItemsAll} 
                   visibleItems={secondaryItemsAllResults} 
-                  extraProperties={{ primaryItems, secondariesByPrimary }} 
+                  extraProperties={{ primaryItems, getQuantityAssigned }} 
                 /> 
               ) || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
