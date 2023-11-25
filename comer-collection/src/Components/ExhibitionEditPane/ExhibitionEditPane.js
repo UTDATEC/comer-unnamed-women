@@ -7,11 +7,11 @@ import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 
 
-const ColorInput = ({value, onChange}) => {
+const ColorInput = ({value, onChange, disabled}) => {
     return (
         <input type="color" sx={{width: "100%"}} 
             value={value ?? ""}
-            {...{onChange}} 
+            {...{onChange, disabled}} 
         />
     )
 }
@@ -390,6 +390,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
 
                     <ExhibitionOption description="Color">
                         <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color} 
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "image",
