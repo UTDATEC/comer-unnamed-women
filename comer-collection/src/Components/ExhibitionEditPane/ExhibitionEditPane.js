@@ -11,7 +11,10 @@ const ColorInput = ({value, onChange}) => {
 
 const AccordionSubHeading = ({text}) => {
     return (
-        <Typography variant="h6" align="center" sx={{opacity: 0.5}}>{text}</Typography>
+        <>
+            <Divider />
+            <Typography variant="h6" align="center" sx={{opacity: 0.5}}>{text}</Typography>
+        </>
     )
 }
 
@@ -71,6 +74,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             <ColorInput value={exhibitionState.appearance.main_wall_color} 
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
+                                        scope: "exhibition",
                                         type: "set_main_wall_color",
                                         newColor: e.target.value
                                     }
@@ -81,6 +85,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             <ColorInput value={exhibitionState.appearance.side_wall_color} 
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
+                                        scope: "exhibition",
                                         type: "set_side_wall_color",
                                         newColor: e.target.value
                                     }
@@ -91,6 +96,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             <ColorInput value={exhibitionState.appearance.floor_color} 
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
+                                        scope: "exhibition",
                                         type: "set_floor_color",
                                         newColor: e.target.value
                                     }
@@ -101,6 +107,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             <ColorInput value={exhibitionState.appearance.ceiling_color} 
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
+                                        scope: "exhibition",
                                         type: "set_ceiling_color",
                                         newColor: e.target.value
                                     }
@@ -112,8 +119,6 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                                 <Typography variant="body1">Select</Typography>
                             </Button>
                         </ExhibitionOption>
-
-                        <Divider />
                         
                         <AccordionSubHeading text="Ambient Lighting" />
 
@@ -121,6 +126,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             <Select value={exhibitionState.appearance.moodiness} 
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
+                                        scope: "exhibition",
                                         type: "set_moodiness",
                                         newMoodiness: e.target.value
                                     })
@@ -130,6 +136,53 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                                     <MenuItem key={option.value} value={option.value}>{option.displayText}</MenuItem>
                                 ))}
                             </Select>
+                        </ExhibitionOption>
+                        <ExhibitionOption description="Ambient Light Color">
+                            <ColorInput value={exhibitionState.appearance.ambient_light_color} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "exhibition",
+                                        type: "set_ambient_light_color",
+                                        newColor: e.target.value
+                                    }
+                                )
+                            }} />
+                        </ExhibitionOption>
+
+                        <AccordionSubHeading text="Exhibition Dimensions" />
+
+                        <ExhibitionOption description="Length">
+                            <Input type="number" value={exhibitionState.size.length_ft}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "exhibition",
+                                        type: "set_length",
+                                        newValue: e.target.value
+                                    })
+                                }}
+                            />
+                        </ExhibitionOption>
+                        <ExhibitionOption description="Width">
+                            <Input type="number" value={exhibitionState.size.width_ft}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "exhibition",
+                                        type: "set_width",
+                                        newValue: e.target.value
+                                    })
+                                }}
+                            />
+                        </ExhibitionOption>
+                        <ExhibitionOption description="Height">
+                            <Input type="number" value={exhibitionState.size.height_ft}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "exhibition",
+                                        type: "set_height",
+                                        newValue: e.target.value
+                                    })
+                                }}
+                            />
                         </ExhibitionOption>
                         
                     </Stack>
