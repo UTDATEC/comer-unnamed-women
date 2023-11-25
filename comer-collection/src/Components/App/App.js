@@ -9,6 +9,7 @@ import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
 import { green, grey, orange } from '@mui/material/colors';
 import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
+import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
 
 const App = () => {
   const [searchParams, setSearchParams] = useState({
@@ -155,6 +156,7 @@ const App = () => {
             </ThemeProvider>
           } />
           <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
+          <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
           <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
           <Route path="/Account/*" element={<Account {
