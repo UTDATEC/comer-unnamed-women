@@ -857,7 +857,7 @@ const UserManagement = (props) => {
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
             {/* <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
-            <Typography variant="h6">Name</Typography>
+            <Typography variant="h6">Course Name</Typography>
         </TableCell>
       ),
       generateTableCell: (course) => (
