@@ -3,12 +3,12 @@ import {
   Typography, Stack, TableCell, Paper, Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import axios from "axios";
 import { DataTable } from "./Tools/DataTable";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
-import LockIcon from "@mui/icons-material/Lock"
-import PublicIcon from "@mui/icons-material/Public"
+import LockIcon from "@mui/icons-material/Lock";
+import PublicIcon from "@mui/icons-material/Public";
 import { useTheme } from "@emotion/react";
+import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 
 
 const MyExhibitions = (props) => {
@@ -21,12 +21,8 @@ const MyExhibitions = (props) => {
   const [myExhibitions, setMyExhibitions] = useState([]);
   const fetchMyExhibitions = async() => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/account/exhibitions`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }
-      });
-      setMyExhibitions(response.data.data);
+      const response = await sendAuthenticatedRequest("GET", `/api/account/exhibitions`);
+      setMyExhibitions(response.data);
     } catch(e) {
       console.log(`Error fetching courses: ${e.message}`);
     }

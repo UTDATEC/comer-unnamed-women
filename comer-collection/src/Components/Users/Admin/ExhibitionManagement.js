@@ -37,6 +37,7 @@ import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilege
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 import { userFieldDefinitions } from "../Tools/HelperMethods/fields";
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 
 
 const ExhibitionManagement = (props) => {
@@ -92,13 +93,7 @@ const ExhibitionManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/exhibitions", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      const exhibitionData = await response.data;
+      const exhibitionData = await sendAuthenticatedRequest("GET", "/api/exhibitions")
       setExhibitions(exhibitionData.data);
 
       setSelectedExhibitions(selectedExhibitions.filter((su) => (
@@ -106,12 +101,7 @@ const ExhibitionManagement = (props) => {
       )));
 
 
-      const response2 = await axios.get("http://localhost:9000/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const userData = await response2.data;
+      const userData = await sendAuthenticatedRequest("GET", "/api/users")
       setUsers(userData.data);
 
       setTimeout(() => {

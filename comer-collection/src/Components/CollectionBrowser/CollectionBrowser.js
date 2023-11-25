@@ -1,5 +1,4 @@
 import { Box, ImageList, ImageListItem, ImageListItemBar, Paper, Stack, ThemeProvider, Typography, createTheme } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import imageComingSoon from './utd.jpg';
 import { useTheme } from "@emotion/react";
