@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import GridView from '../GridView/GridView';
 import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
@@ -8,7 +7,7 @@ import Account from '../Users/Account';
 
 import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
-import { blue, green, grey, orange } from '@mui/material/colors';
+import { green, grey, orange } from '@mui/material/colors';
 import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
 
 const App = () => {
