@@ -324,7 +324,7 @@ const UserManagement = (props) => {
 
   const handleResetPassword = async(userId) => {
     try {
-      sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`)
+      await sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`)
       fetchData();
 
       showSnackbar(`Password reset for user ${userId}`, "success");
