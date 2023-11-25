@@ -372,6 +372,67 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         />
                     </ExhibitionOption>
 
+                    <AccordionSubHeading text="Frame" />
+                    <ExhibitionOption description="Custom Frame">
+                        <Checkbox 
+                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_frame_custom_enabled",
+                                    isEnabled: e.target.checked
+                                })
+                            }}
+                        />
+
+                    </ExhibitionOption>
+
+                    <ExhibitionOption description="Color">
+                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_frame_color",
+                                    newColor: e.target.value
+                                }
+                            )
+                        }} />
+
+                    </ExhibitionOption>
+
+                    <ExhibitionOption description="Width">
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.frame.width ?? ""}
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_frame_width",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+
+                    <ExhibitionOption description="Height">
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.frame.height ?? ""}
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_frame_height",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+
+
                 </ExhibitionOptionGroup>
 
             </Box>

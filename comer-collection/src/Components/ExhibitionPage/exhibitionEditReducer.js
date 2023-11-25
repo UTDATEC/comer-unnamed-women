@@ -245,6 +245,42 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 }
                             }
                     
+                        case 'set_frame_custom_enabled':
+                            return {
+                                ...image,
+                                frame: {
+                                    ...image.frame,
+                                    custom: action.isEnabled
+                                }
+                            }
+                    
+                        case 'set_frame_width':
+                            return {
+                                ...image,
+                                frame: {
+                                    ...image.frame,
+                                    width: action.newValue
+                                }
+                            }
+                    
+                        case 'set_frame_height':
+                            return {
+                                ...image,
+                                frame: {
+                                    ...image.frame,
+                                    height: action.newValue
+                                }
+                            }
+                    
+                        case 'set_frame_color':
+                            return {
+                                ...image,
+                                frame: {
+                                    ...image.frame,
+                                    color: action.newColor
+                                }
+                            }
+                    
                         default:
                             console.log("Unrecognized image edit action: ", action.type, action);
                             return exhibitionData;
