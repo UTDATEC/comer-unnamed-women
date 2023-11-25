@@ -97,20 +97,20 @@ const ImageManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/images", {
+      const responseImages = await axios.get("http://localhost:9000/api/images", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const imageData = response.data;
+      const imageData = responseImages.data;
       setImages(imageData.data);
 
-      const response2 = await axios.get("http://localhost:9000/api/artists", {
+      const responseArtists = await axios.get("http://localhost:9000/api/artists", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const artistData = response2.data;
+      const artistData = responseArtists.data;
       setArtists(artistData.data);
 
       setTimeout(() => {
