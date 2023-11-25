@@ -329,6 +329,49 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
 
                     </ExhibitionOption>
 
+                    <AccordionSubHeading text="Matte" />
+                    <ExhibitionOption description="Color">
+                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.matte.color} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_matte_color",
+                                    newColor: e.target.value
+                                }
+                            )
+                        }} />
+
+                    </ExhibitionOption>
+
+                    <ExhibitionOption description="Custom Weight">
+                        
+                        <Checkbox 
+                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_matte_weight_enabled",
+                                    isEnabled: e.target.checked
+                                })
+                            }}
+                        />
+                        
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.matte.weighted_value ?? ""}
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_matte_weight_value",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+
                 </ExhibitionOptionGroup>
 
             </Box>

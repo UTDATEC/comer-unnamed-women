@@ -218,6 +218,33 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 }
                             }
                     
+                        case 'set_matte_color':
+                            return {
+                                ...image,
+                                matte: {
+                                    ...image.matte,
+                                    color: action.newColor
+                                }
+                            }
+                    
+                        case 'set_matte_weight_enabled':
+                            return {
+                                ...image,
+                                matte: {
+                                    ...image.matte,
+                                    weighted: action.isEnabled
+                                }
+                            }
+                    
+                        case 'set_matte_weight_value':
+                            return {
+                                ...image,
+                                matte: {
+                                    ...image.matte,
+                                    weighted_value: action.newValue
+                                }
+                            }
+                    
                         default:
                             console.log("Unrecognized image edit action: ", action.type, action);
                             return exhibitionData;
