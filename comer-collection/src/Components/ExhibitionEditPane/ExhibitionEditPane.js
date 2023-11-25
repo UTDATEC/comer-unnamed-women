@@ -44,11 +44,6 @@ const ExhibitionOption = ({description, children}) => {
     const theme = useTheme();
     return (
         <Stack direction="row" alignItems="center" spacing={1} 
-            sx={{
-                [`&:hover`]: {
-                    backgroundColor: theme.palette.grey.translucent
-                }
-            }}
             justifyContent="space-between"
         >
             <Typography variant="body1">{description}</Typography>
