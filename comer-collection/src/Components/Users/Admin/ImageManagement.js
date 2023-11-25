@@ -1073,6 +1073,19 @@ const ImageManagement = (props) => {
           <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
         </TableCell>
       )
+    },
+    {
+      columnDescription: "Notes",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+            <Typography variant="h6">Notes</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Typography variant="body1">{artist.notes ?? ""}</Typography>
+        </TableCell>
+      )
     }
   ]
 
