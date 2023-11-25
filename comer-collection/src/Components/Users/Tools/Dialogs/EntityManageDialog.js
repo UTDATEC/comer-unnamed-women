@@ -143,8 +143,8 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
         editDialogIsOpen={internalEditDialogIsOpen}
         setEditDialogIsOpen={setInternalEditDialogIsOpen}
         editDialogItem={internalEditDialogItem}
-        entity="artist"
-        dialogTitle="Edit Artist"
+        entity={entitySingular}
+        dialogTitle={`Edit ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
         dialogInstructions="Update"
         handleItemEdit={handleItemEdit}
         editDialogFields={internalEditDialogFields}
@@ -159,8 +159,8 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
         deleteDialogIsOpen={internalDeleteDialogIsOpen} 
         setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen} 
         deleteDialogItem={internalDeleteDialogItem}
-        dialogTitle="Delete Artist"
-        entity="artist"
+        dialogTitle={`Edit ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
+        entity={entitySingular}
         handleDelete={handleItemDelete}
         />
 
