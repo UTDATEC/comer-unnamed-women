@@ -30,6 +30,7 @@ import { SelectionSummary } from "../Tools/SelectionSummary";
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
 import { courseFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
+import SecurityIcon from "@mui/icons-material/Security"
 
 
 const CourseManagement = (props) => {
@@ -593,13 +594,10 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          {
-            user.family_name || user.given_name ? (
-              <Typography variant="body1">{user.family_name ?? ""}, {user.given_name ?? ""}</Typography>
-            ) : (
-              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-            )
-          }
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
+          {user.is_admin && (<SecurityIcon color="secondary" />)}
+        </Stack>
         </TableCell>
       )
     },
@@ -630,15 +628,17 @@ const CourseManagement = (props) => {
       return (
       <TableCell>
         {quantity == assignUserDialogCourses.length && (
-          <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
+          <Button variant="text" color={user.is_admin ? "secondary" : "primary"} disabled startIcon={<CheckIcon />}>
             {assignUserDialogCourses.length == 1 ? (
               <Typography variant="body1">Enrolled</Typography>
             ) : (
-              <Typography variant="body1">Enrolled in all {quantity}</Typography>
+              <Typography variant="body1">
+                {quantity == 2 ? `Enrolled in both` : `Enrolled in all ${quantity}`}
+              </Typography>
             )}
           </Button>) || 
           quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
               handleAssignCoursesToUser(user.id, extraProperties.primaryItems.map((c) => c.id));
             }}>
               {assignUserDialogCourses.length == 1 ? (
@@ -649,7 +649,7 @@ const CourseManagement = (props) => {
             </Button>
           ) || 
           quantity > 0 && quantity < assignUserDialogCourses.length && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
               handleAssignCoursesToUser(user.id, extraProperties.primaryItems.map((c) => c.id));
             }}>
               <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
@@ -679,7 +679,7 @@ const CourseManagement = (props) => {
       return (
         <TableCell>
           {quantity == assignUserDialogCourses.length && (
-              <Button variant="outlined" color="primary" startIcon={<PersonRemoveIcon />} onClick={() => {
+              <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
                 handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
               }}>
                 {assignUserDialogCourses.length == 1 ? (
@@ -690,7 +690,7 @@ const CourseManagement = (props) => {
               </Button>
             ) || 
             quantity > 0 && quantity < assignUserDialogCourses.length && (
-              <Button variant="outlined" color="primary" startIcon={<PersonRemoveIcon />} onClick={() => {
+              <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
                 handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
               }}>
                 <Typography variant="body1">Unenroll from {quantity}</Typography>
