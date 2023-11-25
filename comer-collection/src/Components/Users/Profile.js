@@ -277,7 +277,7 @@ const Profile = (props) => {
           <Typography variant="h4">My Courses</Typography>
         </Stack>
         <DataTable
-          items={myCourses}
+          visibleItems={myCourses}
           tableFields={courseTableFields}
         />
       </Stack>

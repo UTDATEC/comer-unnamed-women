@@ -114,7 +114,7 @@ const MyExhibitions = (props) => {
           <Typography variant="h4">My Exhibitions</Typography>
         </Stack>
         <DataTable
-          items={myExhibitions}
+          visibleItems={myExhibitions}
           tableFields={exhibitionTableFields}
         />
       </Stack>
