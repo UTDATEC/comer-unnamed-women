@@ -64,7 +64,7 @@ export const AssociationManagementDialog = ({
       }}
     >
       <DialogTitle textAlign="center" variant="h4">{dialogTitle}</DialogTitle>
-      <DialogContent sx={{minHeight: "450px"}}>
+      <DialogContent>
         <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
         <Stack direction="column" padding={1}>
           {secondarySearchFields?.length > 0 && (
