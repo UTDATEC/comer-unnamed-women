@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
-import axios from "axios";
 import {
   Stack,
   Button,
@@ -37,7 +36,7 @@ import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilege
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
-import { createUsers } from "../Tools/HelperMethods/APICalls";
+import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 
 
 const UserManagement = (props) => {
@@ -100,13 +99,7 @@ const UserManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      const userData = await response.data;
+      const userData = await sendAuthenticatedRequest("GET", "/api/users")
       setUsers(userData.data);
 
       setSelectedUsers(selectedUsers.filter((su) => (
@@ -114,12 +107,7 @@ const UserManagement = (props) => {
       )));
 
 
-      const response2 = await axios.get("http://localhost:9000/api/courses", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const courseData = await response2.data;
+      const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
       setCourses(courseData.data);
 
       setTimeout(() => {
@@ -189,16 +177,9 @@ const UserManagement = (props) => {
 
 
   const handleUserEdit = async(userId, updateFields) => {
-    const { email, given_name, family_name } = updateFields;
+    const filteredUser = filterItemFields(userFieldDefinitions, updateFields);
     try {
-      await axios.put(
-        `http://localhost:9000/api/users/${userId}`, { email, given_name, family_name },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", `/api/users/${userId}`, filteredUser);
       fetchData();
 
       setEditDialogIsOpen(false);
@@ -216,56 +197,13 @@ const UserManagement = (props) => {
 
 
 
-  const handleUnassignCoursesFromUser = async(userId, courseIds) => {
-    let coursesAdded = 0;
-    let courseIndicesWithErrors = []
-    for(const [i, courseId] of courseIds.entries()) {
-      try {
-        await axios.delete(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
-        coursesAdded++;
-  
-      } catch (error) {
-        console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
-        courseIndicesWithErrors.push(i);
-      }
-    }
-    fetchData();
-
-    if(coursesAdded == courseIds.length) {
-      setCreateDialogIsOpen(false);
-      showSnackbar(`Successfully removed user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success")
-    } else if(coursesAdded < courseIds.length) {
-      if(coursesAdded > 0) {
-        showSnackbar(`Removed user ${userId} from ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning")
-      }
-      else {
-        showSnackbar(`Failed to remove user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error")
-      }
-
-    }
-  }
 
   const handleAssignUsersToCourse = async(courseId, userIds) => {
     let usersEnrolled = 0;
     let userIndicesWithErrors = []
     for(const [i, userId] of userIds.entries()) {
       try {
-        await axios.put(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
+        await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}/users/${userId}`);
 
         usersEnrolled++;
   
@@ -300,14 +238,7 @@ const UserManagement = (props) => {
     let userIndicesWithErrors = []
     for(const [i, userId] of userIds.entries()) {
       try {
-        await axios.delete(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
+        await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}/users/${userId}`)
 
         usersUnenrolled++;
   
@@ -338,46 +269,6 @@ const UserManagement = (props) => {
   }
 
 
-  const handleAssignCoursesToUser = async(userId, courseIds) => {
-    let coursesAdded = 0;
-    let courseIndicesWithErrors = []
-    for(const [i, courseId] of courseIds.entries()) {
-      try {
-        await axios.put(
-          `http://localhost:9000/api/courses/${courseId}/users/${userId}`, null,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
-        coursesAdded++;
-  
-      } catch (error) {
-        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
-        courseIndicesWithErrors.push(i);
-      }
-    }
-    fetchData();
-
-    if(coursesAdded == courseIds.length) {
-      setCreateDialogIsOpen(false);
-
-      showSnackbar(`Successfully added user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success")
-
-    } else if(coursesAdded < courseIds.length) {
-
-      if(coursesAdded > 0) {
-        showSnackbar(`Added user ${userId} to ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning")
-      }
-      else {
-        showSnackbar(`Failed to add user ${userId} to ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error")
-      }
-
-    }
-
-  }
 
 
   
@@ -385,17 +276,10 @@ const UserManagement = (props) => {
 
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
     try {
-      await axios.put(
-        (willBeActive ? 
-          `http://localhost:9000/api/users/${userId}/activate` : 
-          `http://localhost:9000/api/users/${userId}/deactivate`
-          ), null,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", (willBeActive ? 
+        `/api/users/${userId}/activate` : 
+        `/api/users/${userId}/deactivate`
+        ));
       fetchData();
 
       showSnackbar(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`, "success")
@@ -410,19 +294,10 @@ const UserManagement = (props) => {
 
   const handleChangeUserPrivileges = async(userId, verifyPassword, isPromotion) => {
     try {
-      await axios.put(
-        (isPromotion ? 
-          `http://localhost:9000/api/users/${userId}/promote` : 
-          `http://localhost:9000/api/users/${userId}/demote`
-          ), {
-            verifyPassword: verifyPassword
-          },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", (isPromotion ? 
+        `/api/users/${userId}/promote` : 
+        `/api/users/${userId}/demote`
+        ), {verifyPassword})
       fetchData();
       
       setPrivilegesDialogIsOpen(false);
@@ -449,14 +324,7 @@ const UserManagement = (props) => {
 
   const handleResetPassword = async(userId) => {
     try {
-      await axios.put(
-        `http://localhost:9000/api/users/${userId}/resetpassword`, null,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`)
       fetchData();
 
       showSnackbar(`Password reset for user ${userId}`, "success");
@@ -471,14 +339,7 @@ const UserManagement = (props) => {
 
   const handleDelete = async (userId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`)
       fetchData();
 
       showSnackbar(`User ${userId} has been deleted`, "success")
