@@ -111,7 +111,7 @@ export const AssociationManagementDialog = ({
                   tableFields={secondaryTableFieldsAssignedOnly} 
                   items={secondaryItemsAssigned} 
                   visibleItems={secondaryItemsAssignedResults} 
-                  extraProperties={{  primaryItems, secondariesByPrimary}} 
+                  extraProperties={{  primaryItems, getQuantityAssigned}} 
                 /> 
               ) || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
