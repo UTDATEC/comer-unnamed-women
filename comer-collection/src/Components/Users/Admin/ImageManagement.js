@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
-import axios from "axios";
 import {
   Stack,
   Button,
@@ -40,6 +39,7 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove"
 import CheckIcon from "@mui/icons-material/Check"
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 
 
 const ImageManagement = (props) => {
@@ -115,28 +115,13 @@ const ImageManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const responseImages = await axios.get("http://localhost:9000/api/images", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const imageData = responseImages.data;
+      const imageData = await sendAuthenticatedRequest("GET", "/api/images");
       setImages(imageData.data);
 
-      const responseArtists = await axios.get("http://localhost:9000/api/artists", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const artistData = responseArtists.data;
+      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
       setArtists(artistData.data);
 
-      const responseTags = await axios.get("http://localhost:9000/api/tags", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const tagData = responseTags.data;
+      const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
       setTags(tagData.data);
 
       setTimeout(() => {
@@ -200,26 +185,13 @@ const ImageManagement = (props) => {
   })
   
 
-  const handleDeleteClick = (imageId) => {
-    setDeleteDialogImage({ imageId });
-    setDeleteDialogIsOpen(true);
-  };
-
-
   const handleImagesCreate = async(newImageArray) => {
     let imagesCreated = 0;
     let imageIndicesWithErrors = []
     for(const [i, newImageData] of newImageArray.entries()) {
       try {
         let filteredImage = filterItemFields(imageFieldDefinitions, newImageData);
-        await axios.post(
-          `http://localhost:9000/api/images`, filteredImage,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
+        await sendAuthenticatedRequest("POST", `/api/images`, filteredImage);
 
         imagesCreated++;
   
@@ -264,14 +236,7 @@ const ImageManagement = (props) => {
   const handleImageEdit = async(imageId, updateFields) => {
     try {
       let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
-      await axios.put(
-        `http://localhost:9000/api/images/${imageId}`, filteredImage,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", `/api/images/${imageId}`, filteredImage);
       fetchData();
 
       setEditDialogIsOpen(false);
@@ -290,22 +255,11 @@ const ImageManagement = (props) => {
 
   const handleDelete = async (imageId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/images/${imageId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}`);
       fetchData();
 
       showSnackbar(`Image ${imageId} has been deleted`, "success")
 
-      if (response.status === 200 || response.status === 204) {
-      } else {
-        console.error("Error deleting image:", response.statusText);
-      }
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
@@ -321,14 +275,7 @@ const ImageManagement = (props) => {
   const handleCreateArtist = async(newArtist) => {
     try {
       let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
-      await axios.post(
-        `http://localhost:9000/api/artists/`, filteredArtist,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("POST", `/api/artists/`, filteredArtist);
       fetchData();
 
       showSnackbar(`Artist created`, "success");
@@ -345,14 +292,7 @@ const ImageManagement = (props) => {
   const handleCreateTag = async(newTag) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
-      await axios.post(
-        `http://localhost:9000/api/tags/`, filteredTag,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("POST", `/api/tags/`, filteredTag);
       fetchData();
 
       showSnackbar(`Tag created`, "success");
@@ -368,14 +308,7 @@ const ImageManagement = (props) => {
   const handleEditArtist = async(artistId, updateFields) => {
     try {
       let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
-      await axios.put(
-        `http://localhost:9000/api/artists/${artistId}`, filteredartist,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}`, filteredartist);
       fetchData();
 
       setArtistEditDialogIsOpen(false);
@@ -395,14 +328,7 @@ const ImageManagement = (props) => {
   const handleEditTag = async(tagId, updateFields) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
-      await axios.put(
-        `http://localhost:9000/api/tags/${tagId}`, filteredtag,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}`, filteredtag);
       fetchData();
 
       setTagEditDialogIsOpen(false);
@@ -420,14 +346,7 @@ const ImageManagement = (props) => {
 
   const handleDeleteArtist = async(artistId) => {
     try {
-      await axios.delete(
-        `http://localhost:9000/api/artists/${artistId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("DELETE", `/api/artists/${artistId}`);
       fetchData();
 
       setArtistDeleteDialogIsOpen(false);
@@ -445,14 +364,7 @@ const ImageManagement = (props) => {
   
   const handleDeleteTag = async(tagId) => {
     try {
-      await axios.delete(
-        `http://localhost:9000/api/tags/${tagId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await sendAuthenticatedRequest("DELETE", `/api/tags/${tagId}`);
       fetchData();
 
       setTagDeleteDialogIsOpen(false);
@@ -476,24 +388,10 @@ const ImageManagement = (props) => {
       try {
         switch (operation) {
           case "assign":
-            await axios.put(
-              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`, null,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              }
-            );
+            await sendAuthenticatedRequest("PUT", `/api/images/${imageId}/artists/${artistId}`, null);
             break;
           case "unassign":
-            await axios.delete(
-              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              }
-            );
+            await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}/artists/${artistId}`);
             break;
           default:
             throw Error("Operation must be 'assign' or 'unassign'");
@@ -541,24 +439,10 @@ const ImageManagement = (props) => {
       try {
         switch (operation) {
           case "assign":
-            await axios.put(
-              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`, null,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              }
-            );
+            await sendAuthenticatedRequest("PUT", `/api/images/${imageId}/artists/${artistId}`, null);
             break;
           case "unassign":
-            await axios.delete(
-              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              }
-            );
+            await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}/artists/${artistId}`);
             break;
           default:
             throw Error("Operation must be 'assign' or 'unassign'");
