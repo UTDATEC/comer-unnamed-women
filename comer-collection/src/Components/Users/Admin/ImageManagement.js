@@ -688,7 +688,7 @@ const ImageManagement = (props) => {
               <EditIcon />
             </IconButton>
             <IconButton 
-              // disabled={course.Users.length > 0} 
+              disabled={!image.is_deletable} 
               onClick={(e) => {
                 setDeleteDialogImage(image);
                 setDeleteDialogIsOpen(true);
