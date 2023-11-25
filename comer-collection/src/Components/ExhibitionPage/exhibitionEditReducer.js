@@ -196,7 +196,6 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 ...image,
                                 position: {
                                     ...image.position,
-                                    custom_position: true,
                                     custom_x: action.newValue
                                 }
                             }
@@ -206,8 +205,16 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 ...image,
                                 position: {
                                     ...image.position,
-                                    custom_position: true,
                                     custom_y: action.newValue
+                                }
+                            }
+                    
+                        case 'set_position_custom_enabled':
+                            return {
+                                ...image,
+                                position: {
+                                    ...image.position,
+                                    custom_position: action.isEnabled
                                 }
                             }
                     

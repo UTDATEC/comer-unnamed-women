@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
@@ -286,10 +286,24 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     </Stack>
 
                     <AccordionSubHeading text="Position" />
-                    <ExhibitionOption description="X">
+                    <ExhibitionOption description="Custom Position">
+                        
 
+                        <Checkbox 
+                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_position_custom_enabled",
+                                    isEnabled: e.target.checked
+                                })
+                            }}
+                        />
+                        
                         <Input type="number"
                             value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "image",
@@ -300,11 +314,9 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                             }}
                         />
 
-                    </ExhibitionOption>
-                    <ExhibitionOption description="Y">
-
                         <Input type="number"
                             value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_y ?? ""}
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "image",
