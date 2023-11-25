@@ -19,7 +19,7 @@ const SearchBox = (props) => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton sx={{
-                  visibility: searchQuery == "" ? "hidden" : ""
+                  display: searchQuery == "" ? "none" : ""
                 }} onClick={() => {
                   setSearchQuery("");
                 }}>
