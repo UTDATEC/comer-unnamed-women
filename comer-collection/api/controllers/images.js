@@ -97,13 +97,20 @@ const updateImage = async (req, res, next) => {
 
 const deleteImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId);
-            if(image) {
+        const image = await Image.findByPk(req.params.imageId, {
+            include: [Exhibition]
+        });
+        if(image) {
+            if(!isImageDeletable(image.toJSON())) {
+                next(createError(422, {debugMessage: "Image is not eligible for deletion."}))
+            }
+            else {
                 await image.destroy();
                 res.sendStatus(204);
             }
-            else
-                next(createError(404));
+        }
+        else
+            next(createError(404));
     })
 };
 
