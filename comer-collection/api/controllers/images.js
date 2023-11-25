@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
+const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 
 
 const isImageDeletable = (imageJSON) => {
@@ -34,7 +35,8 @@ const createImage = async (req, res, next) => {
         try {
             if(req.body.id)
                 throw new Error("Image id should not be included when creating an Image");
-            const newImage = await Image.create(req.body);
+            const imageData = convertEmptyFieldsToNullFields(req.body);
+            const newImage = await Image.create(imageData);
             res.status(201).json({ data: newImage });
         } catch (e) {
             next(createError(400, {debugMessage: e.message}));
@@ -80,15 +82,8 @@ const updateImage = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.imageId) {
                     throw new Error("Image id in request body does not match Image id in URL");
                 }
-                const imageData = {};
-                for(let [field, value] of Object.entries(req.body)) {
-                    if (value !== "")
-                        imageData[field] = value;
-                    else
-                        imageData[field] = null;
-                }
-                image.set(imageData)
-                await image.save();
+                const imageData = convertEmptyFieldsToNullFields(req.body);
+                await image.update(imageData);
                 res.status(200).json({ data: imageData });
             }
             else

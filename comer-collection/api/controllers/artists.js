@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const { Artist, Image } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
+const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 
 
 
@@ -27,7 +28,8 @@ const createArtist = async (req, res, next) => {
         try {
             if(req.body.id)
                 throw new Error("Artist id should not be included when creating an Artist");
-            const newArtist = await Artist.create(req.body);
+            const artistData = convertEmptyFieldsToNullFields(req.body);
+            const newArtist = await Artist.create(artistData);
             res.status(201).json({ data: newArtist });
         } catch (e) {
             next(createError(400, {debugMessage: e.message}));
@@ -56,9 +58,9 @@ const updateArtist = async (req, res, next) => {
                 if(req.body.id && req.body.id !== req.params.artistId) {
                     throw new Error("Artist id in request body does not match Artist id in URL");
                 }
-                artist.set(req.body);
-                await artist.save();
-                res.status(200).json({ data: artist });
+                const artistData = convertEmptyFieldsToNullFields(req.body);
+                await artist.update(artistData);
+                res.status(200).json({ data: artistData });
             }
             else
                 next(createError(404));
