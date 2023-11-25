@@ -47,6 +47,38 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                     floor_color: action.newColor
                 }
             };
+        case "set_ceiling_color":
+            return {
+                ...exhibitionData,
+                appearance: {
+                    ...exhibitionData.appearance,
+                    ceiling_color: action.newColor
+                }
+            };
+        case "set_floor_texture":
+            return {
+                ...exhibitionData,
+                appearance: {
+                    ...exhibitionData.appearance,
+                    floor_texture: action.newTexture
+                }
+            };
+        case "set_moodiness":
+            return {
+                ...exhibitionData,
+                appearance: {
+                    ...exhibitionData.appearance,
+                    moodiness: action.newMoodiness
+                }
+            };
+        case "set_ambient_light_color":
+            return {
+                ...exhibitionData,
+                appearance: {
+                    ...exhibitionData.appearance,
+                    ambient_light_color: action.newColor
+                }
+            };
         default:
             console.log("Unrecognized exhibition edit action: ", action);
             return exhibitionData;
