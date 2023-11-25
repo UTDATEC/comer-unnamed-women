@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom'; // Import Route from react-router-dom
 import AdminNav from './AccountNav';
 import UserManagement from './Admin/UserManagement';
-import ExhibitionList from './Admin/ExhibitionList';
 import ImageManagement from './Admin/ImageManagement';
-import ImageEdit from './Admin/ImageEdit';
-import InviteForm from './Admin/InviteForm';
 import Profile from './Profile';
 import { Box } from '@mui/material';
 import Unauthorized from '../ErrorPages/Unauthorized';
