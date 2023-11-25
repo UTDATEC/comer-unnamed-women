@@ -36,6 +36,10 @@ import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
+import PersonAddIcon from "@mui/icons-material/PersonAdd"
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove"
+import CheckIcon from "@mui/icons-material/Check"
 
 
 const ImageManagement = (props) => {
@@ -53,6 +57,10 @@ const ImageManagement = (props) => {
   const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [selectedImages, setSelectedImages] = useState([]);
+  
+  const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
+  const [assignArtistDialogImages, setAssignArtistDialogImages] = useState([]);
+  const [artistsByImage, setArtistsByImage] = useState({});
 
   const [previewerImage, setPreviewerImage] = useState(null);
   const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -134,6 +142,16 @@ const ImageManagement = (props) => {
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
+
+
+      const artistsByImageDraft = {}
+      for(const i of imageData.data) {
+        artistsByImageDraft[i.id] = i.Artists;
+      }
+      setArtistsByImage({...artistsByImageDraft});
+
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -448,6 +466,138 @@ const ImageManagement = (props) => {
       showSnackbar(`Error deleting tag ${tagId}`, "error");
     }
   }
+
+
+
+  const handleManageArtistsForImage = async(operation, imageId, artistIds) => {
+    let artistsUpdated = 0;
+    let artistIndicesWithErrors = []
+    for(const [i, artistId] of artistIds.entries()) {
+      try {
+        switch (operation) {
+          case "assign":
+            await axios.put(
+              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`, null,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              }
+            );
+            break;
+          case "unassign":
+            await axios.delete(
+              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              }
+            );
+            break;
+          default:
+            throw Error("Operation must be 'assign' or 'unassign'");
+        }
+        
+
+        artistsUpdated++;
+  
+      } catch (error) {
+        console.error(`Error ${operation}ing artist ${artistId} for image ${imageId}: ${error}`);
+        artistIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(artistsUpdated == artistIds.length) {
+      showSnackbar(`Successfully ${operation}ed ${artistsUpdated} artists for image ${imageId}`, "success")
+
+    } else if(artistsUpdated < artistIds.length) {
+
+      if(artistsUpdated > 0) {
+        showSnackbar(`${artistsUpdated} of ${artistIds.length} ${artistIds.length == 1 ? "artist" : "artists"} ${operation}ed for image ${imageId}`, "warning");
+      }
+      else {
+        showSnackbar(`Failed to ${operation} ${artistIds.length} ${artistIds.length == 1 ? "artist" : "artists"} for image ${imageId}`, "error");
+      }
+
+    }
+  }
+
+  const handleAssignArtistsToImage = (imageId, artistIds) => {
+    handleManageArtistsForImage("assign", imageId, artistIds);
+  }
+
+  const handleUnassignArtistsFromImage = (imageId, artistIds) => {
+    handleManageArtistsForImage("unassign", imageId, artistIds);
+  }
+
+
+
+  const handleManageImagesForArtist = async(operation, artistId, imageIds) => {
+    let imagesUpdated = 0;
+    let imageIndicesWithErrors = []
+    for(const [i, imageId] of imageIds.entries()) {
+      try {
+        switch (operation) {
+          case "assign":
+            await axios.put(
+              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`, null,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              }
+            );
+            break;
+          case "unassign":
+            await axios.delete(
+              `http://localhost:9000/api/images/${imageId}/artists/${artistId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              }
+            );
+            break;
+          default:
+            throw Error("Operation must be 'assign' or 'unassign'");
+        }
+        
+
+        imagesUpdated++;
+  
+      } catch (error) {
+        console.error(`Error ${operation}ing artist ${artistId} for image ${imageId}: ${error}`);
+        imageIndicesWithErrors.push(i);
+      }
+    }
+    fetchData();
+
+    if(imagesUpdated == imageIds.length) {
+      showSnackbar(`Successfully ${operation}ed ${imagesUpdated} artists for artist ${artistId}`, "success")
+
+    } else if(imagesUpdated < imageIds.length) {
+
+      if(imagesUpdated > 0) {
+        showSnackbar(`${imagesUpdated} of ${imageIds.length} ${imageIds.length == 1 ? "image" : "images"} ${operation}ed for artist ${artistId}`, "warning");
+      }
+      else {
+        showSnackbar(`Failed to ${operation} ${imageIds.length} ${imageIds.length == 1 ? "image" : "images"} for artist ${artistId}`, "error");
+      }
+
+    }
+  }
+
+  const handleAssignImagesToArtist = (artistId, imageIds) => {
+    handleManageImagesForArtist("assign", artistId, imageIds);
+  }
+
+  const handleUnassignImagesFromArtist = (artistId, imageIds) => {
+    handleManageImagesForArtist("unassign", artistId, imageIds);
+  }
+
+
 
   
   const handleCopyToClipboard = useCallback((item, fieldName) => {
@@ -795,8 +945,10 @@ const ImageManagement = (props) => {
           <Stack direction="row" spacing={1} alignItems="center">
             <Button variant="text" 
               color="primary"
-              disabled startIcon={<BrushIcon />}
+              startIcon={<BrushIcon />}
               onClick={() => {
+                setAssignArtistDialogImages([image]);
+                setAssignArtistDialogIsOpen(true);
                 // setAssignCourseDialogUser(user);
                 // setAssignCourseDialogCourses([...user.Courses]);
                 // setAssignCourseDialogIsOpen(true);
@@ -895,6 +1047,121 @@ const ImageManagement = (props) => {
   ]
 
 
+  const artistTableFieldsForDialog = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">ID</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Typography variant="body1">{artist.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Artist",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+            <Typography variant="h6">Artist</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (artist) => (
+        <TableCell>
+          <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
+        </TableCell>
+      )
+    }
+  ]
+
+
+  const artistTableFieldsForDialogAll = [...artistTableFieldsForDialog, {
+    columnDescription: "Add",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (artist, extraProperties) => {
+      const quantity = extraProperties.getQuantityAssigned(artist);
+      return (
+      <TableCell>
+        {quantity == assignArtistDialogImages.length && (
+          <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
+            {assignArtistDialogImages.length == 1 ? (
+              <Typography variant="body1">Added</Typography>
+            ) : (
+              <Typography variant="body1">
+                {quantity == 2 ? `Added to both images` : `Added to all ${quantity} images`}
+              </Typography>
+            )}
+          </Button>) || 
+          quantity == 0 && (
+            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+              handleAssignImagesToArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+            }}>
+              {assignArtistDialogImages.length == 1 ? (
+                <Typography variant="body1">Add</Typography>
+                ) : (
+                <Typography variant="body1">Add to {assignArtistDialogImages.length} images</Typography>
+              )}
+            </Button>
+          ) || 
+          quantity > 0 && quantity < assignArtistDialogImages.length && (
+            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+              handleAssignImagesToArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+            }}>
+              {assignArtistDialogImages.length - quantity == 1 ? (
+                <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more image</Typography>
+              ) : (
+                <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more images</Typography>
+              )}
+            </Button>
+          )
+        }
+      </TableCell>
+    )}
+  }]
+
+  const artistTableFieldsForDialogAssigned = [...artistTableFieldsForDialog, {
+    columnDescription: "",
+    generateTableHeaderCell: () => (
+      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+        <Typography variant="h6">&nbsp;</Typography>
+      </TableCell>
+    ),
+    generateTableCell: (artist, extraProperties) => {
+      const quantity = extraProperties.getQuantityAssigned(artist)
+
+      return (
+        <TableCell>
+          {quantity == assignArtistDialogImages.length && (
+              <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+                handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+              }}>
+                {assignArtistDialogImages.length == 1 ? (
+                  <Typography variant="body1">Remove</Typography>
+                  ) : (
+                  <Typography variant="body1">Remove from {quantity} images</Typography>
+                )}
+              </Button>
+            ) || 
+            quantity > 0 && quantity < assignArtistDialogImages.length && (
+              <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+                handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+              }}>
+                <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
+              </Button>
+            )
+          }
+        </TableCell>
+      )
+    }
+  }]
+
+
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
@@ -969,15 +1236,15 @@ const ImageManagement = (props) => {
           entityPlural="images"
         />
         <Stack direction="row" spacing={2} >
-          {/* <Button variant="outlined"
+          <Button variant="outlined"
             disabled={selectedImages.length == 0}
-            startIcon={<GroupAddIcon />}
+            startIcon={<BrushIcon />}
             onClick={() => {
-            setAssignUserDialogCourses([...selectedCourses])
-            setAssignUserDialogIsOpen(true);
+            setAssignArtistDialogImages([...selectedImages])
+            setAssignArtistDialogIsOpen(true);
           }}>
-            <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length == 1 ? "course" : "courses"}</Typography>
-          </Button> */}
+            <Typography variant="body1">Manage Credits for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
+          </Button>
         </Stack>
       </Stack>
 
@@ -1073,6 +1340,43 @@ const ImageManagement = (props) => {
         previewerOpen={previewerOpen}
         setPreviewerOpen={setPreviewerOpen}
       />
+
+
+      <AssociationManagementDialog
+        primaryEntity="image"
+        secondaryEntity="artist"
+        primaryItems={assignArtistDialogImages}
+        secondaryItemsAll={artists}
+        secondariesByPrimary={artistsByImage}
+        dialogTitle={
+          assignArtistDialogImages.length == 1 ?
+            `Edit Listed Artists for ${assignArtistDialogImages[0].title}` :
+            `Edit Listed Artists for ${assignArtistDialogImages.length} Selected Images`
+        }
+        dialogButtonForSecondaryManagement={<>
+          <Button variant="outlined" onClick={() => {
+            // navigate('/Account/UserManagement')
+            setAssignArtistDialogIsOpen(false);
+            setManageArtistDialogIsOpen(true);
+          }}>
+            <Typography>Go to artist management</Typography>
+          </Button>
+        </>}
+        dialogIsOpen={assignArtistDialogIsOpen}
+        tableTitleAssigned={
+          assignArtistDialogImages.length == 1 ?
+            `Listed Artists for ${assignArtistDialogImages[0].title}` :
+            `Listed Artists for Selected Images`
+        }
+        tableTitleAll={`All Artists`}
+        setDialogIsOpen={setAssignArtistDialogIsOpen}
+        secondaryFieldInPrimary="Artists"
+        secondaryTableFieldsAll={artistTableFieldsForDialogAll}
+        secondaryTableFieldsAssignedOnly={artistTableFieldsForDialogAssigned}
+        secondarySearchFields={['fullName', 'fullNameReverse', 'notes']}
+        secondarySearchBoxPlaceholder={"Search artists by name or notes"}
+      />
+
 
       </Box>
 
