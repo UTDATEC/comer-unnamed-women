@@ -581,7 +581,10 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Typography variant="body1">{user.id}</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="body1">{user.id} </Typography>
+            {user.is_admin && (<SecurityIcon color="secondary" />)}
+          </Stack>
         </TableCell>
       )
     },
@@ -594,10 +597,7 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
-          {user.is_admin && (<SecurityIcon color="secondary" />)}
-        </Stack>
+        <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
         </TableCell>
       )
     },
