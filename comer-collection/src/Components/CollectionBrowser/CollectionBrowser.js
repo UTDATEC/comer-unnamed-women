@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import imageComingSoon from './utd.jpg';
 import { useTheme } from "@emotion/react";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 
 
 export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem}) => {
@@ -11,13 +12,9 @@ export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem})
 
     const fetchImageData = async() => {
         try {
-            const response = await axios.get("http://localhost:9000/api/collection/images");
-            const imageData = response.data;
+            const imageData = await sendAuthenticatedRequest("GET", '/api/collection/images');
             setImages(imageData.data);
       
-            // setTimeout(() => {
-            //   setRefreshInProgress(false);
-            // }, 1000);
           } catch (error) {
             console.error("Error fetching image metadata:", error);
           }
