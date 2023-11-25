@@ -1,11 +1,36 @@
 const createError = require('http-errors');
-const { Tag } = require("../sequelize.js");
+const { Tag, Image } = require("../sequelize.js");
 const { adminOperation } = require('../security.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 
+const isTagDeletable = (tagJSON) => {
+    return Boolean(tagJSON.Images?.length == 0);
+}
+
+
 const listTags = async (req, res, next) => {
-    const tags = await Tag.findAll();
+    const tags = Array.from(await Tag.findAll({
+        include: Image
+    })).map((a) => {
+        const tagJSON = a.toJSON();
+        return {
+            ...tagJSON, 
+            is_deletable: isTagDeletable(tagJSON)
+        };
+    });
     res.status(200).json({ data: tags });
+};
+
+const getTag = async (req, res, next) => {
+    const tag = await Tag.findByPk(req.params.tagId, {
+        include: Image
+    });
+    if(tag) {
+        const tagData = {...tag.toJSON(), is_deletable: isTagDeletable(tag.toJSON())}
+        res.status(200).json({ data: tagData });
+    }
+    else
+        next(createError(404));
 };
 
 const createTag = async (req, res, next) => {
@@ -46,14 +71,21 @@ const updateTag = async (req, res, next) => {
 
 const deleteTag = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
-        const tag = await Tag.findByPk(req.params.tagId);
+        const tag = await Tag.findByPk(req.params.tagId, {
+            include: [Image]
+        });
         if(tag) {
-            await tag.destroy();
-            res.sendStatus(204);
+            if(!isTagDeletable(tag.toJSON())) {
+                next(createError(422, {debugMessage: "Tag is not eligible for deletion."}))
+            }
+            else {
+                await tag.destroy();
+                res.sendStatus(204);
+            }
         }
         else
             next(createError(404))
     })
 };
 
-module.exports = { listTags, createTag, updateTag, deleteTag }
+module.exports = { getTag, listTags, createTag, updateTag, deleteTag }
