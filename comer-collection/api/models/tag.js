@@ -12,6 +12,10 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             allowNull: false,
             field: "tag_data"
+        },
+        notes: {
+            type: Sequelize.TEXT('tiny'),
+            field: "tag_notes"
         }
     }, {
         tableName: "comer_image_tags"
