@@ -1,13 +1,9 @@
-import { getBlankItemFields, imageFieldDefinitions } from "./fields";
+import { courseFieldDefinitions, getBlankItemFields, imageFieldDefinitions, userFieldDefinitions } from "./fields";
 
 export const createUserDialogReducer = (createDialogUsers, action) => {
   switch (action.type) {
     case 'add':
-      return [...createDialogUsers, {
-        family_name: "",
-        given_name: "",
-        email: ""
-      }];
+      return [...createDialogUsers, getBlankItemFields(userFieldDefinitions)];
 
     case 'change':
       return createDialogUsers.map((r, i) => {
@@ -58,12 +54,7 @@ export const createUserDialogReducer = (createDialogUsers, action) => {
 export const createCourseDialogReducer = (createDialogCourses, action) => {
   switch (action.type) {
     case 'add':
-      return [...createDialogCourses, {
-        name: "",
-        date_start: "",
-        date_end: "",
-        notes: ""
-      }];
+      return [...createDialogCourses, getBlankItemFields(courseFieldDefinitions)];
 
     case 'change':
       return createDialogCourses.map((r, i) => {
