@@ -180,3 +180,18 @@ export const artistFieldDefinitions = [
   }
 ];
 
+
+export const tagFieldDefinitions = [
+  {
+    fieldName: "data",
+    displayName: "Tag",
+    isRequired: true
+  },
+  {
+    fieldName: "notes",
+    displayName: "Notes",
+    isRequired: false,
+    inputType: "textarea",
+    multiline: true
+  }
+];

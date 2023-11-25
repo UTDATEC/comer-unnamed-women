@@ -21,7 +21,7 @@ import { DataTable } from "../Tools/DataTable";
 import { searchItems } from "../Tools/SearchUtilities";
 import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
-import { getBlankItemFields } from "../Tools/HelperMethods/fields";
+import { getBlankItemFields, tagFieldDefinitions } from "../Tools/HelperMethods/fields";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PlaceIcon from "@mui/icons-material/Place";
 import SellIcon from "@mui/icons-material/Sell";
@@ -41,6 +41,7 @@ import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 const ImageManagement = (props) => {
   const [images, setImages] = useState([]);
   const [artists, setArtists] = useState([]);
+  const [tags, setTags] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -64,6 +65,15 @@ const ImageManagement = (props) => {
   const [artistEditDialogFields, setArtistEditDialogFields] = useState(getBlankItemFields(artistFieldDefinitions));
   const [artistEditDialogSubmitEnabled, setArtistEditDialogSubmitEnabled] = useState(false);
   const [artistDialogSearchQuery, setArtistDialogSearchQuery] = useState("");
+
+  const [manageTagDialogIsOpen, setManageTagDialogIsOpen] = useState(false);
+  const [tagDeleteDialogIsOpen, setTagDeleteDialogIsOpen] = useState(false);
+  const [tagDeleteDialogItem, setTagDeleteDialogItem] = useState(null);
+  const [tagEditDialogIsOpen, setTagEditDialogIsOpen] = useState(false);
+  const [tagEditDialogItem, setTagEditDialogItem] = useState(null);
+  const [tagEditDialogFields, setTagEditDialogFields] = useState(getBlankItemFields(tagFieldDefinitions));
+  const [tagEditDialogSubmitEnabled, setTagEditDialogSubmitEnabled] = useState(false);
+  const [tagDialogSearchQuery, setTagDialogSearchQuery] = useState("");
 
   const editDialogFieldDefinitions = imageFieldDefinitions;
   const createDialogFieldDefinitions = imageFieldDefinitions;
@@ -112,6 +122,14 @@ const ImageManagement = (props) => {
       });
       const artistData = responseArtists.data;
       setArtists(artistData.data);
+
+      const responseTags = await axios.get("http://localhost:9000/api/tags", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const tagData = responseTags.data;
+      setTags(tagData.data);
 
       setTimeout(() => {
         setRefreshInProgress(false);
@@ -304,6 +322,30 @@ const ImageManagement = (props) => {
     }
   }
 
+
+  
+  const handleCreateTag = async(newTag) => {
+    try {
+      let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
+      await axios.post(
+        `http://localhost:9000/api/tags/`, filteredTag,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      showSnackbar(`Tag created`, "success");
+
+    } catch (error) {
+      console.error(`Error creating tag: ${error}`);
+
+      showSnackbar(`Error creating tag`, "error");
+    }
+  }
+
   
   const handleEditArtist = async(artistId, updateFields) => {
     try {
@@ -331,6 +373,33 @@ const ImageManagement = (props) => {
   }
 
 
+  
+  const handleEditTag = async(tagId, updateFields) => {
+    try {
+      let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
+      await axios.put(
+        `http://localhost:9000/api/tags/${tagId}`, filteredtag,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setTagEditDialogIsOpen(false);
+      setTagEditDialogFields(getBlankItemFields(tagFieldDefinitions));
+
+      showSnackbar(`Successfully edited tag ${tagId}`, "success");
+
+    } catch (error) {
+      console.error(`Error editing tag ${tagId}: ${error}`);
+
+      showSnackbar(`Error editing for tag ${tagId}`, "error");
+    }
+  }
+
+
   const handleDeleteArtist = async(artistId) => {
     try {
       await axios.delete(
@@ -352,6 +421,31 @@ const ImageManagement = (props) => {
       console.error(`Error deleting artist ${artistId}: ${error}`);
 
       showSnackbar(`Error deleting artist ${artistId}`, "error");
+    }
+  }
+
+  
+  const handleDeleteTag = async(tagId) => {
+    try {
+      await axios.delete(
+        `http://localhost:9000/api/tags/${tagId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchData();
+
+      setTagDeleteDialogIsOpen(false);
+      setTagDeleteDialogItem(null);
+
+      showSnackbar(`Tag ${tagId} deleted`, "success");
+
+    } catch (error) {
+      console.error(`Error deleting tag ${tagId}: ${error}`);
+
+      showSnackbar(`Error deleting tag ${tagId}`, "error");
     }
   }
 
@@ -474,6 +568,104 @@ const ImageManagement = (props) => {
               onClick={(e) => {
                 setArtistDeleteDialogItem(artist);
                 setArtistDeleteDialogIsOpen(true);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
+        </TableCell>
+      )
+    }
+  ]
+
+
+  
+  const tagTableFields = [
+    {
+      columnDescription: "ID",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">ID</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (tag) => (
+        <TableCell>
+          <Typography variant="body1">{tag.id}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Data",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Tag</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (tag) => (
+        <TableCell>
+          <Typography variant="body1">{tag.data}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Images",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Images</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (tag) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ImageIcon />
+            <Typography variant="body1">{tag.Images.length}</Typography>
+          </Stack>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Notes",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Notes</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (tag) => (
+        <TableCell>
+          {tag.notes && (
+            <Typography variant="body1">{tag.notes}</Typography>
+          ) || !tag.notes && (
+            <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
+          )}
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Options",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">&nbsp;</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (tag) => (
+        <TableCell>
+          <Stack direction="row">
+            <IconButton
+              onClick={(e) => {
+                setTagEditDialogItem(tag);
+                const filteredTag = filterItemFields(tagFieldDefinitions, tag);
+                setTagEditDialogFields(filteredTag);
+                setTagEditDialogSubmitEnabled(true);
+                setTagEditDialogIsOpen(true);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton 
+              disabled={!tag.is_deletable} 
+              onClick={(e) => {
+                setTagDeleteDialogItem(tag);
+                setTagDeleteDialogIsOpen(true);
               }}
             >
               <DeleteIcon />
@@ -738,7 +930,7 @@ const ImageManagement = (props) => {
           </Button>
           <Button color="primary" variant="outlined" startIcon={<SellIcon />}
             onClick={() => {
-              // setCreateDialogIsOpen(true);
+              setManageTagDialogIsOpen(true);
             }}
           >
             <Typography variant="body1">Tags</Typography>
@@ -841,6 +1033,38 @@ const ImageManagement = (props) => {
         setInternalEditDialogSubmitEnabled={setArtistEditDialogSubmitEnabled}
         itemSearchQuery={artistDialogSearchQuery}
         setItemSearchQuery={setArtistDialogSearchQuery}
+      />
+
+      <EntityManageDialog 
+        entitySingular="tag" entityPlural="tags"
+        dialogTitle="Manage Tags"
+        dialogInstructionsTable="Edit or delete existing tags"
+        dialogInstructionsForm="Create a new tag"
+        dialogItems={tags}
+        setDialogItems={setTags}
+        dialogFieldDefinitions={tagFieldDefinitions}
+        dialogTableFields={tagTableFields}
+        dialogIsOpen={manageTagDialogIsOpen}
+        setDialogIsOpen={setManageTagDialogIsOpen}
+        handleItemCreate={handleCreateTag}
+        handleItemEdit={handleEditTag}
+        handleItemDelete={handleDeleteTag}
+        searchBoxFields={['data', 'notes']}
+        searchBoxPlaceholder="Search tags by name or notes"
+        internalDeleteDialogIsOpen={tagDeleteDialogIsOpen}
+        setInternalDeleteDialogIsOpen={setTagDeleteDialogIsOpen}
+        internalDeleteDialogItem={tagDeleteDialogItem}
+        setInternalDeleteDialogItem={setTagDeleteDialogItem}
+        internalEditDialogIsOpen={tagEditDialogIsOpen}
+        setInternalEditDialogIsOpen={setTagEditDialogIsOpen}
+        internalEditDialogItem={tagEditDialogItem}
+        setInternalEditDialogItem={setTagEditDialogItem}
+        internalEditDialogFields={tagEditDialogFields}
+        setInternalEditDialogFields={setTagEditDialogFields}
+        internalEditDialogSubmitEnabled={tagEditDialogSubmitEnabled}
+        setInternalEditDialogSubmitEnabled={setTagEditDialogSubmitEnabled}
+        itemSearchQuery={tagDialogSearchQuery}
+        setItemSearchQuery={setTagDialogSearchQuery}
       />
 
       <ImageFullScreenViewer 
