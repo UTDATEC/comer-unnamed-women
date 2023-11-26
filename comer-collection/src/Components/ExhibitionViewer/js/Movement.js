@@ -14,7 +14,7 @@ export const keys_pressed = {
 };
 
 // update movement according to key pressed
-export const updateMovement = (delta, controls, camera, walls, setCameraPosition, scene, renderer) => {
+export const updateMovement = (delta, controls, camera, setCameraPosition, scene, renderer) => {
 
     // console.log("update movement called", delta, controls, camera, walls)
 
@@ -49,14 +49,14 @@ export const updateMovement = (delta, controls, camera, walls, setCameraPosition
     }
 
     // if this returns true, this means that there was a collision and camera should move back to original position
-    if (checkCollision(camera, walls)) {
-        camera.position.copy(previous_position);
-    }
+    // if (checkCollision(camera, walls)) {
+    //     camera.position.copy(previous_position);
+    // }
 
     else {
         // console.log("camera new position", camera.position.clone());
-        setCameraPosition(camera.position.clone())
-        renderer.render(scene, camera);
+        // setCameraPosition(camera.position.clone())
+        // renderer.render(scene, camera);
         // if(move_speed > 0) {
         //     updateMovement(delta, controls, camera, walls, setCameraPosition);
         // }

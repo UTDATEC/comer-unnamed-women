@@ -1,14 +1,14 @@
 import { keys_pressed, updateMovement } from "./Movement.js";
 // import { showMenu } from "./Menu.js";
 
-export const setupEventListeners = (controls, boundingBoxElement, clock, camera, walls, setCameraPosition, scene, renderer) => {
-    window.addEventListener('keydown', (event) => {
-        onKeyDown(event, clock, controls, camera, walls, setCameraPosition, scene, renderer)
-    }, false);
+export const setupEventListeners = (controls, boundingBoxElement, clock, camera, setCameraPosition, scene, renderer) => {
+    // window.addEventListener('keydown', (event) => {
+    //     onKeyDown(event, clock, controls, camera, setCameraPosition, scene, renderer)
+    // }, false);
 
-    window.addEventListener('keyup', (event) => {
-        onKeyUp(event, clock, controls, camera, walls, setCameraPosition, scene, renderer)
-    }, false);
+    // window.addEventListener('keyup', (event) => {
+    //     onKeyUp(event, clock, controls, camera, setCameraPosition, scene, renderer)
+    // }, false);
     // controls.addEventListener('unlock', showMenu);
 };
 
@@ -21,7 +21,7 @@ export const setupEventListeners = (controls, boundingBoxElement, clock, camera,
  * while allowing users to accidentally hit shift/capslock
  */
 
-function onKeyDown(event, clock, controls, camera, walls, setCameraPosition, scene, renderer) {
+function onKeyDown(event, clock, controls, camera, setCameraPosition, scene, renderer) {
 
     // console.log("keydown", event)
 
@@ -37,11 +37,11 @@ function onKeyDown(event, clock, controls, camera, walls, setCameraPosition, sce
         keys_pressed[normal_key] = true;
     }
 
-    const delta = clock.getDelta();
-    updateMovement(delta, controls, camera, walls, setCameraPosition, scene, renderer);
+    // const delta = clock.getDelta();
+    // updateMovement(delta, controls, camera, setCameraPosition, scene, renderer);
 };
 
-function onKeyUp(event, clock, controls, camera, walls, setCameraPosition, scene, renderer) {
+function onKeyUp(event, clock, controls, camera, setCameraPosition, scene, renderer) {
 
     // console.log("keyup", event)
 
@@ -57,6 +57,6 @@ function onKeyUp(event, clock, controls, camera, walls, setCameraPosition, scene
         keys_pressed[normal_key] = false;
     }
 
-    const delta = clock.getDelta();
-    updateMovement(delta, controls, camera, walls, setCameraPosition, scene, renderer);
+    // // const delta = clock.getDelta();
+    // updateMovement(delta, controls, camera, setCameraPosition, scene, renderer);
 }

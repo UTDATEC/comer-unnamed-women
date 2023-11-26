@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { addObjectsToScene, setupScene } from './js/Scene';
 
 import './css/style.css'
-import { setupWalls } from './js/Walls';
+import { setupMainWalls, setupSideWalls, setupWalls } from './js/Walls';
 import { setupFloor } from './js/Floor';
 import { setupCeiling } from './js/Ceiling';
 import { createArt } from './js/Art';
@@ -16,6 +16,26 @@ import { setupEventListeners } from './js/EventListener';
 import { setupRendering } from './js/Render';
 import  staticImages  from './js/StaticImages';
 import { Box } from '@mui/material';
+
+
+
+
+const getAmbientLightIntensity = (moodiness) => {
+    switch (moodiness) {
+        case "dark":
+            return 0.5;
+        case "moody dark":
+            return 1.5;
+        case "moody bright":
+            return 2.5;
+        case "bright":
+            return 3.5;
+        default:
+            return 1.5;
+    }
+
+}
+
 
 const ExhibitionViewer = ({exhibitionState: primary_json}) => {
 
@@ -87,26 +107,23 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         const texture_loader = new THREE.TextureLoader();
         setMyTextureLoader(texture_loader);
 
-        // console.log(scene);
-        
+
         return () => {
-            console.log("Running cleanup");
-            if(canvasRef && canvasRef.current && canvasRef.current.firstChild)
-                canvasRef.current?.removeChild(canvasRef.current?.firstChild);
+            console.log("Running cleanup"); 
+            setMyRenderer(null);
+            setMyCamera(null);
+            setMyScene(null);
+            setMyControls(null);  
+
         }
+        
 
 
     }, []);
 
+
     useEffect(() => {
     
-        let gallery_width = primary_json.size.width_ft,       // units total in left and right directions of (0, 0, 0)
-        gallery_length = primary_json.size.length_ft,     // units total in forward and back directions of (0, 0, 0)
-        gallery_height = primary_json.size.height_ft -5,  // height of gallery from (0,0,0)
-        gallery_depth = 5,    // depth of gallery from (0,0,0)
-        wall_offset = 1 / 12; // 1 inch (1/12 of a unit) so art is 1 inch off the wall for frames
-    
-        
         // checking if JSON was read correctly
         // console.log("Gallery Height Total: ", gallery_height + gallery_depth, "Gallery Width: ", gallery_width, "Gallery Length: ", gallery_length);
     
@@ -114,16 +131,16 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         if(myScene) {
             
             // create gallery bounds
-            const walls = setupWalls(myScene, myTextureLoader, 
-                gallery_width, gallery_length, gallery_height, gallery_depth, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color);
+            // const walls = setupWalls(myScene, myTextureLoader, 
+            //     primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color);
         
-            const floor = setupFloor(myScene, myTextureLoader, 
-                gallery_width, gallery_length, gallery_depth, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture);
+            // const floor = setupFloor(myScene, myTextureLoader, 
+            //     primary_json.size.width_ft, primary_json.size.length_ft, 5, 
+            //     primary_json.appearance.floor_color, primary_json.appearance.floor_texture);
             
-            const ceiling = setupCeiling(myScene, myTextureLoader, 
-                gallery_width, gallery_length, gallery_height, 
-                primary_json.appearance.ceiling_color);
+            // const ceiling = setupCeiling(myScene, myTextureLoader, 
+            //     primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
+            //     primary_json.appearance.ceiling_color);
         
                 
             let photos_on_1 = 0,
@@ -141,42 +158,27 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         
             // console.log("photo_1:", photos_on_1, "photo_2:", photos_on_2, "photo_3:", photos_on_3, "photo_4:", photos_on_4);
         
-            // turn string value of brightness into a value we can use for brightness
-            let ambient_light_intensity;
-        
-            if (primary_json.appearance.moodiness == "dark") {
-            ambient_light_intensity = 0.5;
-            } 
-            else if (primary_json.appearance.moodiness == "moody dark") {
-            ambient_light_intensity = 1.5;
-            }
-            else if (primary_json.appearance.moodiness == "moody bright") {
-            ambient_light_intensity = 2.5;
-            }
-            else if (primary_json.appearance.moodiness == "bright") {
-            ambient_light_intensity = 3.5;
-            }
         
             // kind of a last minute add, but scene needs to be here for lighting, even though
             // art is not added to the scene here
             // ambient_light_intensity is added for safety in light creation
             const art = createArt(myTextureLoader, 
             photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
-            gallery_width, gallery_length, gallery_height, wall_offset, 
-            ambient_light_intensity, myScene);
+            primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
+            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene);
         
-            const ambient_light = createAmbientLight(primary_json.appearance.ambient_light_color, ambient_light_intensity);
-            myScene.add(ambient_light);
+            // const ambient_light = createAmbientLight(primary_json.appearance.ambient_light_color, ambient_light_intensity);
+            // myScene.add(ambient_light);
         
     
     
             
-            createBoundingBoxes(walls);
+            // createBoundingBoxes(walls);
         
             addObjectsToScene(myScene, art);
         
         
-            setupRendering(myScene, myCamera, myRenderer, art, myControls, walls, gallery_width, gallery_length, controlsEnabled, setCameraPosition, containerRef.current);
+            setupRendering(myScene, myCamera, myRenderer, art, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled, setCameraPosition, containerRef.current);
             myRenderer.render(myScene, myCamera);
         
             canvasRef.current.appendChild(myRenderer.domElement);
@@ -203,18 +205,127 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             // console.log("myCamera", myCamera);
             console.log("exhibition data changed");
 
+            console.log("scene number of children", myScene.children.length);
+
             return () => {
                 console.log("myScene", myScene);
-                myScene.children = [];
+                canvasRef.current.removeChild(myRenderer.domElement);
+                // // myScene.children = [];
+                // console.log("cleaning up: scene number of children", myScene.children.length);
             }
         }
-    }, [primary_json])
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer]) 
+
+
+    // Update main wall color
+    useEffect(() => {
+        if(myScene) { 
+            const mainWalls = setupMainWalls(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, myRenderer, myCamera);
+
+            createBoundingBoxes(mainWalls);
+
+            return () => {
+                myScene.remove(mainWalls);
+            }
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.appearance.main_wall_color
+    ])
+
+    // Update side wall color
+    useEffect(() => {
+        if(myScene) { 
+            const sideWalls = setupSideWalls(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color, myRenderer, myCamera);
+    
+            createBoundingBoxes(sideWalls);
+
+            return () => {
+                myScene.remove(sideWalls);
+            }
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.appearance.side_wall_color
+    ])
+
+    // Update floor and ceiling
+    useEffect(() => {
+        if(myScene) {
+        
+            const floor = setupFloor(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, 5, 
+                primary_json.appearance.floor_color, primary_json.appearance.floor_texture);
+            
+            const ceiling = setupCeiling(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
+                primary_json.appearance.ceiling_color);
+        
+    
+            myRenderer.render(myScene, myCamera);
+            
+            return () => {
+                myScene.remove(floor);
+                myScene.remove(ceiling);
+            }
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.appearance.floor_color, 
+        primary_json.appearance.ceiling_color
+    ])
+
+
+
+    useEffect(() => {
+        console.log("Ambient light updated", primary_json.appearance.moodiness, getAmbientLightIntensity(primary_json.appearance.moodiness));
+        if(myScene) {
+            const ambient_light = new THREE.AmbientLight(primary_json.appearance.ambient_light_color, getAmbientLightIntensity(primary_json.appearance.moodiness));
+            myScene.add(ambient_light); 
+            myRenderer.render(myScene, myCamera);
+
+            return () => {
+                myScene.remove(ambient_light); 
+            }
+            
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness])
+
+
+
+    // useEffect(() => {
+    //     console.log("Wall colors updated");
+    //     let gallery_width = primary_json.size.width_ft,       // units total in left and right directions of (0, 0, 0)
+    //     gallery_length = primary_json.size.length_ft,     // units total in forward and back directions of (0, 0, 0)
+    //     gallery_height = primary_json.size.height_ft -5,  // height of gallery from (0,0,0)
+    //     gallery_depth = 5    // depth of gallery from (0,0,0)
+    
+
+    //     if(myScene) {
+    //         const walls = setupWalls(myScene, myTextureLoader, 
+    // //             gallery_width, gallery_length, gallery_height, gallery_depth, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color);
+    //             createBoundingBoxes(walls);
+        
+    //         return () => {
+    //             myScene.remove(walls);
+    //         }
+
+    //     }
+    // }, [primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color])
+
+    // useEffect(() => {
+    //     console.log("Image list updated");
+    //     if(myScene) {
+
+    //     }
+    // })
 
 
     useEffect(() => {
         console.log("Camera updated", cameraPosition);
-        if(cameraPosition.z != 5)
-            setCameraPosition({...cameraPosition, z: 5})
+        // setCameraPosition({x: 0, y: 0, z: 5})
+        // if(cameraPosition.z != 5)
+        //     setCameraPosition({...cameraPosition, z: 5})
         
         // if(cameraPosition.x < -gallery_length / 2)
         //     setCameraPosition({...cameraPosition, x: -gallery_length / 2})

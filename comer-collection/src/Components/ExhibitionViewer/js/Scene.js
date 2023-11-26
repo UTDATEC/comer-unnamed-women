@@ -32,7 +32,7 @@ export const setupScene = (scene, boundingBoxElement, cameraPosition, setCameraP
     scene.add(camera);
 
     // set camera slighly back from middle of gallery
-    camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    camera.position.set(0, 0, 5);
 
     // enable antialiasing
     renderer = new THREE.WebGLRenderer({
