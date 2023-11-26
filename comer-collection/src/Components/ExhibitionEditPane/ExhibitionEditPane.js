@@ -64,10 +64,7 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
     const theme = useTheme();
     
     return (
-        <Accordion disableGutters expanded={expandedSection == id}
-            onChange={(e, isExpanded) => {
-                setExpandedSection(isExpanded ? id : null);
-            }}>
+        <Accordion disableGutters expanded={expandedSection == id}>
             <Box square sx={{
                 width: "100%",
                 position: "sticky",
