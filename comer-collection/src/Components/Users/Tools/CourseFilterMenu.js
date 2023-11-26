@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import SchoolIcon from '@mui/icons-material/School';
+import CheckIcon from "@mui/icons-material/Check"
 
 export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
   return (
@@ -34,7 +35,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
           setFilterValue(null);
         }}>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <SchoolIcon sx={{ visibility: "hidden" }} />
+          <CheckIcon sx={{ visibility: Boolean(filterValue) ? "hidden" : "" }} />
           <Typography variant="body1" sx={{ minWidth: "120px" }}>
             Do not filter by course
           </Typography>
