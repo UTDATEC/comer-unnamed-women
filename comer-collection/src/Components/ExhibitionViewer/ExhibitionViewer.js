@@ -252,25 +252,30 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
     // Update floor and ceiling
     useEffect(() => {
         if(myScene) {
-        
             const floor = setupFloor(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture);
-            
-            const ceiling = setupCeiling(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
-                primary_json.appearance.ceiling_color);
-        
-    
-            myRenderer.render(myScene, myCamera);
+                primary_json.appearance.floor_color, primary_json.appearance.floor_texture, myRenderer, myCamera);
             
             return () => {
                 myScene.remove(floor);
+            }
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.appearance.floor_color
+    ])
+
+    // Update floor and ceiling
+    useEffect(() => {
+        if(myScene) {
+            const ceiling = setupCeiling(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
+                primary_json.appearance.ceiling_color, myRenderer, myCamera);
+            
+            return () => {
                 myScene.remove(ceiling);
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.floor_color, 
         primary_json.appearance.ceiling_color
     ])
 
