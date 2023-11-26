@@ -130,18 +130,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
     
         if(myScene) {
             
-            // create gallery bounds
-            // const walls = setupWalls(myScene, myTextureLoader, 
-            //     primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color);
-        
-            // const floor = setupFloor(myScene, myTextureLoader, 
-            //     primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-            //     primary_json.appearance.floor_color, primary_json.appearance.floor_texture);
-            
-            // const ceiling = setupCeiling(myScene, myTextureLoader, 
-            //     primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
-            //     primary_json.appearance.ceiling_color);
-        
                 
             let photos_on_1 = 0,
             photos_on_2 = 0,
@@ -302,47 +290,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness])
 
 
-
-    // useEffect(() => {
-    //     console.log("Wall colors updated");
-    //     let gallery_width = primary_json.size.width_ft,       // units total in left and right directions of (0, 0, 0)
-    //     gallery_length = primary_json.size.length_ft,     // units total in forward and back directions of (0, 0, 0)
-    //     gallery_height = primary_json.size.height_ft -5,  // height of gallery from (0,0,0)
-    //     gallery_depth = 5    // depth of gallery from (0,0,0)
-    
-
-    //     if(myScene) {
-    //         const walls = setupWalls(myScene, myTextureLoader, 
-    // //             gallery_width, gallery_length, gallery_height, gallery_depth, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color);
-    //             createBoundingBoxes(walls);
-        
-    //         return () => {
-    //             myScene.remove(walls);
-    //         }
-
-    //     }
-    // }, [primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color])
-
-    // useEffect(() => {
-    //     console.log("Image list updated");
-    //     if(myScene) {
-
-    //     }
-    // })
-
-
-    useEffect(() => {
-        console.log("Camera updated", cameraPosition);
-        // setCameraPosition({x: 0, y: 0, z: 5})
-        // if(cameraPosition.z != 5)
-        //     setCameraPosition({...cameraPosition, z: 5})
-        
-        // if(cameraPosition.x < -gallery_length / 2)
-        //     setCameraPosition({...cameraPosition, x: -gallery_length / 2})
-        // else if(cameraPosition.x > gallery_length / 2)
-        //     setCameraPosition({...cameraPosition, x: gallery_length / 2})
-        
-    }, [cameraPosition]);
 
         
     const selectedImageKey = './logo.png'; // Replace this with the desired key
