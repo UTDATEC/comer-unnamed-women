@@ -45,7 +45,8 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                       minWidth: "330px"
                     }}
                     inputProps={{
-                      type: f.inputType ?? "text"
+                      type: f.inputType ?? "text",
+                      maxlength: f.maxlength ?? 255
                     }}
                     InputLabelProps={{
                       [f.inputType == "datetime-local" ? "shrink" : ""]: true

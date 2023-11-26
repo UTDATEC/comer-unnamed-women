@@ -380,7 +380,20 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (course) => (
         <TableCell>
-          <Typography variant="body1">{new Date (course.date_start).toLocaleString()}</Typography>
+          <Stack direction="column" padding={0}>
+            <Typography variant="body1">
+              {new Date (course.date_start).toLocaleDateString([], {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'short'
+              })}
+            </Typography>
+            <Typography variant="body1">{new Date (course.date_start).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit'
+            })}</Typography>
+          </Stack>
         </TableCell>
       )
     },
@@ -393,7 +406,20 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (course) => (
         <TableCell>
-          <Typography variant="body1">{new Date (course.date_end).toLocaleString()}</Typography>
+          <Stack direction="column" padding={0}>
+            <Typography variant="body1">
+              {new Date (course.date_end).toLocaleDateString([], {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'short'
+              })}
+            </Typography>
+            <Typography variant="body1">{new Date (course.date_end).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit'
+            })}</Typography>
+          </Stack>
         </TableCell>
       )
     },
@@ -430,10 +456,8 @@ const CourseManagement = (props) => {
       generateTableCell: (course) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" color="primary" startIcon={<PersonIcon />}
+            <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
               onClick={() => {
-                // setSelectedCourses([course]);
-                // setAssignUserDialogCourses([course]);
                 setAssignUserDialogCourses([course]);
                 setAssignUserDialogIsOpen(true);
               }}
@@ -469,8 +493,7 @@ const CourseManagement = (props) => {
           <IconButton 
             onClick={() => {
               setEditDialogCourse(course);
-              const { name, date_start, date_end, notes } = course;
-              setEditDialogFields({ name, date_start, date_end, notes });
+              setEditDialogFields(filterItemFields(courseFieldDefinitions, course));
               setEditDialogSubmitEnabled(true);
               setEditDialogIsOpen(true)
             }}

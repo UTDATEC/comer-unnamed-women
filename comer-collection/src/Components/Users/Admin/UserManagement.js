@@ -13,7 +13,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import LockResetIcon from "@mui/icons-material/LockReset";
-import LockIcon from "@mui/icons-material/Lock";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -37,6 +37,7 @@ import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
+import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
 
 
 const UserManagement = (props) => {
@@ -49,6 +50,8 @@ const UserManagement = (props) => {
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogUser, setDeleteDialogUser] = useState(null);
+
+  const [multiDeleteDialogIsOpen, setMultiDeleteDialogIsOpen] = useState(false);
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
@@ -350,10 +353,6 @@ const UserManagement = (props) => {
 
       showSnackbar(`User ${userId} has been deleted`, "success")
 
-      if (response.status === 200 || response.status === 204) {
-      } else {
-        console.error("Error deleting user:", response.statusText);
-      }
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
@@ -363,6 +362,40 @@ const UserManagement = (props) => {
     setDeleteDialogIsOpen(false);
     setDeleteDialogUser(null);
   };
+
+
+  const handleDeleteMultiple = async(userIds) => {
+    
+    let usersDeleted = 0;
+    for(const [i, userId] of userIds.entries()) {
+      try {
+        await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`);
+        usersDeleted++;
+      } catch (error) {
+        console.error(`Error deleting user ${userId}: ${error}`);
+      }
+    }
+    fetchData();
+
+    if(usersDeleted == userIds.length) {
+      setCreateDialogIsOpen(false);
+
+      showSnackbar(`Successfully deleted ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
+
+      setMultiDeleteDialogIsOpen(false);
+
+    } else if(usersDeleted < userIds.length) {
+
+      if(usersDeleted > 0) {
+        showSnackbar(`Deleted ${usersDeleted} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "warning")
+      }
+      else {
+        showSnackbar(`Failed to delete ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "error")
+      }
+
+    }
+
+  }
 
 
   const handleCopyToClipboard = useCallback((user, fieldName) => {
@@ -463,7 +496,7 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           {appUser.id == user.id ? (
-            <Button startIcon={<LockIcon />} color={user.is_admin ? "secondary" : "primary"}
+            <Button startIcon={<OpenInNewIcon />} color={user.is_admin ? "secondary" : "primary"}
             variant="outlined"
             onClick={() => {
               navigate('/Account/ChangePassword');
@@ -839,8 +872,30 @@ const UserManagement = (props) => {
             entityPlural="users"
           />
          <Stack direction="row" spacing={2} >
+            {(() => {
+              const selectedDeletableUsers = selectedUsers.filter((u) => u.is_deletable);
+              return (
+                <Button variant="outlined"
+                  sx={{
+                    display: selectedDeletableUsers.length == 0 ? "none" : ""
+                  }}
+                  startIcon={<DeleteIcon />}
+                  onClick={() => {
+                    if(selectedDeletableUsers.length == 1) {
+                      setDeleteDialogUser(selectedDeletableUsers[0]);
+                      setDeleteDialogIsOpen(true);
+                    } else {
+                      setMultiDeleteDialogIsOpen(true);
+                    }
+                  }}>
+                  <Typography variant="body1">Delete {selectedDeletableUsers.length} {selectedDeletableUsers.length == 1 ? "user" : "users"}</Typography>
+                </Button>
+              )
+            })()}
             <Button variant="outlined"
-              disabled={selectedUsers.length == 0}
+              sx={{
+                display: selectedUsers.length == 0 ? "none" : ""
+              }}
               startIcon={<SchoolIcon />}
               onClick={() => {
               setAssignCourseDialogUsers([...selectedUsers])
@@ -871,6 +926,15 @@ const UserManagement = (props) => {
         dialogTitle="Delete User"
         deleteDialogItem={deleteDialogUser}
         {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+
+      <ItemMultiDeleteDialog
+        entitySingular="user"
+        entityPlural="users"
+        deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
+        deleteDialogIsOpen={multiDeleteDialogIsOpen}
+        setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
+        handleDelete={handleDeleteMultiple}
+      />
 
       <AssociationManagementDialog
         primaryEntity="user"

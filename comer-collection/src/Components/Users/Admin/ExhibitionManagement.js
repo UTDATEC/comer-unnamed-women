@@ -334,71 +334,69 @@ const ExhibitionManagement = (props) => {
       )
     },
     {
-      columnDescription: "Email",
+      columnDescription: "Owner",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
+            <ColumnSortButton columnName="Owner" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
         </TableCell>
       ),
-      generateTableCell: (user) => (
+      generateTableCell: (exhibition) => (
         <TableCell>
-          <Button color="grey"
-            variant="text" sx={{textTransform: "unset"}}
-            onClick={() => {handleCopyToClipboard(user, "email")}}>
-            <Typography variant="body1">{user.email}</Typography>
-          </Button>
+          <Stack direction="column" padding={1}>
+            <Typography variant="body1">{exhibition.User.full_name_reverse}</Typography>
+            <Typography variant="body1" sx={{opacity: 0.5}}>{exhibition.User.email}</Typography>
+          </Stack>
         </TableCell>
       )
     },
-    // {
-    //   columnDescription: "Courses",
-    //   generateTableHeaderCell: () => (
-    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-    //       <Typography variant="h6">Courses</Typography>
-    //     </TableCell>
-    //   ),
-    //   generateTableCell: (user) => (
-    //     <TableCell>
-    //       <Stack direction="row" spacing={1} alignItems="center">
-    //         <Button variant="text" 
-    //           color={user.is_admin ? "secondary" : "primary"}
-    //           startIcon={<SchoolIcon />}
-    //           onClick={() => {
-    //             setAssignCourseDialogUsers([user])
-    //             setAssignCourseDialogIsOpen(true);
-    //           }}
-    //         >
-    //           <Typography variant="body1">{user.Courses.length}</Typography>
-    //         </Button>
-    //       </Stack>
-    //     </TableCell>
-    //   )
-    // },
-    // {
-    //   columnDescription: "Exhibitions",
-    //   generateTableHeaderCell: () => (
-    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-    //       <Typography variant="h6">Exhibitions</Typography>
-    //     </TableCell>
-    //   ),
-    //   generateTableCell: (user) => (
-    //     <TableCell>
-    //       <Stack direction="row" spacing={1} alignItems="center">
-    //         <Button variant="text" 
-    //           color={user.is_admin ? "secondary" : "primary"}
-    //           disabled startIcon={<PhotoCameraBackIcon />}
-    //           onClick={() => {
-    //             // setAssignCourseDialogUser(user);
-    //             // setAssignCourseDialogCourses([...user.Courses]);
-    //             // setAssignCourseDialogIsOpen(true);
-    //           }}
-    //         >
-    //           <Typography variant="body1">{user.Exhibitions.length}</Typography>
-    //         </Button>
-    //       </Stack>
-    //     </TableCell>
-    //   )
-    // },
+    {
+      columnDescription: "Date Created",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Date Created</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (exhibition) => (
+        <TableCell>
+          <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Date Modified",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Date Modified</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (exhibition) => (
+        <TableCell>
+          <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Access",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6">Access</Typography>
+        </TableCell>
+      ),
+      generateTableCell: (exhibition) => (
+        <TableCell>
+          <Stack direction="row" spacing={1} alignItems="center">
+            {exhibition.privacy == "PRIVATE" && (
+                <LockIcon />
+              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+                <PublicIcon />
+              ) || exhibition.privacy == "PUBLIC" && (
+                <PublicIcon />
+              )}
+              <Typography variant="body1">{exhibition.privacy}</Typography>
+          </Stack>
+        </TableCell>
+      )
+    },
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
