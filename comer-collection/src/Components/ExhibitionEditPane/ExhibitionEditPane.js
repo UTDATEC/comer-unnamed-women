@@ -46,6 +46,38 @@ const moodinessOptions = [
 ]
 
 
+const textureOptions = [
+    {
+        value: "black_carpet.png",
+        displayText: "Black Carpet"
+    },
+    {
+        value: "black_marble.png",
+        displayText: "Black Marble"
+    },
+    {
+        value: "blue_carpet.png",
+        displayText: "Blue Carpet"
+    },
+    {
+        value: "dark_gray_carpet.png",
+        displayText: "Dark Gray Carpet"
+    },
+    {
+        value: "gray_marble.png",
+        displayText: "Gray Marble"
+    },
+    {
+        value: "orange_carpet.png",
+        displayText: "Orange Carpet"
+    },
+    {
+        value: "parquet_wood.jpg",
+        displayText: "Parquet Wood"
+    }
+]
+
+
 const ExhibitionOption = ({description, children, vertical}) => {
     const theme = useTheme();
     return (
@@ -184,9 +216,19 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Floor Texture">
-                        <Button disabled>
-                            <Typography variant="body1">Select</Typography>
-                        </Button>
+                    <Select value={exhibitionState.appearance.floor_texture ?? ''} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "exhibition",
+                                    type: "set_floor_texture",
+                                    newTexture: e.target.value
+                                })
+                            }}
+                        >
+                            {textureOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>{option.displayText}</MenuItem>
+                            ))}
+                        </Select>
                     </ExhibitionOption>
                     
                     <AccordionSubHeading text="Ambient Lighting" />

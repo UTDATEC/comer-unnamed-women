@@ -179,7 +179,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         
         
             setupRendering(myScene, myCamera, myRenderer, art, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled, setCameraPosition, containerRef.current);
-            myRenderer.render(myScene, myCamera);
+            // myRenderer.render(myScene, myCamera);
         
             canvasRef.current.appendChild(myRenderer.domElement);
         
@@ -230,7 +230,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.main_wall_color
+        primary_json.appearance.main_wall_color,
+        primary_json.size
     ])
 
     // Update side wall color
@@ -246,10 +247,11 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.side_wall_color
+        primary_json.appearance.side_wall_color,
+        primary_json.size
     ])
 
-    // Update floor and ceiling
+    // Update floor
     useEffect(() => {
         if(myScene) {
             const floor = setupFloor(myScene, myTextureLoader, 
@@ -261,10 +263,12 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.floor_color
+        primary_json.appearance.floor_color,
+        primary_json.appearance.floor_texture,
+        primary_json.size
     ])
 
-    // Update floor and ceiling
+    // Update ceiling
     useEffect(() => {
         if(myScene) {
             const ceiling = setupCeiling(myScene, myTextureLoader, 
@@ -276,7 +280,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.ceiling_color
+        primary_json.appearance.ceiling_color,
+        primary_json.size
     ])
 
 
