@@ -63,7 +63,9 @@ export const AssociationManagementDialog = ({
           setDialogIsOpen(false);
       }}
     >
-      <DialogTitle textAlign="center" variant="h4">{dialogTitle}</DialogTitle>
+      <DialogTitle textAlign="center" variant="h4" sx={{wordWrap: "break-word"}}>
+        {dialogTitle}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
         <Stack direction="column" padding={1}>
@@ -75,7 +77,7 @@ export const AssociationManagementDialog = ({
           )}
         </Stack>
         <Stack spacing={2} direction="row" padding={2}>
-          <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
+          <Stack sx={{width: "50%", wordWrap: "break-word"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
@@ -103,7 +105,7 @@ export const AssociationManagementDialog = ({
             </Box>
           </Stack>
           <Divider sx={{borderWidth: "2px"}} />
-          <Stack sx={{width: "50%"}} spacing={2} textAlign="center">
+          <Stack sx={{width: "50%", wordWrap: "break-word"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && (

@@ -46,7 +46,7 @@ const MyExhibitions = (props) => {
         </TableCell>
       ),
       generateTableCell: (exhibition) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{exhibition.title}</Typography>
         </TableCell>
       )

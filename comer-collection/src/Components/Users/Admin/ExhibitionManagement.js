@@ -322,7 +322,7 @@ const ExhibitionManagement = (props) => {
         </TableCell>
       ),
       generateTableCell: (exhibition) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
           {
             exhibition.title ? (
               <Typography variant="body1">{exhibition.title}</Typography>

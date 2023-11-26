@@ -52,7 +52,7 @@ const Profile = (props) => {
         </TableCell>
       ),
       generateTableCell: (course) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
         </TableCell>
       )
@@ -114,7 +114,7 @@ const Profile = (props) => {
         </TableCell>
       ),
       generateTableCell: (course) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "300px"}}>
           <Typography variant="body1">{course.notes}</Typography>
         </TableCell>
       )

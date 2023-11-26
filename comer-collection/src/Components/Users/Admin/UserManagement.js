@@ -409,7 +409,7 @@ const UserManagement = (props) => {
         </TableCell>
       ),
       generateTableCell: (user) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
           {
             user.has_name ? (
               <Typography variant="body1">{user.full_name_reverse}</Typography>
