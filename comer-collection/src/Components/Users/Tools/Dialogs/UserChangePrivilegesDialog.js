@@ -49,10 +49,10 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
         ) || !dialogUser?.is_admin && (
           <>
           <DialogContentText variant="body1">
-            You are about to grant administrator privileges to {dialogUser?.safe_display_name}.
+            You are about to grant administrator privileges to {dialogUser?.safe_display_name}.  This user will be able to manage images, users, exhibitions, and courses.  This means they will have the ability to modify, deactivate, and delete your account.
           </DialogContentText>
           <DialogContentText variant="body1">
-            This user will be able to manage images, users, exhibitions, and courses.  The user will continue to have curator privileges, as well.
+            The user will continue to have curator privileges, as well.
           </DialogContentText>
           </>
         )}
