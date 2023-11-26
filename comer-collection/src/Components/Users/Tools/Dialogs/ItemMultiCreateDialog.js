@@ -45,10 +45,10 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                       minWidth: "330px"
                     }}
                     inputProps={{
-                      type: f.inputType ?? "text",
-                      sx: {...{
-                        textAlign: f.inputType == "datetime-local" ? "center" : ""
-                      }}
+                      type: f.inputType ?? "text"
+                    }}
+                    InputLabelProps={{
+                      [f.inputType == "datetime-local" ? "shrink" : ""]: true
                     }}
                     required={Boolean(f.isRequired)}
                   onChange={(e) => {
