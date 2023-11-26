@@ -35,5 +35,5 @@ export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_lengt
         
     }); 
 
-    scene.add(ceiling_group);
+    return ceiling_group;
 };
