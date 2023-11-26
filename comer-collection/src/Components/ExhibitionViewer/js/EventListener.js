@@ -1,9 +1,14 @@
-import { keys_pressed } from "./Movement.js";
+import { keys_pressed, updateMovement } from "./Movement.js";
 // import { showMenu } from "./Menu.js";
 
-export const setupEventListeners = (controls) => {
-    document.addEventListener('keydown', onKeyDown, false);
-    document.addEventListener('keyup', onKeyUp, false);
+export const setupEventListeners = (controls, boundingBoxElement, clock, camera, walls, setCameraPosition, scene, renderer) => {
+    window.addEventListener('keydown', (event) => {
+        onKeyDown(event, clock, controls, camera, walls, setCameraPosition, scene, renderer)
+    }, false);
+
+    window.addEventListener('keyup', (event) => {
+        onKeyUp(event, clock, controls, camera, walls, setCameraPosition, scene, renderer)
+    }, false);
     // controls.addEventListener('unlock', showMenu);
 };
 
@@ -16,7 +21,9 @@ export const setupEventListeners = (controls) => {
  * while allowing users to accidentally hit shift/capslock
  */
 
-function onKeyDown(event) {
+function onKeyDown(event, clock, controls, camera, walls, setCameraPosition, scene, renderer) {
+
+    // console.log("keydown", event)
 
     let normal_key;
     if (event.key == 'W' || event.key == 'A' || event.key == 'S' || event.key == 'D'){
@@ -29,9 +36,14 @@ function onKeyDown(event) {
     if (normal_key in keys_pressed) {
         keys_pressed[normal_key] = true;
     }
+
+    const delta = clock.getDelta();
+    updateMovement(delta, controls, camera, walls, setCameraPosition, scene, renderer);
 };
 
-function onKeyUp(event) {
+function onKeyUp(event, clock, controls, camera, walls, setCameraPosition, scene, renderer) {
+
+    // console.log("keyup", event)
 
     let normal_key;
     if (event.key == 'W' || event.key == 'A' || event.key == 'S' || event.key == 'D'){
@@ -44,4 +56,7 @@ function onKeyUp(event) {
     if (normal_key in keys_pressed) {
         keys_pressed[normal_key] = false;
     }
+
+    const delta = clock.getDelta();
+    updateMovement(delta, controls, camera, walls, setCameraPosition, scene, renderer);
 }

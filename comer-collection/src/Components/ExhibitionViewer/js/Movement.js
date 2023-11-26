@@ -14,17 +14,25 @@ export const keys_pressed = {
 };
 
 // update movement according to key pressed
-export const updateMovement = (delta, controls, camera, walls) => {
+export const updateMovement = (delta, controls, camera, walls, setCameraPosition, scene, renderer) => {
+
+    // console.log("update movement called", delta, controls, camera, walls)
 
     // if this is false, movement is disabled, return early
-    if (!controls.isLocked) {
-        return;
-    }
+    // if (!controls.isLocked) {
+    //     return;
+    // }
 
-    const move_speed = 5 * delta;
+    // const move_speed = 5 * delta;
+    const move_speed = 5;
+
+    // console.log("move_speed", move_speed)
+
     const previous_position = camera.position.clone();
+    // console.log("previous_position", previous_position);
 
     if (keys_pressed.ArrowDown || keys_pressed.s) {
+        // console.log("arrowdown", controls)
         controls.moveForward(-move_speed);
     }
 
@@ -44,6 +52,16 @@ export const updateMovement = (delta, controls, camera, walls) => {
     if (checkCollision(camera, walls)) {
         camera.position.copy(previous_position);
     }
+
+    else {
+        // console.log("camera new position", camera.position.clone());
+        setCameraPosition(camera.position.clone())
+        renderer.render(scene, camera);
+        // if(move_speed > 0) {
+        //     updateMovement(delta, controls, camera, walls, setCameraPosition);
+        // }
+    }
+    
 };
 
 export const checkCollision = (camera, walls) => {

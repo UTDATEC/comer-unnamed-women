@@ -2,6 +2,7 @@ import * as THREE from 'three';
 //import primary_json from '../example.json' assert { type: "json" };
 import { displayArtInfo, hideArtInfo } from './ArtInfo.js';
 import { updateMovement } from './Movement.js';
+import { setupEventListeners } from './EventListener.js';
 
 export const setupRendering = (
     scene, 
@@ -12,7 +13,9 @@ export const setupRendering = (
     walls,
     gallery_width,
     gallery_length,
-    controlsEnabled
+    controlsEnabled, 
+    setCameraPosition,
+    boundingBoxElement
 ) => {
 
     // create clock for accurate and fluid movement
@@ -28,10 +31,12 @@ export const setupRendering = (
     let render = function () {
 
         // get delta for accurate movement
-        const delta = clock.getDelta();
+        // const delta = clock.getDelta();
         
         // update position as player moves
-        updateMovement(delta, controls, camera, walls);
+        // updateMovement(delta, controls, camera, walls, setCameraPosition);
+        console.log("calling setupEventListeners");
+        setupEventListeners(controls, boundingBoxElement, clock, camera, walls, setCameraPosition, scene, renderer);
 
         // variable for the current art to have display for
         let art_to_show;
@@ -107,8 +112,21 @@ export const setupRendering = (
         }
 
         renderer.render(scene, camera);     // recursive loop to continue rendering
-        requestAnimationFrame(render);
+        // requestAnimationFrame(render);
+        // render();
     };
+
+    controls.addEventListener('change', () => {
+
+        // get delta for accurate movement
+        // const delta = clock.getDelta();
+        
+        // update position as player moves
+        // updateMovement(delta, controls, camera, walls, setCameraPosition);
+
+        renderer.render(scene, camera);
+        
+    })
 
     // console.log("render() function is called");
     render();
