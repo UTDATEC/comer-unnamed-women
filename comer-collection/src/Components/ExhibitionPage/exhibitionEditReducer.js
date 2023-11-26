@@ -281,6 +281,42 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 }
                             }
                     
+                        case 'set_light_intensity':
+                            return {
+                                ...image,
+                                light: {
+                                    ...image.light,
+                                    intensity: action.newValue
+                                }
+                            }
+                    
+                        case 'set_light_color':
+                            return {
+                                ...image,
+                                light: {
+                                    ...image.light,
+                                    color: action.newColor
+                                }
+                            }
+                    
+                        case 'set_description':
+                            return {
+                                ...image,
+                                metadata: {
+                                    ...image.metadata,
+                                    description: action.newValue
+                                }
+                            }
+                    
+                        case 'set_additional_information':
+                            return {
+                                ...image,
+                                metadata: {
+                                    ...image.metadata,
+                                    additional_information: action.newValue
+                                }
+                            }
+                    
                         default:
                             console.log("Unrecognized image edit action: ", action.type, action);
                             return exhibitionData;

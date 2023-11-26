@@ -433,7 +433,68 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         />
                     </ExhibitionOption>
 
+                    <AccordionSubHeading text="Spotlight" />
+                    <ExhibitionOption description="Color">
+                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color} 
+                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.light.custom)}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_light_color",
+                                    newColor: e.target.value
+                                }
+                            )
+                        }} />
+                    </ExhibitionOption>
 
+                    <ExhibitionOption description="Intensity">
+                        <Input type="number"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.light.intensity ?? ""}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_light_intensity",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+                    
+                    <AccordionSubHeading text="Curator's Notes" />
+                    <ExhibitionOption vertical description="Description">
+                        <TextField type="textarea" multiline rows={3}
+                        variant="outlined" placeholder="Enter text"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.metadata.description ?? ""}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_description",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+
+                    <ExhibitionOption vertical description="Additional Information">
+                        <TextField type="textarea" multiline rows={2}
+                            variant="outlined" placeholder="Enter text"
+                            value={getImageStateById(exhibitionState, selectedImageId)?.metadata.additional_information ?? ""}
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_additional_information",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        />
+                    </ExhibitionOption>
+                    </>
+                    )}
+                    
                 </ExhibitionOptionGroup>
 
             </Box>
