@@ -70,7 +70,7 @@ export const getImageStateById = (exhibitionData, image_id) => {
 
 
 const width_ft_min = 10;
-const height_ft_min = 10;
+const height_ft_min = 4;
 const length_ft_min = 10;
 
 
