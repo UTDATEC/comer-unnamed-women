@@ -366,7 +366,7 @@ const CourseManagement = (props) => {
         </TableCell>
       ),
       generateTableCell: (course) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
         </TableCell>
       )

@@ -3,8 +3,7 @@ import {
   Stack,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton, Paper
-} from "@mui/material";
+  Switch, useTheme, Box, IconButton, Paper, MenuItem, Chip} from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
@@ -37,6 +36,7 @@ import { SelectionSummary } from "../Tools/SelectionSummary";
 import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
+import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 
 
 const UserManagement = (props) => {
@@ -73,6 +73,7 @@ const UserManagement = (props) => {
     setUserTypeFilter(null);
     setUserActivationStatusFilter(null);
     setUserPasswordTypeFilter(null);
+    setUserCourseIdFilter(null);
   }
 
   const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
@@ -80,6 +81,8 @@ const UserManagement = (props) => {
 
   const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
   const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
+
+  const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
   const [sortColumn, setSortColumn] = useState("ID");
   const [sortAscending, setSortAscending] = useState(true);
@@ -94,7 +97,7 @@ const UserManagement = (props) => {
     if(appUser.is_admin) {
       fetchData();
     }
-  }, []); 
+  }, []);
 
 
   const fetchData = async () => {
@@ -121,7 +124,7 @@ const UserManagement = (props) => {
       }
       setCoursesByUser({...coursesByUserDraft});
 
-      
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -135,7 +138,7 @@ const UserManagement = (props) => {
     Step 3: apply sorting order
   */
 
-  const filterUsers = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter) => {
+  const filterUsers = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter) => {
     return users.filter((user) => {
       return (
         // filter by user type
@@ -146,15 +149,18 @@ const UserManagement = (props) => {
       ) && (
         // filter by password type
         !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && user.pw_temp || userPasswordTypeFilter == "Permanent" && !user.pw_temp
+      ) && (
+        // filter by course
+        !userCourseIdFilter || userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
       )
     })
   }
 
 
   const filteredUsers = useMemo(() => filterUsers(
-    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter
   ), [
-    users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
+    users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter
   ])
 
 
@@ -168,7 +174,7 @@ const UserManagement = (props) => {
     else if(sortColumn == "Email")
       return !sortAscending ^ (a.email > b.email)
   })
-  
+
 
 
   const handleUsersCreate = async(newUserArray) => {
@@ -206,7 +212,7 @@ const UserManagement = (props) => {
         await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}/users/${userId}`);
 
         usersEnrolled++;
-  
+
       } catch (error) {
         console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
@@ -241,7 +247,7 @@ const UserManagement = (props) => {
         await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}/users/${userId}`)
 
         usersUnenrolled++;
-  
+
       } catch (error) {
         console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
@@ -271,13 +277,13 @@ const UserManagement = (props) => {
 
 
 
-  
+
 
 
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
     try {
-      await sendAuthenticatedRequest("PUT", (willBeActive ? 
-        `/api/users/${userId}/activate` : 
+      await sendAuthenticatedRequest("PUT", (willBeActive ?
+        `/api/users/${userId}/activate` :
         `/api/users/${userId}/deactivate`
         ));
       fetchData();
@@ -294,12 +300,12 @@ const UserManagement = (props) => {
 
   const handleChangeUserPrivileges = async(userId, verifyPassword, isPromotion) => {
     try {
-      await sendAuthenticatedRequest("PUT", (isPromotion ? 
-        `/api/users/${userId}/promote` : 
+      await sendAuthenticatedRequest("PUT", (isPromotion ?
+        `/api/users/${userId}/promote` :
         `/api/users/${userId}/demote`
         ), {verifyPassword})
       fetchData();
-      
+
       setPrivilegesDialogIsOpen(false);
 
       showSnackbar(`User ${userId} is ${isPromotion ? "now" : "no longer"} an administrator.`, "success")
@@ -447,8 +453,8 @@ const UserManagement = (props) => {
               }
             ]}
             optionAll="All Users"
-            filter={userPasswordTypeFilter} 
-            setFilter={setUserPasswordTypeFilter} 
+            filter={userPasswordTypeFilter}
+            setFilter={setUserPasswordTypeFilter}
             menuAnchorElement={userPasswordTypeMenuAnchorElement}
             setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
           />
@@ -471,11 +477,11 @@ const UserManagement = (props) => {
               <Typography variant="body1">Copy</Typography>
             </Button>
           ) : (
-            <Button 
+            <Button
               startIcon={<LockResetIcon />}
               color={user.is_admin ? "secondary" : "primary"}
               itemID={user.id}
-              variant="outlined" 
+              variant="outlined"
               disabled={appUser.id == user.id}
               onClick={(e) => {
                 handleResetPassword(e.target.parentElement.attributes.itemid.value);
@@ -496,7 +502,7 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" 
+            <Button variant="text"
               color={user.is_admin ? "secondary" : "primary"}
               startIcon={<SchoolIcon />}
               onClick={() => {
@@ -520,7 +526,7 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" 
+            <Button variant="text"
               color={user.is_admin ? "secondary" : "primary"}
               disabled startIcon={<PhotoCameraBackIcon />}
               onClick={() => {
@@ -551,8 +557,8 @@ const UserManagement = (props) => {
               }
             ]}
             optionAll="All Users"
-            filter={userTypeFilter} 
-            setFilter={setUserTypeFilter} 
+            filter={userTypeFilter}
+            setFilter={setUserTypeFilter}
             menuAnchorElement={userTypeMenuAnchorElement}
             setMenuAnchorElement={setUserTypeMenuAnchorElement}
           />
@@ -579,7 +585,7 @@ const UserManagement = (props) => {
       columnDescription: "Active",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="Active" 
+          <ColumnFilterButton columnName="Active"
             options={[
               {
                 value: "Active",
@@ -591,8 +597,8 @@ const UserManagement = (props) => {
               }
             ]}
             optionAll="All Users"
-            filter={userActivationStatusFilter} 
-            setFilter={setUserActivationStatusFilter} 
+            filter={userActivationStatusFilter}
+            setFilter={setUserActivationStatusFilter}
             menuAnchorElement={userActivationStatusMenuAnchorElement}
             setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
           />
@@ -600,10 +606,10 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell>
-          <Switch 
+          <Switch
             itemID={user.id}
-            checked={user.is_active} 
-            disabled={user.id == appUser.id} 
+            checked={user.is_active}
+            disabled={user.id == appUser.id}
             color={user.is_admin ? "secondary" : "primary"}
             onClick={(e) => {
               handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
@@ -621,8 +627,8 @@ const UserManagement = (props) => {
       ),
       generateTableCell: (user) => (
         <TableCell sx={{minWidth: "100px"}}>
-          <IconButton 
-            disabled={user.id == appUser.id} 
+          <IconButton
+            disabled={user.id == appUser.id}
             onClick={() => {
               setEditDialogUser(user);
               const { email, family_name, given_name } = user;
@@ -633,8 +639,8 @@ const UserManagement = (props) => {
           >
             <EditIcon />
           </IconButton>
-          <IconButton 
-            disabled={!user.is_deletable} 
+          <IconButton
+            disabled={!user.is_deletable}
             onClick={() => {
               setDeleteDialogUser(user);
               setDeleteDialogIsOpen(true);
@@ -666,12 +672,11 @@ const UserManagement = (props) => {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            {/* <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
             <Typography variant="h6">Course Name</Typography>
         </TableCell>
       ),
       generateTableCell: (course) => (
-        <TableCell>
+        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
         </TableCell>
       )
@@ -714,7 +719,7 @@ const UserManagement = (props) => {
                 {quantity == 2 ? `Both users enrolled` : `All ${quantity} users enrolled`}
               </Typography>
             )}
-          </Button>) || 
+          </Button>) ||
           quantity == 0 && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
               handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
@@ -725,7 +730,7 @@ const UserManagement = (props) => {
                 <Typography variant="body1">Enroll {assignCourseDialogUsers.length} users</Typography>
               )}
             </Button>
-          ) || 
+          ) ||
           quantity > 0 && quantity < assignCourseDialogUsers.length && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
               handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
@@ -792,7 +797,8 @@ const UserManagement = (props) => {
       `
     }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="50%" />
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="30%" />
+          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{courses}} />
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
@@ -805,7 +811,7 @@ const UserManagement = (props) => {
               visibleUsers.length > 0 ? "outlined" : "contained"
             } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
-                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
+                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter || userCourseIdFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
@@ -818,13 +824,13 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields} 
+        <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields}
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
           sx={{gridArea: "table"}}
         />
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
-          <SelectionSummary 
+          <SelectionSummary
             items={users}
             selectedItems={selectedUsers}
             setSelectedItems={setSelectedUsers}
@@ -845,14 +851,14 @@ const UserManagement = (props) => {
           </Stack>
         </Stack>
 
-      <ItemMultiCreateDialog entity="user" 
+      <ItemMultiCreateDialog entity="user"
         dialogTitle={"Create Users"}
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
         {...{ createDialogFieldDefinitions: userFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
 
-      <ItemSingleEditDialog 
+      <ItemSingleEditDialog
         entity="user"
         dialogTitle={"Edit User"}
         dialogInstructions={"Edit the user fields, then click 'Save'."}
@@ -860,7 +866,7 @@ const UserManagement = (props) => {
         handleItemEdit={handleUserEdit}
         {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
 
-      <ItemSingleDeleteDialog 
+      <ItemSingleDeleteDialog
         entity="user"
         dialogTitle="Delete User"
         deleteDialogItem={deleteDialogUser}
