@@ -8,7 +8,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
     <Select displayEmpty value={filterValue?.id ?? ""}
       variant="outlined"
       sx={{
-        textOverflow: "hidden", 
+        wordWrap: "break-word", 
         width: "100%",
         maxWidth: "300px"
       }}
@@ -50,7 +50,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
           <Stack direction="row" alignItems="center" spacing={2}>
             <SchoolIcon sx={{ visibility: filterValue?.id == course.id ? "" : "hidden" }} />
             <Stack direction="column" alignItems="left" spacing={0} sx={{}}>
-              <Typography variant="body1" sx={{ minWidth: "120px"  }}>
+              <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
                 {course.name}
               </Typography>
               <Typography sx={{opacity: 0.5}}>
