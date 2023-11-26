@@ -46,10 +46,10 @@ const moodinessOptions = [
 ]
 
 
-const ExhibitionOption = ({description, children}) => {
+const ExhibitionOption = ({description, children, vertical}) => {
     const theme = useTheme();
     return (
-        <Stack direction="row" alignItems="center" spacing={1} 
+        <Stack direction={vertical ? "column" : "row"} alignItems={vertical ? "" : "center"} spacing={1} 
             justifyContent="space-between"
         >
             <Typography variant="body1">{description}</Typography>
@@ -73,10 +73,16 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
                 position: "sticky",
                 top: "0px",
                 background: theme.palette.grey.translucent,
+                zIndex: 100
             }}
                 component={Paper}
             >
                 <ListItemButton
+                    onClick={() => {
+                        setExpandedSection((expandedSection) => (
+                            expandedSection == id ? null : id
+                        ))
+                    }}
                 > 
                     <AccordionSummary sx={{width: "100%"}}
                         expandIcon={<ExpandMoreIcon />}
@@ -259,9 +265,12 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     {...{expandedSection, setExpandedSection, selectedImageId, setSelectedImageId}}
                 >
 
-                    <ExhibitionOption direction="row" alignItems="center" justifyContent="center">
+                    <ExhibitionOption>
 
-                        <Select value={selectedImageId ?? ""} 
+                        <Select sx={{width: "100%"}} 
+                            // label="Select an image"
+                            disabled={!Boolean(exhibitionState.images?.length)}
+                            value={selectedImageId ?? ""} 
                             onChange={(e) => {
                                 setSelectedImageId(e.target.value)
                             }}
@@ -270,6 +279,9 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                                 <MenuItem key={image.image_id} value={image.image_id ?? ''}>{image.image_id}</MenuItem>
                             ))}
                         </Select>
+                    </ExhibitionOption>
+
+                    <ExhibitionOption>
                         
                         <Button variant="contained" 
                             startIcon={<AddPhotoAlternateIcon />}
@@ -283,8 +295,11 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         >
                             <Typography variant="body1">Add Image</Typography>
                         </Button>
+
                     </ExhibitionOption>
 
+                    
+                    { selectedImageId && ( <>
                     <AccordionSubHeading text="Position" />
                     <ExhibitionOption description="Custom Position">
                         
