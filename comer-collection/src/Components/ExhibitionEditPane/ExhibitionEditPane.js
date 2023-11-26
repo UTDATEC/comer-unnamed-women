@@ -46,6 +46,26 @@ const moodinessOptions = [
 ]
 
 
+const directionOptions = [
+    {
+        value: 1,
+        displayText: "Front"
+    },
+    {
+        value: 2,
+        displayText: "Right"
+    },
+    {
+        value: 3,
+        displayText: "Back"
+    },
+    {
+        value: 4,
+        displayText: "Left"
+    }
+]
+
+
 const textureOptions = [
     {
         value: "black_carpet.png",
@@ -340,6 +360,25 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     
                     { selectedImageId && ( <>
                     <AccordionSubHeading text="Position" />
+
+                    <ExhibitionOption description="Wall">
+                        <Select value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ''} 
+                            onChange={(e) => {
+                                exhibitionEditDispatch({
+                                    scope: "image",
+                                    image_id: selectedImageId,
+                                    type: "set_direction",
+                                    newValue: e.target.value
+                                })
+                            }}
+                        >
+                            {directionOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>{option.displayText}</MenuItem>
+                            ))}
+                        </Select>
+
+                    </ExhibitionOption>
+
                     <ExhibitionOption description="Custom Position">
                         
 

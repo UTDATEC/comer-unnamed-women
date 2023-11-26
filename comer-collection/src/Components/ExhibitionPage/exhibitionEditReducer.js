@@ -317,6 +317,15 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                                 }
                             }
                     
+                        case 'set_direction':
+                            return {
+                                ...image,
+                                metadata: {
+                                    ...image.metadata,
+                                    direction: action.newValue
+                                }
+                            }
+                    
                         default:
                             console.log("Unrecognized image edit action: ", action.type, action);
                             return exhibitionData;
