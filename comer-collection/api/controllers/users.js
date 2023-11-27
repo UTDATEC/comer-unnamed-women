@@ -11,6 +11,10 @@ const isUserDeletable = (userJSON) => {
     return Boolean(!userJSON.is_admin && userJSON.Courses?.length == 0 && userJSON.Exhibitions?.length == 0);
 }
 
+const canUserCreateExhibition = (userJSON) => {
+    return Boolean(userJSON.is_admin || userJSON.Courses?.filter((c) => c.status == "Active").length);
+}
+
 
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
@@ -23,7 +27,8 @@ const listUsers = async (req, res, next) => {
             const userJSON = u.toJSON();
             return {
                 ...userJSON, 
-                is_deletable: isUserDeletable(userJSON)
+                is_deletable: isUserDeletable(userJSON),
+                can_create_exhibition: canUserCreateExhibition(userJSON)
             };
         })
         res.status(200).json({ data: users });
@@ -207,7 +212,10 @@ const getUser = async (req, res, next) => {
             }
         });
         if (user) {
-            const userData = {...user.toJSON(), is_deletable: isUserDeletable(user.toJSON())}
+            const userData = {...user.toJSON(), 
+                is_deletable: isUserDeletable(user.toJSON()),
+                can_create_exhibition: canUserCreateExhibition(userJSON)
+            }
             res.status(200).json({ data: userData });
         }
         else {
@@ -248,4 +256,4 @@ const resetUserPassword = async(req, res, next) => {
     });
 }
 
-module.exports = { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }
+module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }

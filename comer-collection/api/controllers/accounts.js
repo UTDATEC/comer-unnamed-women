@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
 const { User, Course } = require('../sequelize')
 const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
+const { canUserCreateExhibition } = require('./users.js');
 
 const signIn = async(req, res, next) => {
     try {
@@ -87,7 +88,10 @@ const getCurrentUser = async(req, res, next) => {
             const user = await User.findByPk(user_id, {
                 include: [Course]
             });
-            const dataToSend = {...user.toJSON(), password_change_required}
+            const dataToSend = {...user.toJSON(), 
+                password_change_required,
+                can_create_exhibition: canUserCreateExhibition(user.toJSON())
+            }
             res.status(200).json({ data: dataToSend });
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
