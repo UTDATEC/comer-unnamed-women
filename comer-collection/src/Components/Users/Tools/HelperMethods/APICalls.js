@@ -10,33 +10,39 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
     "PUT": axios.put,
     "DELETE": axios.delete
   }
-  
-  if(!Object.keys(axiosMethods).includes(method))
-    throw Error(`${method} is not a valid method`);
 
-  switch (method) {
-    case "GET":
-    case "DELETE":
-      const response = await axiosMethods[method](
-        `${apiLocation}${url}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          }
-        }
-      )
-      return response.data;
+  try {
+    if(!Object.keys(axiosMethods).includes(method))
+      throw Error(`${method} is not a valid method`);
   
-    case "POST":
-    case "PUT":
-      const response2 = await axiosMethods[method](
-        `${apiLocation}${url}`, payload, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+    switch (method) {
+      case "GET":
+      case "DELETE":
+        const response = await axiosMethods[method](
+          `${apiLocation}${url}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
           }
-        }
-      )
-      return response2.data;
+        )
+        return response.data;
+    
+      case "POST":
+      case "PUT":
+        const response2 = await axiosMethods[method](
+          `${apiLocation}${url}`, payload, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+          }
+        )
+        return response2.data;
+    }
   }
+  catch(e) {
+    throw new Error(e.message)
+  }
+  
 
 
 }
