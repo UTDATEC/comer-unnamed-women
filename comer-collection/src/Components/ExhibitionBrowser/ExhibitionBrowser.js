@@ -56,19 +56,6 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
           )
         },
         {
-          columnDescription: "Date Created",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Date Created</Typography>
-            </TableCell>
-          ),
-          generateTableCell: (exhibition) => (
-            <TableCell>
-              <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
-            </TableCell>
-          )
-        },
-        {
           columnDescription: "Last Updated",
           generateTableHeaderCell: () => (
             <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
@@ -102,7 +89,7 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
 
     return (
         <Box component={Paper} square justifyItems="center" sx={{
-            padding: "50px"
+            padding: "50px 300px"
             
             }} >
             <Stack spacing={4} padding={5}>
