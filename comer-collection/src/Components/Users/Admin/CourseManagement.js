@@ -31,6 +31,7 @@ import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods
 import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
 import SecurityIcon from "@mui/icons-material/Security"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
+import InfoIcon from "@mui/icons-material/Info";
 
 
 const CourseManagement = (props) => {
@@ -199,10 +200,10 @@ const CourseManagement = (props) => {
     } else if(coursesCreated < newCourseArray.length) {
 
       if(coursesCreated > 0) {
-        showSnackbar(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "warning");
+        showSnackbar(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "warning");
       }
       else {
-        showSnackbar(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "error");
+        showSnackbar(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "error");
       }
 
       createDialogDispatch({
@@ -310,12 +311,12 @@ const CourseManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields({name: '', date_start: '', date_end: '', notes: ''})
 
-      showSnackbar(`Successfully edited course ${courseId}`, "success");
+      showSnackbar(`Successfully edited course`, "success");
 
     } catch (error) {
       console.error(`Error editing course ${courseId}: ${error}`);
 
-      showSnackbar(`Error editing for course ${courseId}`, "error");
+      showSnackbar(`Error editing course.  Make sure the end time is after the start time.`, "error");
     }
   }
 
@@ -432,17 +433,7 @@ const CourseManagement = (props) => {
       ),
       generateTableCell: (course) => (
         <TableCell>
-          {
-            new Date(course.date_start).getTime() > new Date().getTime() && (
-              <Typography variant="body1">Upcoming</Typography>
-            ) || 
-            new Date(course.date_end).getTime() < new Date().getTime() && (
-              <Typography variant="body1">Expired</Typography>
-            ) || 
-            new Date(course.date_end).getTime() >= new Date().getTime() && new Date(course.date_start).getTime() <= new Date().getTime() && (
-              <Typography variant="body1">Active</Typography>
-            )
-          }
+          <Typography variant="body1">{course.status}</Typography>
         </TableCell>
       )
     },
@@ -689,6 +680,18 @@ const CourseManagement = (props) => {
         <DataTable items={courses} visibleItems={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
           sx={{gridArea: "table"}}
+          emptyMinHeight="300px"
+          {...visibleCourses.length == courses.length && {
+            noContentMessage: "No courses yet",
+            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonText: "Create a course",
+            NoContentIcon: InfoIcon
+          } || visibleCourses.length < courses.length && {
+            noContentMessage: "No results",
+            noContentButtonAction: clearFilters,
+            noContentButtonText: "Clear Filters",
+            NoContentIcon: SearchIcon
+          }}
         />
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
           <SelectionSummary 

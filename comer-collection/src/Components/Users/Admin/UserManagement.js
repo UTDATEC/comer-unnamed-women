@@ -38,6 +38,8 @@ import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/f
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
+import SearchIcon from "@mui/icons-material/Search"
+import InfoIcon from "@mui/icons-material/Info"
 
 
 const UserManagement = (props) => {
@@ -861,6 +863,18 @@ const UserManagement = (props) => {
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
           sx={{gridArea: "table"}}
+          emptyMinHeight="300px"
+          {...visibleUsers.length == users.length && {
+            noContentMessage: "No users yet",
+            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonText: "Create a user",
+            NoContentIcon: InfoIcon
+          } || visibleUsers.length < users.length && {
+            noContentMessage: "No results",
+            noContentButtonAction: clearFilters,
+            noContentButtonText: "Clear Filters",
+            NoContentIcon: SearchIcon
+          }}
         />
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
           <SelectionSummary

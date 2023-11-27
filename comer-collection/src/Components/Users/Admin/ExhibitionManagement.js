@@ -1,44 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
   Stack,
   Button,
-  Typography,
-  Switch, useTheme, Box, IconButton, Paper
+  Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
-import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ColumnSortButton } from "../Tools/ColumnSortButton";
-import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
-import LockResetIcon from "@mui/icons-material/LockReset";
 import LockIcon from "@mui/icons-material/Lock";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
-import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
-import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { searchItems } from "../Tools/SearchUtilities";
-import SchoolIcon from '@mui/icons-material/School';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonIcon from '@mui/icons-material/Person';
-import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
-import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-import SecurityIcon from "@mui/icons-material/Security";
-import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
 import { SelectionSummary } from "../Tools/SelectionSummary";
-import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
-import { userFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-
+import SearchIcon from "@mui/icons-material/Search"
+import InfoIcon from "@mui/icons-material/Info"
+import VpnLockIcon from "@mui/icons-material/VpnLock";
+import PublicIcon from "@mui/icons-material/Public"
 
 const ExhibitionManagement = (props) => {
   const [users, setUsers] = useState([]);
@@ -388,11 +370,17 @@ const ExhibitionManagement = (props) => {
             {exhibition.privacy == "PRIVATE" && (
                 <LockIcon />
               ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                <PublicIcon />
+                <VpnLockIcon />
               ) || exhibition.privacy == "PUBLIC" && (
                 <PublicIcon />
               )}
-              <Typography variant="body1">{exhibition.privacy}</Typography>
+              <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
+                "Private"
+              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+                "Public Anonymous"
+              ) || exhibition.privacy == "PUBLIC" && (
+                "Public"
+              )}</Typography>
           </Stack>
         </TableCell>
       )
@@ -569,6 +557,9 @@ const ExhibitionManagement = (props) => {
 //     }
 //   }]
 
+  const clearFilters = () => {
+    
+  }
 
 
   return !appUser.is_admin && (
@@ -619,6 +610,16 @@ const ExhibitionManagement = (props) => {
           rowSelectionEnabled={true}
           selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
           sx={{gridArea: "table"}}
+          emptyMinHeight="300px"
+          {...visibleExhibitions.length == exhibitions.length && {
+            noContentMessage: "No exhibitions yet",
+            NoContentIcon: InfoIcon
+          } || visibleExhibitions.length < exhibitions.length && {
+            noContentMessage: "No results",
+            noContentButtonAction: clearFilters,
+            noContentButtonText: "Clear Filters",
+            NoContentIcon: SearchIcon
+          }}
         />
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
           <SelectionSummary 
