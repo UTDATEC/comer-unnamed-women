@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@emotion/react";
+
+
+const DataTableCell = ({tf, item, extraProperties, visibleItems}) => {
+
+  return useMemo(() => tf.generateTableCell(item, extraProperties), [item]);
+
+}
+
 
 export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems, emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
@@ -57,7 +65,6 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
 
             const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
             const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
-
             return (
             <TableRow key={item.id} sx={{
               [`&:hover`]: {
@@ -82,9 +89,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
             </TableCell>)}
               {tableFields.map((tf) => {
                 return (
-                  <React.Fragment key={tf.columnDescription}>
-                    {tf.generateTableCell(item, extraProperties)}
-                  </React.Fragment>
+                  <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
                 )
               })}
             </TableRow>
