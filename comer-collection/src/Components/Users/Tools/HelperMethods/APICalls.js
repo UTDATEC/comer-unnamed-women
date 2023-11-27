@@ -18,25 +18,43 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
     switch (method) {
       case "GET":
       case "DELETE":
-        const response = await axiosMethods[method](
-          `${apiLocation}${url}`, {
+        if(Array.isArray(url)) {
+          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-          }
-        )
-        return response.data;
+          })))
+          return responses;
+        } else {
+          const response = await axiosMethods[method](
+            `${apiLocation}${url}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              }
+            }
+          )
+          return response.data;
+        }
     
       case "POST":
       case "PUT":
-        const response2 = await axiosMethods[method](
-          `${apiLocation}${url}`, payload, {
+        if(Array.isArray(url)) {
+          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, null, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-          }
-        )
-        return response2.data;
+          })))
+          return responses;
+        } else {
+          const response = await axiosMethods[method](
+            `${apiLocation}${url}`, null, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              }
+            }
+          )
+          return response.data;
+        }
     }
   }
   catch(e) {

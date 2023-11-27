@@ -32,6 +32,7 @@ import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
 import SecurityIcon from "@mui/icons-material/Security"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import InfoIcon from "@mui/icons-material/Info";
+import axios from "axios";
 
 
 const CourseManagement = (props) => {
@@ -218,82 +219,28 @@ const CourseManagement = (props) => {
   }
 
 
-  
   const handleAssignCoursesToUser = async(userId, courseIds) => {
-    let coursesAdded = 0;
-    let courseIndicesWithErrors = []
-    for(const [i, courseId] of courseIds.entries()) {
-      try {
-        await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}/users/${userId}`)
-        coursesAdded++;
-  
-      } catch (error) {
-        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
-        courseIndicesWithErrors.push(i);
-      }
+    try {
+      await sendAuthenticatedRequest("PUT", courseIds.map((c) => `/api/courses/${c}/users/${userId}`));
+      showSnackbar(`Successfully enrolled in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
+      fetchData();
+    } catch (error) {
+      console.log("error assigning courses for user", error.message);
+      showSnackbar(`Failed to enroll in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
     }
-    fetchData();
-
-    if(coursesAdded == courseIds.length) {
-      setCreateDialogIsOpen(false);
-      createDialogDispatch({
-        type: "set",
-        newArray: []
-      })
-
-      showSnackbar(`Successfully enrolled user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
-
-    } else if(coursesAdded < courseIds.length) {
-
-      if(coursesAdded > 0) {
-        showSnackbar(`Enrolled user ${userId} in ${coursesAdded} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
-      }
-      else {
-        showSnackbar(`Failed to enroll user ${userId} in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
-      }
-
-    }
-
-
   }
 
 
   
   const handleUnassignCoursesFromUser = async(userId, courseIds) => {
-    let coursesRemoved = 0;
-    let courseIndicesWithErrors = []
-    for(const [i, courseId] of courseIds.entries()) {
-      try {
-        await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}/users/${userId}`)
-        coursesRemoved++;
-  
-      } catch (error) {
-        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
-        courseIndicesWithErrors.push(i);
-      }
+    try {
+      await sendAuthenticatedRequest("DELETE", courseIds.map((c) => `/api/courses/${c}/users/${userId}`));
+      showSnackbar(`Successfully unenrolled from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
+      fetchData();
+    } catch (error) {
+      console.log("error unassigning courses for user", error.message);
+      showSnackbar(`Failed to unenroll from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
     }
-    fetchData();
-
-    if(coursesRemoved == courseIds.length) {
-      setCreateDialogIsOpen(false);
-      createDialogDispatch({
-        type: "set",
-        newArray: []
-      })
-
-      showSnackbar(`Successfully unenrolled user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
-
-    } else if(coursesRemoved < courseIds.length) {
-
-      if(coursesRemoved > 0) {
-        showSnackbar(`Unenrolled user ${userId} from ${coursesRemoved} of ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "warning");
-      }
-      else {
-        showSnackbar(`Failed to unenroll user ${userId} from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
-      }
-      
-    }
-
   }
 
 
