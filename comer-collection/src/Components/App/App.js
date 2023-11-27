@@ -1,15 +1,14 @@
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import SearchBy from '../SearchBy/SearchBy';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { useEffect, useState } from 'react';
 import Account from '../Users/Account';
 
-import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
 import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
 import { green, grey, orange } from '@mui/material/colors';
 import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
 import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
+import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
 
 const App = () => {
   const [searchParams, setSearchParams] = useState({
@@ -155,9 +154,8 @@ const App = () => {
               <CollectionBrowser {...{showSnackbar}} />
             </ThemeProvider>
           } />
-          <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
+          <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
           <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
-          <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
 
           <Route path="/Account/*" element={<Account {
               ...{appUser, setAppUser, showSnackbar,

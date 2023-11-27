@@ -35,7 +35,7 @@ export default function NavBar(props) {
       const output = [
         { text: "Home", link: "/" },
         { text: "Browse Collection", link: "/BrowseCollection" },
-        { text: "Exhibit Viewer", link: "/exhibition_viewer" },
+        { text: "Public Exhibitions", link: "/Exhibitions" },
         // { text: "Search", link: "/searchBy" }
       ]
       if(!user) {
