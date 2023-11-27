@@ -1,3 +1,5 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
     const Artist = sequelize.define("Artist", {
@@ -18,6 +20,18 @@ module.exports = (db) => {
             allowNull: false,
             field: "artist_givenname"
         },
+        fullName: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.givenName} ${this.familyName}`;
+            }
+        },
+        fullNameReverse: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.familyName}, ${this.givenName}`;
+            }
+        },
         website: {
             type: Sequelize.TEXT('tiny'),
             field: "artist_website"
@@ -25,6 +39,12 @@ module.exports = (db) => {
         notes: {
             type: Sequelize.TEXT('tiny'),
             field: "artist_notes"
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.familyName || this.givenName) ? `${this.fullName}` : `Artist ${this.id}`
+            }
         }
     }, {
         tableName: "comer_artists"

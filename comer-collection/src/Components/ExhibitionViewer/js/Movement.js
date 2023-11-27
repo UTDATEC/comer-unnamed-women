@@ -11,43 +11,57 @@ export const keys_pressed = {
     a: false,
     s: false,
     d: false,
-    W: false, 
-    A: false,
-    S: false,
-    D: false
 };
 
 // update movement according to key pressed
-export const updateMovement = (delta, controls, camera, walls) => {
+export const updateMovement = (delta, controls, camera, setCameraPosition, scene, renderer) => {
+
+    // console.log("update movement called", delta, controls, camera, walls)
 
     // if this is false, movement is disabled, return early
-    if (!controls.isLocked) {
-        return;
-    }
+    // if (!controls.isLocked) {
+    //     return;
+    // }
 
-    const move_speed = 5 * delta;
+    // const move_speed = 5 * delta;
+    const move_speed = 5;
+
+    // console.log("move_speed", move_speed)
+
     const previous_position = camera.position.clone();
+    // console.log("previous_position", previous_position);
 
-    if (keys_pressed.ArrowDown || keys_pressed.s || keys_pressed.S) {
+    if (keys_pressed.ArrowDown || keys_pressed.s) {
+        // console.log("arrowdown", controls)
         controls.moveForward(-move_speed);
     }
 
-    if (keys_pressed.ArrowUp || keys_pressed.w || keys_pressed.W) {
+    if (keys_pressed.ArrowUp || keys_pressed.w) {
         controls.moveForward(move_speed);
     }
 
-    if (keys_pressed.ArrowLeft || keys_pressed.a || keys_pressed.A) {
+    if (keys_pressed.ArrowLeft || keys_pressed.a) {
         controls.moveRight(-move_speed);
     }
 
-    if (keys_pressed.ArrowRight || keys_pressed.d || keys_pressed.D) {
+    if (keys_pressed.ArrowRight || keys_pressed.d) {
         controls.moveRight(move_speed);
     }
 
     // if this returns true, this means that there was a collision and camera should move back to original position
-    if (checkCollision(camera, walls)) {
-        camera.position.copy(previous_position);
+    // if (checkCollision(camera, walls)) {
+    //     camera.position.copy(previous_position);
+    // }
+
+    else {
+        // console.log("camera new position", camera.position.clone());
+        // setCameraPosition(camera.position.clone())
+        // renderer.render(scene, camera);
+        // if(move_speed > 0) {
+        //     updateMovement(delta, controls, camera, walls, setCameraPosition);
+        // }
     }
+    
 };
 
 export const checkCollision = (camera, walls) => {

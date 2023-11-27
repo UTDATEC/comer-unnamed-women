@@ -1,16 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import GridView from '../GridView/GridView';
-import SearchBy from '../SearchBy/SearchBy';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { useEffect, useState } from 'react';
-import Admin from '../Users/Admin/Admin';
-import Curator from '../Users/Curator/Curator';
+import Account from '../Users/Account';
 
-import ExhibitionViewer from '../ExhibitionViewer/ExhibitionViewer';
-import { Box, ThemeProvider, createTheme } from '@mui/material';
-import { green, orange } from '@mui/material/colors';
+import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
+import { green, grey, orange } from '@mui/material/colors';
+import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
+import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
+import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
 
 const App = () => {
   const [searchParams, setSearchParams] = useState({
@@ -45,28 +43,67 @@ const App = () => {
     updatedAt: '',
   });
 
+  const [appDarkTheme, setAppDarkTheme] = useState(true);
+
+  const primaryColor = green;
+  const secondaryColor = orange;
+
   const theme = createTheme({
     typography: {
       fontFamily: [
         "Helvetica"
       ].join(","),
-      fontSize: 10,
+      fontSize: 12,
+      body1: {
+        fontWeight: 500,
+        fontSize: '0.9rem'
+      }
     },
     palette: {
+      mode: appDarkTheme ? "dark" : "light",
       primary: {
-        main: green['900'],
-        contrastText: 'white'
+        main: appDarkTheme ? primaryColor['700'] : primaryColor['900'],
+        light: primaryColor['500'],
+        contrastText: 'white',
+        "200": primaryColor['200'],
+        "100": primaryColor['100'],
+        translucent: `${primaryColor['700']}40`,
+        veryTranslucent: `${primaryColor['700']}20`
       },
       secondary: {
-        main: orange['700'],
-        contrastText: 'black'
+        main: secondaryColor['700'],
+        contrastText: 'white',
+        "200": secondaryColor['200'],
+        "100": secondaryColor['100'],
+        translucent: `${secondaryColor['700']}40`,
+        veryTranslucent: `${secondaryColor['700']}20`
+      },
+      grey: {
+        main: grey['600'],
+        translucent: appDarkTheme ? grey['800'] : '#CCC',
+        veryTranslucent: appDarkTheme ? '#333' : '#EEE',
       }
     }
   })
 
-  const [currentUserProfile, setCurrentUserProfile] = useState(null);
+
+  const [appUser, setAppUser] = useState(null);
+  
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+
+  const showSnackbar = (message, severity="info") => {
+    setSnackbarText(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  }
+  
+
   useEffect(() => {
-    const setAppUser = async() => {
+    const initializeAppUser = async() => {
       try {
         const response = await fetch("http://localhost:9000/api/account/profile", {
           headers: {
@@ -75,16 +112,16 @@ const App = () => {
         })
         if(response.status == 200) {
           let responseJson = await response.json();
-          setCurrentUserProfile(responseJson.data);
+          setAppUser(responseJson.data);
         } else {
           throw new Error("Response status was not 200")
         }
       } catch (error) {
-        setCurrentUserProfile(null);
+        setAppUser(null);
       }
       
     }
-    setAppUser();
+    initializeAppUser();
   }, []);
 
 
@@ -95,35 +132,70 @@ const App = () => {
           height: '100vh', 
           display: 'grid',
           gridTemplateColumns: '1fr',
-          gridTemplateRows: '64px auto',
+          gridTemplateRows: '64px calc(100vh - 64px)',
           gridTemplateAreas: `
             "header"
             "body"
           `
         }}>
-        <NavBar user={currentUserProfile} setUser={setCurrentUserProfile} sx={{ gridArea: 'header' }} />
+        <NavBar {...{appUser, setAppUser, appDarkTheme, setAppDarkTheme}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
         <Routes>
-          <Route path="/searchBy" element={<SearchBy paramSetter={setSearchParams} />} />
-          <Route path="/exhibition_viewer" element={<ExhibitionViewer />} />
-
-          <Route path="/Admin/*" element={<Admin />} />
-          <Route path="/Curator/*" element={<Curator />} />
-
-          <Route path="/login" element={<Login user={currentUserProfile} setUser={setCurrentUserProfile} />} />
-          
-          <Route path="/" element={
-            <GridView
-            searchParams={searchParams}
-            setSelectedImage={setSelectedImage}
-          />
+          <Route path="/BrowseCollection" element={
+            <ThemeProvider theme={(mainTheme) => {
+              return {
+                ...mainTheme, 
+                palette: {
+                  ...mainTheme.palette, 
+                  mode: "dark"
+                }
+              };
+            }}>
+              <CollectionBrowser {...{showSnackbar}} />
+            </ThemeProvider>
           } />
+          <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
+          <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
+
+          <Route path="/Account/*" element={<Account {
+              ...{appUser, setAppUser, showSnackbar,
+                snackbarOpen, snackbarText, snackbarSeverity,
+                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
+              }
+            } />} />
+
+          <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
+          
+          <Route index element={() => {
+            const navigate = useNavigate();
+            return <Navigate to="/login" />
+          }} />
+
               
           </Routes>
         </Box>
         </Box>
         
       </BrowserRouter>
+      
+      <Snackbar 
+        open={snackbarOpen} 
+        autoHideDuration={3000} 
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+        onClose={() => {
+          setSnackbarOpen(false);
+        }}
+      >
+        <Alert severity={snackbarSeverity} variant="standard" sx={{width: "100%"}}>
+          <Stack direction="row" spacing={2}>
+            <Typography variant="body1">{snackbarText}</Typography>
+          </Stack>
+        </Alert>
+      </Snackbar>
+
       </ThemeProvider>
   );
 }

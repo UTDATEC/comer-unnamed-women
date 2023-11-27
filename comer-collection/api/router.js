@@ -3,17 +3,21 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
-const { listTags, createTag, updateTag, deleteTag } = require("./controllers/tags.js");
-const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword } = require("./controllers/users.js");
-const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse } = require("./controllers/courses.js");
+const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
+const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
+const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition, saveExhibition, loadExhibition } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions } = require('./controllers/exhibitions.js');
 
 // Read images
 router.get("/images", listImages);
 router.get("/images/:imageId", getImage)
+
+router.get("/collection/images", listImagesPublic);
+router.get("/collection/images/:imageId", getImagePublic);
+router.get("/exhibitions/public", listPublicExhibitions);
 
 // Modify images
 router.post("/images", createImage);
@@ -39,6 +43,7 @@ router.delete("/artists/:artistId", deleteArtist);
 
 // Read tags
 router.get("/tags", listTags);
+router.get("/tags/:tagId", getTag);
 
 // Modify tags
 router.post("/tags", createTag);
@@ -52,6 +57,10 @@ router.get("/users/:userId", getUser);
 // Modify users
 router.post("/users", createUser);
 router.put("/users/:userId", updateUser);
+router.put("/users/:userId/deactivate", deactivateUser);
+router.put("/users/:userId/promote", promoteUser);
+router.put("/users/:userId/demote", demoteUser);
+router.put("/users/:userId/activate", activateUser);
 router.delete("/users/:userId", deleteUser);
 router.put("/users/:userId/resetpassword", resetUserPassword);
 
@@ -75,13 +84,19 @@ router.get("/exhibitions/:exhibitionId", getExhibition)
 router.put("/exhibitions", saveExhibition)
 router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
-// Write exhibitions (admin)
+// Modify exhibitions (admin)
+router.delete("/exhibitions/:exhibitionId", deleteExhibition)
+
+
 
 // User interactions
 router.put("/account/signin", signIn);
 router.put("/account/changepassword", changePassword);
 router.get("/account/profile", getCurrentUser);
+router.get("/account/courses", listMyCourses);
+router.get("/account/exhibitions", listMyExhibitions);
 
+router.post("/account/exhibitions", createExhibition);
 
 
 // router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {

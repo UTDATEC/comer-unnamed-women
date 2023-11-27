@@ -7,13 +7,24 @@ let camera, controls, renderer;
 
 // variables for aspect ratio updates
 
-export const setupScene = (scene) =>  {
-    let window_height = window.innerHeight, window_width = window.innerWidth;
+export const get_canvas_dimensions = (boundingBoxElement) => {
+    const { height: canvas_height, width: canvas_width } = boundingBoxElement.getBoundingClientRect();
+    return [canvas_height, canvas_width];
+}
+
+export const setupScene = (scene, boundingBoxElement, cameraPosition, setCameraPosition) =>  {
+    // let window_height = window.innerHeight, window_width = window.innerWidth;
+
+    // console.log("setupScene boundingBoxElement", boundingBoxElement);
+
+    // let { height: canvas_height, width: canvas_width } = boundingBoxElement.getBoundingClientRect();
+    let [canvas_height, canvas_width] = get_canvas_dimensions(boundingBoxElement);
     
     // camera set up
     camera = new THREE.PerspectiveCamera(
         60, // field of view: 60-90 is normal for viewing on a monitor
-        window_width / window_height, // aspect ratio: assumption that ar should be the current window size
+        // window_width / window_height, // aspect ratio: assumption that ar should be the current window size
+        canvas_width / canvas_height, // aspect ratio: assumption that ar should be the current window size
         0.1,  // near setting for camera frustum
         1000 // far setting for camera frustum
     );
@@ -29,8 +40,10 @@ export const setupScene = (scene) =>  {
     });
 
     // set initial window size
-    console.log(window_width, window_height);
-    renderer.setSize(window_width, window_height);
+    // console.log(window_width, window_height);
+    // renderer.setSize(window_width, window_height);
+    renderer.setSize(canvas_width, canvas_height);
+    
     // document.body.appendChild(renderer.domElement);
     // console.log(renderer.domElement);
 
@@ -47,11 +60,15 @@ export const setupScene = (scene) =>  {
 
     // resize window when window is resized
     window.addEventListener('resize', function() {
-        window_width = window.innerWidth;
-        window_height = window.innerHeight;
-        camera.aspect = window_width / window_height;
+        // window_width = window.innerWidth;
+        // window_height = window.innerHeight;
+        [canvas_height, canvas_width] = get_canvas_dimensions(boundingBoxElement);
+        // camera.aspect = window_width / window_height;
+        camera.aspect = canvas_width / canvas_height;
         camera.updateProjectionMatrix();
-        renderer.setSize(window_width, window_height);
+        // renderer.setSize(window_width, window_height);
+        renderer.setSize(canvas_width, canvas_height);
+        renderer.render(scene, camera);
     });
 
     return { camera, controls, renderer };

@@ -26,13 +26,6 @@
 	  top: 1px;
   }
   
-  input[type=text] {
-	width: 300%;
-	padding: 10px 10px;
-	margin: 4px 0;
-	box-sizing: border-box;
-  }
-  
   .align1 {
 	margin-left: 250px;
   }

@@ -1,16 +1,82 @@
 import * as THREE from 'three';
 
-import { generateArtData } from './ArtData.js'
+// import { generateArtData } from './ArtData.js'
 import { createFrame } from './Frames.js';
 import { createMatte } from './Matte.js';
 import { createSpotlight } from './Lighting.js';
+//import staticImages from './StaticImages.js';
+
+export function generateArtData(primary_json) {
+
+    const art_data = [];
+
+    // copy all the data from json
+    primary_json.images.forEach((image) => {
+
+        const item = {
+
+            img_src: image.image_id,
+
+            position: {
+                custom_x: image.position.custom_x,
+                custom_y: image.position.custom_y,
+                custom_position: image.position.custom_position
+            },
+
+            size: {
+                width: image.size.width,
+                height: image.size.height
+            },
+
+            matte: {
+                color: image.matte.color,
+                weighted: image.matte.weighted,
+                weighted_value: image.matte.weighted_value
+            },
+
+            frame: {
+                custom: image.frame.custom,
+                width: image.frame.width, 
+                height: image.frame.height,
+                color: image.frame.color
+            },
+
+            light: {
+                intensity: image.light.intensity,
+                color: image.light.color
+            },
+
+            metadata: {
+                title: image.metadata.title,
+                artist: image.metadata.artist,
+                description: image.metadata.description,
+                year: image.metadata.year,
+                medium: image.metadata.medium,
+                additional_information: image.metadata.additional_information,
+                direction: image.metadata.direction
+            }
+        };
+
+        // add item to array of data
+        art_data.push(item);
+    });
+
+    // return art data
+    return art_data;
+}
+
+
 
 export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
     gallery_width, gallery_length, gallery_height, wall_offset, 
-    ambient_light_intensity, scene) {
+    ambient_light_intensity, scene, renderer, camera, primary_json) {
     
+
+    const spotlights = [];
+        
     // create a place to store all of the art in gallery
-    let arts = [];
+    const all_arts_group = new THREE.Group();
+    scene.add(all_arts_group);
 
     // counters for placing photos in default positions
     let photos_placed_1 = 1, 
@@ -19,7 +85,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         photos_placed_4 = 1;
 
     // get art data
-    const art_data = generateArtData();
+    const art_data = generateArtData(primary_json);
 
     // hard coded because hex color math does not work with variables
     // we can just assume that they should be black
@@ -32,6 +98,9 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     
     // create mesh from images, place them, rotate them
     art_data.forEach((data) => {
+
+        //const tmp_key = './' + data.img_src + '.jpg';
+        //const texture = texture_loader.load(staticImages[tmp_key]);
 
         // grab the texture and apply that texture to a material (lambert has lighting effects applied to it)
         const texture = texture_loader.load('../images/artworks1/' + data.img_src + '.jpg'); // convert image into texture
@@ -60,7 +129,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
                 // 20x16 frame will fit, update values for positional math
                 if (data.size.width < 20 && data.size.height < 16) {
-                    console.log("Photo had no default frame size and fits 20x16");
+                    // console.log("Photo had no default frame size and fits 20x16");
 
                     // create 20x16
                     frame = createFrame(20, 16, 
@@ -73,7 +142,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     
                 // 16x20 frame will fit, update values for positional math
                 else if (data.size.width < 16 && data.size.height < 20 ) {
-                    console.log("Photo had no default frame size and fits 16x20");
+                    // console.log("Photo had no default frame size and fits 16x20");
 
                     // create 16x20
                     frame = createFrame(16, 20, 
@@ -86,7 +155,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     
                 // 36x24 frame will fit, update values for positional math
                 else if (data.size.width < 36 && data.size.height < 24) {
-                    console.log("Photo had no default frame size and fits 36x24");
+                    // console.log("Photo had no default frame size and fits 36x24");
 
                     // create 36x24
                     frame = createFrame(36, 24, 
@@ -99,7 +168,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
                 // 24x36 frame will fit, update values for positional math
                 else if (data.size.width < 24 && data.size.height < 36) {
-                    console.log("Photo had no default frame size and fits 24x36");
+                    // console.log("Photo had no default frame size and fits 24x36");
 
                     // create 24x36
                     frame = createFrame(24, 36, 
@@ -113,7 +182,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
                 // there is no custom frame and no default fits, create large custom frame
                 // update values for positional math
                 else {
-                    console.log("Photo had no default frame size and exceeds normal size bounds");
+                    // console.log("Photo had no default frame size and exceeds normal size bounds");
 
                     // create larger frame
                     frame = createFrame(data.size.width + 3, data.size.height + 3, 
@@ -128,7 +197,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             // theoretically, this should never happen
             // it 'has' a custom frame, but one of the values was null or zero
             else if (data.frame.custom == true) {
-                console.log("Photo frame is in a nonexsitent state, yet this value is true. Creating frame anyways");
+                // console.log("Photo frame is in a nonexsitent state, yet this value is true. Creating frame anyways");
 
                 // create a value to make a frame with where there is a 0 or null value
                 if (data.frame.width == 0 || data.frame.width == null) {
@@ -146,7 +215,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
         // there is a custom frame, use directly from json
         else if (data.frame.custom == true) {
-            console.log("Photo had a frame assigned in .json file")
+            // console.log("Photo had a frame assigned in .json file")
 
             // create frame with the custom values
             frame = createFrame(data.frame.width, data.frame.height, 
@@ -156,7 +225,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         // catch statement, in case the json had incorrect type/value
         // also theoretically impossible to happen
         else {
-            console.log("Frame did not follow normal conventions. Attempting to create frame using stored values");
+            // console.log("Frame did not follow normal conventions. Attempting to create frame using stored values");
 
             // attempt to create one from values in json
             try {
@@ -166,7 +235,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
             // if there was an error, create a 40x40 frame with basic values and hope that works for that photo
             catch(error) {
-                console.log("Error found, creating large frame.");
+                // console.log("Error found, creating large frame.");
                 frame = createFrame(40, 40, 
                     primary_frame_color, secondary_frame_color);
             }
@@ -284,6 +353,16 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         frame.position.set(0, -((data.frame.height + 1) / 2) / 12, 0);
         matte.position.set(0, 0, -(1 / 48));
 
+        // move the art if the curator designated they wanted a weighted matte
+        if (data.matte.weighted == true) {
+            art.position.set(0, ((data.frame.height / 12) - (data.size.height / 12)) / 4, 0);
+
+            // if there has been an adjustment to the weight, make the adjustment
+            if (data.matte.weighted_value != 0) {
+                art.position.set(0, data.matte.weighted_value / 12, 0);
+            }
+        }
+
         // if intensity does not fit any of the requirements, make it one above the ambient lighting
         if (data.light.intensity <= 0 || 
             data.light.intensity == null || 
@@ -298,11 +377,15 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         }
 
         // create spotlight
-        createSpotlight(data.light.intensity, data.light.color, art_group.position, gallery_height_offset, scene, data.metadata.direction);
+        let spotlight = createSpotlight(data.light.intensity, data.light.color, art_group.position, gallery_height_offset, scene, data.metadata.direction);
 
         // add art to the group
-        arts.push(art_group);
+        all_arts_group.add(art_group);
+        scene.add(spotlight);
+        spotlights.push(spotlight);
     });
 
-    return arts;
+    renderer.render(scene, camera);
+
+    return [all_arts_group, spotlights];
 };

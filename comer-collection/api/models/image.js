@@ -75,6 +75,10 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             field: "image_url"
         },
+        thumbnailUrl: {
+            type: Sequelize.TEXT('tiny'),
+            field: "image_thumbnail_url"
+        },
         location: {
             type: Sequelize.TEXT('tiny'),
             field: "image_location"

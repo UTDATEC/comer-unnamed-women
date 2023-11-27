@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const createError = require('http-errors');
 const jwt = require('jsonwebtoken')
 const { User } = require('./sequelize')
@@ -24,6 +25,9 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
         if(!user)
             throw new Error("User not found");
 
+        if(!user.is_active)
+            throw new Error("User is deactivated");
+
         // Check if password has changed since token was generated
         else if(`"${decoded.pw_updated}"` !== JSON.stringify(user.pw_updated))
             throw new Error("Token password update time does not match the latest password update time")
@@ -36,7 +40,7 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
         else if(requireAdmin && !user.is_admin) 
             next(createError(403), { debugMessage: "Non-admin account in use when admin account is required"});
         
-        callback(user.id);
+        callback(user.id, Boolean(!user.getDataValue('pw_hash')));
 
     } 
     catch(err) {
@@ -46,6 +50,9 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
 }
 
 const adminOperation = async (req, res, next, callback) => {
+
+    //callback(true)
+
     await userOperation(req, res, next, callback, true, true);
 }
 
@@ -67,4 +74,9 @@ const filterUserData = (user) => {
 }
 
 
-module.exports = {userOperation, adminOperation, generateTokenDataFromUserInstance, filterUserData};
+const verifyPasswordWithHash = async(password, pw_hash) => {
+    return await bcrypt.compare(password ?? "", pw_hash)
+}
+
+
+module.exports = {userOperation, adminOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash};

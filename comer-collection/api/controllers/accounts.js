@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
 const { User, Course } = require('../sequelize')
-const { userOperation, generateTokenDataFromUserInstance, filterUserData } = require("../security.js");
+const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
+const { canUserCreateExhibition } = require('./users.js');
 
 const signIn = async(req, res, next) => {
     try {
@@ -16,9 +17,9 @@ const signIn = async(req, res, next) => {
             }
         });
         
-        const match = user && ((password == user.pw_temp) || (user.pw_hash && await bcrypt.compare(password, user.pw_hash)));
+        const match = user && ((password == user.pw_temp) || (user.pw_hash && await verifyPasswordWithHash(password, user.pw_hash)));
 
-        if(match) {
+        if(match && user.is_active) {
             token = generateTokenDataFromUserInstance(user);
             jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
                 if (err) {
@@ -82,16 +83,20 @@ const changePassword = async(req, res, next) => {
 };
 
 const getCurrentUser = async(req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
+    userOperation(req, res, next, async(user_id, password_change_required) => {
         try {
             const user = await User.findByPk(user_id, {
                 include: [Course]
             });
-            res.status(200).json({ data: user });
+            const dataToSend = {...user.toJSON(), 
+                password_change_required,
+                can_create_exhibition: canUserCreateExhibition(user.toJSON())
+            }
+            res.status(200).json({ data: dataToSend });
         } catch(e) {
             next(createError(400, {debugMessage: e.message}));
         }
-    });
+    }, false);
 }
 
 module.exports = { changePassword, signIn, getCurrentUser }

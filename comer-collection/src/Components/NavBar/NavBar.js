@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import '../App/App.css';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,56 +8,15 @@ import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, Stack } from '@mui/material';
-
-const PREFIX = 'NavBar';
-
-const classes = {
-  abRoot: `${PREFIX}-abRoot`,
-  root: `${PREFIX}-root`,
-  menuButton: `${PREFIX}-menuButton`,
-  buttonText: `${PREFIX}-buttonText`,
-  title: `${PREFIX}-title`,
-  titleButton: `${PREFIX}-titleButton`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-
-
-  [`& .${classes.menuButton}`]: {
-    textAlign: 'right',
-  },
-  
-  [`& .${classes.buttonText}`]: {
-    color: 'white'
-  },
-
-  [`& .${classes.title}`]: {
-    flexGrow: 1,
-    textAlign: 'left',
-    color: 'white',
-  },
-
-  [`& .${classes.titleButton}`]: {
-    textAlign: 'left',
-    width: '20%',
-  }
-}));
-
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { useTheme } from '@emotion/react';
 
 
 export default function NavBar(props) {
   
   const navigate = useNavigate();
-  const { user, setUser } = props;
-  
-  const signOutUser = () => {
-    setUser(null);
-    localStorage.removeItem('token');
-  }
+  const theme = useTheme();
+  const { appUser, setAppUser, appDarkTheme, setAppDarkTheme } = props;
   
   const [buttons, setButtons] = useState([]);
 
@@ -76,40 +34,51 @@ export default function NavBar(props) {
     const getButtons = (user) => {
       const output = [
         { text: "Home", link: "/" },
-        { text: "Exhibit Viewer", link: "/exhibition_viewer" },
-        { text: "Search", link: "/searchBy" }
+        { text: "Browse Collection", link: "/BrowseCollection" },
+        { text: "Public Exhibitions", link: "/Exhibitions" },
+        // { text: "Search", link: "/searchBy" }
       ]
       if(!user) {
         output.push({ text: "Log in", link: "/login" })
       }
       return output
     }
-    setButtons(getButtons(user));
-  }, [user])
+    setButtons(getButtons(appUser));
+  }, [appUser])
 
   return (
-    <Root className={classes.root}>
       <AppBar position="fixed" color="primary">
-        <Toolbar>
-          <Typography variant="h4" className={classes.title}>
-            UTD Comer Collection
-          </Typography>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+          <Stack direction="row" alignItems="center" paddingLeft={2}>
+            {/* Placeholder for logo */}
+            {/* <img src={utd_logo} height="48px" /> */}
+            <Typography variant="h5" sx={{paddingLeft: "25px"}}>
+              UTD Comer Collection
+            </Typography>
+          </Stack>
+          <Toolbar>
           <Stack spacing={1} direction={'row'}>
             {buttons.map((button) => (
-              <Button key={button.text} color="primary" variant="contained" onClick={() => navigate(button.link)}>
-                <Typography variant="h6" className={classes.buttonText}>
-                  {button.text}
-                </Typography>
-                {/* <div className={classes.buttonText}></div> */}
+              <Button key={button.text} color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => navigate(button.link)}>
+                <Typography variant="body1">{button.text}</Typography>
               </Button>
             ))}
-            {user && (
+            <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
+              setAppDarkTheme((current) => !current)
+            }}>
+              <Typography variant="body1">Change theme</Typography>
+            </Button>
+            {appUser && (
               <>
-                <Button variant="text" onClick={handleMenuOpen} sx={{textTransform: "unset"}}
+                <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
                   aria-haspopup={Boolean(anchorElement)}
                   aria-expanded={Boolean(anchorElement)}
                 >
-                  <Typography variant="h5" sx={{color: "white", marginLeft: '20px'}}>{user.given_name} {user.family_name}</Typography>
+                  <Stack direction="row" alignContent="center" alignItems="center">
+                    <Typography variant="h6" sx={{color: "white"}}>
+                      {appUser.safe_display_name}
+                    </Typography>
+                  </Stack>
                 </Button>
                 <Menu MenuListProps={{
                 }} anchorEl={anchorElement} anchorOrigin={{
@@ -121,9 +90,19 @@ export default function NavBar(props) {
                 }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
                   <MenuItem onClick={() => {
                     handleMenuClose();
-                    signOutUser();
+                    navigate('/Account')
                   }}>
-                    <Typography variant="h6">
+                    <Typography variant="body">
+                      Account
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    setAppUser(null);
+                    localStorage.removeItem('token');
+                    navigate('/')
+                  }}>
+                    <Typography variant="body">
                       Log Out
                     </Typography>
                   </MenuItem>
@@ -131,8 +110,8 @@ export default function NavBar(props) {
               </>
             )}
           </Stack>
-        </Toolbar>
+          </Toolbar>
+        </Stack>
       </AppBar>
-    </Root>
   );
 }

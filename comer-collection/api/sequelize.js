@@ -52,7 +52,10 @@ db.User.belongsToMany(db.Course, { through: "comer_enrollments", foreignKey: "us
 db.Course.belongsToMany(db.User, { through: "comer_enrollments", foreignKey: "course_id"});
 
 db.User.hasMany(db.Exhibition, {foreignKey: 'exhibition_owner'})
-db.Exhibition.belongsTo(db.User, {foreignKey: 'exhibition_owner'});
+db.Exhibition.belongsTo(db.User, {foreignKey: 'exhibition_owner', inverse: {as: 'exhibitions', type: 'hasMany'}});
+
+db.Exhibition.belongsToMany(db.Image, { through: "comer_image_appearances", foreignKey: "exhibition_id" });
+db.Image.belongsToMany(db.Exhibition, { through: "comer_image_appearances", foreignKey: "image_id" });
 
 
 module.exports = db;
