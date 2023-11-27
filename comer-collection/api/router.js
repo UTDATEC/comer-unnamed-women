@@ -101,6 +101,10 @@ router.post("/account/exhibitions", createExhibition);
 router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
 router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
 
+router.get("/account/exhibitions/:exhibitionId/load", loadExhibition)
+router.put("/account/exhibitions/:exhibitionId/save", saveExhibition);
+
+
 // router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
 //     next(createError(405));
 // })

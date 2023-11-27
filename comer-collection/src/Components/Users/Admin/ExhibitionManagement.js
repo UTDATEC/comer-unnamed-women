@@ -666,12 +666,14 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
 
       <ExhibitionSettingsDialog
         editMode={true}
+        adminMode={true}
         dialogExhibitionAccess={editDialogExhibitionAccess}
         setDialogExhibitionAccess={setEditDialogExhibitionAccess}
         dialogExhibitionId={editDialogExhibitionId}
         dialogExhibitionTitle={editDialogExhibitionTitle}
         setDialogExhibitionTitle={setEditDialogExhibitionTitle}
         dialogIsOpen={editDialogIsOpen}
+        setDialogIsOpen={setEditDialogIsOpen}
         handleExhibitionEdit={handleExhibitionEditByAdmin}
         />
 

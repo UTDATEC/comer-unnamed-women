@@ -11,31 +11,36 @@ import SaveIcon from "@mui/icons-material/Save";
 import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
 import VpnLockIcon from "@mui/icons-material/VpnLock";
-import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
 
-export const exhibitionAccessOptions = [
+export const exhibitionAccessOptions = (adminMode) => [
   {
     value: "PRIVATE",
     displayText: "Private",
-    caption: "Only you and administrators will be able to access this exhibition.",
+    caption: adminMode ? 
+      "Only the owner, you, and other administrators will be able to access this exhibition." :
+      "Only you and administrators will be able to access this exhibition.",
     icon: LockIcon
   },
   {
     value: "PUBLIC_ANONYMOUS",
     displayText: "Anonymous",
-    caption: "This exhibition will be visible to the public, but your name will not be displayed to anyone except you and administrators.",
+    caption: adminMode ?
+      "This exhibition will be visible to the public, but the owner's name will not be displayed to anyone except the owner and administrators." :
+      "This exhibition will be visible to the public, but your name will not be displayed to anyone except you and administrators.",
     icon: VpnLockIcon
   },
   {
     value: "PUBLIC",
     displayText: "Public",
-    caption: "This exhibition will be visible to the public, and your full name will be visible to anyone who views the exhibition.  Your email address and course enrollments will not be displayed publicly.",
+    caption: adminMode ?
+      "This exhibition will be visible to the public, and the owner's full name will be visible to anyone who views the exhibition.  The owner's email address and course enrollments will never be displayed publicly." :
+      "This exhibition will be visible to the public, and your full name will be visible to anyone who views the exhibition.  Your email address and course enrollments will never be displayed publicly.",
     icon: PublicIcon
   }
 ]
 
 
-export const ExhibitionSettingsDialog = ({ editMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
+export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
   return (
     <Dialog component="form"
       open={dialogIsOpen}
@@ -56,17 +61,28 @@ export const ExhibitionSettingsDialog = ({ editMode, dialogIsOpen, setDialogIsOp
       <DialogTitle variant="h4" textAlign="center">{editMode ? "Edit Exhibition" : "Create Exhibition"}</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          <DialogContentText variant="body1">Set the title and access level for your exhibition.  These fields can be changed later by you or your instructor/administrator.</DialogContentText>
+          <DialogContentText variant="body1">{
+          adminMode ? 
+            "Set the title and access level for this exhibition.  These fields can be changed later by you or the owner." : 
+            "Set the title and access level for your exhibition.  These fields can be changed later by you or your instructor/administrator."
+          }</DialogContentText>
           <TextField value={dialogExhibitionTitle} label="Exhibition Title" 
             onChange={(e) => {
               setDialogExhibitionTitle(e.target.value)
             }}
             required />
+          <DialogContentText variant="body1">
+            {
+              adminMode ?
+                "Note that the privacy settings below will have no effect if you include the owner's personal information in the exhibition title.  The owner's name will remain visible to you and other administrators regardless of this setting." :
+                "Note that the privacy settings below will have no effect if you include personal information in the exhibition title.  Your instructor/administrator will be able to see your name regardless of this setting."
+            }
+          </DialogContentText>
           <ToggleButtonGroup required exclusive orientation="vertical" value={dialogExhibitionAccess}
               onChange={(e, next) => {
                 setDialogExhibitionAccess(next)
               }}>
-          {exhibitionAccessOptions.map((option) => (
+          {exhibitionAccessOptions(Boolean(adminMode)).map((option) => (
             <ToggleButton key={option.value} value={option.value} sx={{textTransform: "unset", minHeight: "100px"}}>
               <Stack direction="row" alignItems="center" spacing={2} paddingLeft={1}>
                 <option.icon fontSize="large" />
@@ -87,10 +103,10 @@ export const ExhibitionSettingsDialog = ({ editMode, dialogIsOpen, setDialogIsOp
           }}>
             <Typography variant="body1">Cancel</Typography>
           </Button>
-          <Button color="primary" variant="contained" size="large" startIcon={<PhotoCameraBackIcon />} sx={{ width: "100%" }}
+          <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
             disabled={!Boolean(dialogExhibitionAccess && dialogExhibitionTitle)}
             type="submit">
-            <Typography variant="body1">{editMode ? "Edit Exhibition" : "Create Exhibition"}</Typography>
+            <Typography variant="body1">{editMode ? "Save Settings" : "Create Exhibition"}</Typography>
           </Button>
         </Stack>
       </DialogActions>

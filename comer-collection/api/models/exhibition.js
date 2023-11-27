@@ -19,7 +19,10 @@ module.exports = (db) => {
         data: {
             type: Sequelize.BLOB('medium'),
             field: "exhibition_data",
-            allowNull: true
+            allowNull: true,
+            get() {
+                return this.getDataValue('data')?.toString('utf-8');
+            }
         },
         date_created: {
             type: Sequelize.DATE(3),

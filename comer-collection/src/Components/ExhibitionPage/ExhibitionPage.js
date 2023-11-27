@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer";
 import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer";
 import primary_json from "../ExhibitionViewer/example2.json"
-
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 
 export const ExhibitionPage = (props) => {
 
@@ -13,7 +13,28 @@ export const ExhibitionPage = (props) => {
 
     
 
-    const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, primary_json);
+    const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, blankExhibitionData);
+    const [exhibitionIsLoaded, setExhibitionIsLoaded] = useState(false);
+
+    const loadExhibition = async() => {
+        const exhibitionData = await sendAuthenticatedRequest("GET", `/api/account/exhibitions/${exhibitionId}/load`);
+        console.log(exhibitionData.data.data);
+        // console.log("exhibitionData", exhibitionData)
+        if(exhibitionData.data?.data) {
+            exhibitionEditDispatch({
+                scope: "exhibition",
+                type: "set_everything",
+                newExhibition: JSON.parse(exhibitionData.data.data)
+            });
+        }
+        setExhibitionIsLoaded(true);
+        // return exhibitionData;
+    }
+
+    useEffect(() => {
+        loadExhibition();
+    }, [])
+
 
     return (
         <Box 
@@ -30,7 +51,7 @@ export const ExhibitionPage = (props) => {
 
         >
 
-            <ExhibitionViewer {...{exhibitionState}}
+            <ExhibitionViewer {...{exhibitionState, exhibitionIsLoaded}}
                 sx={{gridArea: "viewer", width: "100%", height: "100%"}}
             />
 

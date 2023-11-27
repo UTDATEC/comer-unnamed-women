@@ -5,6 +5,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 
 
 const ColorInput = ({value, onChange, disabled}) => {
@@ -602,7 +603,13 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                 }} 
             >
                 
-                <Button disabled variant="contained" startIcon={<CloudUploadIcon />}>
+                <Button variant="contained" startIcon={<CloudUploadIcon />} 
+                    onClick={() => {
+                        sendAuthenticatedRequest("PUT", `/api/account/exhibitions/${exhibitionId}/save`, {
+                            data: JSON.stringify(exhibitionState)
+                        });
+                    }}
+                >
                     <Typography variant="body1">Save</Typography>
                 </Button>
                 

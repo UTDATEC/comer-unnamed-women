@@ -7,9 +7,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
-import { Menu, MenuItem, Stack } from '@mui/material';
+import { Divider, Menu, MenuItem, Stack } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useTheme } from '@emotion/react';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
+import LogoutIcon from "@mui/icons-material/Logout"
 
 
 export default function NavBar(props) {
@@ -90,21 +93,39 @@ export default function NavBar(props) {
                 }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
                   <MenuItem onClick={() => {
                     handleMenuClose();
-                    navigate('/Account')
+                    navigate('/Account/Profile')
                   }}>
-                    <Typography variant="body">
-                      Account
-                    </Typography>
+                    <Stack direction="row" spacing={1}>
+                      <AccountCircleIcon />
+                      <Typography variant="body">
+                        My Profile
+                      </Typography>
+                    </Stack>
                   </MenuItem>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    navigate('/Account/MyExhibitions')
+                  }}>
+                    <Stack direction="row" spacing={1}>
+                      <PhotoCameraBackIcon />
+                      <Typography variant="body">
+                        My Exhibitions
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                  <Divider />
                   <MenuItem onClick={() => {
                     handleMenuClose();
                     setAppUser(null);
                     localStorage.removeItem('token');
                     navigate('/')
                   }}>
-                    <Typography variant="body">
-                      Log Out
-                    </Typography>
+                    <Stack direction="row" spacing={1}>
+                      <LogoutIcon />
+                      <Typography variant="body">
+                        Log Out
+                      </Typography>
+                    </Stack>
                   </MenuItem>
                 </Menu>
               </>

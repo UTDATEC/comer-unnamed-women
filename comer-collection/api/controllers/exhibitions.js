@@ -184,18 +184,46 @@ const adminDeleteExhibition = async (req, res, next) => {
 }
 
 const loadExhibition = async (req, res, next) => {
-    try {
-        const ExhibitionWithData = Exhibition.scope('with_data');
-        const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
-            include: [User]
-        });
-        if(!exhibition)
-            next(createError(404));
-        else
-            res.status(200).json({data: exhibition})
-    } catch(e) {
-        next(createError(500), {debugMessage: e.message});
-    }
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
+                include: [User]
+            });
+            if(!exhibition)
+                next(createError(404));
+            else if(exhibition.User.id != user_id)
+                next(createError(403, {debugMessage: "Cannot load exhibition you do not own"}))
+            else
+                res.status(200).json({data: exhibition})
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
 }
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, listMyExhibitions }
+
+const saveExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
+                include: [User]
+            });
+            if(!exhibition)
+                next(createError(404));
+            else if(exhibition.User.id != user_id)
+                next(createError(403, {debugMessage: "Cannot save exhibition you do not own"}))
+            else
+                await exhibition.update({
+                    data: req.body.data,
+                    date_modified: Date.now()
+                });
+                res.status(200).json({data: exhibition})
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
+}
+
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, saveExhibition, listMyExhibitions }

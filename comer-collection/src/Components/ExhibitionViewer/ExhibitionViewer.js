@@ -37,7 +37,7 @@ const getAmbientLightIntensity = (moodiness) => {
 }
 
 
-const ExhibitionViewer = ({exhibitionState: primary_json}) => {
+const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded}) => {
 
     const [controlsEnabled, setControlsEnabled] = useState(false);
     const [menuVisible, setMenuVisible] = useState(true);
@@ -88,38 +88,42 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
 
     useEffect(() => {
 
-        const scene = new THREE.Scene();
+        if(exhibitionIsLoaded) {
 
-        if(!containerRef || !containerRef.current){
-            return;
+            const scene = new THREE.Scene();
+    
+            if(!containerRef || !containerRef.current){
+                return;
+            }
+    
+            let { camera, controls, renderer } = setupScene(scene, containerRef.current, cameraPosition, setCameraPosition);
+            setMyRenderer(renderer);
+            setMyCamera(camera);
+            setMyScene(scene);
+            setMyControls(controls);
+            
+    
+            // controls.addEventListener('lock', hideMenu);
+            // controls.addEventListener('unlock', showMenu);
+    
+            const texture_loader = new THREE.TextureLoader();
+            setMyTextureLoader(texture_loader);
+    
+    
+            return () => {
+                console.log("Running cleanup"); 
+                setMyRenderer(null);
+                setMyCamera(null);
+                setMyScene(null);
+                setMyControls(null);  
+    
+            }
+            
         }
 
-        let { camera, controls, renderer } = setupScene(scene, containerRef.current, cameraPosition, setCameraPosition);
-        setMyRenderer(renderer);
-        setMyCamera(camera);
-        setMyScene(scene);
-        setMyControls(controls);
-        
-
-        // controls.addEventListener('lock', hideMenu);
-        // controls.addEventListener('unlock', showMenu);
-
-        const texture_loader = new THREE.TextureLoader();
-        setMyTextureLoader(texture_loader);
 
 
-        return () => {
-            console.log("Running cleanup"); 
-            setMyRenderer(null);
-            setMyCamera(null);
-            setMyScene(null);
-            setMyControls(null);  
-
-        }
-        
-
-
-    }, []);
+    }, [exhibitionIsLoaded]);
 
 
     const handleControlsChange = () => {
@@ -217,6 +221,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
         }
 
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.images,
         primary_json.size
     ])
@@ -236,6 +241,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.appearance.main_wall_color,
         primary_json.size
     ])
@@ -253,6 +259,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.appearance.side_wall_color,
         primary_json.size
     ])
@@ -269,6 +276,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.appearance.floor_color,
         primary_json.appearance.floor_texture,
         primary_json.size
@@ -286,6 +294,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.appearance.ceiling_color,
         primary_json.size
     ])
@@ -305,6 +314,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
             
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        // primary_json,
         primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness])
 
 
