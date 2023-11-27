@@ -1,6 +1,7 @@
 import { Navigate, useNavigate } from 'react-router';
 import { useState } from 'react';
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
+import { sendAuthenticatedRequest } from '../Users/Tools/HelperMethods/APICalls';
 
 async function loginUser(email, password) {
   const response = await fetch('http://localhost:9000/api/account/signin', {
@@ -20,6 +21,7 @@ const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const navigate = useNavigate();
 
@@ -27,26 +29,25 @@ const Login = (props) => {
   //Api call here
   const handleLogin = async (event) => {
     event.preventDefault();
-    const response = await loginUser(email, password);
+    setButtonEnabled(false);
+    const response = await sendAuthenticatedRequest("PUT", "/api/account/signin", {
+      email, password
+    });
 
     if(response.token) {
       // alert("Success");
       localStorage.setItem('token', response.token);
 
-      const profileResponse = await fetch("http://localhost:9000/api/account/profile", {
-        headers: {
-          Authorization: `Bearer ${response.token}`
-        }
-      })
-      if(profileResponse.status == 200) {
-        let profileResponseJson = await profileResponse.json();
-        setAppUser(profileResponseJson.data);
+      try {
+        const profileResponse = await sendAuthenticatedRequest("GET", "/api/account/profile")
+        setAppUser(profileResponse.data);
         navigate('/Account');
       }
-      else {
+      catch(e) {
         setAppUser(null);
         localStorage.removeItem('token');
         setPassword("");
+        setButtonEnabled(true);
         setError(true);
       }
 
@@ -54,6 +55,7 @@ const Login = (props) => {
     }
     else {
       setPassword("");
+      setButtonEnabled(true);
       setError(true);
     }
     
@@ -94,7 +96,7 @@ const Login = (props) => {
               <Button type="submit" 
                 variant="contained" 
                 sx={{minWidth: "400px"}} 
-                disabled={!(email && password)}
+                disabled={!(email && password && buttonEnabled)}
               >
                 <Typography variant="body1">Log In</Typography>
               </Button>
