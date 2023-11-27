@@ -529,7 +529,6 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     <AccordionSubHeading text="Spotlight" />
                     <ExhibitionOption description="Color">
                         <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color} 
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.light.custom)}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "image",
@@ -557,7 +556,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     
                     <AccordionSubHeading text="Curator's Notes" />
                     <ExhibitionOption vertical description="Description">
-                        <TextField type="textarea" multiline rows={3}
+                        <TextField type="textarea" multiline rows={4}
                         variant="outlined" placeholder="Enter text"
                             value={getImageStateById(exhibitionState, selectedImageId)?.metadata.description ?? ""}
                             onChange={(e) => {
