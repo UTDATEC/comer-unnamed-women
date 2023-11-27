@@ -37,4 +37,6 @@ export function createSpotlight(intensity, color, art_position, gallery_height, 
     // add light and target
     scene.add(spotlight);
     scene.add(spotlight.target);
+
+    return spotlight;
 }

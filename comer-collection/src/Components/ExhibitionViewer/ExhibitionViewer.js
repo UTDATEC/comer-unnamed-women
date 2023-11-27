@@ -122,53 +122,23 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
     }, []);
 
 
+    const handleControlsChange = () => {
+                
+        // get delta for accurate movement
+        // const delta = clock.getDelta();
+        
+        // update position as player moves
+        // updateMovement(delta, controls, camera, walls, setCameraPosition);
+
+        myRenderer.render(myScene, myCamera);
+        
+    };
+
+
     useEffect(() => {
     
-        // checking if JSON was read correctly
-        // console.log("Gallery Height Total: ", gallery_height + gallery_depth, "Gallery Width: ", gallery_width, "Gallery Length: ", gallery_length);
-    
-    
-        if(myScene) {
+        if(canvasRef.current && myScene) {
             
-                
-            let photos_on_1 = 0,
-            photos_on_2 = 0,
-            photos_on_3 = 0,
-            photos_on_4 = 0;
-        
-            // count photos on walls
-            primary_json.images.forEach((image) => {
-            if (image.metadata.direction == 1) { photos_on_1++; }
-            else if (image.metadata.direction == 2) { photos_on_2++; }
-            else if (image.metadata.direction == 3) { photos_on_3++; }
-            else if (image.metadata.direction == 4) { photos_on_4++; }
-            })
-        
-            // console.log("photo_1:", photos_on_1, "photo_2:", photos_on_2, "photo_3:", photos_on_3, "photo_4:", photos_on_4);
-        
-        
-            // kind of a last minute add, but scene needs to be here for lighting, even though
-            // art is not added to the scene here
-            // ambient_light_intensity is added for safety in light creation
-            const art = createArt(myTextureLoader, 
-            photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
-            primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
-            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene);
-        
-            // const ambient_light = createAmbientLight(primary_json.appearance.ambient_light_color, ambient_light_intensity);
-            // myScene.add(ambient_light);
-        
-    
-    
-            
-            // createBoundingBoxes(walls);
-        
-            addObjectsToScene(myScene, art);
-        
-        
-            setupRendering(myScene, myCamera, myRenderer, art, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled, setCameraPosition, containerRef.current);
-            // myRenderer.render(myScene, myCamera);
-        
             canvasRef.current.appendChild(myRenderer.domElement);
         
             // playButtonRef.current.addEventListener('click', () => {
@@ -183,26 +153,74 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
                 })
             }
     
-            console.log("myControls", myControls);
-            console.log("myCamera", myCamera);
-            // console.log("controls", controls);
-    
-            myRenderer?.render(myScene, myCamera);
-            // console.log("myRenderer", myRenderer);
-            // console.log("myScene", myScene);
-            // console.log("myCamera", myCamera);
             console.log("exhibition data changed");
 
-            console.log("scene number of children", myScene.children.length);
+
+            myControls.addEventListener('change', handleControlsChange);
+
 
             return () => {
                 console.log("myScene", myScene);
-                canvasRef.current.removeChild(myRenderer.domElement);
-                // // myScene.children = [];
-                // console.log("cleaning up: scene number of children", myScene.children.length);
+                myControls.removeEventListener('change', handleControlsChange);
+                if(canvasRef.current)
+                    canvasRef.current.removeChild(myRenderer.domElement);
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer]) 
+
+
+    useEffect(() => {
+
+        if(myScene) {
+
+            console.log("Images updated")
+                
+            let photos_on_1 = 0,
+            photos_on_2 = 0,
+            photos_on_3 = 0,
+            photos_on_4 = 0;
+        
+            // count photos on walls
+            primary_json.images.forEach((image) => {
+            if (image.metadata.direction == 1) { photos_on_1++; }
+            else if (image.metadata.direction == 2) { photos_on_2++; }
+            else if (image.metadata.direction == 3) { photos_on_3++; }
+            else if (image.metadata.direction == 4) { photos_on_4++; }
+            })
+        
+        
+            // kind of a last minute add, but scene needs to be here for lighting, even though
+            // art is not added to the scene here
+            // ambient_light_intensity is added for safety in light creation
+            const [all_arts_group, spotlights] = createArt(myTextureLoader, 
+            photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
+            primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
+            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json);
+        
+        
+            // addObjectsToScene(myScene, art);
+
+            // art.forEach((object) => {
+            //     scene.add(object);
+            // });
+
+        
+            setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled);
+
+            return () => {
+                myScene.remove(all_arts_group);
+                spotlights.forEach((spotlight) => {
+                    myScene.remove(spotlight);
+                })
+            }
+        
+        }
+
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
+        primary_json.images,
+        primary_json.size
+    ])
+
 
 
     // Update main wall color

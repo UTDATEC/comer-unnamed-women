@@ -12,9 +12,7 @@ export const setupRendering = (
     controls,
     gallery_width,
     gallery_length,
-    controlsEnabled, 
-    setCameraPosition,
-    boundingBoxElement
+    controlsEnabled
 ) => {
 
     // create clock for accurate and fluid movement
@@ -35,17 +33,6 @@ export const setupRendering = (
     //     // render();
     // };
 
-    controls.addEventListener('change', () => {
-        
-        // get delta for accurate movement
-        // const delta = clock.getDelta();
-        
-        // update position as player moves
-        // updateMovement(delta, controls, camera, walls, setCameraPosition);
-
-        renderer.render(scene, camera);
-        
-    })
 
     // console.log("render() function is called");
     // render();

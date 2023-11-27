@@ -1,17 +1,82 @@
 import * as THREE from 'three';
 
-import { generateArtData } from './ArtData.js'
+// import { generateArtData } from './ArtData.js'
 import { createFrame } from './Frames.js';
 import { createMatte } from './Matte.js';
 import { createSpotlight } from './Lighting.js';
 //import staticImages from './StaticImages.js';
 
+export function generateArtData(primary_json) {
+
+    const art_data = [];
+
+    // copy all the data from json
+    primary_json.images.forEach((image) => {
+
+        const item = {
+
+            img_src: image.image_id,
+
+            position: {
+                custom_x: image.position.custom_x,
+                custom_y: image.position.custom_y,
+                custom_position: image.position.custom_position
+            },
+
+            size: {
+                width: image.size.width,
+                height: image.size.height
+            },
+
+            matte: {
+                color: image.matte.color,
+                weighted: image.matte.weighted,
+                weighted_value: image.matte.weighted_value
+            },
+
+            frame: {
+                custom: image.frame.custom,
+                width: image.frame.width, 
+                height: image.frame.height,
+                color: image.frame.color
+            },
+
+            light: {
+                intensity: image.light.intensity,
+                color: image.light.color
+            },
+
+            metadata: {
+                title: image.metadata.title,
+                artist: image.metadata.artist,
+                description: image.metadata.description,
+                year: image.metadata.year,
+                medium: image.metadata.medium,
+                additional_information: image.metadata.additional_information,
+                direction: image.metadata.direction
+            }
+        };
+
+        // add item to array of data
+        art_data.push(item);
+    });
+
+    // return art data
+    return art_data;
+}
+
+
+
 export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
     gallery_width, gallery_length, gallery_height, wall_offset, 
-    ambient_light_intensity, scene) {
+    ambient_light_intensity, scene, renderer, camera, primary_json) {
     
+
+    const spotlights = [];
+        
     // create a place to store all of the art in gallery
-    let arts = [];
+    const all_arts_group = new THREE.Group();
+    scene.add(all_arts_group);
 
     // counters for placing photos in default positions
     let photos_placed_1 = 1, 
@@ -20,7 +85,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         photos_placed_4 = 1;
 
     // get art data
-    const art_data = generateArtData();
+    const art_data = generateArtData(primary_json);
 
     // hard coded because hex color math does not work with variables
     // we can just assume that they should be black
@@ -312,11 +377,15 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         }
 
         // create spotlight
-        createSpotlight(data.light.intensity, data.light.color, art_group.position, gallery_height_offset, scene, data.metadata.direction);
+        let spotlight = createSpotlight(data.light.intensity, data.light.color, art_group.position, gallery_height_offset, scene, data.metadata.direction);
 
         // add art to the group
-        arts.push(art_group);
+        all_arts_group.add(art_group);
+        scene.add(spotlight);
+        spotlights.push(spotlight);
     });
 
-    return arts;
+    renderer.render(scene, camera);
+
+    return [all_arts_group, spotlights];
 };
