@@ -7,10 +7,47 @@ import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@emotion/react";
 
 
-const DataTableCell = ({tf, item, extraProperties, visibleItems}) => {
+const DataTableCell = ({tf, item, extraProperties}) => {
 
   return useMemo(() => tf.generateTableCell(item, extraProperties), [item]);
 
+}
+
+
+const DataTableRow = ({item, selectedItems, setSelectedItems, theme, visibleItems, extraProperties, rowSelectionEnabled, tableFields}) => {
+  
+  const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
+  const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
+
+  return useMemo(() => (
+    <TableRow key={item.id} sx={{
+      [`&:hover`]: {
+        backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
+        
+      },
+      [`&:not(:hover)`]: {
+        backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
+      }
+    }}>
+    {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
+      <Checkbox checked={isSelected} 
+      color={themeColor}
+      onChange={(e) => {
+        if(e.target.checked) {
+          setSelectedItems([...selectedItems, item])
+        } else {
+          setSelectedItems(selectedItems.filter((si) => si.id != item.id))
+        }
+      }}
+      size="medium" />
+    </TableCell>)}
+      {tableFields.map((tf) => {
+        return (
+          <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
+        )
+      })}
+    </TableRow>
+  ), [item, selectedItems, visibleItems, extraProperties])
 }
 
 
@@ -61,39 +98,9 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
         </TableHead>
 
         <TableBody>
-          {(visibleItems ?? []).map((item) => {
-
-            const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
-            const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
-            return (
-            <TableRow key={item.id} sx={{
-              [`&:hover`]: {
-                backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
-                
-              },
-              [`&:not(:hover)`]: {
-                backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
-              }
-            }}>
-            {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-              <Checkbox checked={isSelected} 
-              color={themeColor}
-              onChange={(e) => {
-                if(e.target.checked) {
-                  setSelectedItems([...selectedItems, item])
-                } else {
-                  setSelectedItems(selectedItems.filter((si) => si.id != item.id))
-                }
-              }}
-              size="medium" />
-            </TableCell>)}
-              {tableFields.map((tf) => {
-                return (
-                  <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
-                )
-              })}
-            </TableRow>
-          )})}
+          {(visibleItems ?? []).map((item) => (
+            <DataTableRow {...{item, selectedItems, setSelectedItems, theme, visibleItems, extraProperties, rowSelectionEnabled, tableFields}} />
+          ))}
         </TableBody>
       </Table>
       {visibleItems.length == 0 && emptyMinHeight && (
