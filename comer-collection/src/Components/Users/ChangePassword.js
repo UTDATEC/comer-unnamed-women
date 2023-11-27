@@ -118,7 +118,7 @@ const ChangePassword = (props) => {
               <Typography variant="body1">Change Password</Typography>
             </Button>
             {!appUser.password_change_required && (<Button onClick={() => {
-              navigate('/Account')
+              navigate('/Account/Profile')
             }} 
               variant="outlined" 
               sx={{minWidth: "400px"}} 
