@@ -112,37 +112,75 @@ const getExhibition = async (req, res, next) => {
     });
 }
 
-const deleteExhibition = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const exhibition = await Exhibition.findByPk(req.params.exhibitionId);
-        if(exhibition) {
-            await exhibition.destroy();
-            res.sendStatus(204);
+const ownerEditExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
+                include: [User]
+            })
+            if(exhibition.User.id != user_id) {
+                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
+            } else {
+                const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
+                const now = Date.now()
+                const updatedExhibition = await exhibition.update({
+                    title: exhibitionFields.title,
+                    privacy: exhibitionFields.privacy
+                })
+                res.status(200).json({ data: updatedExhibition });
+            }
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
         }
-        else
-            next(createError(404));
-    });
+    })
 }
 
-const saveExhibition = async (req, res, next) => {
-    try {
-        const newExhibition = await Exhibition.create({
-            title: req.body.title,
-            data: req.body.data,
-            date_created: Date.now(),
-            date_modified: Date.now(),
-            privacy: req.body.privacy
-        });
-        
-        const user = User.findByPk(req.body.userid)
-        await newExhibition.setUser(user);
+const ownerDeleteExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
+                include: [User]
+            })
+            if(exhibition.User.id != user_id) {
+                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
+            } else {
+                await exhibition.destroy();
+                res.sendStatus(204);
+            }
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
+}
 
-        res.status(201);
 
-    } catch(e) {
-        console.log(e.message)
-        next(createError(500), {debugMessage: e.message});
-    }
+const adminEditExhibition = async (req, res, next) => {
+    adminOperation(req, res, next, async() => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
+            const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
+            const now = Date.now()
+            const updatedExhibition = await exhibition.update({
+                title: exhibitionFields.title,
+                privacy: exhibitionFields.privacy
+            })
+            res.status(200).json({ data: updatedExhibition });
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
+}
+
+const adminDeleteExhibition = async (req, res, next) => {
+    adminOperation(req, res, next, async() => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
+            await exhibition.destroy();
+            res.sendStatus(204);
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
 }
 
 const loadExhibition = async (req, res, next) => {
@@ -160,4 +198,4 @@ const loadExhibition = async (req, res, next) => {
     }
 }
 
-module.exports = { listPublicExhibitions, createExhibition, listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions }
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, listMyExhibitions }

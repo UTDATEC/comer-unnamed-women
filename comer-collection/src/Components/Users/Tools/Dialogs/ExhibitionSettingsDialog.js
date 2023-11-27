@@ -35,33 +35,36 @@ export const exhibitionAccessOptions = [
 ]
 
 
-export const ExhibitionCreateDialog = ({ createDialogIsOpen, setCreateDialogIsOpen, createDialogExhibitionTitle, createDialogExhibitionAccess, setCreateDialogExhibitionTitle, setCreateDialogExhibitionAccess, handleExhibitionCreate }) => {
+export const ExhibitionSettingsDialog = ({ editMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
   return (
     <Dialog component="form"
-      open={createDialogIsOpen}
+      open={dialogIsOpen}
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;
-        createDialogIsOpen(false);
+        dialogIsOpen(false);
       }}
       fullWidth={true}
       onSubmit={(e) => {
         e.preventDefault();
-        handleExhibitionCreate(createDialogExhibitionTitle, createDialogExhibitionAccess);
+        if(editMode)
+          handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
+        else
+          handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess);
       }}
     >
-      <DialogTitle variant="h4" textAlign="center">Create Exhibition</DialogTitle>
+      <DialogTitle variant="h4" textAlign="center">{editMode ? "Edit Exhibition" : "Create Exhibition"}</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          <DialogContentText variant="body1">Set the title and access level for your new exhibition.  These fields can be changed later by you or your instructor/administrator.</DialogContentText>
-          <TextField value={createDialogExhibitionTitle} label="Exhibition Title" 
+          <DialogContentText variant="body1">Set the title and access level for your exhibition.  These fields can be changed later by you or your instructor/administrator.</DialogContentText>
+          <TextField value={dialogExhibitionTitle} label="Exhibition Title" 
             onChange={(e) => {
-              setCreateDialogExhibitionTitle(e.target.value)
+              setDialogExhibitionTitle(e.target.value)
             }}
             required />
-          <ToggleButtonGroup required exclusive orientation="vertical" value={createDialogExhibitionAccess}
+          <ToggleButtonGroup required exclusive orientation="vertical" value={dialogExhibitionAccess}
               onChange={(e, next) => {
-                setCreateDialogExhibitionAccess(next)
+                setDialogExhibitionAccess(next)
               }}>
           {exhibitionAccessOptions.map((option) => (
             <ToggleButton key={option.value} value={option.value} sx={{textTransform: "unset", minHeight: "100px"}}>
@@ -80,14 +83,14 @@ export const ExhibitionCreateDialog = ({ createDialogIsOpen, setCreateDialogIsOp
       <DialogActions>
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
           <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
-            setCreateDialogIsOpen(false);
+            setDialogIsOpen(false);
           }}>
             <Typography variant="body1">Cancel</Typography>
           </Button>
           <Button color="primary" variant="contained" size="large" startIcon={<PhotoCameraBackIcon />} sx={{ width: "100%" }}
-            disabled={!Boolean(createDialogExhibitionAccess && createDialogExhibitionTitle)}
+            disabled={!Boolean(dialogExhibitionAccess && dialogExhibitionTitle)}
             type="submit">
-            <Typography variant="body1">Create Exhibition</Typography>
+            <Typography variant="body1">{editMode ? "Edit Exhibition" : "Create Exhibition"}</Typography>
           </Button>
         </Stack>
       </DialogActions>

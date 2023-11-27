@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  Typography, Stack, TableCell, Paper, Box, Button
+  Typography, Stack, TableCell, Paper, Box, Button, IconButton
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable";
@@ -12,9 +12,12 @@ import AddIcon from "@mui/icons-material/Add"
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 import { getBlankItemFields } from "./Tools/HelperMethods/fields";
-import { ExhibitionCreateDialog } from "./Tools/Dialogs/ExhibitionCreateDialog";
+import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog";
 import InfoIcon from "@mui/icons-material/Info";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import SettingsIcon from "@mui/icons-material/Settings"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
 
 
 const MyExhibitions = (props) => {
@@ -26,9 +29,16 @@ const MyExhibitions = (props) => {
 
   const [myExhibitions, setMyExhibitions] = useState([]);
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
-  const [createDialogExhibitionTitle, setCreateDialogExhibitionTitle] = useState("");
-  const [createDialogExhibitionAccess, setCreateDialogExhibitionAccess] = useState(null);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [dialogExhibitionId, setDialogExhibitionId] = useState(null);
+  const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState("");
+  const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState(null);
+  const [isDialogInEditMode, setDialogIsEditMode] = useState(false);
+
+
+
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
 
   const fetchMyExhibitions = async() => {
     try {
@@ -51,15 +61,45 @@ const MyExhibitions = (props) => {
 
   const handleExhibitionCreate = async(title, privacy) => {
     try {
-      const response = await sendAuthenticatedRequest("POST", "/api/account/exhibitions", {title, privacy});
-      setCreateDialogIsOpen(false);
-      setCreateDialogExhibitionTitle("");
-      setCreateDialogExhibitionAccess(null)
+      await sendAuthenticatedRequest("POST", "/api/account/exhibitions", {title, privacy});
+      setDialogIsOpen(false);
+      setDialogExhibitionId(null);
+      setDialogExhibitionTitle("");
+      setDialogExhibitionAccess(null)
       showSnackbar(`Exhibition ${title} created`, "success")
     }
     catch(e) {
       console.log(`Error creating exhibition: ${e.message}`)
       showSnackbar(`Error creating exhibition.`, "error")
+    }
+    fetchMyExhibitions();
+  }
+
+  const handleExhibitionEditByOwner = async(exhibitionId, title, privacy) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/account/exhibitions/${exhibitionId}`, {title, privacy});
+      setDialogIsOpen(false);
+      setDialogExhibitionId(null);
+      setDialogExhibitionTitle("");
+      setDialogExhibitionAccess(null);
+      showSnackbar(`Exhibition ${title} updated`, "success");
+    } catch(e) {
+      console.log(`Error updating exhibition: ${e.message}`)
+      showSnackbar(`Error updating exhibition`, "error");
+    }
+    fetchMyExhibitions();
+  }
+
+  
+  const handleExhibitionDeleteByOwner = async(exhibitionId) => {
+    try {
+      await sendAuthenticatedRequest("DELETE", `/api/account/exhibitions/${exhibitionId}`);
+      setDeleteDialogIsOpen(false);
+      setDeleteDialogExhibition(null);
+      showSnackbar(`Exhibition deleted`, "success");
+    } catch(e) {
+      console.log(`Error deleting exhibition: ${e.message}`)
+      showSnackbar(`Error deleting exhibition`, "error");
     }
     fetchMyExhibitions();
   }
@@ -76,6 +116,21 @@ const MyExhibitions = (props) => {
       generateTableCell: (exhibition) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{exhibition.title}</Typography>
+        </TableCell>
+      )
+    },
+    {
+      columnDescription: "Open",
+      generateTableHeaderCell: () => (
+        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
+          <Typography variant="h6"></Typography>
+        </TableCell>
+      ),
+      generateTableCell: (exhibition) => (
+        <TableCell>
+          <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
+            <Typography variant="body1">Open</Typography>
+          </Button>
         </TableCell>
       )
     },
@@ -134,7 +189,7 @@ const MyExhibitions = (props) => {
       )
     },
     {
-      columnDescription: "Open",
+      columnDescription: "Edit",
       generateTableHeaderCell: () => (
         <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
           <Typography variant="h6"></Typography>
@@ -142,12 +197,33 @@ const MyExhibitions = (props) => {
       ),
       generateTableCell: (exhibition) => (
         <TableCell>
-          <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
-            <Typography variant="body1">Open</Typography>
-          </Button>
+          <Stack direction="row" spacing={2}>
+
+            <IconButton 
+              onClick={() => {
+                setDialogIsEditMode(true);
+                setDialogExhibitionId(exhibition.id);
+                setDialogExhibitionAccess(exhibition.privacy);
+                setDialogExhibitionTitle(exhibition.title);
+                setDialogIsOpen(true);
+              }}
+            >
+              <SettingsIcon />
+            </IconButton>
+
+            <IconButton 
+              onClick={() => {
+                setDeleteDialogExhibition(exhibition);
+                setDeleteDialogIsOpen(true);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+
+          </Stack>
         </TableCell>
       )
-    },
+    }
   ]
 
   
@@ -165,7 +241,9 @@ const MyExhibitions = (props) => {
         </Stack>
           <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>} 
             onClick={() => {
-              setCreateDialogIsOpen(true);
+              setDialogIsEditMode(false);
+              setDialogExhibitionId(null);
+              setDialogIsOpen(true);
             }}
           >
             <Typography variant="body1">Create Exhibition</Typography>
@@ -184,10 +262,20 @@ const MyExhibitions = (props) => {
         />
       </Stack>
 
-      <ExhibitionCreateDialog {...{createDialogExhibitionAccess, setCreateDialogExhibitionAccess, 
-          createDialogExhibitionTitle, setCreateDialogExhibitionTitle, 
-          createDialogIsOpen, setCreateDialogIsOpen, 
-          handleExhibitionCreate}} />
+      <ItemSingleDeleteDialog 
+        deleteDialogIsOpen={deleteDialogIsOpen}
+        deleteDialogItem={deleteDialogExhibition}
+        dialogTitle="Delete Exhibition"
+        requireTypedConfirmation={true}
+        entity="exhibition"
+        handleDelete={handleExhibitionDeleteByOwner}
+        setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+      />
+
+      <ExhibitionSettingsDialog editMode={isDialogInEditMode} {...{dialogExhibitionId, dialogExhibitionAccess, setDialogExhibitionAccess, 
+          dialogExhibitionTitle, setDialogExhibitionTitle, 
+          dialogIsOpen, setDialogIsOpen, 
+          handleExhibitionCreate, handleExhibitionEdit: handleExhibitionEditByOwner}} />
     </Box>
   );
 }

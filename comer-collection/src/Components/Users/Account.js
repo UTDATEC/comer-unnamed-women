@@ -57,7 +57,7 @@ const Account = (props) => {
                 }
               } />} />
             <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
-            <Route path="ExhibitionManagement" element={<ExhibitionManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ExhibitionManagement" element={<ExhibitionManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
             <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar }} />} />
             <Route path="CourseManagement" element={<CourseManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
 

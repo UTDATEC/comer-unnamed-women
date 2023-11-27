@@ -9,7 +9,7 @@ const { listTags, createTag, updateTag, deleteTag, getTag } = require("./control
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition } = require('./controllers/exhibitions.js');
 
 // Read images
 router.get("/images", listImages);
@@ -81,11 +81,12 @@ router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 // Read exhibitions (admin)
 router.get("/exhibitions", listExhibitions)
 router.get("/exhibitions/:exhibitionId", getExhibition)
-router.put("/exhibitions", saveExhibition)
-router.get("/exhibitions/:exhibitionId/load", loadExhibition)
+// router.put("/exhibitions", saveExhibition)
+// router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
 // Modify exhibitions (admin)
-router.delete("/exhibitions/:exhibitionId", deleteExhibition)
+router.put("/exhibitions/:exhibitionId", adminEditExhibition);
+router.delete("/exhibitions/:exhibitionId", adminDeleteExhibition);
 
 
 
@@ -97,7 +98,8 @@ router.get("/account/courses", listMyCourses);
 router.get("/account/exhibitions", listMyExhibitions);
 
 router.post("/account/exhibitions", createExhibition);
-
+router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
+router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
 
 // router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
 //     next(createError(405));

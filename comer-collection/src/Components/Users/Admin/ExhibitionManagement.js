@@ -21,6 +21,9 @@ import SearchIcon from "@mui/icons-material/Search"
 import InfoIcon from "@mui/icons-material/Info"
 import VpnLockIcon from "@mui/icons-material/VpnLock";
 import PublicIcon from "@mui/icons-material/Public"
+import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog";
+import SettingsIcon from "@mui/icons-material/Settings"
+import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 
 const ExhibitionManagement = (props) => {
   const [users, setUsers] = useState([]);
@@ -31,13 +34,13 @@ const ExhibitionManagement = (props) => {
   const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
-  const [editDialogExhibition, setEditDialogExhibition] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
-  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
+  const [editDialogExhibitionId, setEditDialogExhibitionId] = useState(null);
+  const [editDialogExhibitionAccess, setEditDialogExhibitionAccess] = useState(null);
+  const [editDialogExhibitionTitle, setEditDialogExhibitionTitle] = useState(null);
 
   const [selectedExhibitions, setSelectedExhibitions] = useState([]);
 
-//   const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+//   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 //   const [createDialogExhibitions, createDialogDispatch] = useReducer(createUserDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -175,7 +178,7 @@ const ExhibitionManagement = (props) => {
 //     fetchData();
 
 //     if(usersCreated == newUserArray.length) {
-//       setCreateDialogIsOpen(false);
+//       setDialogIsOpen(false);
 //       createDialogDispatch({
 //         type: "set",
 //         newArray: []
@@ -232,35 +235,35 @@ const ExhibitionManagement = (props) => {
 //     }
 //   }
 
+const handleExhibitionEditByAdmin = async(exhibitionId, title, privacy) => {
+  try {
+    await sendAuthenticatedRequest("PUT", `/api/exhibitions/${exhibitionId}`, {title, privacy});
+    setEditDialogIsOpen(false);
+    setEditDialogExhibitionId(null);
+    setEditDialogExhibitionTitle("");
+    setEditDialogExhibitionAccess(null);
+    showSnackbar(`Exhibition ${title} updated`, "success");
+  } catch(e) {
+    console.log(`Error updating exhibition: ${e.message}`)
+    showSnackbar(`Error updating exhibition`, "error");
+  }
+  fetchData();
+}
 
 
-  const handleDelete = async (exhibitionId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/exhibitions/${exhibitionId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      fetchData();
 
-      showSnackbar(`Exhibition ${exhibitionId} has been deleted`, "success")
-
-      if (response.status === 200 || response.status === 204) {
-      } else {
-        console.error("Error deleting exhibition:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error handling delete operation:", error);
-
-      showSnackbar(`Exhibition ${exhibitionId} could not be deleted`, "error")
-    }
-
+const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
+  try {
+    await sendAuthenticatedRequest("DELETE", `/api/exhibitions/${exhibitionId}`);
     setDeleteDialogIsOpen(false);
     setDeleteDialogExhibition(null);
-  };
+    showSnackbar(`Exhibition deleted`, "success");
+  } catch(e) {
+    console.log(`Error deleting exhibition: ${e.message}`)
+    showSnackbar(`Error deleting exhibition`, "error");
+  }
+  fetchData();
+}
 
 
   const handleCopyToClipboard = useCallback((exhibition, fieldName) => {
@@ -394,20 +397,22 @@ const ExhibitionManagement = (props) => {
       ),
       generateTableCell: (exhibition) => (
         <TableCell sx={{minWidth: "100px"}}>
-          {/* <IconButton 
-            disabled={true} 
+          <Stack direction="row" spacing={1}>
+
+        <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
+          <Typography variant="body1">Open</Typography>
+        </Button>
+          <IconButton 
             onClick={() => {
-              setEditDialogExhibition(exhibition);
-              const { email, family_name, given_name } = exhibition;
-              setEditDialogFields({ email, family_name, given_name });
-              setEditDialogSubmitEnabled(true);
+              setEditDialogExhibitionId(exhibition.id);
+              setEditDialogExhibitionAccess(exhibition.privacy);
+              setEditDialogExhibitionTitle(exhibition.title);
               setEditDialogIsOpen(true)
             }}
           >
-            <EditIcon />
-          </IconButton> */}
+            <SettingsIcon />
+          </IconButton>
           <IconButton 
-            disabled={!exhibition.is_deletable} 
             onClick={() => {
               setDeleteDialogExhibition(exhibition);
               setDeleteDialogIsOpen(true);
@@ -415,6 +420,7 @@ const ExhibitionManagement = (props) => {
           >
             <DeleteIcon />
           </IconButton>
+          </Stack>
         </TableCell>
       )
     }
@@ -599,7 +605,7 @@ const ExhibitionManagement = (props) => {
             </Button> */}
             {/* <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
               onClick={() => {
-                setCreateDialogIsOpen(true);
+                setDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Users</Typography>
@@ -648,7 +654,7 @@ const ExhibitionManagement = (props) => {
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogExhibitions}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions: userFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} /> */}
+        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} /> */}
 
       {/* <ItemSingleEditDialog 
         entity="exhibition"
@@ -658,11 +664,26 @@ const ExhibitionManagement = (props) => {
         handleItemEdit={handleExhibitionEdit}
         {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} /> */}
 
-      <ItemSingleDeleteDialog 
-        entity="exhibition"
-        dialogTitle="Delete Exhibition"
+      <ExhibitionSettingsDialog
+        editMode={true}
+        dialogExhibitionAccess={editDialogExhibitionAccess}
+        setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+        dialogExhibitionId={editDialogExhibitionId}
+        dialogExhibitionTitle={editDialogExhibitionTitle}
+        setDialogExhibitionTitle={setEditDialogExhibitionTitle}
+        dialogIsOpen={editDialogIsOpen}
+        handleExhibitionEdit={handleExhibitionEditByAdmin}
+        />
+
+      <ItemSingleDeleteDialog
+        deleteDialogIsOpen={deleteDialogIsOpen}
         deleteDialogItem={deleteDialogExhibition}
-        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+        dialogTitle="Delete Exhibition"
+        requireTypedConfirmation={true}
+        entity="exhibition"
+        setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+        handleDelete={handleExhibitionDeleteByAdmin}
+      />
 
       {/* <AssociationManagementDialog
         primaryEntity="user"

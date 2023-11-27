@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 const { User } = require("../sequelize.js")
 
 module.exports = (db) => {
@@ -38,6 +39,12 @@ module.exports = (db) => {
                 isIn: [["PUBLIC", "PUBLIC_ANONYMOUS", "PRIVATE"]]
             },
             defaultValue: "PRIVATE"
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.title;
+            }
         }
     }, {
         defaultScope: {

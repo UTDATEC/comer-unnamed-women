@@ -59,7 +59,7 @@ const CourseManagement = (props) => {
   const editDialogFieldDefinitions = courseFieldDefinitions;
   const createDialogFieldDefinitions = courseFieldDefinitions;
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -190,7 +190,7 @@ const CourseManagement = (props) => {
     fetchData();
 
     if(coursesCreated == newCourseArray.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
         newArray: []
@@ -617,7 +617,7 @@ const CourseManagement = (props) => {
             </Button>
             <Button color="primary" variant="contained" startIcon={<AddIcon/>}
               onClick={() => {
-                setCreateDialogIsOpen(true);
+                setDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Courses</Typography>
@@ -630,7 +630,7 @@ const CourseManagement = (props) => {
           emptyMinHeight="300px"
           {...visibleCourses.length == courses.length && {
             noContentMessage: "No courses yet",
-            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonAction: () => {setDialogIsOpen(true)},
             noContentButtonText: "Create a course",
             NoContentIcon: InfoIcon
           } || visibleCourses.length < courses.length && {
@@ -667,7 +667,7 @@ const CourseManagement = (props) => {
         dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
         createDialogItems={createDialogCourses}
         handleItemsCreate={handleCoursesCreate}
-        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="course"

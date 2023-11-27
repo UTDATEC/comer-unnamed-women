@@ -39,7 +39,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
       case "POST":
       case "PUT":
         if(Array.isArray(url)) {
-          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, null, {
+          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, payload, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -47,7 +47,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
           return responses;
         } else {
           const response = await axiosMethods[method](
-            `${apiLocation}${url}`, null, {
+            `${apiLocation}${url}`, payload, {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               }
@@ -66,7 +66,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
 }
 
 
-export const createUsers = async(newUserArray, {showSnackbar, setCreateDialogIsOpen, createDialogDispatch, fetchData}) => {
+export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, createDialogDispatch, fetchData}) => {
   let usersCreated = 0;
   let userIndicesWithErrors = []
   for(const [i, newUserData] of newUserArray.entries()) {
@@ -84,7 +84,7 @@ export const createUsers = async(newUserArray, {showSnackbar, setCreateDialogIsO
   fetchData();
 
   if(usersCreated == newUserArray.length) {
-    setCreateDialogIsOpen(false);
+    setDialogIsOpen(false);
     createDialogDispatch({
       type: "set",
       newArray: []

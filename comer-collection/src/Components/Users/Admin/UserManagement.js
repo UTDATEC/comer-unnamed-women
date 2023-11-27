@@ -66,7 +66,7 @@ const UserManagement = (props) => {
 
   const [coursesByUser, setCoursesByUser] = useState({});
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -183,7 +183,7 @@ const UserManagement = (props) => {
 
 
   const handleUsersCreate = async(newUserArray) => {
-    createUsers(newUserArray, {showSnackbar, setCreateDialogIsOpen, createDialogDispatch, fetchData})
+    createUsers(newUserArray, {showSnackbar, setDialogIsOpen, createDialogDispatch, fetchData})
   }
 
 
@@ -226,7 +226,7 @@ const UserManagement = (props) => {
     fetchData();
 
     if(usersEnrolled == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
@@ -261,7 +261,7 @@ const UserManagement = (props) => {
     fetchData();
 
     if(usersUnenrolled == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "success")
 
@@ -380,7 +380,7 @@ const UserManagement = (props) => {
     fetchData();
 
     if(usersDeleted == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully deleted ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
@@ -852,7 +852,7 @@ const UserManagement = (props) => {
             </Button>
             <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
               onClick={() => {
-                setCreateDialogIsOpen(true);
+                setDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Users</Typography>
@@ -866,7 +866,7 @@ const UserManagement = (props) => {
           emptyMinHeight="300px"
           {...visibleUsers.length == users.length && {
             noContentMessage: "No users yet",
-            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonAction: () => {setDialogIsOpen(true)},
             noContentButtonText: "Create a user",
             NoContentIcon: InfoIcon
           } || visibleUsers.length < users.length && {
@@ -925,7 +925,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
         createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions: userFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog
         entity="user"

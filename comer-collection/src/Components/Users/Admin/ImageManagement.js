@@ -86,7 +86,7 @@ const ImageManagement = (props) => {
   const editDialogFieldDefinitions = imageFieldDefinitions;
   const createDialogFieldDefinitions = imageFieldDefinitions;
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [createDialogImages, createDialogDispatch] = useReducer(createImageDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -203,7 +203,7 @@ const ImageManagement = (props) => {
     fetchData();
 
     if(imagesCreated == newImageArray.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
         newArray: []
@@ -1108,7 +1108,7 @@ const ImageManagement = (props) => {
           </Button>
           <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
             onClick={() => {
-              setCreateDialogIsOpen(true);
+              setDialogIsOpen(true);
             }}
           >
             <Typography variant="body1">Create Images</Typography>
@@ -1150,7 +1150,7 @@ const ImageManagement = (props) => {
         dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
         createDialogItems={createDialogImages}
         handleItemsCreate={handleImagesCreate}
-        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="image"

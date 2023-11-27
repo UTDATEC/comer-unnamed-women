@@ -64,6 +64,16 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
     visibleItems.map((i) => i.id).includes(parseInt(si.id))
   ));
 
+  const tableBody = useMemo(() => {
+    return (
+      <TableBody>
+        {(visibleItems ?? []).map((item) => (
+          <DataTableRow {...{item, selectedItems, setSelectedItems, theme, visibleItems, extraProperties, rowSelectionEnabled, tableFields}} />
+        ))}
+      </TableBody>
+    )
+  }, [selectedItems, visibleItems])
+
   return (
     <TableContainer component={Paper} sx={{ width: "100%" || 'calc(100% - 0px)', height: visibleItems.length ? nonEmptyHeight : "unset" , minHeight: visibleItems.length == 0 ? emptyMinHeight : "unset" }}>
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
@@ -102,11 +112,8 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
           </TableRow>
         </TableHead>
 
-        <TableBody>
-          {(visibleItems ?? []).map((item) => (
-            <DataTableRow {...{item, selectedItems, setSelectedItems, theme, visibleItems, extraProperties, rowSelectionEnabled, tableFields}} />
-          ))}
-        </TableBody>
+        {tableBody}
+        
       </Table>
       {visibleItems.length == 0 && emptyMinHeight && (
         <Box square sx={{width: '100%'}}>
