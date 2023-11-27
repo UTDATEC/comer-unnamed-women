@@ -34,18 +34,24 @@ export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem})
             gridTemplateAreas: `
             "toolbar"
             "gallery"
-            `,
-            
+            `
             }} >
-            <ImageList sx={{gridArea: "gallery", maxWidth: "60%", overflowY: "scroll"}} rowHeight={200} cols={4}>
+            <ImageList sx={{gridArea: "gallery", maxWidth: "100%", overflowY: "scroll", justifyItems: "center"}} 
+                variant="standard"
+                rowHeight={200} cols={6} gap={8}>
                 {images.map((image) => (
-                    <ImageListItem sx={{maxWidth: "50%"}} key={image.id}>
-                        {image.url && (
+                    <ImageListItem sx={{width: "60%"}} key={image.id}>
+                        {image.thumbnail_url && (
+                            <img src={image.thumbnail_url}
+                                alt={image.safe_display_name}
+                                loading="lazy"
+                            />
+                        ) || !image.thumbnail_url && image.url && (
                             <img src={image.url}
                                 alt={image.safe_display_name}
                                 loading="lazy"
                             />
-                        ) || !image.url && (
+                        ) || !image.thumbnail_url && !image.url && (
                             <img src={imageComingSoon} />
                         )}
                         <ImageListItemBar 
