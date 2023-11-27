@@ -19,7 +19,16 @@ const DataTableRow = ({item, selectedItems, setSelectedItems, theme, visibleItem
   const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
   const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
 
-  return useMemo(() => (
+  const mainCells = useMemo(() => {
+    return tableFields.map((tf) => {
+      return (
+        <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
+      )
+    })
+  }, [item, extraProperties]);
+
+  return useMemo(() => {
+    return (
     <TableRow key={item.id} sx={{
       [`&:hover`]: {
         backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
@@ -41,13 +50,9 @@ const DataTableRow = ({item, selectedItems, setSelectedItems, theme, visibleItem
       }}
       size="medium" />
     </TableCell>)}
-      {tableFields.map((tf) => {
-        return (
-          <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
-        )
-      })}
+      {mainCells}
     </TableRow>
-  ), [item, selectedItems, visibleItems, extraProperties])
+  )}, [item, selectedItems, extraProperties])
 }
 
 
