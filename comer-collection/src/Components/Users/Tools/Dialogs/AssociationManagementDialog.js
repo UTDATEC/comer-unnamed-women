@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Stack, Dialog,
   DialogTitle,
@@ -38,10 +38,10 @@ export const AssociationManagementDialog = ({
 
   const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
-  const secondaryItemsAssigned = computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems);
-  const secondaryItemsAssignedResults = searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []);
-  const secondaryItemsAllResults = searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []);
 
+  const secondaryItemsAssigned = useMemo(() => computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems), [secondaryItemsAll, secondariesByPrimary, primaryItems]);
+  const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
+  const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAll]);
 
   const getQuantityAssigned = (secondary) => {
     return Object.entries(secondariesByPrimary)
