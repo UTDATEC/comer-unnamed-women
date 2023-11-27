@@ -63,7 +63,7 @@ export const AssociationManagementDialog = ({
           setDialogIsOpen(false);
       }}
     >
-      <DialogTitle textAlign="center" variant="h4" sx={{wordWrap: "break-word"}}>
+      <DialogTitle textAlign="center" variant="h4" sx={{textOverflow: "ellipsis", wordWrap: "break-word"}}>
         {dialogTitle}
       </DialogTitle>
       <DialogContent>
@@ -81,7 +81,8 @@ export const AssociationManagementDialog = ({
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
               {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
-                <DataTable 
+                <DataTable
+                  nonEmptyHeight="300px" 
                   tableFields={secondaryTableFieldsAll} 
                   items={secondaryItemsAll} 
                   visibleItems={secondaryItemsAllResults} 

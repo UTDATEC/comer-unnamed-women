@@ -1,12 +1,12 @@
 import React from "react";
-import { Checkbox, Paper, TableCell, TableContainer, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@emotion/react";
 
-export const DataTable = ({ tableFields, items, visibleItems, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems }) => {
+export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems, emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
   const theme = useTheme();
 
@@ -15,7 +15,7 @@ export const DataTable = ({ tableFields, items, visibleItems, extraProperties, r
   ));
 
   return (
-    <TableContainer component={Paper} sx={{ width: "100%", maxHeight: 'calc(100% - 0px)' }}>
+    <TableContainer component={Paper} sx={{ width: "100%" || 'calc(100% - 0px)', height: visibleItems.length ? nonEmptyHeight : "unset" , minHeight: visibleItems.length == 0 ? emptyMinHeight : "unset" }}>
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
         <TableHead>
           <TableRow>
@@ -91,6 +91,22 @@ export const DataTable = ({ tableFields, items, visibleItems, extraProperties, r
           )})}
         </TableBody>
       </Table>
+      {visibleItems.length == 0 && emptyMinHeight && (
+        <Box square sx={{width: '100%'}}>
+        <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
+          {NoContentIcon && (
+            <NoContentIcon sx={{fontSize: '150pt', opacity: 0.5}} />
+          )}
+          <Typography variant="h4">{noContentMessage ?? "This list is empty"}</Typography>
+          {noContentButtonText && noContentButtonAction && (
+            <Button variant="contained" onClick={noContentButtonAction}>
+                <Typography variant="body1">{noContentButtonText}</Typography>
+            </Button>
+          )}
+
+        </Stack>
+    </Box>
+      )}
     </TableContainer>
   );
 };

@@ -260,7 +260,7 @@ const Profile = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) || !appUser.password_change_required && (
     <Box component={Paper} square sx={{height: "100%"}}>
-    <Stack spacing={4} padding={5}>
+    <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5}>
       <Stack spacing={2}>
         <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
           <AccountCircleIcon fontSize="large" />
@@ -271,14 +271,29 @@ const Profile = (props) => {
           tableFields={userTableFields}
         />
       </Stack>
-      <Stack spacing={2}>
-      <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
+    </Stack>
+    <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5} height="400px">
+      <Stack spacing={2}  sx={{
+        display: "grid",
+        gridTemplateRows: "50px 350px",
+        gridTemplateColumns: "1fr",
+        gridTemplateAreas: `
+          "title"
+          "content"
+        `
+      }}  overflow="hidden">
+      <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center"
+        sx={{gridArea: "title"}}>
           <SchoolIcon fontSize="large" />
           <Typography variant="h4">My Courses</Typography>
         </Stack>
-        <DataTable
-          visibleItems={myCourses}
+        <DataTable sx={{overflow: "scroll"}}
+          nonEmptyHeight="350px"
+          visibleItems={myCourses.sort((a, b) => (a.date_start < b.date_start ? 1 : -1))}
           tableFields={courseTableFields}
+          NoContentIcon={SchoolIcon}
+          emptyMinHeight="400px"
+          noContentMessage="You are not enrolled in any courses."
         />
       </Stack>
     </Stack>
