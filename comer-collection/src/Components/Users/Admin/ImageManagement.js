@@ -175,15 +175,6 @@ const ImageManagement = (props) => {
 
   const visibleImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
 
-  // const visibleImages = filteredAndSearchedImages.sort((a, b) => {
-  //   if(sortColumn == "Name")
-  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-  //   else if(sortColumn == "ID")
-  //     return !sortAscending ^ (a.id > b.id);
-  //   else if(sortColumn == "Email")
-  //     return !sortAscending ^ (a.email > b.email)
-  // })
-  
 
   const handleImagesCreate = async(newImageArray) => {
     let imagesCreated = 0;
