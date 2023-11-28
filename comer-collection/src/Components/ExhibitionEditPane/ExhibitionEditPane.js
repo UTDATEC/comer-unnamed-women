@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
@@ -6,6 +6,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
+import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
 
 
 const ColorInput = ({value, onChange, disabled}) => {
@@ -159,6 +160,9 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
     const [expandedSection, setExpandedSection] = useState(null);
 
     const [selectedImageId, setSelectedImageId] = useState(null);
+
+    const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
+    const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
 
     const theme = useTheme();
 
@@ -346,11 +350,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                         <Button variant="contained" 
                             startIcon={<AddPhotoAlternateIcon />}
                             onClick={() => {
-                                exhibitionEditDispatch({
-                                    scope: "exhibition",
-                                    type: "add_image",
-                                    image_id: exhibitionState.images.length + 1
-                                })
+                                setImageChooserIsOpen(true);
                             }}
                         >
                             <Typography variant="body1">Add Image</Typography>
@@ -614,6 +614,31 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                 </Button>
                 
             </Stack>
+
+
+            <Dialog component="form" open={imageChooserIsOpen} fullWidth maxWidth="xl" onSubmit={(e) => {
+                e.preventDefault();
+                exhibitionEditDispatch({
+                    scope: "exhibition",
+                    type: "add_image",
+                    image_id: imageChooserSelectedImage.id
+                })
+                setImageChooserIsOpen(false);
+                setImageChooserSelectedImage(null);
+            }}>
+                <DialogTitle>Choose an image</DialogTitle>
+                <DialogContent>
+                    <CollectionBrowser selectedItem={imageChooserSelectedImage} 
+                        setSelectedItem={setImageChooserSelectedImage} disabledImages={exhibitionState.images} />
+                </DialogContent>
+                <DialogActions>
+                    <Stack direction="row">
+                        <Button variant="contained" type="submit" disabled={!imageChooserSelectedImage}>
+                            <Typography>Select</Typography>
+                        </Button>
+                    </Stack>
+                </DialogActions>
+            </Dialog>
 
 
         </Box>

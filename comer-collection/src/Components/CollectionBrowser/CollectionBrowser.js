@@ -5,7 +5,7 @@ import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 
 
-export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem}) => {
+export const CollectionBrowser = ({showSnackbar, isDialogMode, selectedItem, setSelectedItem, disabledImages}) => {
 
     const [images, setImages] = useState([]);
 
@@ -40,7 +40,15 @@ export const CollectionBrowser = ({showSnackbar, isDialogMode, setSelectedItem})
                 variant="standard"
                 rowHeight={200} cols={6} gap={8}>
                 {images.map((image) => (
-                    <ImageListItem sx={{width: "60%"}} key={image.id}>
+                    <ImageListItem sx={{
+                            width: "60%",
+                            backgroundColor: image.id == selectedItem?.id ? "blue" : "",
+                            opacity: (disabledImages ?? []).map((di) => di.image_id).includes(image.id) ? 0.2 : 1
+                        }} key={image.id} 
+                        onClick={() => {
+                        if(setSelectedItem)
+                            setSelectedItem(image)
+                    }}>
                         {image.thumbnail_url && (
                             <img src={image.thumbnail_url}
                                 alt={image.safe_display_name}
