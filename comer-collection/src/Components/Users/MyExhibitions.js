@@ -22,10 +22,7 @@ import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
 
 const MyExhibitions = (props) => {
 
-  const { appUser, setSelectedNavItem, showSnackbar, 
-    
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
-
+  const { appUser, setSelectedNavItem, showSnackbar } = props;
 
   const [myExhibitions, setMyExhibitions] = useState([]);
 
@@ -39,6 +36,9 @@ const MyExhibitions = (props) => {
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
+
+  const [sortColumn, setSortColumn] = useState("Date Modified");
+  const [sortAscending, setSortAscending] = useState(false);
 
   const fetchMyExhibitions = async() => {
     try {
@@ -108,24 +108,16 @@ const MyExhibitions = (props) => {
   const exhibitionTableFields = [
     {
       columnDescription: "Title",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Title</Typography>
-        </TableCell>
-      ),
       generateTableCell: (exhibition) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{exhibition.title}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (exhibition) => exhibition.title.toLowerCase()
     },
     {
       columnDescription: "Open",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6"></Typography>
-        </TableCell>
-      ),
+      columnHeaderLabel: "",
       generateTableCell: (exhibition) => (
         <TableCell>
           <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
@@ -136,37 +128,24 @@ const MyExhibitions = (props) => {
     },
     {
       columnDescription: "Date Created",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Date Created</Typography>
-        </TableCell>
-      ),
       generateTableCell: (exhibition) => (
         <TableCell>
           <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (exhibition) => new Date(exhibition.date_created)
     },
     {
       columnDescription: "Date Modified",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Date Modified</Typography>
-        </TableCell>
-      ),
       generateTableCell: (exhibition) => (
         <TableCell>
           <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
     },
     {
       columnDescription: "Access",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Access</Typography>
-        </TableCell>
-      ),
       generateTableCell: (exhibition) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -189,12 +168,7 @@ const MyExhibitions = (props) => {
       )
     },
     {
-      columnDescription: "Edit",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6"></Typography>
-        </TableCell>
-      ),
+      columnDescription: "Options",
       generateTableCell: (exhibition) => (
         <TableCell>
           <Stack direction="row" spacing={2}>
@@ -251,6 +225,7 @@ const MyExhibitions = (props) => {
         </Stack>
         <DataTable
           visibleItems={myExhibitions}
+          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
           tableFields={exhibitionTableFields}
           emptyMinHeight="400px"
           NoContentIcon={InfoIcon}

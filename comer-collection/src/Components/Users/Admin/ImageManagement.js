@@ -173,16 +173,16 @@ const ImageManagement = (props) => {
   ])
 
 
-  const filteredAndSearchedImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
+  const visibleImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
 
-  const visibleImages = filteredAndSearchedImages.sort((a, b) => {
-    if(sortColumn == "Name")
-      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-    else if(sortColumn == "ID")
-      return !sortAscending ^ (a.id > b.id);
-    else if(sortColumn == "Email")
-      return !sortAscending ^ (a.email > b.email)
-  })
+  // const visibleImages = filteredAndSearchedImages.sort((a, b) => {
+  //   if(sortColumn == "Name")
+  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+  //   else if(sortColumn == "ID")
+  //     return !sortAscending ^ (a.id > b.id);
+  //   else if(sortColumn == "Email")
+  //     return !sortAscending ^ (a.email > b.email)
+  // })
   
 
   const handleImagesCreate = async(newImageArray) => {
@@ -498,11 +498,6 @@ const ImageManagement = (props) => {
   const artistTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.id}</Typography>
@@ -511,11 +506,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Name</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
@@ -524,11 +514,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Images",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Images</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -540,11 +525,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Website",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Website</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           {artist.website && (
@@ -561,11 +541,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           {artist.notes && (
@@ -578,11 +553,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">&nbsp;</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Stack direction="row">
@@ -617,11 +587,6 @@ const ImageManagement = (props) => {
   const tagTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Typography variant="body1">{tag.id}</Typography>
@@ -630,11 +595,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Data",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Tag</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Typography variant="body1">{tag.data}</Typography>
@@ -643,11 +603,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Images",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Images</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -659,11 +614,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           {tag.notes && (
@@ -676,11 +626,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">&nbsp;</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Stack direction="row">
@@ -714,37 +659,24 @@ const ImageManagement = (props) => {
   const imageTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.id
     },
     {
       columnDescription: "Title",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Title" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.title}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.title.toLowerCase()
     },
     {
       columnDescription: "Preview",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6"></Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
@@ -775,37 +707,24 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Accession Number",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.accessionNumber}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
     },
     {
       columnDescription: "Year",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Year</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.year}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.year
     },
     {
       columnDescription: "Location",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Location</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           {image.location && (
@@ -819,11 +738,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Artists",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Artists</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -846,11 +760,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Tags",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Tags</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -871,11 +780,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Exhibitions",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Exhibitions</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -896,11 +800,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row">
@@ -934,11 +833,6 @@ const ImageManagement = (props) => {
   const artistTableFieldsForDialog = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.id}</Typography>
@@ -947,11 +841,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Artist",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Artist</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
@@ -960,11 +849,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.notes ?? ""}</Typography>
@@ -976,11 +860,6 @@ const ImageManagement = (props) => {
 
   const artistTableFieldsForDialogAll = [...artistTableFieldsForDialog, {
     columnDescription: "Add",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (artist, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(artist);
       return (
@@ -1024,11 +903,6 @@ const ImageManagement = (props) => {
 
   const artistTableFieldsForDialogAssigned = [...artistTableFieldsForDialog, {
     columnDescription: "",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (artist, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(artist)
 
@@ -1116,6 +990,7 @@ const ImageManagement = (props) => {
         </Stack>
       </Stack>
       <DataTable items={images} visibleItems={visibleImages} 
+        {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
         tableFields={imageTableFields} 
         rowSelectionEnabled={true} 
         selectedItems={selectedImages}

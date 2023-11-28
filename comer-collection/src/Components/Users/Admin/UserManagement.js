@@ -169,16 +169,16 @@ const UserManagement = (props) => {
   ])
 
 
-  const filteredAndSearchedUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
+  const visibleUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
 
-  const visibleUsers = filteredAndSearchedUsers.sort((a, b) => {
-    if(sortColumn == "Name")
-      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-    else if(sortColumn == "ID")
-      return !sortAscending ^ (a.id > b.id);
-    else if(sortColumn == "Email")
-      return !sortAscending ^ (a.email > b.email)
-  })
+  // const visibleUsers = filteredAndSearchedUsers.sort((a, b) => {
+  //   if(sortColumn == "Name")
+  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+  //   else if(sortColumn == "ID")
+  //     return !sortAscending ^ (a.id > b.id);
+  //   else if(sortColumn == "Email")
+  //     return !sortAscending ^ (a.email > b.email)
+  // })
 
 
 
@@ -420,11 +420,6 @@ const UserManagement = (props) => {
   const userTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -434,15 +429,11 @@ const UserManagement = (props) => {
             )}
           </Stack>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
           {
@@ -453,15 +444,11 @@ const UserManagement = (props) => {
             )
           }
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Button color="grey"
@@ -470,31 +457,11 @@ const UserManagement = (props) => {
             <Typography variant="body1">{user.email}</Typography>
           </Button>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.email
     },
     {
       columnDescription: "Password",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="Password"
-            options={[
-              {
-                value: "Temporary",
-                displayText: "Temporary password"
-              },
-              {
-                value: "Permanent",
-                displayText: "Password set by user"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userPasswordTypeFilter}
-            setFilter={setUserPasswordTypeFilter}
-            menuAnchorElement={userPasswordTypeMenuAnchorElement}
-            setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           {appUser.id == user.id ? (
@@ -529,11 +496,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Courses",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Courses</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -553,11 +515,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Exhibitions",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Exhibitions</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -578,27 +535,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "User Type",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="User Type"
-            options={[
-              {
-                value: "Administrator",
-                displayText: "Administrators"
-              },
-              {
-                value: "Curator",
-                displayText: "Curators"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userTypeFilter}
-            setFilter={setUserTypeFilter}
-            menuAnchorElement={userTypeMenuAnchorElement}
-            setMenuAnchorElement={setUserTypeMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Button color="grey" sx={{textTransform: "unset"}}
@@ -618,27 +554,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Active",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="Active"
-            options={[
-              {
-                value: "Active",
-                displayText: "Active"
-              },
-              {
-                value: "Inactive",
-                displayText: "Inactive"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userActivationStatusFilter}
-            setFilter={setUserActivationStatusFilter}
-            menuAnchorElement={userActivationStatusMenuAnchorElement}
-            setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Switch
@@ -655,11 +570,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell sx={{minWidth: "100px"}}>
           <IconButton
@@ -691,12 +601,6 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialog = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          {/* <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Typography variant="body1">{course.id}</Typography>
@@ -705,11 +609,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Course Name</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
@@ -718,11 +617,6 @@ const UserManagement = (props) => {
     },
     {
       columnDescription: "Dates",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Dates</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Stack>
@@ -736,11 +630,6 @@ const UserManagement = (props) => {
 
   const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
     columnDescription: "Enroll",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (course, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(course);
       return (
@@ -784,11 +673,6 @@ const UserManagement = (props) => {
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (course, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(course)
 
@@ -862,6 +746,7 @@ const UserManagement = (props) => {
         <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields}
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
+          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
           sx={{gridArea: "table"}}
           emptyMinHeight="300px"
           {...visibleUsers.length == users.length && {
