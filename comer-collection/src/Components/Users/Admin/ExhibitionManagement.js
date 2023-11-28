@@ -60,8 +60,8 @@ const ExhibitionManagement = (props) => {
 //   const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
 //   const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
 
-  const [sortColumn, setSortColumn] = useState("ID");
-  const [sortAscending, setSortAscending] = useState(true);
+  const [sortColumn, setSortColumn] = useState("Modified");
+  const [sortAscending, setSortAscending] = useState(false);
 
 
   const { appUser, setSelectedNavItem, showSnackbar } = props;
