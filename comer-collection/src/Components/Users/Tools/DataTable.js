@@ -8,8 +8,10 @@ import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./ColumnSortButton";
 
 
-const DataTableCell = ({tf, item, extraProperties}) => {
-  return useMemo(() => tf.generateTableCell(item, extraProperties), [item, extraProperties]);
+const DataTableCell = ({tf, item: itemAsString, extraProperties}) => {
+  return useMemo(() => {
+    return tf.generateTableCell(JSON.parse(itemAsString), extraProperties)
+  }, [itemAsString, extraProperties]);
 }
 
 
@@ -101,7 +103,9 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
               </TableCell>)}
                 {tableFields.map((tf) => {
                   return (
-                    <DataTableCell key={tf.columnDescription} {...{tf, item, extraProperties, visibleItems}} />
+                    <DataTableCell key={tf.columnDescription} {...{tf, extraProperties, visibleItems}}
+                      item={JSON.stringify(item)}
+                    />
                   )
                 })}
               </TableRow>
