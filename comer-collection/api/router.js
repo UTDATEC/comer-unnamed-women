@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
@@ -27,6 +27,9 @@ router.delete("/images/:imageId", deleteImage);
 // Modify image/artist associations
 router.put("/images/:imageId/artists/:artistId", assignArtistToImage);
 router.delete("/images/:imageId/artists/:artistId", unassignArtistFromImage);
+
+router.put("/artists/:artistId/images/assign", assignArtistToImages);
+router.put("/artists/:artistId/images/unassign", unassignArtistFromImages);
 
 // Modify image/tag associations
 router.put("/images/:imageId/tags/:tagId", assignTagToImage);
