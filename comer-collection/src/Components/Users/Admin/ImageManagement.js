@@ -464,13 +464,33 @@ const ImageManagement = (props) => {
     }
   }
 
-  const handleAssignImagesToArtist = (artistId, imageIds) => {
-    handleManageImagesForArtist("assign", artistId, imageIds);
-  }
+  const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/assign`, {
+        images: imageIds
+      });
+      showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success")
 
-  const handleUnassignImagesFromArtist = (artistId, imageIds) => {
-    handleManageImagesForArtist("unassign", artistId, imageIds);
-  }
+    } catch (error) {
+      console.error(`Error assigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
+      showSnackbar(`Failed to assign artist ${artistId} for ${imageIds.length} images`, "error")
+    }
+    fetchData();
+  }, [showSnackbar]);
+
+  const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/unassign`, {
+        images: imageIds
+      });
+      showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success")
+
+    } catch (error) {
+      console.error(`Error unassigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
+      showSnackbar(`Failed to unassign artist ${artistId} for ${imageIds.length} images`, "error")
+    }
+    fetchData();
+  }, [showSnackbar]);
 
 
 
@@ -821,7 +841,7 @@ const ImageManagement = (props) => {
   ]
 
 
-  const artistTableFieldsForDialog = [
+  const artistTableFieldsForDialog = useMemo(() =>[
     {
       columnDescription: "ID",
       generateTableCell: (artist) => (
@@ -846,10 +866,11 @@ const ImageManagement = (props) => {
         </TableCell>
       )
     }
-  ]
+  ], []);
+  
 
 
-  const artistTableFieldsForDialogAll = [...artistTableFieldsForDialog, {
+  const artistTableFieldsForDialogAll = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "Add",
     generateTableCell: (artist, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(artist);
@@ -890,9 +911,9 @@ const ImageManagement = (props) => {
         }
       </TableCell>
     )}
-  }]
+  }], [assignArtistDialogImages, handleAssignImagesToArtist]);
 
-  const artistTableFieldsForDialogAssigned = [...artistTableFieldsForDialog, {
+  const artistTableFieldsForDialogAssigned = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (artist, extraProperties) => {
       const quantity = extraProperties.getQuantityAssigned(artist)
@@ -921,7 +942,7 @@ const ImageManagement = (props) => {
         </TableCell>
       )
     }
-  }]
+  }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);
 
 
   return !appUser.is_admin && (
