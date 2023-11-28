@@ -486,7 +486,7 @@ const UserManagement = (props) => {
               variant="outlined"
               disabled={appUser.id == user.id}
               onClick={(e) => {
-                handleResetPassword(e.target.parentElement.attributes.itemid.value);
+                handleResetPassword(user.id);
               }}>
               <Typography variant="body1">Reset</Typography>
             </Button>
