@@ -605,7 +605,8 @@ const UserManagement = (props) => {
         <TableCell>
           <Typography variant="body1">{course.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => course.id
     },
     {
       columnDescription: "Name",
@@ -613,7 +614,8 @@ const UserManagement = (props) => {
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => course.name
     },
     {
       columnDescription: "Dates",
@@ -631,7 +633,8 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
     columnDescription: "Enroll",
     generateTableCell: (course, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(course);
+      const quantity = course.quantity_assigned;
+      // const quantity = extraProperties.getQuantityAssigned(course);
       return (
       <TableCell>
         {quantity == assignCourseDialogUsers.length && (
@@ -674,7 +677,8 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (course, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(course)
+      // const quantity = extraProperties.getQuantityAssigned(course)
+      const quantity = course.quantity_assigned;
 
       return (
         <TableCell>

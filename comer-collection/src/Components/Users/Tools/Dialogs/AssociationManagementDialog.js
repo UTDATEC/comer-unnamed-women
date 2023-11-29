@@ -38,10 +38,8 @@ export const AssociationManagementDialog = ({
 
   const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
-
-  const secondaryItemsAssigned = useMemo(() => computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems), [secondaryItemsAll, secondariesByPrimary, primaryItems]);
-  const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
-  const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAll]);
+  const [secondarySortColumn, setSecondarySortColumn] = useState("ID");
+  const [secondarySortAscending, setSecondarySortAscending] = useState(true);
 
   const getQuantityAssigned = useCallback((secondary) => {
     return Object.entries(secondariesByPrimary)
@@ -52,32 +50,55 @@ export const AssociationManagementDialog = ({
       secondaries.map((si) => si.id).includes(secondary.id)
     )).length;
   }, [secondariesByPrimary, primaryItems]);
-  
+
+
+  const secondaryItemsAssigned = useMemo(() => {
+    console.log("Runnign secondaryItemsAssigned");
+    return computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems)
+  }, [secondaryItemsAll, secondariesByPrimary, primaryItems]);
+
+  const secondaryItemsAllWithQuantities = useMemo(() => secondaryItemsAll.map((si) => {
+    return {...si, quantity_assigned: getQuantityAssigned(si)};
+  }), [secondaryItemsAll]);
+
+  const secondaryItemsAssignedWithQuantities = useMemo(() => secondaryItemsAssigned.map((si) => {
+    return {...si, quantity_assigned: getQuantityAssigned(si)};
+  }), [secondaryItemsAssigned]);
+
+  const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAllWithQuantities]);
+
+  const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
+
   const allTable = useMemo(() => {
     console.log("running allTable")
     return <DataTable
       nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAll} 
-      items={secondaryItemsAll} 
       visibleItems={secondaryItemsAllResults} 
-      extraProperties={{ primaryItems, getQuantityAssigned }} 
+      extraProperties={{ primaryItems }} 
+      sortColumn={secondarySortColumn}
+      setSortColumn={setSecondarySortColumn}
+      sortAscending={secondarySortAscending}
+      setSortAscending={setSecondarySortAscending}
     />
-  }, [secondaryItemsAll, secondaryItemsAllResults, primaryItems, 
-    getQuantityAssigned
+  }, [secondaryItemsAllResults, primaryItems, 
+    secondarySortColumn, secondarySortAscending
   ]);
 
   const assignedTable = useMemo(() => {
-    console.log("running allTable")
+    console.log("running assignedTable")
     return <DataTable 
-    nonEmptyHeight="300px" 
+      nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAssignedOnly} 
-      items={secondaryItemsAssigned} 
       visibleItems={secondaryItemsAssignedResults} 
-      extraProperties={{  primaryItems, getQuantityAssigned}} 
+      extraProperties={{  primaryItems }}  
+      sortColumn={secondarySortColumn}
+      setSortColumn={setSecondarySortColumn}
+      sortAscending={secondarySortAscending}
+      setSortAscending={setSecondarySortAscending}
     />
-  }, [secondaryItemsAssigned, secondaryItemsAssignedResults, primaryItems, 
-    secondaryItemsAll, secondaryItemsAllResults, 
-    getQuantityAssigned
+  }, [secondaryItemsAssignedResults, primaryItems, 
+    secondarySortColumn, secondarySortAscending
   ])
 
   return (

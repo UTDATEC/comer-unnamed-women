@@ -108,21 +108,19 @@ const ImageManagement = (props) => {
   useEffect(() => {
     setSelectedNavItem("Image Management");
     if(appUser.is_admin) {
-      fetchData();
+      fetchImages();
+      fetchArtists();
     }
   }, []); 
 
 
-  const fetchData = async () => {
+  const fetchImages = async () => {
     try {
       const imageData = await sendAuthenticatedRequest("GET", "/api/images");
       setImages(imageData.data);
 
-      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
-      setArtists(artistData.data);
-
-      const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
-      setTags(tagData.data);
+      // const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
+      // setTags(tagData.data);
 
       setTimeout(() => {
         setRefreshInProgress(false);
@@ -135,12 +133,23 @@ const ImageManagement = (props) => {
       }
       setArtistsByImage({...artistsByImageDraft});
 
-
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+
+  const fetchArtists = async () => {
+    try {
+
+      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
+      setArtists(artistData.data);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+  }
 
   /*
     Image display:
@@ -191,7 +200,7 @@ const ImageManagement = (props) => {
         imageIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(imagesCreated == newImageArray.length) {
       setDialogIsOpen(false);
@@ -228,7 +237,7 @@ const ImageManagement = (props) => {
     try {
       let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/images/${imageId}`, filteredImage);
-      fetchData();
+      fetchImages();
 
       setEditDialogIsOpen(false);
       setEditDialogFields(getBlankItemFields(imageFieldDefinitions));
@@ -247,7 +256,7 @@ const ImageManagement = (props) => {
   const handleDelete = async (imageId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}`);
-      fetchData();
+      fetchImages();
 
       showSnackbar(`Image ${imageId} has been deleted`, "success")
 
@@ -267,7 +276,7 @@ const ImageManagement = (props) => {
     try {
       let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
       await sendAuthenticatedRequest("POST", `/api/artists/`, filteredArtist);
-      fetchData();
+      fetchArtists();
 
       showSnackbar(`Artist created`, "success");
 
@@ -284,7 +293,7 @@ const ImageManagement = (props) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
       await sendAuthenticatedRequest("POST", `/api/tags/`, filteredTag);
-      fetchData();
+      fetchArtists();
 
       showSnackbar(`Tag created`, "success");
 
@@ -300,11 +309,11 @@ const ImageManagement = (props) => {
     try {
       let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}`, filteredartist);
-      fetchData();
+      fetchArtists();
 
       setArtistEditDialogIsOpen(false);
       setArtistEditDialogFields(getBlankItemFields(artistFieldDefinitions));
-
+``
       showSnackbar(`Successfully edited artist ${artistId}`, "success");
 
     } catch (error) {
@@ -320,7 +329,7 @@ const ImageManagement = (props) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}`, filteredtag);
-      fetchData();
+      fetchArtists();
 
       setTagEditDialogIsOpen(false);
       setTagEditDialogFields(getBlankItemFields(tagFieldDefinitions));
@@ -338,7 +347,7 @@ const ImageManagement = (props) => {
   const handleDeleteArtist = async(artistId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/artists/${artistId}`);
-      fetchData();
+      fetchArtists();
 
       setArtistDeleteDialogIsOpen(false);
       setArtistDeleteDialogItem(null);
@@ -356,7 +365,7 @@ const ImageManagement = (props) => {
   const handleDeleteTag = async(tagId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/tags/${tagId}`);
-      fetchData();
+      fetchArtists();
 
       setTagDeleteDialogIsOpen(false);
       setTagDeleteDialogItem(null);
@@ -396,7 +405,7 @@ const ImageManagement = (props) => {
         artistIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(artistsUpdated == artistIds.length) {
       showSnackbar(`Successfully ${operation}ed ${artistsUpdated} artists for image ${imageId}`, "success")
@@ -447,7 +456,7 @@ const ImageManagement = (props) => {
         imageIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(imagesUpdated == imageIds.length) {
       showSnackbar(`Successfully ${operation}ed ${imagesUpdated} artists for artist ${artistId}`, "success")
@@ -475,7 +484,7 @@ const ImageManagement = (props) => {
       console.error(`Error assigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
       showSnackbar(`Failed to assign artist ${artistId} for ${imageIds.length} images`, "error")
     }
-    fetchData();
+    fetchImages();
   }, [showSnackbar]);
 
   const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
@@ -489,7 +498,7 @@ const ImageManagement = (props) => {
       console.error(`Error unassigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
       showSnackbar(`Failed to unassign artist ${artistId} for ${imageIds.length} images`, "error")
     }
-    fetchData();
+    fetchImages();
   }, [showSnackbar]);
 
 
@@ -848,7 +857,8 @@ const ImageManagement = (props) => {
         <TableCell>
           <Typography variant="body1">{artist.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (artist) => artist.id
     },
     {
       columnDescription: "Artist",
@@ -873,7 +883,7 @@ const ImageManagement = (props) => {
   const artistTableFieldsForDialogAll = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "Add",
     generateTableCell: (artist, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(artist);
+      const quantity = artist.quantity_assigned;
       return (
       <TableCell>
         {quantity == assignArtistDialogImages.length && (
@@ -916,8 +926,7 @@ const ImageManagement = (props) => {
   const artistTableFieldsForDialogAssigned = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (artist, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(artist)
-
+      const quantity = artist.quantity_assigned;
       return (
         <TableCell>
           {quantity == assignArtistDialogImages.length && (
@@ -945,6 +954,23 @@ const ImageManagement = (props) => {
   }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);
 
 
+
+  const imageDataTable = useMemo(() => {
+    console.log("Running imageDataTable")
+    return (
+      <DataTable visibleItems={visibleImages} 
+        {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+        tableFields={imageTableFields} 
+        rowSelectionEnabled={true} 
+        selectedItems={selectedImages}
+        setSelectedItems={setSelectedImages}
+        // sx={{gridArea: "table"}}
+      />
+    )
+  }, [visibleImages, selectedImages, sortColumn, sortAscending]);
+
+
+
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
@@ -967,7 +993,7 @@ const ImageManagement = (props) => {
         <Stack direction="row" spacing={2}>
           <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
             setRefreshInProgress(true);
-            fetchData();
+            fetchImages();
           }}
             disabled={refreshInProgress}>
             <Typography variant="body1">Refresh</Typography>
@@ -1001,14 +1027,8 @@ const ImageManagement = (props) => {
           </Button>
         </Stack>
       </Stack>
-      <DataTable items={images} visibleItems={visibleImages} 
-        {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
-        tableFields={imageTableFields} 
-        rowSelectionEnabled={true} 
-        selectedItems={selectedImages}
-        setSelectedItems={setSelectedImages}
-        sx={{gridArea: "table"}}
-      />
+      
+      {imageDataTable}
 
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
         <SelectionSummary

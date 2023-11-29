@@ -276,10 +276,6 @@ const CourseManagement = (props) => {
 
       showSnackbar(`Course ${courseId} has been deleted`, "success")
 
-      if (response.status === 200 || response.status === 204) {
-      } else {
-        console.error("Error deleting course:", response.statusText);
-      }
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
@@ -427,7 +423,8 @@ const CourseManagement = (props) => {
             {user.is_admin && (<SecurityIcon color="secondary" />)}
           </Stack>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
@@ -435,7 +432,8 @@ const CourseManagement = (props) => {
         <TableCell>
         <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
@@ -450,7 +448,8 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
     columnDescription: "Enroll",
     generateTableCell: (user, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(user);
+      // const quantity = extraProperties.getQuantityAssigned(user);
+      const quantity = user.quantity_assigned
       return (
       <TableCell>
         {quantity == assignUserDialogCourses.length && (
@@ -489,8 +488,8 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (user, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(user)
-
+      // const quantity = extraProperties.getQuantityAssigned(user)
+      const quantity = user.quantity_assigned;
       return (
         <TableCell>
           {quantity == assignUserDialogCourses.length && (
