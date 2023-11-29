@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
@@ -18,6 +18,8 @@ router.get("/images/:imageId", getImage)
 router.get("/collection/images", listImagesPublic);
 router.get("/collection/images/:imageId", getImagePublic);
 router.get("/exhibitions/public", listPublicExhibitions);
+
+router.get("/collection/images/:imageId/download", downloadImagePublic);
 
 // Modify images
 router.post("/images", createImage);
