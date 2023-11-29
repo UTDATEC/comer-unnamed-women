@@ -227,7 +227,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json}) => {
     useEffect(() => {
         if(myScene) { 
             const mainWalls = setupMainWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, myRenderer, myCamera);
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, primary_json.appearance.side_wall_color, myRenderer, myCamera);
 
             createBoundingBoxes(mainWalls);
 

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import staticImages from './StaticImages';
 
-export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, renderer, camera) => {
+export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, side_color, renderer, camera) => {
     // create a group for walls for bounding box and adding to scene
     let wall_group = new THREE.Group();
     scene.add(wall_group); 
@@ -36,7 +36,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
             new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
             new THREE.MeshLambertMaterial({
                 map: wall_texture_frontback,
-                color: main_color,
+                color: side_color,
             }),
         );
     
