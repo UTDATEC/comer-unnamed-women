@@ -134,7 +134,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
         // update position as player moves
         // updateMovement(delta, controls, camera, walls, setCameraPosition);
 
-        // myRenderer.render(myScene, myCamera);
+        myRenderer.render(myScene, myCamera);
 
         
         
