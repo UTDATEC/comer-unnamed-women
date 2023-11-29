@@ -11,10 +11,15 @@ export const ExhibitionPage = (props) => {
 
     const { exhibitionId } = useParams();
 
-    
+    const [globalImageCatalog, setGlobalImageCatalog] = useState([]);    
 
     const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, blankExhibitionData);
     const [exhibitionIsLoaded, setExhibitionIsLoaded] = useState(false);
+
+    const loadCatalog = async() => {
+        const catalogData = await sendAuthenticatedRequest("GET", "/api/collection/images");
+        setGlobalImageCatalog(catalogData.data);
+    }
 
     const loadExhibition = async() => {
         const exhibitionData = await sendAuthenticatedRequest("GET", `/api/account/exhibitions/${exhibitionId}/load`);
@@ -33,6 +38,7 @@ export const ExhibitionPage = (props) => {
 
     useEffect(() => {
         loadExhibition();
+        loadCatalog();
     }, [])
 
 
@@ -51,11 +57,11 @@ export const ExhibitionPage = (props) => {
 
         >
 
-            <ExhibitionViewer {...{exhibitionState, exhibitionIsLoaded}}
+            <ExhibitionViewer {...{exhibitionState, exhibitionIsLoaded, globalImageCatalog}}
                 sx={{gridArea: "viewer", width: "100%", height: "100%"}}
             />
 
-            <ExhibitionEditPane {...{exhibitionId, exhibitionState, exhibitionEditDispatch}} 
+            <ExhibitionEditPane {...{exhibitionId, exhibitionState, exhibitionEditDispatch, globalImageCatalog}} 
                 sx={{gridArea: "editpane"}} 
             />
 

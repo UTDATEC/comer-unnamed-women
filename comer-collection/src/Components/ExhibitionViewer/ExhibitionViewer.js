@@ -37,7 +37,7 @@ const getAmbientLightIntensity = (moodiness) => {
 }
 
 
-const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded}) => {
+const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, globalImageCatalog}) => {
 
     const [controlsEnabled, setControlsEnabled] = useState(false);
     const [menuVisible, setMenuVisible] = useState(true);
@@ -134,9 +134,15 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded}) =
         // update position as player moves
         // updateMovement(delta, controls, camera, walls, setCameraPosition);
 
-        myRenderer.render(myScene, myCamera);
+        // myRenderer.render(myScene, myCamera);
+
+        
         
     };
+
+    const logKeyEvent = (e) => {
+        console.log(e)
+    }
 
 
     useEffect(() => {
@@ -196,10 +202,10 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded}) =
             // kind of a last minute add, but scene needs to be here for lighting, even though
             // art is not added to the scene here
             // ambient_light_intensity is added for safety in light creation
-            const [all_arts_group, spotlights] = createArt(myTextureLoader, 
+            const all_arts_group = createArt(myTextureLoader, 
             photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
             primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
-            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json);
+            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
         
         
             // addObjectsToScene(myScene, art);
@@ -211,11 +217,10 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded}) =
         
             setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled);
 
+
+
             return () => {
                 myScene.remove(all_arts_group);
-                spotlights.forEach((spotlight) => {
-                    myScene.remove(spotlight);
-                })
             }
         
         }
