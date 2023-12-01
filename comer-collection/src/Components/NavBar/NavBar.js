@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import AppBar from '@mui/material/AppBar';
@@ -13,13 +13,16 @@ import { useTheme } from '@emotion/react';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import LogoutIcon from "@mui/icons-material/Logout"
+import { useAppUser } from '../App/AppUser';
 
 
 export default function NavBar(props) {
   
   const navigate = useNavigate();
   const theme = useTheme();
-  const { appUser, setAppUser, appDarkTheme, setAppDarkTheme } = props;
+  const {appDarkTheme, setAppDarkTheme} = props;
+
+  const [appUser, setAppUser] = useAppUser();
   
   const [buttons, setButtons] = useState([]);
 

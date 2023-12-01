@@ -40,6 +40,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove"
 import CheckIcon from "@mui/icons-material/Check"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const ImageManagement = (props) => {
@@ -100,8 +102,10 @@ const ImageManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar } = props;
+  const { selectedNavItem, setSelectedNavItem } = props;
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
+  const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
   
 

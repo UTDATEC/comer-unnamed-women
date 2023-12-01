@@ -1,14 +1,17 @@
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import Account from '../Users/Account';
 
-import { Box, ThemeProvider, createTheme, Snackbar, Alert, Stack, Typography } from '@mui/material';
+import { Box, ThemeProvider, createTheme } from '@mui/material';
 import { green, grey, orange } from '@mui/material/colors';
 import { CollectionBrowser } from '../CollectionBrowser/CollectionBrowser';
 import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
 import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
+import { SnackbarProvider } from './AppSnackbar';
+import { AppUserProvider } from './AppUser';
+
 
 const App = () => {
 
@@ -56,45 +59,9 @@ const App = () => {
   })
 
 
-  const [appUser, setAppUser] = useState(null);
-  
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarText, setSnackbarText] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-
-
-  const showSnackbar = (message, severity="info") => {
-    setSnackbarText(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  }
-  
-
-  useEffect(() => {
-    const initializeAppUser = async() => {
-      try {
-        const response = await fetch("http://localhost:9000/api/account/profile", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if(response.status == 200) {
-          let responseJson = await response.json();
-          setAppUser(responseJson.data);
-        } else {
-          throw new Error("Response status was not 200")
-        }
-      } catch (error) {
-        setAppUser(null);
-      }
-      
-    }
-    initializeAppUser();
-  }, []);
-
 
   return (
+    <AppUserProvider>
       <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Box sx={{
@@ -107,8 +74,10 @@ const App = () => {
             "body"
           `
         }}>
-        <NavBar {...{appUser, setAppUser, appDarkTheme, setAppDarkTheme}} sx={{ gridArea: 'header' }} />
+        <NavBar {...{appDarkTheme, setAppDarkTheme}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
+
+        <SnackbarProvider >
         <Routes>
           <Route path="/BrowseCollection" element={
             <ThemeProvider theme={(mainTheme) => {
@@ -120,20 +89,15 @@ const App = () => {
                 }
               };
             }}>
-              <CollectionBrowser {...{showSnackbar}} />
+              <CollectionBrowser />
             </ThemeProvider>
           } />
           <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
           <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
 
-          <Route path="/Account/*" element={<Account {
-              ...{appUser, setAppUser, showSnackbar,
-                snackbarOpen, snackbarText, snackbarSeverity,
-                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
-              }
-            } />} />
+          <Route path="/Account/*" element={<Account />} />
 
-          <Route path="/login" element={<Login {...{appUser, setAppUser}} />} />
+          <Route path="/login" element={<Login />} />
           
           <Route index element={() => {
             const navigate = useNavigate();
@@ -142,30 +106,16 @@ const App = () => {
 
               
           </Routes>
+          </SnackbarProvider>
         </Box>
         </Box>
         
       </BrowserRouter>
       
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={3000} 
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center"
-        }}
-        onClose={() => {
-          setSnackbarOpen(false);
-        }}
-      >
-        <Alert severity={snackbarSeverity} variant="standard" sx={{width: "100%"}}>
-          <Stack direction="row" spacing={2}>
-            <Typography variant="body1">{snackbarText}</Typography>
-          </Stack>
-        </Alert>
-      </Snackbar>
+      
 
       </ThemeProvider>
+    </AppUserProvider>
   );
 }
 

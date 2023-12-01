@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useState } from "react";
 import {
   Stack,
   Button,
@@ -40,6 +40,8 @@ import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
 import SearchIcon from "@mui/icons-material/Search"
 import InfoIcon from "@mui/icons-material/Info"
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const UserManagement = (props) => {
@@ -93,7 +95,9 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
+  const { setSelectedNavItem } = props;
+  const [appUser, setAppUser] = useAppUser();
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
 

@@ -18,11 +18,16 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SettingsIcon from "@mui/icons-material/Settings"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
+import { useSnackbar } from "../App/AppSnackbar";
+import { useAppUser } from "../App/AppUser";
 
 
 const MyExhibitions = (props) => {
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
+  const { setSelectedNavItem } = props;
+  const showSnackbar = useSnackbar();
+
+  const [appUser, setAppUser] = useAppUser();
 
   const [myExhibitions, setMyExhibitions] = useState([]);
 

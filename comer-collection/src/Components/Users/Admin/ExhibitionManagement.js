@@ -24,6 +24,8 @@ import PublicIcon from "@mui/icons-material/Public"
 import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog";
 import SettingsIcon from "@mui/icons-material/Settings"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 const ExhibitionManagement = (props) => {
   const [users, setUsers] = useState([]);
@@ -64,7 +66,9 @@ const ExhibitionManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(false);
 
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
+  const { setSelectedNavItem } = props;
+  const [appUser, setAppUser] = useAppUser();
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
 

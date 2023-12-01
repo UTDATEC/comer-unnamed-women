@@ -7,7 +7,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
 
   
-export const ExhibitionBrowser = ({showSnackbar}) => {
+export const ExhibitionBrowser = () => {
 
     const [exhibitions, setExhibitions] = useState([]);
 

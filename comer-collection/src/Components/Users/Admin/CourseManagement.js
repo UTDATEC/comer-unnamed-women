@@ -33,6 +33,8 @@ import SecurityIcon from "@mui/icons-material/Security"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const CourseManagement = (props) => {
@@ -73,8 +75,10 @@ const CourseManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
+  const { setSelectedNavItem } = props;
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
+  const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
   
 

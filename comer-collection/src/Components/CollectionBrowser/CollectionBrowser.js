@@ -5,7 +5,7 @@ import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 
 
-export const CollectionBrowser = ({showSnackbar, isDialogMode, selectedItem, setSelectedItem, disabledImages}) => {
+export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, disabledImages}) => {
 
     const [images, setImages] = useState([]);
 
