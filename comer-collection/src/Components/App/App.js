@@ -11,37 +11,6 @@ import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
 import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
 
 const App = () => {
-  const [searchParams, setSearchParams] = useState({
-    title: '',
-    inscriptions: '',
-    medium: '',
-    subject: '',
-    tags: '',
-    dateCreated: '',
-    dimensions: '',
-    accessionNumber: '',
-    collectionLocation: '',
-    copyright: '',
-    artist: '',
-  });
-
-  const [selectedImage, setSelectedImage] = useState({
-    accessionNumber: '',
-    artist: '',
-    collectionLocation: '',
-    copyright: '',
-    createdAt: '',
-    dateCreated: '',
-    dimensions: '',
-    fileName: '',
-    id: -1,
-    inscriptions: '',
-    medium: '',
-    subject: '',
-    tags: '',
-    title: '',
-    updatedAt: '',
-  });
 
   const [appDarkTheme, setAppDarkTheme] = useState(true);
 
