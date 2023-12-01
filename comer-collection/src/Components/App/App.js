@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../Login/Login';
 import NavBar from '../NavBar/NavBar';
 import React, { createContext, useEffect, useState } from 'react';
@@ -79,6 +79,9 @@ const App = () => {
 
         <SnackbarProvider >
         <Routes>
+          
+          <Route index element={<Navigate to="/login" />} />
+          
           <Route path="/BrowseCollection" element={<CollectionBrowser />} />
           <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
           <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
@@ -86,11 +89,6 @@ const App = () => {
           <Route path="/Account/*" element={<Account />} />
 
           <Route path="/login" element={<Login />} />
-          
-          <Route index element={() => {
-            const navigate = useNavigate();
-            return <Navigate to="/login" />
-          }} />
 
               
           </Routes>
