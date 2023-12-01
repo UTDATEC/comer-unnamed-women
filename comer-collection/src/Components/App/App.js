@@ -79,19 +79,7 @@ const App = () => {
 
         <SnackbarProvider >
         <Routes>
-          <Route path="/BrowseCollection" element={
-            <ThemeProvider theme={(mainTheme) => {
-              return {
-                ...mainTheme, 
-                palette: {
-                  ...mainTheme.palette, 
-                  mode: "dark"
-                }
-              };
-            }}>
-              <CollectionBrowser />
-            </ThemeProvider>
-          } />
+          <Route path="/BrowseCollection" element={<CollectionBrowser />} />
           <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
           <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
 
