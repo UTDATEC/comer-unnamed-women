@@ -9,7 +9,7 @@ const { listTags, createTag, updateTag, deleteTag, getTag } = require("./control
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 // Read images
 router.get("/images", listImages);
@@ -106,8 +106,11 @@ router.post("/account/exhibitions", createExhibition);
 router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
 router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
 
-router.get("/account/exhibitions/:exhibitionId/load", loadExhibition)
+router.get("/account/exhibitions/:exhibitionId/load", loadExhibition);
+router.get("/exhibitions/:exhibitionId/load", loadExhibitionAdmin);
+router.get("/exhibitions/public/:exhibitionId/load", loadExhibitionPublic);
 router.put("/account/exhibitions/:exhibitionId/save", saveExhibition);
+router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
 
 
 // router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
