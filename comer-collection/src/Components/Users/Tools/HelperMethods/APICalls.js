@@ -33,7 +33,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
               }
             }
           )
-          return response.data;
+          return {...response.data, status: response.status};
         }
     
       case "POST":
@@ -53,7 +53,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
               }
             }
           )
-          return response.data;
+          return {...response.data, status: response.status};
         }
     }
   }
