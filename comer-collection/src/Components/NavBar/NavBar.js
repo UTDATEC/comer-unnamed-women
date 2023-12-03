@@ -53,7 +53,7 @@ export default function NavBar(props) {
   }, [appUser])
 
   return (
-      <AppBar position="fixed" color="primary">
+      <AppBar position="fixed" color="primary" sx={{zIndex: 5000}}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
           <Stack direction="row" alignItems="center" paddingLeft={2}>
             {/* Placeholder for logo */}
@@ -86,7 +86,7 @@ export default function NavBar(props) {
                     </Typography>
                   </Stack>
                 </Button>
-                <Menu MenuListProps={{
+                <Menu sx={{zIndex: 5000}} MenuListProps={{
                 }} anchorEl={anchorElement} anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right'
