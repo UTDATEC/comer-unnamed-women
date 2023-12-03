@@ -7,9 +7,14 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
 
   
-export const ExhibitionBrowser = ({showSnackbar}) => {
+export const ExhibitionBrowser = () => {
 
     const [exhibitions, setExhibitions] = useState([]);
+
+    const [sortColumn, setSortColumn] = useState("Last Updated");
+    const [sortAscending, setSortAscending] = useState(false);
+  
+  
 
     const fetchPublicExhibitionData = async() => {
         try {
@@ -26,55 +31,38 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
     }, [])
 
     const theme = useTheme();
-    console.log(theme);
   
     const exhibitionTableFields = [
         {
           columnDescription: "Title",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Title</Typography>
-            </TableCell>
-          ),
           generateTableCell: (exhibition) => (
             <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
               <Typography variant="body1">{exhibition.title}</Typography>
             </TableCell>
-          )
+          ),
+          generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
         },
         {
           columnDescription: "Curator",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Curator</Typography>
-            </TableCell>
-          ),
           generateTableCell: (exhibition) => (
             <TableCell>
               <Typography variant="body1">{exhibition.curator}</Typography>
             </TableCell>
-          )
+          ),
+          generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
         },
         {
           columnDescription: "Last Updated",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Last Updated</Typography>
-            </TableCell>
-          ),
           generateTableCell: (exhibition) => (
             <TableCell>
               <Typography variant="body1">{new Date (exhibition.date_modified).toDateString()}</Typography>
             </TableCell>
-          )
+          ),
+          generateSortableValue: (exhibition) => new Date (exhibition.date_modified)
         },
         {
           columnDescription: "Open",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6"></Typography>
-            </TableCell>
-          ),
+          columnHeaderLabel: "",
           generateTableCell: (exhibition) => (
             <TableCell>
               <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
@@ -100,6 +88,7 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
               </Stack>
               </Stack>
                 <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
+                    {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
                     nonEmptyHeight="500px" emptyMinHeight="500px"
                 />
             </Stack>

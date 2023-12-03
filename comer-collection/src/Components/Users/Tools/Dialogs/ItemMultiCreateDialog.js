@@ -9,14 +9,14 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
+export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
   return (
     <Dialog component="form" fullWidth={true} maxWidth="lg"
-      open={createDialogIsOpen}
+      open={dialogIsOpen}
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;
-        setCreateDialogIsOpen(false);
+        setDialogIsOpen(false);
       }}
       onSubmit={(e) => {
         e.preventDefault();
@@ -46,7 +46,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                     }}
                     inputProps={{
                       type: f.inputType ?? "text",
-                      maxlength: f.maxlength ?? 255
+                      maxLength: f.maxlength ?? 255
                     }}
                     InputLabelProps={{
                       [f.inputType == "datetime-local" ? "shrink" : ""]: true
@@ -79,7 +79,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
       <DialogActions>
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
           <Button color="primary" variant="outlined" size="large" onClick={() => {
-            setCreateDialogIsOpen(false);
+            setDialogIsOpen(false);
             createDialogDispatch({
               type: "set",
               newArray: []

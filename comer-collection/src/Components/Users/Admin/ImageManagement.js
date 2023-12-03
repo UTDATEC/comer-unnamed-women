@@ -40,6 +40,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove"
 import CheckIcon from "@mui/icons-material/Check"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const ImageManagement = (props) => {
@@ -86,7 +88,7 @@ const ImageManagement = (props) => {
   const editDialogFieldDefinitions = imageFieldDefinitions;
   const createDialogFieldDefinitions = imageFieldDefinitions;
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [createDialogImages, createDialogDispatch] = useReducer(createImageDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,29 +102,29 @@ const ImageManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar } = props;
+  const { selectedNavItem, setSelectedNavItem } = props;
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
+  const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
   
 
   useEffect(() => {
     setSelectedNavItem("Image Management");
     if(appUser.is_admin) {
-      fetchData();
+      fetchImages();
+      fetchArtists();
     }
   }, []); 
 
 
-  const fetchData = async () => {
+  const fetchImages = async () => {
     try {
       const imageData = await sendAuthenticatedRequest("GET", "/api/images");
       setImages(imageData.data);
 
-      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
-      setArtists(artistData.data);
-
-      const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
-      setTags(tagData.data);
+      // const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
+      // setTags(tagData.data);
 
       setTimeout(() => {
         setRefreshInProgress(false);
@@ -135,12 +137,23 @@ const ImageManagement = (props) => {
       }
       setArtistsByImage({...artistsByImageDraft});
 
-
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+
+  const fetchArtists = async () => {
+    try {
+
+      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
+      setArtists(artistData.data);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+  }
 
   /*
     Image display:
@@ -173,17 +186,8 @@ const ImageManagement = (props) => {
   ])
 
 
-  const filteredAndSearchedImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
+  const visibleImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
 
-  const visibleImages = filteredAndSearchedImages.sort((a, b) => {
-    if(sortColumn == "Name")
-      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-    else if(sortColumn == "ID")
-      return !sortAscending ^ (a.id > b.id);
-    else if(sortColumn == "Email")
-      return !sortAscending ^ (a.email > b.email)
-  })
-  
 
   const handleImagesCreate = async(newImageArray) => {
     let imagesCreated = 0;
@@ -200,10 +204,10 @@ const ImageManagement = (props) => {
         imageIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(imagesCreated == newImageArray.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
         newArray: []
@@ -237,7 +241,7 @@ const ImageManagement = (props) => {
     try {
       let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/images/${imageId}`, filteredImage);
-      fetchData();
+      fetchImages();
 
       setEditDialogIsOpen(false);
       setEditDialogFields(getBlankItemFields(imageFieldDefinitions));
@@ -256,7 +260,7 @@ const ImageManagement = (props) => {
   const handleDelete = async (imageId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}`);
-      fetchData();
+      fetchImages();
 
       showSnackbar(`Image ${imageId} has been deleted`, "success")
 
@@ -276,7 +280,7 @@ const ImageManagement = (props) => {
     try {
       let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
       await sendAuthenticatedRequest("POST", `/api/artists/`, filteredArtist);
-      fetchData();
+      fetchArtists();
 
       showSnackbar(`Artist created`, "success");
 
@@ -293,7 +297,7 @@ const ImageManagement = (props) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
       await sendAuthenticatedRequest("POST", `/api/tags/`, filteredTag);
-      fetchData();
+      fetchArtists();
 
       showSnackbar(`Tag created`, "success");
 
@@ -309,11 +313,11 @@ const ImageManagement = (props) => {
     try {
       let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}`, filteredartist);
-      fetchData();
+      fetchArtists();
 
       setArtistEditDialogIsOpen(false);
       setArtistEditDialogFields(getBlankItemFields(artistFieldDefinitions));
-
+``
       showSnackbar(`Successfully edited artist ${artistId}`, "success");
 
     } catch (error) {
@@ -329,7 +333,7 @@ const ImageManagement = (props) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}`, filteredtag);
-      fetchData();
+      fetchArtists();
 
       setTagEditDialogIsOpen(false);
       setTagEditDialogFields(getBlankItemFields(tagFieldDefinitions));
@@ -347,7 +351,7 @@ const ImageManagement = (props) => {
   const handleDeleteArtist = async(artistId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/artists/${artistId}`);
-      fetchData();
+      fetchArtists();
 
       setArtistDeleteDialogIsOpen(false);
       setArtistDeleteDialogItem(null);
@@ -365,7 +369,7 @@ const ImageManagement = (props) => {
   const handleDeleteTag = async(tagId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/tags/${tagId}`);
-      fetchData();
+      fetchArtists();
 
       setTagDeleteDialogIsOpen(false);
       setTagDeleteDialogItem(null);
@@ -405,7 +409,7 @@ const ImageManagement = (props) => {
         artistIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(artistsUpdated == artistIds.length) {
       showSnackbar(`Successfully ${operation}ed ${artistsUpdated} artists for image ${imageId}`, "success")
@@ -456,7 +460,7 @@ const ImageManagement = (props) => {
         imageIndicesWithErrors.push(i);
       }
     }
-    fetchData();
+    fetchImages();
 
     if(imagesUpdated == imageIds.length) {
       showSnackbar(`Successfully ${operation}ed ${imagesUpdated} artists for artist ${artistId}`, "success")
@@ -473,13 +477,33 @@ const ImageManagement = (props) => {
     }
   }
 
-  const handleAssignImagesToArtist = (artistId, imageIds) => {
-    handleManageImagesForArtist("assign", artistId, imageIds);
-  }
+  const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/assign`, {
+        images: imageIds
+      });
+      showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success")
 
-  const handleUnassignImagesFromArtist = (artistId, imageIds) => {
-    handleManageImagesForArtist("unassign", artistId, imageIds);
-  }
+    } catch (error) {
+      console.error(`Error assigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
+      showSnackbar(`Failed to assign artist ${artistId} for ${imageIds.length} images`, "error")
+    }
+    fetchImages();
+  }, [showSnackbar]);
+
+  const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/unassign`, {
+        images: imageIds
+      });
+      showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success")
+
+    } catch (error) {
+      console.error(`Error unassigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
+      showSnackbar(`Failed to unassign artist ${artistId} for ${imageIds.length} images`, "error")
+    }
+    fetchImages();
+  }, [showSnackbar]);
 
 
 
@@ -498,11 +522,6 @@ const ImageManagement = (props) => {
   const artistTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.id}</Typography>
@@ -511,11 +530,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Name</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
@@ -524,11 +538,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Images",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Images</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -540,11 +549,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Website",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Website</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           {artist.website && (
@@ -561,11 +565,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           {artist.notes && (
@@ -578,11 +577,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">&nbsp;</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Stack direction="row">
@@ -617,11 +611,6 @@ const ImageManagement = (props) => {
   const tagTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Typography variant="body1">{tag.id}</Typography>
@@ -630,11 +619,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Data",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Tag</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Typography variant="body1">{tag.data}</Typography>
@@ -643,11 +627,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Images",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Images</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -659,11 +638,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           {tag.notes && (
@@ -676,11 +650,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">&nbsp;</Typography>
-        </TableCell>
-      ),
       generateTableCell: (tag) => (
         <TableCell>
           <Stack direction="row">
@@ -714,37 +683,24 @@ const ImageManagement = (props) => {
   const imageTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.id
     },
     {
       columnDescription: "Title",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Title" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.title}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.title.toLowerCase()
     },
     {
       columnDescription: "Preview",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6"></Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
@@ -775,37 +731,24 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Accession Number",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Acc No" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.accessionNumber}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
     },
     {
       columnDescription: "Year",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Year</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Typography variant="body1">{image.year}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (image) => image.year
     },
     {
       columnDescription: "Location",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Location</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           {image.location && (
@@ -819,11 +762,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Artists",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Artists</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -846,11 +784,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Tags",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Tags</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -871,11 +804,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Exhibitions",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Exhibitions</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -896,11 +824,6 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
-      ),
       generateTableCell: (image) => (
         <TableCell>
           <Stack direction="row">
@@ -931,27 +854,18 @@ const ImageManagement = (props) => {
   ]
 
 
-  const artistTableFieldsForDialog = [
+  const artistTableFieldsForDialog = useMemo(() =>[
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (artist) => artist.id
     },
     {
       columnDescription: "Artist",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Artist</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
@@ -960,29 +874,20 @@ const ImageManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (artist) => (
         <TableCell>
           <Typography variant="body1">{artist.notes ?? ""}</Typography>
         </TableCell>
       )
     }
-  ]
+  ], []);
+  
 
 
-  const artistTableFieldsForDialogAll = [...artistTableFieldsForDialog, {
+  const artistTableFieldsForDialogAll = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "Add",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (artist, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(artist);
+      const quantity = artist.quantity_assigned;
       return (
       <TableCell>
         {quantity == assignArtistDialogImages.length && (
@@ -1020,18 +925,12 @@ const ImageManagement = (props) => {
         }
       </TableCell>
     )}
-  }]
+  }], [assignArtistDialogImages, handleAssignImagesToArtist]);
 
-  const artistTableFieldsForDialogAssigned = [...artistTableFieldsForDialog, {
+  const artistTableFieldsForDialogAssigned = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (artist, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(artist)
-
+      const quantity = artist.quantity_assigned;
       return (
         <TableCell>
           {quantity == assignArtistDialogImages.length && (
@@ -1056,7 +955,24 @@ const ImageManagement = (props) => {
         </TableCell>
       )
     }
-  }]
+  }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);
+
+
+
+  const imageDataTable = useMemo(() => {
+    console.log("Running imageDataTable")
+    return (
+      <DataTable visibleItems={visibleImages} 
+        {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+        tableFields={imageTableFields} 
+        rowSelectionEnabled={true} 
+        selectedItems={selectedImages}
+        setSelectedItems={setSelectedImages}
+        // sx={{gridArea: "table"}}
+      />
+    )
+  }, [visibleImages, selectedImages, sortColumn, sortAscending]);
+
 
 
   return !appUser.is_admin && (
@@ -1081,7 +997,7 @@ const ImageManagement = (props) => {
         <Stack direction="row" spacing={2}>
           <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
             setRefreshInProgress(true);
-            fetchData();
+            fetchImages();
           }}
             disabled={refreshInProgress}>
             <Typography variant="body1">Refresh</Typography>
@@ -1108,20 +1024,15 @@ const ImageManagement = (props) => {
           </Button>
           <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
             onClick={() => {
-              setCreateDialogIsOpen(true);
+              setDialogIsOpen(true);
             }}
           >
             <Typography variant="body1">Create Images</Typography>
           </Button>
         </Stack>
       </Stack>
-      <DataTable items={images} visibleItems={visibleImages} 
-        tableFields={imageTableFields} 
-        rowSelectionEnabled={true} 
-        selectedItems={selectedImages}
-        setSelectedItems={setSelectedImages}
-        sx={{gridArea: "table"}}
-      />
+      
+      {imageDataTable}
 
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
         <SelectionSummary
@@ -1150,7 +1061,7 @@ const ImageManagement = (props) => {
         dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
         createDialogItems={createDialogImages}
         handleItemsCreate={handleImagesCreate}
-        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="image"

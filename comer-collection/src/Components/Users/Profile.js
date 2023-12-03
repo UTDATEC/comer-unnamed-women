@@ -16,12 +16,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SchoolIcon from '@mui/icons-material/School';
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
+import { useAppUser } from "../App/AppUser";
+import { useSnackbar } from "../App/AppSnackbar";
 
 const Profile = (props) => {
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
-    snackbarOpen, snackbarText, snackbarSeverity,
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const { setSelectedNavItem } = props;
+
+  const [appUser, setAppUser] = useAppUser();
+  const showSnackbar = useSnackbar();
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -241,18 +244,9 @@ const Profile = (props) => {
   const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
       navigator.clipboard.writeText(user[fieldName]);
-      setSnackbarSeverity("success")
-      if(fieldName == "email") {
-        setSnackbarText(`Email address copied to clipboard`);
-      } else {
-        setSnackbarText(`Text copied to clipboard`);
-      }
-
-      setSnackbarOpen(true);
+      showSnackbar("Copied to clipboard", "success");
     } catch (error) {
-      setSnackbarSeverity("error")
-      setSnackbarText(`Error copying text to clipboard`);
-      setSnackbarOpen(true);
+      showSnackbar("Error copying text to clipboard", "error");
     }
   }, [])
 

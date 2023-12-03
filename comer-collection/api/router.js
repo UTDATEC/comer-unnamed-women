@@ -3,13 +3,13 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
 const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 // Read images
 router.get("/images", listImages);
@@ -19,6 +19,8 @@ router.get("/collection/images", listImagesPublic);
 router.get("/collection/images/:imageId", getImagePublic);
 router.get("/exhibitions/public", listPublicExhibitions);
 
+router.get("/collection/images/:imageId/download", downloadImagePublic);
+
 // Modify images
 router.post("/images", createImage);
 router.put("/images/:imageId", updateImage);
@@ -27,6 +29,9 @@ router.delete("/images/:imageId", deleteImage);
 // Modify image/artist associations
 router.put("/images/:imageId/artists/:artistId", assignArtistToImage);
 router.delete("/images/:imageId/artists/:artistId", unassignArtistFromImage);
+
+router.put("/artists/:artistId/images/assign", assignArtistToImages);
+router.put("/artists/:artistId/images/unassign", unassignArtistFromImages);
 
 // Modify image/tag associations
 router.put("/images/:imageId/tags/:tagId", assignTagToImage);
@@ -81,11 +86,12 @@ router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 // Read exhibitions (admin)
 router.get("/exhibitions", listExhibitions)
 router.get("/exhibitions/:exhibitionId", getExhibition)
-router.put("/exhibitions", saveExhibition)
-router.get("/exhibitions/:exhibitionId/load", loadExhibition)
+// router.put("/exhibitions", saveExhibition)
+// router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
 // Modify exhibitions (admin)
-router.delete("/exhibitions/:exhibitionId", deleteExhibition)
+router.put("/exhibitions/:exhibitionId", adminEditExhibition);
+router.delete("/exhibitions/:exhibitionId", adminDeleteExhibition);
 
 
 
@@ -97,6 +103,14 @@ router.get("/account/courses", listMyCourses);
 router.get("/account/exhibitions", listMyExhibitions);
 
 router.post("/account/exhibitions", createExhibition);
+router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
+router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
+
+router.get("/account/exhibitions/:exhibitionId/load", loadExhibition);
+router.get("/exhibitions/:exhibitionId/load", loadExhibitionAdmin);
+router.get("/exhibitions/public/:exhibitionId/load", loadExhibitionPublic);
+router.put("/account/exhibitions/:exhibitionId/save", saveExhibition);
+router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
 
 
 // router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {

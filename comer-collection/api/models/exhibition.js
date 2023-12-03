@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 const { User } = require("../sequelize.js")
 
 module.exports = (db) => {
@@ -18,7 +19,10 @@ module.exports = (db) => {
         data: {
             type: Sequelize.BLOB('medium'),
             field: "exhibition_data",
-            allowNull: true
+            allowNull: true,
+            get() {
+                return this.getDataValue('data')?.toString('utf-8');
+            }
         },
         date_created: {
             type: Sequelize.DATE(3),
@@ -38,6 +42,12 @@ module.exports = (db) => {
                 isIn: [["PUBLIC", "PUBLIC_ANONYMOUS", "PRIVATE"]]
             },
             defaultValue: "PRIVATE"
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.title;
+            }
         }
     }, {
         defaultScope: {

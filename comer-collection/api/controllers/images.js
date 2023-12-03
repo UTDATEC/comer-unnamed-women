@@ -1,8 +1,9 @@
 const createError = require('http-errors');
-const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
+const { Image, Artist, Tag, Exhibition, sequelize } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
-
+const { Op } = require('sequelize');
+const https = require('https')
 
 const isImageDeletable = (imageJSON) => {
     return Boolean(imageJSON.Exhibitions?.length == 0);
@@ -53,6 +54,19 @@ const getImagePublic = async (req, res, next) => {
     else
         next(createError(404));
 };
+
+const downloadImagePublic = async(req, res, next) => {
+    try {
+        const image = await Image.findByPk(req.params.imageId)
+        if(!image)
+            throw new Error("Image metadata could not be retrieved from the database")
+        else if(!image?.url)
+            throw new Error("Image does not appear to have a URL");
+        https.get(image.url, (imageRes) => imageRes.pipe(res));
+    } catch(e) {
+        next(createError(500, {debugMessage: e.message}))
+    }
+}
 
 const getImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
@@ -131,6 +145,51 @@ const assignArtistToImage = async (req, res, next) => {
     })
 };
 
+
+
+
+const manageArtistForImages = async(artistId, images, isAssign) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const artist = await Artist.findByPk(artistId);
+        if(isAssign)
+            artist.addImages(images)
+        else
+            artist.removeImages(images);
+        await transaction.commit();
+    } catch(e) {
+        await transaction.rollback();
+        throw new Error(e.message);
+    }
+}
+
+const assignArtistToImages = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        try {
+            manageArtistForImages(req.params.artistId, req.body.images, true);
+            res.sendStatus(204);
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}))
+        }
+    })
+}
+
+const unassignArtistFromImages = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        try {
+            manageArtistForImages(req.params.artistId, req.body.images, false);
+            res.sendStatus(204);
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}))
+        }
+    })
+}
+
+
+
+
 const unassignArtistFromImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const image = await Image.findByPk(req.params.imageId);
@@ -200,4 +259,4 @@ const unassignTagFromImage = async (req, res, next) => {
 // Assign tag to image
 // Unassign tag from imaage
 
-module.exports = { listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }
+module.exports = { downloadImagePublic, listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, assignArtistToImage, assignArtistToImages, unassignArtistFromImages, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }

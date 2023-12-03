@@ -79,6 +79,11 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
         case "exhibition":
             
             switch (action.type) {
+                case "set_everything":
+                    console.log("set_everything", action.newExhibition);
+                    return {
+                        ...action.newExhibition
+                    }
                 case "set_main_wall_color":
                     return {
                         ...exhibitionData,

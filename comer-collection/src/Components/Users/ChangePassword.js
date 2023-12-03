@@ -2,15 +2,18 @@ import { Navigate, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import { useAppUser } from '../App/AppUser';
 
 const ChangePassword = (props) => {
   
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem } = props;
+  const { selectedNavItem, setSelectedNavItem } = props;
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [error, setError] = useState(false);
+
+  const [appUser, setAppUser] = useAppUser();
 
   const navigate = useNavigate();
 

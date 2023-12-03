@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Stack, Dialog,
   DialogTitle,
@@ -30,14 +30,24 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
     internalEditDialogIsOpen, setInternalEditDialogIsOpen, 
     internalEditDialogItem, setInternalEditDialogItem, 
     internalEditDialogFields, setInternalEditDialogFields,
-    internalEditDialogSubmitEnabled, setInternalEditDialogSubmitEnabled
+    internalEditDialogSubmitEnabled, setInternalEditDialogSubmitEnabled,
+
+    onClose
   }) => {
 
   const blankItem = getBlankItemFields(dialogFieldDefinitions)
   const [itemToAdd, setItemToAdd] = useState(blankItem);
 
-  const visibleItems = searchItems(itemSearchQuery, dialogItems, searchBoxFields);
+  const visibleItems = useMemo(() => {
+    return searchItems(itemSearchQuery, dialogItems, searchBoxFields)
+  }, [dialogItems]);
 
+  const entityDataTable = useMemo(() => {
+    return (
+      <DataTable tableFields={dialogTableFields} items={dialogItems} visibleItems={visibleItems} />
+    )
+  }, [dialogItems, visibleItems])
+  
   return (
     <>
       <Dialog fullWidth={true} maxWidth="lg"
@@ -69,7 +79,9 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
                   placeholder={searchBoxPlaceholder} width="40%" 
                   />
               </Stack>
-              <DataTable tableFields={dialogTableFields} items={dialogItems} visibleItems={visibleItems} />
+
+              {entityDataTable}
+              
             </Stack>
           </Box>
           <Divider />
@@ -129,6 +141,8 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
               width: "30%"
             }} color="primary" variant="contained" size="large"
               onClick={() => {
+                if(onClose)
+                  onClose();
                 setDialogIsOpen(false);
               }}
             >

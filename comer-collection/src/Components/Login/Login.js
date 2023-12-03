@@ -2,21 +2,12 @@ import { Navigate, useNavigate } from 'react-router';
 import { useState } from 'react';
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import { sendAuthenticatedRequest } from '../Users/Tools/HelperMethods/APICalls';
+import { useAppUser } from '../App/AppUser';
 
-async function loginUser(email, password) {
-  const response = await fetch('http://localhost:9000/api/account/signin', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password })
-  })
-  return response.json();
-}
 
-const Login = (props) => {
+const Login = () => {
   
-  const { appUser, setAppUser } = props;
+  const [appUser, setAppUser] = useAppUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

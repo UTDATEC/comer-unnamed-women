@@ -33,6 +33,8 @@ import SecurityIcon from "@mui/icons-material/Security"
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const CourseManagement = (props) => {
@@ -59,7 +61,7 @@ const CourseManagement = (props) => {
   const editDialogFieldDefinitions = courseFieldDefinitions;
   const createDialogFieldDefinitions = courseFieldDefinitions;
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -73,8 +75,10 @@ const CourseManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
+  const { setSelectedNavItem } = props;
+  const showSnackbar = useSnackbar();
   const theme = useTheme();
+  const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
   
 
@@ -158,16 +162,16 @@ const CourseManagement = (props) => {
   ])
 
 
-  const filteredAndSearchedCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
+  const visibleCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
 
-  const visibleCourses = filteredAndSearchedCourses.sort((a, b) => {
-    if(sortColumn == "Name")
-      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-    else if(sortColumn == "ID")
-      return !sortAscending ^ (a.id > b.id);
-    else if(sortColumn == "Email")
-      return !sortAscending ^ (a.email > b.email)
-  })
+  // const visibleCourses = filteredAndSearchedCourses.sort((a, b) => {
+  //   if(sortColumn == "Name")
+  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
+  //   else if(sortColumn == "ID")
+  //     return !sortAscending ^ (a.id > b.id);
+  //   else if(sortColumn == "Email")
+  //     return !sortAscending ^ (a.email > b.email)
+  // })
   
 
 
@@ -190,7 +194,7 @@ const CourseManagement = (props) => {
     fetchData();
 
     if(coursesCreated == newCourseArray.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
         newArray: []
@@ -276,10 +280,6 @@ const CourseManagement = (props) => {
 
       showSnackbar(`Course ${courseId} has been deleted`, "success")
 
-      if (response.status === 200 || response.status === 204) {
-      } else {
-        console.error("Error deleting course:", response.statusText);
-      }
     } catch (error) {
       console.error("Error handling delete operation:", error);
 
@@ -295,37 +295,24 @@ const CourseManagement = (props) => {
   const courseTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Typography variant="body1">{course.id}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => course.id
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.name}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => course.name
     },
     {
       columnDescription: "Start",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Start</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Stack direction="column" padding={0}>
@@ -343,15 +330,11 @@ const CourseManagement = (props) => {
             })}</Typography>
           </Stack>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => new Date(course.date_start)
     },
     {
       columnDescription: "End",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">End</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Stack direction="column" padding={0}>
@@ -369,15 +352,11 @@ const CourseManagement = (props) => {
             })}</Typography>
           </Stack>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (course) => new Date(course.date_end)
     },
     {
       columnDescription: "Status",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Status</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Typography variant="body1">{course.status}</Typography>
@@ -386,11 +365,6 @@ const CourseManagement = (props) => {
     },
     {
       columnDescription: "Enrollment",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Enrollment</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -408,11 +382,6 @@ const CourseManagement = (props) => {
     },
     {
       columnDescription: "Notes",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
           <Typography variant="body1">{course.notes}</Typography>
@@ -421,11 +390,6 @@ const CourseManagement = (props) => {
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
         <TableCell>
           <IconButton 
@@ -456,11 +420,6 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialog = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -468,28 +427,20 @@ const CourseManagement = (props) => {
             {user.is_admin && (<SecurityIcon color="secondary" />)}
           </Stack>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Name</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
         <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
         </TableCell>
-      )
+      ),
+      generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Email</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
         <TableCell>
           <Typography variant="body1">{user.email}</Typography>
@@ -500,13 +451,9 @@ const CourseManagement = (props) => {
 
   const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
     columnDescription: "Enroll",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (user, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(user);
+      // const quantity = extraProperties.getQuantityAssigned(user);
+      const quantity = user.quantity_assigned
       return (
       <TableCell>
         {quantity == assignUserDialogCourses.length && (
@@ -544,14 +491,9 @@ const CourseManagement = (props) => {
 
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (user, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(user)
-
+      // const quantity = extraProperties.getQuantityAssigned(user)
+      const quantity = user.quantity_assigned;
       return (
         <TableCell>
           {quantity == assignUserDialogCourses.length && (
@@ -617,7 +559,7 @@ const CourseManagement = (props) => {
             </Button>
             <Button color="primary" variant="contained" startIcon={<AddIcon/>}
               onClick={() => {
-                setCreateDialogIsOpen(true);
+                setDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Courses</Typography>
@@ -626,11 +568,12 @@ const CourseManagement = (props) => {
         </Stack>
         <DataTable items={courses} visibleItems={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
+          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
           sx={{gridArea: "table"}}
           emptyMinHeight="300px"
           {...visibleCourses.length == courses.length && {
             noContentMessage: "No courses yet",
-            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonAction: () => {setDialogIsOpen(true)},
             noContentButtonText: "Create a course",
             NoContentIcon: InfoIcon
           } || visibleCourses.length < courses.length && {
@@ -667,7 +610,7 @@ const CourseManagement = (props) => {
         dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
         createDialogItems={createDialogCourses}
         handleItemsCreate={handleCoursesCreate}
-        {...{ createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
       <ItemSingleEditDialog 
         entity="course"

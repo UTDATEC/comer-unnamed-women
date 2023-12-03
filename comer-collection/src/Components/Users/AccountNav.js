@@ -12,6 +12,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import SchoolIcon from '@mui/icons-material/School';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import LockIcon from '@mui/icons-material/Lock';
+import { useAppUser } from "../App/AppUser";
 
 
 const navLinks = [
@@ -69,7 +70,9 @@ const AccountNav = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { appUser, selectedNavItem, setSelectedNavItem } = props;
+  const { selectedNavItem, setSelectedNavItem } = props;
+
+  const [appUser, setAppUser] = useAppUser();
 
   const theme = useTheme();
 
