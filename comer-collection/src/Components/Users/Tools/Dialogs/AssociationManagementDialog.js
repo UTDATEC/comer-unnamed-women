@@ -57,13 +57,13 @@ export const AssociationManagementDialog = ({
     return computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems)
   }, [secondaryItemsAll, secondariesByPrimary, primaryItems]);
 
-  const secondaryItemsAllWithQuantities = useMemo(() => secondaryItemsAll.map((si) => {
+  const secondaryItemsAllWithQuantities = secondaryItemsAll.map((si) => {
     return {...si, quantity_assigned: getQuantityAssigned(si)};
-  }), [secondaryItemsAll]);
+  });
 
-  const secondaryItemsAssignedWithQuantities = useMemo(() => secondaryItemsAssigned.map((si) => {
+  const secondaryItemsAssignedWithQuantities = secondaryItemsAssigned.map((si) => {
     return {...si, quantity_assigned: getQuantityAssigned(si)};
-  }), [secondaryItemsAssigned]);
+  })
 
   const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAllWithQuantities]);
 
