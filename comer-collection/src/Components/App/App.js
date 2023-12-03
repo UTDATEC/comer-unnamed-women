@@ -52,6 +52,7 @@ const App = () => {
       },
       grey: {
         main: grey['600'],
+        contrastText: 'white',
         translucent: appDarkTheme ? grey['800'] : '#CCC',
         veryTranslucent: appDarkTheme ? '#333' : '#EEE',
       }

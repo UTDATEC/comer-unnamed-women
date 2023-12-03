@@ -7,10 +7,11 @@ import { setupCeiling } from './js/Ceiling';
 import { createArt } from './js/Art';
 import { createBoundingBoxes } from './js/BoundingBox';
 import staticImages from './js/StaticImages';
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Fab, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from '@mui/material';
 import EditIcon from "@mui/icons-material/Edit";
 import { PointerLockControls } from 'three-stdlib';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useTheme } from '@emotion/react';
 
 
 
@@ -96,17 +97,11 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         }
     }
 
-    const handleKeyup = () => {
-        setKeysPressed({
-            arrowup: false,
-            arrowdown: false,
-            arrowleft: false,
-            arrowright: false,
-            w: false,
-            a: false,
-            s: false,
-            d: false,
-        });
+    const handleKeyup = (e) => {
+        const keyPressed = e.key.toLowerCase();
+        if(keyPressed in keysPressed) {
+            setKeysPressed({...keysPressed, [keyPressed]: false})
+        }
     }
 
 
@@ -196,7 +191,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     // Manage movement based on key presses
     // and constrain camera position to exhibition boundaries
     useEffect(() => {
-        const distance_threshold = Math.sqrt((primary_json.size.width_ft + primary_json.size.length_ft) / 4);
+        const distance_threshold = Math.sqrt((primary_json.size.width_ft + primary_json.size.length_ft) / 4) / 6;
 
         // manage camera movement
         if(myControls?.isLocked) {
@@ -266,8 +261,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         let closeImage = null;
         for(const [image_id, image_position] of Object.entries(myArtPositionsByImageId ?? {})) {
             const distance_to_art = myCamera.position.distanceTo(image_position);
-            if(distance_to_art < distance_threshold)
+            if(distance_to_art < distance_threshold) {
                 closeImage = image_id;
+            }
         }
         setInfoMenuImageId(closeImage)
 
@@ -477,19 +473,53 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 </Fab>
             )}
             {!editModeActive && (<ExhibitionIntro {...{dialogIsOpen, setDialogIsOpen}} controls={myControls} {...{exhibitionMetadata}} />)}
-            <ArtInfoPopup {...{globalImageCatalog}} image_id={infoMenuImageId} />
+            <ArtInfoPopup {...{globalImageCatalog}} exhibitionState={primary_json} image_id={infoMenuImageId} />
             
         </Box>
     )
 }
 
 
-const ArtInfoPopup = ({globalImageCatalog, image_id}) => {
-    const imageInfo = globalImageCatalog.find((i) => i.id == image_id);
+const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
+    const infoFromCatalog = globalImageCatalog.find((i) => i.id == image_id);
+    const infoFromExhibition = exhibitionState.images.find((i) => i.image_id == image_id);
     return (
-        <Card sx={{position: "absolute", top: 10, left: 10}}>
+        <Card raised={true} component={Paper} sx={{
+            position: "absolute", 
+            top: 10, left: 10, 
+            width: "calc(30vw - 90px)",
+            opacity: 0.8,
+            visibility: image_id ? "" : "hidden"
+        }}>
             <CardContent>
-                <Typography>{JSON.stringify(imageInfo)}</Typography>
+                <Stack spacing={2}>
+                    <Typography variant="h5">{infoFromCatalog?.title}</Typography>
+                    {infoFromCatalog?.Artists.length > 0 && (
+                        <Stack>
+                            {infoFromCatalog?.Artists.map((a) => (
+                                <Typography>{a.safe_display_name}</Typography>
+                            ))}
+                        </Stack>
+                    )}
+                    {(infoFromCatalog?.year) && (
+                        <>
+                            <Divider />
+                            <Typography>{infoFromCatalog?.year}</Typography>
+                        </>
+                    )}
+                    {(infoFromExhibition?.metadata.description) && (
+                        <>
+                            <Divider />
+                            <Typography>{infoFromExhibition?.metadata.description}</Typography>
+                        </>
+                    )}
+                    {(infoFromExhibition?.metadata.additional_information) && (
+                        <>
+                            <Divider />
+                            <Typography>{infoFromExhibition?.metadata.additional_information}</Typography>
+                        </>
+                    )}
+                </Stack>
             </CardContent>
         </Card>
     )
@@ -521,7 +551,7 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
                         <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
                         <Typography>Left click near an artwork to be positioned in front of the piece.</Typography>
                     </Stack>
-                    <Button variant="contained" color="primary" size="large" id="play_button" 
+                    <Button variant="contained" color="grey" size="large" id="play_button" 
                         onClick={() => {
                             setDialogIsOpen(false);
                             controls.lock();
