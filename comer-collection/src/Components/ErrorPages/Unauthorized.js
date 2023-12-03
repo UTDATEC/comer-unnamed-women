@@ -15,8 +15,8 @@ const Unauthorized = (props) => {
             <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
                 <LockIcon sx={{fontSize: '150pt', opacity: 0.5}} />
                 <Typography variant="h4">{message ?? "Unauthorized"}</Typography>
-                <Button variant="contained" onClick={() => navigate(buttonDestination ?? '/')}>
-                    <Typography variant="body1">{buttonText ?? "Return to Homepage"}</Typography>
+                <Button variant="contained" onClick={() => navigate(buttonDestination ?? '/login')}>
+                    <Typography variant="body1">{buttonText ?? "Return to Login Page"}</Typography>
                 </Button>
             </Stack>
         </Box>
