@@ -80,7 +80,6 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
             
             switch (action.type) {
                 case "set_everything":
-                    console.log("set_everything", action.newExhibition);
                     return {
                         ...action.newExhibition
                     }

@@ -62,7 +62,9 @@ const downloadImagePublic = async(req, res, next) => {
             throw new Error("Image metadata could not be retrieved from the database")
         else if(!image?.url)
             throw new Error("Image does not appear to have a URL");
-        https.get(image.url, (imageRes) => imageRes.pipe(res));
+        https.get(image.url, (imageRes) => imageRes.pipe(res)).on('error', (e) => {
+            console.error(e);
+        });
     } catch(e) {
         next(createError(500, {debugMessage: e.message}))
     }

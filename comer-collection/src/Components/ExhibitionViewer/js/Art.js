@@ -19,6 +19,8 @@ export function generateArtData(primary_json, globalImageCatalog) {
 
         const item = {
 
+            image_id: image.image_id,
+
             img_src: `http://localhost:9000/api/collection/images/${image.image_id}/download` ?? staticImages['./image_not_available.jpg'],
 
             position: {
@@ -76,7 +78,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     ambient_light_intensity, scene, renderer, camera, primary_json, globalImageCatalog) {
     
 
-    const spotlights = [];
+    const artPositionsByImageId = {};
 
     let images_placed = 0;
         
@@ -105,15 +107,8 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     // create mesh from images, place them, rotate them
     art_data.forEach((data) => {
 
-        //const tmp_key = './' + data.img_src + '.jpg';
-        //const texture = texture_loader.load(staticImages[tmp_key]);
-
         // grab the texture and apply that texture to a material (lambert has lighting effects applied to it)
-        console.log(data.img_src, data);
-        const texture = texture_loader.load(data.img_src, 
-            (texture) => {
-
-            console.log("loaded", data.img_src)
+        texture_loader.load(data.img_src, (texture) => {
 
             const material = new THREE.MeshLambertMaterial({ map: texture }); // map texture to a material
     
@@ -122,6 +117,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
                 new THREE.PlaneGeometry((data.size.width / 12), (data.size.height / 12)),
                 material
             );
+
     
             // if frame color is null, give it the default color
             if (data.frame.color == null) {
@@ -353,11 +349,14 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     
             // important information for other functionalities
             art_group.user_data = {
+                image_id: data.image_id,
                 type: 'photograph',
                 info: data.metadata,
                 width: data.size.width,
                 height: data.size.height
             };
+
+            artPositionsByImageId[data.image_id] = art_group.position;
     
             // adjust each item to fix texture fighting
             art.position.set(0, 0, -(1 / 96));
@@ -394,7 +393,6 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             all_arts_group.add(art_group);
             // scene.add(spotlight);
             all_arts_group.add(spotlight);
-            spotlights.push(spotlight);
 
             images_placed++;
 
@@ -409,6 +407,5 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         }); // convert image into texture
     });
 
-    console.log("spotlights returned", spotlights.length)
-    return all_arts_group;
+    return {all_arts_group, artPositionsByImageId};
 };

@@ -1,22 +1,15 @@
-import { Component, createElement, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-// import primary_json from './example2.json' // assert { type: "json" };
 
-// import { scene, setupScene,	 addObjectsToScene } from './Scene.js';
-// import { addObjectsToScene, setupScene } from './js/Scene';
-
-import { setupMainWalls, setupSideWalls, setupWalls } from './js/Walls';
+import { setupMainWalls, setupSideWalls } from './js/Walls';
 import { setupFloor } from './js/Floor';
 import { setupCeiling } from './js/Ceiling';
 import { createArt } from './js/Art';
-import { createAmbientLight } from './js/Lighting';
 import { createBoundingBoxes } from './js/BoundingBox';
-import { setupEventListeners } from './js/EventListener';
-import { setupRendering } from './js/Render';
-import  staticImages  from './js/StaticImages';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Menu, Stack, Typography } from '@mui/material';
-import EditIcon from "@mui/icons-material/Edit"
-import {PointerLockControls} from 'three-stdlib';
+import staticImages from './js/StaticImages';
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Fab, Stack, Typography } from '@mui/material';
+import EditIcon from "@mui/icons-material/Edit";
+import { PointerLockControls } from 'three-stdlib';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
@@ -53,10 +46,15 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     const canvasRef = useRef(null);
 
 
-    const [cameraPosition, setCameraPosition] = useState({
-        x: 0,
-        y: 0,
-        z: 5
+    const [keysPressed, setKeysPressed] = useState({
+        arrowup: false,
+        arrowdown: false,
+        arrowleft: false,
+        arrowright: false,
+        w: false,
+        a: false,
+        s: false,
+        d: false,
     });
 
 
@@ -65,6 +63,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     const [myCamera, setMyCamera] = useState(null);
     const [myControls, setMyControls] = useState(null);
     const [myTextureLoader, setMyTextureLoader] = useState(null);
+    const [myClock, setMyClock] = useState(null);
+    const [myArtPositionsByImageId, setMyArtPositionsByImageId] = useState(null);
+    const [infoMenuImageId, setInfoMenuImageId] = useState(null);
 
     const [canvasDimensions, setCanvasDimensions] = useState({
         width: null,
@@ -88,6 +89,27 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         }
     }
 
+    const handleKeydown = (e) => {
+        const keyPressed = e.key.toLowerCase();
+        if(keyPressed in keysPressed) {
+            setKeysPressed({...keysPressed, [keyPressed]: true})
+        }
+    }
+
+    const handleKeyup = () => {
+        setKeysPressed({
+            arrowup: false,
+            arrowdown: false,
+            arrowleft: false,
+            arrowright: false,
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+        });
+    }
+
+
     useEffect(() => {
 
         if(exhibitionIsLoaded) {
@@ -98,8 +120,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 return;
             }
     
-            // let { camera, controls, renderer } = setupScene(scene, containerRef.current);
-
             let [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
     
             // camera set up
@@ -113,7 +133,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             scene.add(camera);
         
             // set camera slighly back from middle of gallery
-            camera.position.set(0, 0, 5);
+            camera.position.set(0, 0, primary_json.size.length_ft / 4);
+            camera.updateProjectionMatrix();
         
             // enable antialiasing
             let renderer = new THREE.WebGLRenderer({
@@ -126,10 +147,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         
             // render options
         
-            // it says .outputEncoding is deprecated, but it is still usable! 
-            // It is very important to keep this in as the colors of the scene will look very unsaturated/grayed without it. 
-            // console will say use .outputColorSpace instead, but this does not work and will unsaturate the scene
-            renderer.outputEncoding = THREE.SRGBColorSpace;
+            renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
         
             // add mouse controls
             let controls = new PointerLockControls(camera, renderer.domElement);
@@ -137,23 +155,31 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         
             // resize window when window is resized
             window.addEventListener('resize', handleWindowResize);
+            
+            const clock = new THREE.Clock();
+            clock.getDelta();
 
 
             setMyRenderer(renderer);
             setMyCamera(camera);
             setMyScene(scene);
             setMyControls(controls);
-            
+            setMyClock(clock);
+
     
             controls.addEventListener('unlock', restoreMenu);
+
+            window.addEventListener('keydown', handleKeydown);
+            window.addEventListener('keyup', handleKeyup);
     
             const texture_loader = new THREE.TextureLoader();
             setMyTextureLoader(texture_loader);
     
     
             return () => {
-                console.log("Running cleanup"); 
                 controls.removeEventListener('unlock', restoreMenu);
+                window.removeEventListener('keydown', handleKeydown);
+                window.removeEventListener('keyup', handleKeyup);
                 setMyRenderer(null);
                 setMyCamera(null);
                 setMyScene(null);
@@ -165,6 +191,88 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
 
     }, [exhibitionIsLoaded]);
+
+
+    // Manage movement based on key presses
+    // and constrain camera position to exhibition boundaries
+    useEffect(() => {
+        const distance_threshold = Math.sqrt((primary_json.size.width_ft + primary_json.size.length_ft) / 4);
+
+        // manage camera movement
+        if(myControls?.isLocked) {
+            const factor = 5;
+            let delta = myClock.getDelta();
+            let speed;
+            if(delta > 0.05) {
+                delta = myClock.getDelta();
+                speed = 0.05
+            } else {
+                speed = delta;
+            }
+            switch (true) {
+                case keysPressed.d:
+                case keysPressed.arrowright:
+                    myControls.moveRight(factor * speed);
+                    break;
+                case keysPressed.a:
+                case keysPressed.arrowleft:
+                    myControls.moveRight(-factor * speed);
+                    break;
+                case keysPressed.w:
+                case keysPressed.arrowup:
+                    myControls.moveForward(factor * speed);
+                    break;
+                case keysPressed.s:
+                case keysPressed.arrowdown:
+                    myControls.moveForward(-factor * speed);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // manage camera constraints
+        const minDistanceFromWalls = 1;
+        const minZ = -primary_json.size.length_ft / 2 + minDistanceFromWalls;
+        const maxZ = primary_json.size.length_ft / 2 - minDistanceFromWalls;
+        const minX = -primary_json.size.width_ft / 2 + minDistanceFromWalls;
+        const maxX = primary_json.size.width_ft / 2 - minDistanceFromWalls;
+        if(myCamera && myRenderer) {
+            switch (true) {
+                case myCamera.position.z < minZ:
+                    myCamera.position.z = minZ;
+                    break;
+                case myCamera.position.z > maxZ:
+                    myCamera.position.z = maxZ;
+                    break;
+                default:
+                    break;
+            }
+            switch (true) {
+                case myCamera.position.x < minX:
+                    myCamera.position.x = minX;
+                    break;
+                case myCamera.position.x > maxX:
+                    myCamera.position.x = maxX;
+                    break;
+                default:
+                    break;
+            }
+            myCamera.updateProjectionMatrix();
+            myRenderer.render(myScene, myCamera);
+        }
+
+        // manage art info display
+        let closeImage = null;
+        for(const [image_id, image_position] of Object.entries(myArtPositionsByImageId ?? {})) {
+            const distance_to_art = myCamera.position.distanceTo(image_position);
+            if(distance_to_art < distance_threshold)
+                closeImage = image_id;
+        }
+        setInfoMenuImageId(closeImage)
+
+
+    }, [keysPressed, myCamera?.position.x, myCamera?.position.z, primary_json.size]);
 
 
 
@@ -186,20 +294,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
     // function to re-render scene when camera is rotated
     const handleControlsChange = () => {
-                
-        // get delta for accurate movement
-        // const delta = clock.getDelta();
-        
-        // update position as player moves
-        // updateMovement(delta, controls, camera, walls, setCameraPosition);
-
         myRenderer.render(myScene, myCamera);
-
     };
 
-    const logKeyEvent = (e) => {
-        console.log(e)
-    }
 
     // set up event handlers for camera rotation
     useEffect(() => {
@@ -213,7 +310,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             myControls.addEventListener('change', handleControlsChange);
 
             return () => {
-                console.log("myScene", myScene);
                 myControls.removeEventListener('change', handleControlsChange);
                 if(canvasRef.current)
                     canvasRef.current.removeChild(myRenderer.domElement);
@@ -226,7 +322,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
         if(myScene) {
 
-            console.log("Images updated")
                 
             let photos_on_1 = 0,
             photos_on_2 = 0,
@@ -245,14 +340,14 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             // kind of a last minute add, but scene needs to be here for lighting, even though
             // art is not added to the scene here
             // ambient_light_intensity is added for safety in light creation
-            const all_arts_group = createArt(myTextureLoader, 
+            const {all_arts_group, artPositionsByImageId} = createArt(myTextureLoader, 
             photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
             primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
             getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
         
+            setMyArtPositionsByImageId(artPositionsByImageId);
         
-        
-            setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft);
+            // setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft);
 
 
 
@@ -273,7 +368,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     useEffect(() => {
         if(myScene) { 
             const mainWalls = setupMainWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, myRenderer, myCamera);
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, myRenderer, myCamera, true);
 
             createBoundingBoxes(mainWalls);
 
@@ -290,7 +385,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     useEffect(() => {
         if(myScene) { 
             const sideWalls = setupSideWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color, myRenderer, myCamera);
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color, myRenderer, myCamera, true);
     
             createBoundingBoxes(sideWalls);
 
@@ -308,7 +403,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         if(myScene) {
             const floor = setupFloor(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture, myRenderer, myCamera);
+                primary_json.appearance.floor_color, primary_json.appearance.floor_texture, myRenderer, myCamera, true);
             
             return () => {
                 myScene.remove(floor);
@@ -325,7 +420,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         if(myScene) {
             const ceiling = setupCeiling(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
-                primary_json.appearance.ceiling_color, myRenderer, myCamera);
+                primary_json.appearance.ceiling_color, myRenderer, myCamera, true);
             
             return () => {
                 myScene.remove(ceiling);
@@ -339,7 +434,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
 
     useEffect(() => {
-        console.log("Ambient light updated", primary_json.appearance.moodiness, getAmbientLightIntensity(primary_json.appearance.moodiness));
         if(myScene) {
             const ambient_light = new THREE.AmbientLight(primary_json.appearance.ambient_light_color, getAmbientLightIntensity(primary_json.appearance.moodiness));
             myScene.add(ambient_light); 
@@ -383,9 +477,21 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 </Fab>
             )}
             {!editModeActive && (<ExhibitionIntro {...{dialogIsOpen, setDialogIsOpen}} controls={myControls} {...{exhibitionMetadata}} />)}
-            <div id="art-info"></div>
+            <ArtInfoPopup {...{globalImageCatalog}} image_id={infoMenuImageId} />
             
         </Box>
+    )
+}
+
+
+const ArtInfoPopup = ({globalImageCatalog, image_id}) => {
+    const imageInfo = globalImageCatalog.find((i) => i.id == image_id);
+    return (
+        <Card sx={{position: "absolute", top: 10, left: 10}}>
+            <CardContent>
+                <Typography>{JSON.stringify(imageInfo)}</Typography>
+            </CardContent>
+        </Card>
     )
 }
 

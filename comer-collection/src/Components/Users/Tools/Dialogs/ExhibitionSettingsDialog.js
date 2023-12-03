@@ -42,12 +42,12 @@ export const exhibitionAccessOptions = (adminMode) => [
 
 export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
   return (
-    <Dialog component="form"
-      open={dialogIsOpen}
+    <Dialog component="form" sx={{zIndex: 10000}} 
+      open={dialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;
-        dialogIsOpen(false);
+        setDialogIsOpen(false);
       }}
       fullWidth={true}
       onSubmit={(e) => {

@@ -45,8 +45,8 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
   
   
   return (
-    <Dialog component="form"
-      open={editDialogIsOpen}
+    <Dialog component="form" sx={{zIndex: 10000}}
+      open={editDialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;

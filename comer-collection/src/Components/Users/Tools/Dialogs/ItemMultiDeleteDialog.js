@@ -15,8 +15,8 @@ export const ItemMultiDeleteDialog = ({ entitySingular, entityPlural, deleteDial
   const [confirmText, setConfirmText] = useState("");
   
   return (
-    <Dialog component="form" fullWidth={true} maxWidth="sm"
-      open={deleteDialogIsOpen}
+    <Dialog component="form" fullWidth={true} maxWidth="sm" sx={{zIndex: 10000}}
+      open={deleteDialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;

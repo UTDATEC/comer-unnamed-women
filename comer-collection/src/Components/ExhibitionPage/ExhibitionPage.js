@@ -11,12 +11,13 @@ import Unauthorized from "../ErrorPages/Unauthorized";
 import { useSnackbar } from "../App/AppSnackbar";
 
 
-const onUnload = () => {
-    return true;
-}
-
-
 export const ExhibitionPage = (props) => {
+    
+    const onUnload = async() => {
+        await saveExhibition();
+        return false;
+    }
+    
 
     const { exhibitionId } = useParams();
 

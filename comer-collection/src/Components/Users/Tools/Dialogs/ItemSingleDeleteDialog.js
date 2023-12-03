@@ -14,8 +14,8 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, entity, dialo
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   
   return (
-    <Dialog fullWidth={true} maxWidth="sm" component="form"
-      open={deleteDialogIsOpen}
+    <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
+      open={deleteDialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;

@@ -50,8 +50,8 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
   
   return (
     <>
-      <Dialog fullWidth={true} maxWidth="lg"
-        open={dialogIsOpen}
+      <Dialog fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}
+        open={dialogIsOpen} disableEscapeKeyDown
         onClose={(event, reason) => {
           if (reason == "backdropClick")
             return;

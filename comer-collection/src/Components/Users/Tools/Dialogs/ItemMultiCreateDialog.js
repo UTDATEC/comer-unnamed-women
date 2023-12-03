@@ -11,8 +11,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
   return (
-    <Dialog component="form" fullWidth={true} maxWidth="lg"
-      open={dialogIsOpen}
+    <Dialog component="form" fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}
+      open={dialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;

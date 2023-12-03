@@ -614,7 +614,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
             </Stack>
 
 
-            <Dialog component="form" open={imageChooserIsOpen} fullWidth maxWidth="xl" onSubmit={(e) => {
+            <Dialog component="form" open={imageChooserIsOpen} 
+                sx={{zIndex: 10000}} fullWidth maxWidth="xl" onSubmit={(e) => {
                 e.preventDefault();
                 exhibitionEditDispatch({
                     scope: "exhibition",
