@@ -14,6 +14,8 @@ export function generateArtData(primary_json, globalImageCatalog) {
     primary_json.images.forEach((image) => {
 
         const catalogEntry = globalImageCatalog.find((i) => i.id == image.image_id);
+        if(!catalogEntry)
+            return;
 
         const item = {
 
@@ -396,7 +398,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
             images_placed++;
 
-            if(images_placed >= primary_json.images.length)
+            // if(images_placed >= primary_json.images.length)
                 renderer.render(scene, camera);
 
         }, null, () => {

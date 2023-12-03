@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
@@ -7,6 +7,8 @@ import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
+import { useAppUser } from "../App/AppUser";
+import { useSnackbar } from "../App/AppSnackbar";
 
 
 const ColorInput = ({value, onChange, disabled}) => {
@@ -154,8 +156,7 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
     )
 }
 
-
-export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEditDispatch}) => {
+export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, exhibitionIsLoaded, saveExhibition}) => {
     
     const [expandedSection, setExpandedSection] = useState(null);
 
@@ -165,6 +166,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
 
     const theme = useTheme();
+
 
     return (
         
@@ -177,7 +179,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                     "header"
                     "accordions"
                     "footer"
-                `
+                `,
+                zIndex: 50
             }}
         >
 
@@ -185,7 +188,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                 gridArea: "header",
                 backgroundColor: theme.palette.grey.veryTranslucent
             }}>
-                <Typography variant="h5" align="center">Exhibition ID: {exhibitionId}</Typography>
+                <Typography variant="h5" align="center">{exhibitionMetadata.title}</Typography>
             </Box>
 
             <Box sx={{gridArea: "accordions", overflowY: "scroll"}} >
@@ -339,9 +342,10 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                                 setSelectedImageId(e.target.value)
                             }}
                         >
-                            {(exhibitionState.images ?? []).map((image) => (
-                                <MenuItem key={image.image_id} value={image.image_id ?? ''}>{image.image_id}</MenuItem>
-                            ))}
+                            {(exhibitionState.images ?? []).map((image) => {
+                                const image_title = globalImageCatalog?.find((i) => i.id == image.image_id)?.title;
+                                return <MenuItem key={image.image_id} value={image.image_id ?? ''}>{image_title}</MenuItem>
+                            })}
                         </Select>
                     </ExhibitionOption>
 
@@ -603,13 +607,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionState, exhibitionEdi
                 }} 
             >
                 
-                <Button variant="contained" startIcon={<CloudUploadIcon />} 
-                    onClick={() => {
-                        sendAuthenticatedRequest("PUT", `/api/account/exhibitions/${exhibitionId}/save`, {
-                            data: JSON.stringify(exhibitionState)
-                        });
-                    }}
-                >
+                <Button variant="contained" startIcon={<CloudUploadIcon />} onClick={saveExhibition} >
                     <Typography variant="body1">Save</Typography>
                 </Button>
                 

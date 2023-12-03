@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // import primary_json from './example2.json' // assert { type: "json" };
 
 // import { scene, setupScene,	 addObjectsToScene } from './Scene.js';
-import { addObjectsToScene, setupScene } from './js/Scene';
+// import { addObjectsToScene, setupScene } from './js/Scene';
 
 import { setupMainWalls, setupSideWalls, setupWalls } from './js/Walls';
 import { setupFloor } from './js/Floor';
@@ -14,8 +14,10 @@ import { createBoundingBoxes } from './js/BoundingBox';
 import { setupEventListeners } from './js/EventListener';
 import { setupRendering } from './js/Render';
 import  staticImages  from './js/StaticImages';
-import { Box } from '@mui/material';
-
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Menu, Stack, Typography } from '@mui/material';
+import EditIcon from "@mui/icons-material/Edit"
+import {PointerLockControls} from 'three-stdlib';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 
@@ -35,41 +37,20 @@ const getAmbientLightIntensity = (moodiness) => {
 
 }
 
+const get_canvas_dimensions = (boundingBoxElement) => {
+    if(boundingBoxElement) {
+        const { height: canvas_height, width: canvas_width } = boundingBoxElement?.getBoundingClientRect();
+        return [canvas_height, canvas_width];
+    }
+    return [0, 0];
+}
 
-const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, globalImageCatalog}) => {
 
-    const [controlsEnabled, setControlsEnabled] = useState(false);
-    const [menuVisible, setMenuVisible] = useState(true);
+const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive}) => {
+
         
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
-    const playButtonRef = useRef(null);
-    const menuRef = useRef(null);
-
-    //const [imageSrc] = useState('./images/logo.png'); // Set the default image source
-
-
-    const enableControls = (controls) => {
-        setControlsEnabled(true);
-        controls.lock();
-    }
-
-    const disableControls = (controls) => {
-        setControlsEnabled(false);
-        controls.unlock();
-    }
-    
-    
-    const showMenu = () => {
-        if(menuRef && menuRef.current)
-            menuRef.current.style.display = 'block';
-        //disableControls(controls);
-    }
-    
-    const hideMenu = () => {
-        if(menuRef && menuRef.current)
-            menuRef.current.style.display = 'none';
-    }
 
 
     const [cameraPosition, setCameraPosition] = useState({
@@ -85,6 +66,28 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
     const [myControls, setMyControls] = useState(null);
     const [myTextureLoader, setMyTextureLoader] = useState(null);
 
+    const [canvasDimensions, setCanvasDimensions] = useState({
+        width: null,
+        height: null
+    })
+
+
+    const [dialogIsOpen, setDialogIsOpen] = useState(true);
+
+    const restoreMenu = () => {
+        setDialogIsOpen(true);
+    }
+
+    const handleWindowResize = () => {
+        if(containerRef.current) {
+            const [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
+            setCanvasDimensions({
+                width: canvas_width,
+                height: canvas_height
+            })
+        }
+    }
+
     useEffect(() => {
 
         if(exhibitionIsLoaded) {
@@ -95,15 +98,54 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
                 return;
             }
     
-            let { camera, controls, renderer } = setupScene(scene, containerRef.current, cameraPosition, setCameraPosition);
+            // let { camera, controls, renderer } = setupScene(scene, containerRef.current);
+
+            let [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
+    
+            // camera set up
+            let camera = new THREE.PerspectiveCamera(
+                60, // field of view: 60-90 is normal for viewing on a monitor
+                canvas_width / canvas_height, // aspect ratio: assumption that ar should be the current window size
+                0.1,  // near setting for camera frustum
+                1000 // far setting for camera frustum
+            );
+        
+            scene.add(camera);
+        
+            // set camera slighly back from middle of gallery
+            camera.position.set(0, 0, 5);
+        
+            // enable antialiasing
+            let renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+        
+            // set initial canvas size
+            renderer.setSize(canvas_width, canvas_height);
+            
+        
+            // render options
+        
+            // it says .outputEncoding is deprecated, but it is still usable! 
+            // It is very important to keep this in as the colors of the scene will look very unsaturated/grayed without it. 
+            // console will say use .outputColorSpace instead, but this does not work and will unsaturate the scene
+            renderer.outputEncoding = THREE.SRGBColorSpace;
+        
+            // add mouse controls
+            let controls = new PointerLockControls(camera, renderer.domElement);
+            scene.add(controls.getObject());
+        
+            // resize window when window is resized
+            window.addEventListener('resize', handleWindowResize);
+
+
             setMyRenderer(renderer);
             setMyCamera(camera);
             setMyScene(scene);
             setMyControls(controls);
             
     
-            // controls.addEventListener('lock', hideMenu);
-            // controls.addEventListener('unlock', showMenu);
+            controls.addEventListener('unlock', restoreMenu);
     
             const texture_loader = new THREE.TextureLoader();
             setMyTextureLoader(texture_loader);
@@ -111,6 +153,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
     
             return () => {
                 console.log("Running cleanup"); 
+                controls.removeEventListener('unlock', restoreMenu);
                 setMyRenderer(null);
                 setMyCamera(null);
                 setMyScene(null);
@@ -121,10 +164,27 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
         }
 
 
-
     }, [exhibitionIsLoaded]);
 
 
+
+    useEffect(() => {
+        handleWindowResize();
+    }, [editModeActive])
+
+
+
+    useEffect(() => {
+        if(myCamera && myRenderer) {
+            myCamera.aspect = canvasDimensions.width / canvasDimensions.height;
+            myCamera.updateProjectionMatrix();
+            myRenderer.setSize(canvasDimensions.width, canvasDimensions.height);
+            myRenderer.render(myScene, myCamera);
+        }
+    }, [canvasDimensions])
+
+
+    // function to re-render scene when camera is rotated
     const handleControlsChange = () => {
                 
         // get delta for accurate movement
@@ -135,47 +195,31 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
 
         myRenderer.render(myScene, myCamera);
 
-        
-        
     };
 
     const logKeyEvent = (e) => {
         console.log(e)
     }
 
-
+    // set up event handlers for camera rotation
     useEffect(() => {
     
         if(canvasRef.current && myScene) {
             
             canvasRef.current.appendChild(myRenderer.domElement);
-        
-            // playButtonRef.current.addEventListener('click', () => {
-            //     enableControls(controls);
-            //     hideMenu();
-            // });
-    
-            if(canvasRef && canvasRef.current) {
-                canvasRef.current.addEventListener('click', () => {
-                    enableControls(myControls);
-                    hideMenu();
-                })
-            }
-    
-            console.log("exhibition data changed");
-
-
+            canvasRef.current.addEventListener('click', () => {
+                myControls.lock();
+            })
             myControls.addEventListener('change', handleControlsChange);
-
 
             return () => {
                 console.log("myScene", myScene);
                 myControls.removeEventListener('change', handleControlsChange);
                 if(canvasRef.current)
                     canvasRef.current.removeChild(myRenderer.domElement);
-            }
+            } 
         }
-    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer]) 
+    }, [myControls, myScene, myRenderer]) 
 
 
     useEffect(() => {
@@ -207,14 +251,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
         
         
-            // addObjectsToScene(myScene, art);
-
-            // art.forEach((object) => {
-            //     scene.add(object);
-            // });
-
         
-            setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft, controlsEnabled);
+            setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft);
 
 
 
@@ -225,7 +263,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
         }
 
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.images,
         primary_json.size
     ])
@@ -245,7 +282,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.appearance.main_wall_color,
         primary_json.size
     ])
@@ -263,7 +299,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.appearance.side_wall_color,
         primary_json.size
     ])
@@ -280,7 +315,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.appearance.floor_color,
         primary_json.appearance.floor_texture,
         primary_json.size
@@ -298,7 +332,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             }
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.appearance.ceiling_color,
         primary_json.size
     ])
@@ -318,59 +351,88 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionIsLoaded, gl
             
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        // primary_json,
         primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness])
 
 
 
+
+    return (
+        <Box width="100%" height="calc(100vh - 64px)" ref={containerRef} sx={{position: "relative"}}>
+            <div id="exhibition-canvas" ref={canvasRef}>
+            </div>
+            {exhibitionIsEditable && (
+                <Fab variant="extended" color="primary" sx={{position: "absolute", right: 20, bottom: 20, zIndex: 1500}}
+                onClick={() => {
+                    if(editModeActive) {
+                        setEditModeActive(false);
+                    }
+                    else {
+                        setEditModeActive(true);
+                    }
+                }}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        {editModeActive && (
+                            <VisibilityIcon fontSize="large" />
+                        ) || !editModeActive && (
+                            <EditIcon fontSize="large" />
+                        )}
+                        <Typography variant="h6">
+                            {editModeActive ? "Preview" : "Edit"}
+                        </Typography>
+                    </Stack>
+                </Fab>
+            )}
+            {!editModeActive && (<ExhibitionIntro {...{dialogIsOpen, setDialogIsOpen}} controls={myControls} {...{exhibitionMetadata}} />)}
+            <div id="art-info"></div>
+            
+        </Box>
+    )
+}
+
+
+const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen}) => {
         
     const selectedImageKey = './logo.png'; // Replace this with the desired key
     const selectedImageSrc = staticImages[selectedImageKey];
 
     return (
-        <Box width="100%" height="100%" ref={containerRef}>
-        <div className="background_menu">
-            <div id="menu" ref={menuRef}>
-                <div id="image_container">
-                    <img src={selectedImageSrc}/>
-                </div>
-
-                <div id="content">
-                    <h1>{primary_json.main.exhibition_name}</h1>
-                    <div id="content_centered">
-                        <p>Curated by {primary_json.main.curator}</p>
-                        <p>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</p>
+        <Dialog open={dialogIsOpen} className="background_menu" fullWidth maxWidth="md"
+            hideBackdrop disablePortal
+            sx={{position: "absolute"}}>
+            <DialogContent>
+                <Stack alignItems="center" spacing={2}>
+                    <img src={selectedImageSrc} style={{maxWidth: "200px"}}/>
+                    <Typography variant="h4">{exhibitionMetadata.title}</Typography>
+                    {exhibitionMetadata.curator && (
+                        <Typography variant="h5">Curated by {exhibitionMetadata.curator}</Typography>
+                    )}
+                    {/* <Typography>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</Typography> */}
                         
-                    </div>
+                    <Stack sx={{opacity: 0.5}} alignItems="center">
+                        <Typography>Controls are paused while you're in this menu.</Typography>
+                        <Typography>This menu will reappear whenever you press 'Escape.'</Typography>
+                        <Typography>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</Typography>
+                        <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
+                        <Typography>Left click near an artwork to be positioned in front of the piece.</Typography>
+                    </Stack>
+                    <Button variant="contained" color="primary" size="large" id="play_button" 
+                        onClick={() => {
+                            setDialogIsOpen(false);
+                            controls.lock();
+                        }}
+                    >
+                        <Typography variant="h6">Enter Exhibition</Typography>
+                    </Button>
+                </Stack>
 
-                    <div>
-                        <p><b>Welcome to {primary_json.main.curator}'s {primary_json.main.exhibition_name}</b></p>
-                        <br></br>
-                        <p>Controls are temporarily paused while you're in this menu.</p>
-                        <ul>
-                            <li>To begin the exhibition and enable controls, click 'Enter Exhibition' below.</li>
-                            <li>This menu will reappear whenever you press 'Escape.'</li>
-                            <li>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</li>
-                            <li>Take a look around and turn by using your mouse or mousepad.</li>
-                            <li>Left click near an artwork to be positioned in front of the piece.</li>
-                        </ul>
-                    </div>
-
-                    <div id="play_button" ref={playButtonRef}>
-                        <p>Enter Exhibition</p>
-                    </div>
+                <div>
                 </div>
-            </div>
-        </div>
 
-        <div id="exhibition-canvas" ref={canvasRef}>
+            </DialogContent>
+            <DialogActions>
 
-        </div>
-
-
-        <div id="art-info"></div>
-
-        </Box>
+            </DialogActions>
+        </Dialog>
     )
 }
 
