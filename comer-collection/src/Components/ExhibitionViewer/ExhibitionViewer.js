@@ -5,7 +5,6 @@ import * as THREE from 'three';
 // import { scene, setupScene,	 addObjectsToScene } from './Scene.js';
 import { addObjectsToScene, setupScene } from './js/Scene';
 
-import './css/style.css'
 import { setupMainWalls, setupSideWalls, setupWalls } from './js/Walls';
 import { setupFloor } from './js/Floor';
 import { setupCeiling } from './js/Ceiling';
