@@ -33,13 +33,13 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
               }
             }
           )
-          return response.data;
+          return {...response.data, status: response.status};
         }
     
       case "POST":
       case "PUT":
         if(Array.isArray(url)) {
-          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, null, {
+          const responses = await Promise.all(url.map((endpoint) => axiosMethods[method](`${apiLocation}${endpoint}`, payload, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -47,13 +47,13 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
           return responses;
         } else {
           const response = await axiosMethods[method](
-            `${apiLocation}${url}`, null, {
+            `${apiLocation}${url}`, payload, {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               }
             }
           )
-          return response.data;
+          return {...response.data, status: response.status};
         }
     }
   }
@@ -66,7 +66,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
 }
 
 
-export const createUsers = async(newUserArray, {showSnackbar, setCreateDialogIsOpen, createDialogDispatch, fetchData}) => {
+export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, fetchData}) => {
   let usersCreated = 0;
   let userIndicesWithErrors = []
   for(const [i, newUserData] of newUserArray.entries()) {
@@ -84,11 +84,11 @@ export const createUsers = async(newUserArray, {showSnackbar, setCreateDialogIsO
   fetchData();
 
   if(usersCreated == newUserArray.length) {
-    setCreateDialogIsOpen(false);
-    createDialogDispatch({
-      type: "set",
-      newArray: []
-    })
+    setDialogIsOpen(false);
+    // createDialogDispatch({
+    //   type: "set",
+    //   newArray: []
+    // })
 
     showSnackbar(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`, "success");
 
@@ -101,12 +101,14 @@ export const createUsers = async(newUserArray, {showSnackbar, setCreateDialogIsO
       showSnackbar(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure each user has a unique email address.`, "error")
     }
 
-    createDialogDispatch({
-      type: "set",
-      newArray: newUserArray.filter((u, i) => {
-        return userIndicesWithErrors.includes(i);
-      })
-    })
+    // createDialogDispatch({
+    //   type: "set",
+    //   newArray: newUserArray.filter((u, i) => {
+    //     return userIndicesWithErrors.includes(i);
+    //   })
+    // })
   }
+
+  return userIndicesWithErrors;
 
 }

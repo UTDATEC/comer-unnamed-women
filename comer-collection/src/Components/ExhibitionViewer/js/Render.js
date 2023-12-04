@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 //import primary_json from '../example.json' assert { type: "json" };
 import { displayArtInfo, hideArtInfo } from './ArtInfo.js';
-import { updateMovement } from './Movement.js';
-import { setupEventListeners } from './EventListener.js';
 
 export const setupRendering = (
     scene, 
@@ -11,38 +9,15 @@ export const setupRendering = (
     art,
     controls,
     gallery_width,
-    gallery_length,
-    controlsEnabled
-) => {
+    gallery_length) => {
 
     // create clock for accurate and fluid movement
-    const clock = new THREE.Clock();
 
     // this value can be adjusted as wanted, I kind of just went with some math and it worked out
     const distance_threshold = Math.sqrt((gallery_width + gallery_length) / 4);
 
     // boolean to enable/disable quick viewing position
     let art_displayed = false;
-
-    // main render function, allows the scene to keep updating as player moves
-    // let render = function () {
-
-        
-    //     renderer.render(scene, camera);     // recursive loop to continue rendering
-    //     // requestAnimationFrame(render);
-    //     // render();
-    // };
-
-
-    // console.log("render() function is called");
-    // render();
-    // get delta for accurate movement
-    // const delta = clock.getDelta();
-    
-    // update position as player moves
-    // updateMovement(delta, controls, camera, walls, setCameraPosition);
-    // console.log("calling setupEventListeners");
-    // setupEventListeners(controls, boundingBoxElement, clock, camera, setCameraPosition, scene, renderer);
 
     // variable for the current art to have display for
     let art_to_show;

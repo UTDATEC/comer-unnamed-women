@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useReducer } from "react";
 import {
   Stack, Dialog,
   DialogTitle,
@@ -8,19 +8,61 @@ import {
   Typography, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { getBlankItemFields } from "../HelperMethods/fields";
 
-export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogItems, createDialogFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, handleItemsCreate, createDialogDispatch }) => {
+export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate }) => {
+
+
+  const createDialogReducer = useCallback((createDialogItems, action) => {
+    switch (action.type) {
+      case 'add':
+        return [...createDialogItems, getBlankItemFields(createDialogFieldDefinitions)];
+  
+      case 'change':
+        return createDialogItems.map((r, i) => {
+          if (action.index == i)
+            return { ...r, [action.field]: action.newValue };
+  
+          else
+            return r;
+        });
+  
+      case 'remove':
+        return createDialogItems.filter((r, i) => {
+          return action.index != i;
+        });
+  
+      case 'set':
+        return action.newArray;
+  
+      default:
+        throw Error("Unknown action type");
+    }
+  }, [createDialogFieldDefinitions]);
+
+
+  const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
+
+
+
   return (
-    <Dialog component="form" fullWidth={true} maxWidth="lg"
-      open={createDialogIsOpen}
+    <Dialog component="form" fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}
+      open={dialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;
-        setCreateDialogIsOpen(false);
+        setDialogIsOpen(false);
       }}
       onSubmit={(e) => {
         e.preventDefault();
-        handleItemsCreate([...createDialogItems]);
+        handleItemsCreate([...createDialogItems]).then(indicesWithErrors => {
+          createDialogDispatch({
+            type: "set",
+            newArray: createDialogItems.filter((u, i) => {
+              return indicesWithErrors.includes(i);
+            })
+          })
+        });
       }}
     >
       <DialogTitle textAlign="center" variant="h4">{dialogTitle}</DialogTitle>
@@ -46,7 +88,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                     }}
                     inputProps={{
                       type: f.inputType ?? "text",
-                      maxlength: f.maxlength ?? 255
+                      maxLength: f.maxlength ?? 255
                     }}
                     InputLabelProps={{
                       [f.inputType == "datetime-local" ? "shrink" : ""]: true
@@ -79,7 +121,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
       <DialogActions>
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
           <Button color="primary" variant="outlined" size="large" onClick={() => {
-            setCreateDialogIsOpen(false);
+            setDialogIsOpen(false);
             createDialogDispatch({
               type: "set",
               newArray: []

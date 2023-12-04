@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import staticImages from './StaticImages';
 
-export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, renderer, camera) => {
+export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, renderer, camera, renderWhenFinished) => {
     // create a group for walls for bounding box and adding to scene
     let wall_group = new THREE.Group();
     scene.add(wall_group); 
@@ -53,7 +53,8 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
         // add walls to the group
         wall_group.add(front_wall, back_wall);
 
-        renderer.render(scene, camera);
+        if(renderWhenFinished)
+            renderer.render(scene, camera);
         
     });
 
@@ -62,7 +63,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
 }
 
 
-export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, side_color, renderer, camera) => {
+export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, side_color, renderer, camera, renderWhenFinished) => {
 
     // create a group for walls for bounding box and adding to scene
     let wall_group = new THREE.Group();
@@ -121,7 +122,8 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
         // add walls to the group
         wall_group.add(left_wall, right_wall);
 
-        renderer.render(scene, camera);
+        if(renderWhenFinished)
+            renderer.render(scene, camera);
     });
 
     // return walls so that BoundingBox.js can use them

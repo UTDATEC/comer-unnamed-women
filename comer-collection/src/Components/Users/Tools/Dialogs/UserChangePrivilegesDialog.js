@@ -15,8 +15,8 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
   const [verifyPassword, setVerifyPassword] = useState("");
 
   return (
-    <Dialog fullWidth={true} maxWidth="sm" component="form"
-      open={dialogIsOpen}
+    <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
+      open={dialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;

@@ -16,12 +16,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SchoolIcon from '@mui/icons-material/School';
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
+import { useAppUser } from "../App/AppUser";
+import { useSnackbar } from "../App/AppSnackbar";
 
 const Profile = (props) => {
 
-  const { appUser, setAppUser, selectedNavItem, setSelectedNavItem, 
-    snackbarOpen, snackbarText, snackbarSeverity,
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity } = props;
+  const { setSelectedNavItem } = props;
+
+  const [appUser, setAppUser] = useAppUser();
+  const showSnackbar = useSnackbar();
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -47,76 +50,55 @@ const Profile = (props) => {
     {
       columnDescription: "Course Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Course Name</Typography>
-        </TableCell>
+        <Typography variant="h6">Course Name</Typography>
       ),
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{course.name}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.name}</Typography>
       )
     },
     {
       columnDescription: "Start",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Start</Typography>
-        </TableCell>
+        <Typography variant="h6">Start</Typography>
       ),
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (course.date_start).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (course.date_start).toLocaleString()}</Typography>
       )
     },
     {
       columnDescription: "End",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">End</Typography>
-        </TableCell>
+        <Typography variant="h6">End</Typography>
       ),
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (course.date_end).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (course.date_end).toLocaleString()}</Typography>
       )
     },
     {
       columnDescription: "Status",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Status</Typography>
-        </TableCell>
+        <Typography variant="h6">Status</Typography>
       ),
       generateTableCell: (course) => (
-        <TableCell>
-          {
-            new Date(course.date_start).getTime() > new Date().getTime() && (
-              <Typography variant="body1">Upcoming</Typography>
-            ) || 
-            new Date(course.date_end).getTime() < new Date().getTime() && (
-              <Typography variant="body1">Expired</Typography>
-            ) || 
-            new Date(course.date_end).getTime() >= new Date().getTime() && new Date(course.date_start).getTime() <= new Date().getTime() && (
-              <Typography variant="body1">Active</Typography>
-            )
-          }
-        </TableCell>
+        new Date(course.date_start).getTime() > new Date().getTime() && (
+          <Typography variant="body1">Upcoming</Typography>
+        ) || 
+        new Date(course.date_end).getTime() < new Date().getTime() && (
+          <Typography variant="body1">Expired</Typography>
+        ) || 
+        new Date(course.date_end).getTime() >= new Date().getTime() && new Date(course.date_start).getTime() <= new Date().getTime() && (
+          <Typography variant="body1">Active</Typography>
+        )
       )
     },
     {
       columnDescription: "Notes",
+      maxWidth: "300px",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Notes</Typography>
-        </TableCell>
+        <Typography variant="h6">Notes</Typography>
       ),
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "300px"}}>
-          <Typography variant="body1">{course.notes}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.notes}</Typography>
       )
     }
   ]
@@ -126,114 +108,77 @@ const Profile = (props) => {
     {
       columnDescription: "Name",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Name</Typography>
-        </TableCell>
+        <Typography variant="h6">Name</Typography>
       ),
       generateTableCell: (user) => (
-        <TableCell>
-          {
-            user.has_name ? (
-              <Typography variant="body1">{user.full_name}</Typography>
-            ) : (
-              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-            )
-          }
-        </TableCell>
+        user.has_name ? (
+          <Typography variant="body1">{user.full_name}</Typography>
+        ) : (
+          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+        )
       )
     },
     {
       columnDescription: "Email",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Email</Typography>
-        </TableCell>
+        <Typography variant="h6">Email</Typography>
       ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Button color="grey"
-            variant="text" sx={{textTransform: "unset"}}
-            onClick={() => {handleCopyToClipboard(user, "email")}}>
-            <Typography variant="body1">{user.email}</Typography>
-          </Button>
-        </TableCell>
+        <Button color="grey"
+          variant="text" sx={{textTransform: "unset"}}
+          onClick={() => {handleCopyToClipboard(user, "email")}}>
+          <Typography variant="body1">{user.email}</Typography>
+        </Button>
       )
     },
     {
       columnDescription: "Password",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Password Last Changed</Typography>
-        </TableCell>
+        <Typography variant="h6">Password Last Changed</Typography>
       ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="body1">{new Date(appUser.pw_updated).toLocaleString()}</Typography>
-            <Button color={user.is_admin ? "secondary" : "primary"}
-              variant="outlined"
-              onClick={() => {
-                navigate('/Account/ChangePassword');
-              }}>
-              <Typography variant="body1">Change</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body1">{new Date(appUser.pw_updated).toLocaleString()}</Typography>
+          <Button color={user.is_admin ? "secondary" : "primary"}
+            variant="outlined"
+            onClick={() => {
+              navigate('/Account/ChangePassword');
+            }}>
+            <Typography variant="body1">Change</Typography>
+          </Button>
+        </Stack>
       )
     },
-    // {
-    //   columnDescription: "Exhibitions",
-    //   generateTableHeaderCell: () => (
-    //     <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-    //       <Typography variant="h6">Exhibitions</Typography>
-    //     </TableCell>
-    //   ),
-    //   generateTableCell: (user) => (
-    //     <TableCell>
-    //       <Stack direction="row" spacing={1} alignItems="center">
-    //         <Typography variant="body1">{user.Exhibitions.length}</Typography>
-    //       </Stack>
-    //     </TableCell>
-    //   )
-    // },
     {
       columnDescription: "User Type",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">User Type</Typography>
-        </TableCell>
+        <Typography variant="h6">User Type</Typography>
       ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-            {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1}>
+          <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+          {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
+        </Stack>
       )
     },
     {
       columnDescription: "Options",
       generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
+        <Typography variant="h6">Options</Typography>
       ),
       generateTableCell: (user) => (
-        <TableCell>
-          <IconButton 
-            disabled={user.id == appUser.id} 
-            onClick={(e) => {
-              setEditDialogUser(user);
-              const { email, family_name, given_name } = user;
-              setEditDialogFields({ email, family_name, given_name });
-              setEditDialogSubmitEnabled(true);
-              setEditDialogIsOpen(true)
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        </TableCell>
+        <IconButton 
+          disabled={user.id == appUser.id} 
+          onClick={(e) => {
+            setEditDialogUser(user);
+            const { email, family_name, given_name } = user;
+            setEditDialogFields({ email, family_name, given_name });
+            setEditDialogSubmitEnabled(true);
+            setEditDialogIsOpen(true)
+          }}
+        >
+          <EditIcon />
+        </IconButton>
       )
     }
   ]
@@ -241,18 +186,9 @@ const Profile = (props) => {
   const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
       navigator.clipboard.writeText(user[fieldName]);
-      setSnackbarSeverity("success")
-      if(fieldName == "email") {
-        setSnackbarText(`Email address copied to clipboard`);
-      } else {
-        setSnackbarText(`Text copied to clipboard`);
-      }
-
-      setSnackbarOpen(true);
+      showSnackbar("Copied to clipboard", "success");
     } catch (error) {
-      setSnackbarSeverity("error")
-      setSnackbarText(`Error copying text to clipboard`);
-      setSnackbarOpen(true);
+      showSnackbar("Error copying text to clipboard", "error");
     }
   }, [])
 

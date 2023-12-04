@@ -48,12 +48,7 @@ const listPublicExhibitions = async (req, res, next) => {
         const response = [];
         for(const ex of publicExhibitions) {
             const {id, title, date_created, date_modified} = ex.toJSON();
-            const exhibitionItem = {
-                id: ex.id,
-                title: ex.title,
-                date_created: ex.date_created,
-                date_modified: ex.date_modified
-            }
+            const exhibitionItem = {id, title, date_created, date_modified}
             if(ex.privacy == "PUBLIC") {
                 const owner = await ex.getUser();
                 exhibitionItem.curator = owner.full_name;
@@ -112,52 +107,199 @@ const getExhibition = async (req, res, next) => {
     });
 }
 
-const deleteExhibition = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const exhibition = await Exhibition.findByPk(req.params.exhibitionId);
-        if(exhibition) {
-            await exhibition.destroy();
-            res.sendStatus(204);
+const ownerEditExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
+                include: [User]
+            })
+            if(exhibition.User.id != user_id) {
+                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
+            } else {
+                const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
+                const now = Date.now()
+                const updatedExhibition = await exhibition.update({
+                    title: exhibitionFields.title,
+                    privacy: exhibitionFields.privacy
+                })
+                res.status(200).json({ data: updatedExhibition });
+            }
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
         }
-        else
-            next(createError(404));
-    });
+    })
 }
 
-const saveExhibition = async (req, res, next) => {
-    try {
-        const newExhibition = await Exhibition.create({
-            title: req.body.title,
-            data: req.body.data,
-            date_created: Date.now(),
-            date_modified: Date.now(),
-            privacy: req.body.privacy
-        });
-        
-        const user = User.findByPk(req.body.userid)
-        await newExhibition.setUser(user);
+const ownerDeleteExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
+                include: [User]
+            })
+            if(exhibition.User.id != user_id) {
+                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
+            } else {
+                await exhibition.destroy();
+                res.sendStatus(204);
+            }
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
+}
 
-        res.status(201);
 
-    } catch(e) {
-        console.log(e.message)
-        next(createError(500), {debugMessage: e.message});
-    }
+const adminEditExhibition = async (req, res, next) => {
+    adminOperation(req, res, next, async() => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
+            const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
+            const now = Date.now()
+            const updatedExhibition = await exhibition.update({
+                title: exhibitionFields.title,
+                privacy: exhibitionFields.privacy
+            })
+            res.status(200).json({ data: updatedExhibition });
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
+}
+
+const adminDeleteExhibition = async (req, res, next) => {
+    adminOperation(req, res, next, async() => {
+        try {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
+            await exhibition.destroy();
+            res.sendStatus(204);
+        } catch (e) {
+            next(createError(400, {debugMessage: e.message}));
+        }
+    })
 }
 
 const loadExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId);
+            const owner = await exhibition?.getUser();
+            if(!exhibition)
+                next(createError(404));
+            else if(exhibition.privacy != "PUBLIC" && exhibition.privacy != "PUBLIC_ANONYMOUS" && owner.id != user_id)
+                next(createError(403, {debugMessage: "Cannot load private exhibition you do not own"}))
+            else {
+                const {id, title, date_created, date_modified, data} = exhibition.toJSON();
+                const exhibitionJSON = {id, title, date_created, date_modified, data};
+                if(exhibition.privacy == "PUBLIC")
+                    exhibitionJSON.curator = owner.full_name
+                res.status(200).json({data: {
+                    ...exhibitionJSON, 
+                    isEditable: owner.id == user_id
+                }})
+            }
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
+}
+
+const loadExhibitionAdmin = async(req, res, next) => {
+    adminOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
+                include: [User]
+            });
+            const owner = exhibition?.User;
+            if(!exhibition)
+                next(createError(404));
+            else {
+                const {id, title, date_created, date_modified, data} = exhibition.toJSON();
+                const exhibitionJSON = {id, title, date_created, date_modified, data};
+                if(exhibition.privacy == "PUBLIC")
+                    exhibitionJSON.curator = owner.full_name
+                res.status(200).json({data: {
+                    ...exhibitionJSON, 
+                    isEditable: true
+                }})
+            }
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
+}
+
+const loadExhibitionPublic = async(req, res, next) => {
     try {
         const ExhibitionWithData = Exhibition.scope('with_data');
-        const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
-            include: [User]
-        });
+        const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId);
+        const owner = await exhibition?.getUser();
         if(!exhibition)
             next(createError(404));
-        else
-            res.status(200).json({data: exhibition})
+        else if(exhibition.privacy != "PUBLIC" && exhibition.privacy != "PUBLIC_ANONYMOUS")
+            next(createError(403, {debugMessage: "This exhibition is private and no user is logged in."}));
+        else {
+            const {id, title, date_created, date_modified, data} = exhibition.toJSON();
+            const exhibitionJSON = {id, title, date_created, date_modified, data};
+            if(exhibition.privacy == "PUBLIC")
+                exhibitionJSON.curator = owner.full_name
+            res.status(200).json({data: {
+                ...exhibitionJSON, 
+                isEditable: false
+            }})
+        }
     } catch(e) {
-        next(createError(500), {debugMessage: e.message});
+        next(createError(500, {debugMessage: e.message}));
     }
 }
 
-module.exports = { listPublicExhibitions, createExhibition, listExhibitions, getExhibition, deleteExhibition, saveExhibition, loadExhibition, listMyExhibitions }
+
+const saveExhibition = async (req, res, next) => {
+    userOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
+                include: [User]
+            });
+            if(!exhibition)
+                next(createError(404));
+            else if(exhibition.User.id != user_id)
+                next(createError(403, {debugMessage: "Cannot save exhibition you do not own"}))
+            else {
+                await exhibition.update({
+                    data: req.body.data,
+                    date_modified: Date.now()
+                });
+                res.status(200).json({data: exhibition})
+            }
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
+}
+
+
+const saveExhibitionAdmin = async (req, res, next) => {
+    adminOperation(req, res, next, async(user_id) => {
+        try {
+            const ExhibitionWithData = Exhibition.scope('with_data');
+            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
+                include: [User]
+            });
+            if(!exhibition)
+                next(createError(404));
+            else {
+                await exhibition.update({
+                    data: req.body.data,
+                    date_modified: Date.now()
+                });
+                res.status(200).json({data: exhibition})
+            }
+        } catch(e) {
+            next(createError(500), {debugMessage: e.message});
+        }
+    })
+}
+
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin, listMyExhibitions }

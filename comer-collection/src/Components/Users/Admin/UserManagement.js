@@ -3,15 +3,13 @@ import {
   Stack,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton, Paper, MenuItem, Chip} from "@mui/material";
-import TableCell from "@mui/material/TableCell";
+  Switch, Box, IconButton, Paper
+} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import { ColumnSortButton } from "../Tools/ColumnSortButton";
-import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -38,8 +36,10 @@ import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/f
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
-import SearchIcon from "@mui/icons-material/Search"
-import InfoIcon from "@mui/icons-material/Info"
+import SearchIcon from "@mui/icons-material/Search";
+import InfoIcon from "@mui/icons-material/Info";
+import { useSnackbar } from "../../App/AppSnackbar";
+import { useAppUser } from "../../App/AppUser";
 
 
 const UserManagement = (props) => {
@@ -57,8 +57,6 @@ const UserManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
-  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -66,13 +64,11 @@ const UserManagement = (props) => {
 
   const [coursesByUser, setCoursesByUser] = useState({});
 
-  const [createDialogIsOpen, setCreateDialogIsOpen] = useState(false);
-  const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [userTypeFilter, setUserTypeFilter] = useState(null);
-  const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
   const clearFilters = () => {
     setSearchQuery("");
     setUserTypeFilter(null);
@@ -82,10 +78,8 @@ const UserManagement = (props) => {
   }
 
   const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
-  const [userActivationStatusMenuAnchorElement, setUserActivationStatusMenuAnchorElement] = useState(null);
 
   const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
-  const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
 
   const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
@@ -93,8 +87,9 @@ const UserManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { appUser, setSelectedNavItem, showSnackbar } = props;
-  const theme = useTheme();
+  const { setSelectedNavItem } = props;
+  const [appUser, setAppUser] = useAppUser();
+  const showSnackbar = useSnackbar();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -131,7 +126,6 @@ const UserManagement = (props) => {
 
 
     } catch (error) {
-      console.error("Error fetching data:", error);
     }
   };
 
@@ -169,21 +163,11 @@ const UserManagement = (props) => {
   ])
 
 
-  const filteredAndSearchedUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
-
-  const visibleUsers = filteredAndSearchedUsers.sort((a, b) => {
-    if(sortColumn == "Name")
-      return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-    else if(sortColumn == "ID")
-      return !sortAscending ^ (a.id > b.id);
-    else if(sortColumn == "Email")
-      return !sortAscending ^ (a.email > b.email)
-  })
-
+  const visibleUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
 
 
   const handleUsersCreate = async(newUserArray) => {
-    createUsers(newUserArray, {showSnackbar, setCreateDialogIsOpen, createDialogDispatch, fetchData})
+    return await createUsers(newUserArray, {showSnackbar, setDialogIsOpen, fetchData})
   }
 
 
@@ -194,12 +178,10 @@ const UserManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFields({email: '', given_name: '', family_name: ''})
 
       showSnackbar(`Successfully edited user ${userId}`, "success");
 
     } catch (error) {
-      console.error(`Error editing user ${userId}: ${error}`);
 
       showSnackbar(`Error editing for user ${userId}`, "error")
     }
@@ -219,14 +201,13 @@ const UserManagement = (props) => {
         usersEnrolled++;
 
       } catch (error) {
-        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
       }
     }
     fetchData();
 
     if(usersEnrolled == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
@@ -254,14 +235,13 @@ const UserManagement = (props) => {
         usersUnenrolled++;
 
       } catch (error) {
-        console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
       }
     }
     fetchData();
 
     if(usersUnenrolled == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "success")
 
@@ -293,12 +273,10 @@ const UserManagement = (props) => {
         ));
       fetchData();
 
-      showSnackbar(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`, "success")
+      showSnackbar(`User ${willBeActive ? "activated" : "deactivated"}`, "success")
 
     } catch (error) {
-      console.error(`Error deactivating user ${userId}: ${error}`);
-
-      showSnackbar(`Error deactivating user ${userId}`, "error")
+      showSnackbar(`Error ${willBeActive ? "activating" : "deactivating"} user`, "error")
     }
   }
 
@@ -317,7 +295,6 @@ const UserManagement = (props) => {
 
 
     } catch (error) {
-      console.error(`Error changing privileges for user ${userId}: ${error}`);
 
       showSnackbar(`Error changing privileges for user ${userId}`, "error")
     }
@@ -341,7 +318,6 @@ const UserManagement = (props) => {
       showSnackbar(`Password reset for user ${userId}`, "success");
 
     } catch (error) {
-      console.error(`Error resetting password for user ${userId}: ${error}`);
 
       showSnackbar(`Error resetting password for user ${userId}`, "error");
     }
@@ -356,7 +332,6 @@ const UserManagement = (props) => {
       showSnackbar(`User ${userId} has been deleted`, "success")
 
     } catch (error) {
-      console.error("Error handling delete operation:", error);
 
       showSnackbar(`User ${userId} could not be deleted`, "error")
     }
@@ -374,13 +349,12 @@ const UserManagement = (props) => {
         await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`);
         usersDeleted++;
       } catch (error) {
-        console.error(`Error deleting user ${userId}: ${error}`);
       }
     }
     fetchData();
 
     if(usersDeleted == userIds.length) {
-      setCreateDialogIsOpen(false);
+      setDialogIsOpen(false);
 
       showSnackbar(`Successfully deleted ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
@@ -420,83 +394,43 @@ const UserManagement = (props) => {
   const userTableFields = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="body1">{user.id}</Typography>
-            {user.id == appUser.id && (
-              <PersonIcon color="secondary" />
-            )}
-          </Stack>
-        </TableCell>
-      )
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="body1">{user.id}</Typography>
+          {user.id == appUser.id && (
+            <PersonIcon color="secondary" />
+          )}
+        </Stack>
+      ),
+      generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Name" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
+      maxWidth: "150px",
       generateTableCell: (user) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
-          {
-            user.has_name ? (
-              <Typography variant="body1">{user.full_name_reverse}</Typography>
-            ) : (
-              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-            )
-          }
-        </TableCell>
-      )
+        user.has_name ? (
+          <Typography variant="body1">{user.full_name_reverse}</Typography>
+        ) : (
+          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+        )
+      ),
+      generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <ColumnSortButton columnName="Email" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Button color="grey"
-            variant="text" sx={{textTransform: "unset"}}
-            onClick={() => {handleCopyToClipboard(user, "email")}}>
-            <Typography variant="body1">{user.email}</Typography>
-          </Button>
-        </TableCell>
-      )
+        <Button color="grey"
+          variant="text" sx={{textTransform: "unset"}}
+          onClick={() => {handleCopyToClipboard(user, "email")}}>
+          <Typography variant="body1">{user.email}</Typography>
+        </Button>
+      ),
+      generateSortableValue: (user) => user.email
     },
     {
       columnDescription: "Password",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userPasswordTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="Password"
-            options={[
-              {
-                value: "Temporary",
-                displayText: "Temporary password"
-              },
-              {
-                value: "Permanent",
-                displayText: "Password set by user"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userPasswordTypeFilter}
-            setFilter={setUserPasswordTypeFilter}
-            menuAnchorElement={userPasswordTypeMenuAnchorElement}
-            setMenuAnchorElement={setUserPasswordTypeMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
+        <>
           {appUser.id == user.id ? (
             <Button startIcon={<OpenInNewIcon />} color={user.is_admin ? "secondary" : "primary"}
             variant="outlined"
@@ -519,157 +453,89 @@ const UserManagement = (props) => {
               variant="outlined"
               disabled={appUser.id == user.id}
               onClick={(e) => {
-                handleResetPassword(e.target.parentElement.attributes.itemid.value);
+                handleResetPassword(user.id);
               }}>
               <Typography variant="body1">Reset</Typography>
             </Button>
           )}
-        </TableCell>
+        </>
       )
     },
     {
       columnDescription: "Courses",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Courses</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text"
-              color={user.is_admin ? "secondary" : "primary"}
-              startIcon={<SchoolIcon />}
-              onClick={() => {
-                setAssignCourseDialogUsers([user])
-                setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{user.Courses.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text"
+            color={user.is_admin ? "secondary" : "primary"}
+            startIcon={<SchoolIcon />}
+            onClick={() => {
+              setAssignCourseDialogUsers([user])
+              setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{user.Courses.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Exhibitions",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Exhibitions</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text"
-              color={user.is_admin ? "secondary" : "primary"}
-              disabled startIcon={<PhotoCameraBackIcon />}
-              onClick={() => {
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
-                // setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{user.Exhibitions.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text"
+            color={user.is_admin ? "secondary" : "primary"}
+            disabled startIcon={<PhotoCameraBackIcon />}
+            onClick={() => {
+              // setAssignCourseDialogUser(user);
+              // setAssignCourseDialogCourses([...user.Courses]);
+              // setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{user.Exhibitions.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "User Type",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userTypeFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="User Type"
-            options={[
-              {
-                value: "Administrator",
-                displayText: "Administrators"
-              },
-              {
-                value: "Curator",
-                displayText: "Curators"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userTypeFilter}
-            setFilter={setUserTypeFilter}
-            menuAnchorElement={userTypeMenuAnchorElement}
-            setMenuAnchorElement={setUserTypeMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Button color="grey" sx={{textTransform: "unset"}}
-            disabled={user.id == appUser.id}
-            onClick={() => {
-              setPrivilegesDialogUser(user);
-              setPrivilegesDialogIsOpen(true);
-            }}
-          >
-            <Stack direction="row" spacing={1}>
-              <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-              {user.is_admin && (<SecurityIcon color="secondary" />)}
-            </Stack>
-          </Button>
-        </TableCell>
+        <Button color="grey" sx={{textTransform: "unset"}}
+          disabled={user.id == appUser.id}
+          onClick={() => {
+            setPrivilegesDialogUser(user);
+            setPrivilegesDialogIsOpen(true);
+          }}
+        >
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+            {user.is_admin && (<SecurityIcon color="secondary" />)}
+          </Stack>
+        </Button>
       )
     },
     {
       columnDescription: "Active",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: userActivationStatusFilter ? theme.palette.primary["200"] : theme.palette.grey.translucent}}>
-          <ColumnFilterButton columnName="Active"
-            options={[
-              {
-                value: "Active",
-                displayText: "Active"
-              },
-              {
-                value: "Inactive",
-                displayText: "Inactive"
-              }
-            ]}
-            optionAll="All Users"
-            filter={userActivationStatusFilter}
-            setFilter={setUserActivationStatusFilter}
-            menuAnchorElement={userActivationStatusMenuAnchorElement}
-            setMenuAnchorElement={setUserActivationStatusMenuAnchorElement}
-          />
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell>
-          <Switch
-            itemID={user.id}
-            checked={user.is_active}
-            disabled={user.id == appUser.id}
-            color={user.is_admin ? "secondary" : "primary"}
-            onClick={(e) => {
-              handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
-            }}
-          />
-        </TableCell>
+        <Switch
+          itemID={user.id}
+          checked={user.is_active}
+          disabled={user.id == appUser.id}
+          color={user.is_admin ? "secondary" : "primary"}
+          onClick={(e) => {
+            handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
+          }}
+        />
       )
     },
     {
       columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Options</Typography>
-        </TableCell>
-      ),
       generateTableCell: (user) => (
-        <TableCell sx={{minWidth: "100px"}}>
+        <>
           <IconButton
             disabled={user.id == appUser.id}
             onClick={() => {
               setEditDialogUser(user);
-              const { email, family_name, given_name } = user;
-              setEditDialogFields({ email, family_name, given_name });
-              setEditDialogSubmitEnabled(true);
-              setEditDialogIsOpen(true)
+              setEditDialogIsOpen(true);
             }}
           >
             <EditIcon />
@@ -683,7 +549,7 @@ const UserManagement = (props) => {
           >
             <DeleteIcon />
           </IconButton>
-        </TableCell>
+        </>
       )
     }
   ]
@@ -691,61 +557,36 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialog = [
     {
       columnDescription: "ID",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          {/* <ColumnSortButton columnName="ID" {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} /> */}
-          <Typography variant="h6">ID</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{course.id}</Typography>
-        </TableCell>
-      )
+        <Typography variant="body1">{course.id}</Typography>
+      ),
+      generateSortableValue: (course) => course.id
     },
     {
       columnDescription: "Name",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-            <Typography variant="h6">Course Name</Typography>
-        </TableCell>
-      ),
+      maxWidth: "200px",
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{course.name}</Typography>
-        </TableCell>
-      )
+        <Typography variant="body1">{course.name}</Typography>
+      ),
+      generateSortableValue: (course) => course.name
     },
     {
       columnDescription: "Dates",
-      generateTableHeaderCell: () => (
-        <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-          <Typography variant="h6">Dates</Typography>
-        </TableCell>
-      ),
       generateTableCell: (course) => (
-        <TableCell>
-          <Stack>
-            <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
-            <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack>
+          <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
+          <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
+        </Stack>
       )
     }
   ]
 
   const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
     columnDescription: "Enroll",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (course, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(course);
+      const quantity = course.quantity_assigned;
       return (
-      <TableCell>
-        {quantity == assignCourseDialogUsers.length && (
+        quantity == assignCourseDialogUsers.length && (
           <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
             {assignCourseDialogUsers.length == 1 ? (
               <Typography variant="body1">Enrolled</Typography>
@@ -777,37 +618,28 @@ const UserManagement = (props) => {
               )}
             </Button>
           )
-        }
-      </TableCell>
-    )}
-  }]
+        )
+      }
+    }]
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
-    generateTableHeaderCell: () => (
-      <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-        <Typography variant="h6">&nbsp;</Typography>
-      </TableCell>
-    ),
     generateTableCell: (course, extraProperties) => {
-      const quantity = extraProperties.getQuantityAssigned(course)
-
+      const quantity = course.quantity_assigned;
       return (
-        <TableCell>
-          <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
-            handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
-          }}>
-          {quantity == 1 ? (
-            assignCourseDialogUsers.length == 1 ? (
-              <Typography variant="body1">Unenroll</Typography>
-            ) : (
-              <Typography variant="body1">Unenroll {quantity} user</Typography>
-            )
+        <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
+          handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+        }}>
+        {quantity == 1 ? (
+          assignCourseDialogUsers.length == 1 ? (
+            <Typography variant="body1">Unenroll</Typography>
           ) : (
-            <Typography variant="body1">Unenroll {quantity} users</Typography>
-          )}
-          </Button>
-        </TableCell>
+            <Typography variant="body1">Unenroll {quantity} user</Typography>
+          )
+        ) : (
+          <Typography variant="body1">Unenroll {quantity} users</Typography>
+        )}
+        </Button>
       )
     }
   }]
@@ -852,7 +684,7 @@ const UserManagement = (props) => {
             </Button>
             <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
               onClick={() => {
-                setCreateDialogIsOpen(true);
+                setDialogIsOpen(true);
               }}
             >
               <Typography variant="body1">Create Users</Typography>
@@ -862,11 +694,12 @@ const UserManagement = (props) => {
         <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields}
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
+          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
           sx={{gridArea: "table"}}
           emptyMinHeight="300px"
           {...visibleUsers.length == users.length && {
             noContentMessage: "No users yet",
-            noContentButtonAction: () => {setCreateDialogIsOpen(true)},
+            noContentButtonAction: () => {setDialogIsOpen(true)},
             noContentButtonText: "Create a user",
             NoContentIcon: InfoIcon
           } || visibleUsers.length < users.length && {
@@ -923,9 +756,8 @@ const UserManagement = (props) => {
       <ItemMultiCreateDialog entity="user"
         dialogTitle={"Create Users"}
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
-        createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions: userFieldDefinitions, createDialogIsOpen, setCreateDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
       <ItemSingleEditDialog
         entity="user"
@@ -933,7 +765,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Edit the user fields, then click 'Save'."}
         editDialogItem={editDialogUser}
         handleItemEdit={handleUserEdit}
-        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
       <ItemSingleDeleteDialog
         entity="user"
@@ -978,7 +810,6 @@ const UserManagement = (props) => {
         setDialogIsOpen={setAssignCourseDialogIsOpen}
         secondaryTableFieldsAll={courseTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
-        // handleAssociationAssign={handleAssignCourseToUser}
         secondarySearchFields={['name']}
         secondarySearchBoxPlaceholder="Search courses by name"
       />

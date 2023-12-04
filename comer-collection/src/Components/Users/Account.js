@@ -10,14 +10,12 @@ import ChangePassword from './ChangePassword';
 import CourseManagement from './Admin/CourseManagement';
 import MyExhibitions from './MyExhibitions';
 import ExhibitionManagement from './Admin/ExhibitionManagement';
+import { useAppUser } from '../App/AppUser';
 
 
 const Account = (props) => {
 
-  const { appUser, setAppUser, showSnackbar,
-    snackbarOpen, snackbarText, snackbarSeverity,
-    setSnackbarOpen, setSnackbarText, setSnackbarSeverity
-  } = props; 
+  const [appUser, setAppUser] = useAppUser();
 
   const [selectedNavItem, setSelectedNavItem] = useState("");
 
@@ -34,7 +32,7 @@ const Account = (props) => {
       }}>
 
 
-        <AdminNav sx={{gridArea: 'sidebar'}} {...{appUser, selectedNavItem, setSelectedNavItem}} />
+        <AdminNav sx={{gridArea: 'sidebar'}} {...{selectedNavItem, setSelectedNavItem}} />
         
         <Box sx={{gridArea: 'main', position: 'relative', overflowY: "hidden", height: '100%'}}>
           
@@ -43,23 +41,15 @@ const Account = (props) => {
               !appUser.password_change_required && (<Navigate to='Profile' replace />) ||
               appUser.password_change_required && (<Navigate to='ChangePassword' replace />)
             } />
-            <Route path="Profile" element={<Profile {
-              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar,
-                snackbarOpen, snackbarText, snackbarSeverity,
-                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
-                }
-              } />} />
-            <Route path="ChangePassword" element={<ChangePassword {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="Profile" element={<Profile {...{selectedNavItem, setSelectedNavItem }} />} />
+            <Route path="ChangePassword" element={<ChangePassword {...{selectedNavItem, setSelectedNavItem}} />} />
             <Route path="MyExhibitions" element={<MyExhibitions {
-              ...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar,
-                snackbarOpen, snackbarText, snackbarSeverity,
-                setSnackbarOpen, setSnackbarText, setSnackbarSeverity
-                }
+              ...{selectedNavItem, setSelectedNavItem }
               } />} />
-            <Route path="UserManagement" element={<UserManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
-            <Route path="ExhibitionManagement" element={<ExhibitionManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem}} />} />
-            <Route path="ImageManagement" element={<ImageManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar }} />} />
-            <Route path="CourseManagement" element={<CourseManagement {...{appUser, setAppUser, selectedNavItem, setSelectedNavItem, showSnackbar}} />} />
+            <Route path="UserManagement" element={<UserManagement {...{selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ExhibitionManagement" element={<ExhibitionManagement {...{selectedNavItem, setSelectedNavItem}} />} />
+            <Route path="ImageManagement" element={<ImageManagement {...{selectedNavItem, setSelectedNavItem }} />} />
+            <Route path="CourseManagement" element={<CourseManagement {...{selectedNavItem, setSelectedNavItem}} />} />
 
           </Routes>
 

@@ -7,9 +7,14 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
 
   
-export const ExhibitionBrowser = ({showSnackbar}) => {
+export const ExhibitionBrowser = () => {
 
     const [exhibitions, setExhibitions] = useState([]);
+
+    const [sortColumn, setSortColumn] = useState("Last Updated");
+    const [sortAscending, setSortAscending] = useState(false);
+  
+  
 
     const fetchPublicExhibitionData = async() => {
         try {
@@ -26,61 +31,37 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
     }, [])
 
     const theme = useTheme();
-    console.log(theme);
   
     const exhibitionTableFields = [
         {
           columnDescription: "Title",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Title</Typography>
-            </TableCell>
-          ),
+          maxWidth: "200px",
           generateTableCell: (exhibition) => (
-            <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-              <Typography variant="body1">{exhibition.title}</Typography>
-            </TableCell>
-          )
+            <Typography variant="body1">{exhibition.title}</Typography>
+          ),
+          generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
         },
         {
           columnDescription: "Curator",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Curator</Typography>
-            </TableCell>
-          ),
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Typography variant="body1">{exhibition.curator}</Typography>
-            </TableCell>
-          )
+            <Typography variant="body1">{exhibition.curator}</Typography>
+          ),
+          generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
         },
         {
           columnDescription: "Last Updated",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6">Last Updated</Typography>
-            </TableCell>
-          ),
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Typography variant="body1">{new Date (exhibition.date_modified).toDateString()}</Typography>
-            </TableCell>
-          )
+            <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
+          ),
+          generateSortableValue: (exhibition) => new Date (exhibition.date_modified)
         },
         {
           columnDescription: "Open",
-          generateTableHeaderCell: () => (
-            <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
-              <Typography variant="h6"></Typography>
-            </TableCell>
-          ),
+          columnHeaderLabel: "",
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
-                <Typography variant="body1">Open</Typography>
-              </Button>
-            </TableCell>
+            <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
+              <Typography variant="body1">Open</Typography>
+            </Button>
           )
         },
       ]
@@ -88,23 +69,21 @@ export const ExhibitionBrowser = ({showSnackbar}) => {
       
 
     return (
-        <Box component={Paper} square justifyItems="center" sx={{
-            padding: "50px 300px"
-            
-            }} >
-            <Stack spacing={4} padding={5}>
-            <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
-              <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
-                <PhotoCameraBackIcon fontSize="large" />
-                <Typography variant="h4">Public Exhibitions</Typography>
-              </Stack>
-              </Stack>
-                <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
-                    nonEmptyHeight="500px" emptyMinHeight="500px"
-                />
-            </Stack>
-                
-        </Box>
+      <Box component={Paper} square justifyItems="center" sx={{
+        padding: "50px 300px" }} >
+        <Stack spacing={4} padding={5}>
+        <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
+          <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
+            <PhotoCameraBackIcon fontSize="large" />
+            <Typography variant="h4">Public Exhibitions</Typography>
+          </Stack>
+          </Stack>
+            <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
+                {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+                nonEmptyHeight="500px" emptyMinHeight="500px"
+            />
+        </Stack>
+      </Box>
 
     )
 }

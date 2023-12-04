@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import staticImages from './StaticImages';
 
-export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_length, ceiling_height, ceiling_color, renderer, camera) => {
+export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_length, ceiling_height, ceiling_color, renderer, camera, renderWhenFinished) => {
 
     const ceiling_group = new THREE.Group();
     scene.add(ceiling_group);
@@ -31,7 +31,8 @@ export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_lengt
 
         ceiling_group.add(ceiling_plane);
 
-        renderer.render(scene, camera);
+        if(renderWhenFinished)
+            renderer.render(scene, camera);
         
     }); 
 

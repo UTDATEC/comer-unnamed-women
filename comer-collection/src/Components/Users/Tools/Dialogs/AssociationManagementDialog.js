@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Stack, Dialog,
   DialogTitle,
@@ -38,12 +38,10 @@ export const AssociationManagementDialog = ({
 
   const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
+  const [secondarySortColumn, setSecondarySortColumn] = useState("ID");
+  const [secondarySortAscending, setSecondarySortAscending] = useState(true);
 
-  const secondaryItemsAssigned = useMemo(() => computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems), [secondaryItemsAll, secondariesByPrimary, primaryItems]);
-  const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssigned, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
-  const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAll, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAll]);
-
-  const getQuantityAssigned = (secondary) => {
+  const getQuantityAssigned = useCallback((secondary) => {
     return Object.entries(secondariesByPrimary)
     .filter(([primaryId]) => (
       primaryItems.map((pi) => pi.id).includes(parseInt(primaryId))
@@ -51,12 +49,59 @@ export const AssociationManagementDialog = ({
     .filter(([, secondaries]) => (
       secondaries.map((si) => si.id).includes(secondary.id)
     )).length;
-  }
+  }, [secondariesByPrimary, primaryItems]);
 
+
+  const secondaryItemsAssigned = useMemo(() => {
+    console.log("Runnign secondaryItemsAssigned");
+    return computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems)
+  }, [secondaryItemsAll, secondariesByPrimary, primaryItems]);
+
+  const secondaryItemsAllWithQuantities = secondaryItemsAll.map((si) => {
+    return {...si, quantity_assigned: getQuantityAssigned(si)};
+  });
+
+  const secondaryItemsAssignedWithQuantities = secondaryItemsAssigned.map((si) => {
+    return {...si, quantity_assigned: getQuantityAssigned(si)};
+  })
+
+  const secondaryItemsAllResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAllWithQuantities]);
+
+  const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
+
+  const allTable = useMemo(() => {
+    return <DataTable
+      nonEmptyHeight="300px" 
+      tableFields={secondaryTableFieldsAll} 
+      visibleItems={secondaryItemsAllResults} 
+      extraProperties={{ primaryItems }} 
+      sortColumn={secondarySortColumn}
+      setSortColumn={setSecondarySortColumn}
+      sortAscending={secondarySortAscending}
+      setSortAscending={setSecondarySortAscending}
+    />
+  }, [secondaryItemsAllResults, primaryItems, secondariesByPrimary,
+    secondarySortColumn, secondarySortAscending
+  ]);
+
+  const assignedTable = useMemo(() => {
+    return <DataTable 
+      nonEmptyHeight="300px" 
+      tableFields={secondaryTableFieldsAssignedOnly} 
+      visibleItems={secondaryItemsAssignedResults} 
+      extraProperties={{  primaryItems }}  
+      sortColumn={secondarySortColumn}
+      setSortColumn={setSecondarySortColumn}
+      sortAscending={secondarySortAscending}
+      setSortAscending={setSecondarySortAscending}
+    />
+  }, [secondaryItemsAssignedResults, primaryItems, secondariesByPrimary,
+    secondarySortColumn, secondarySortAscending
+  ])
 
   return (
-    <Dialog fullWidth={true} maxWidth="lg"
-      open={dialogIsOpen}
+    <Dialog fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}
+      open={dialogIsOpen} disableEscapeKeyDown
       onClose={(event, reason) => {
         if (reason == "backdropClick")
           return;
@@ -80,15 +125,9 @@ export const AssociationManagementDialog = ({
           <Stack sx={{width: "50%", wordWrap: "break-word"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAll}</Typography>
             <Box maxHeight="350px">
-              {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && (
-                <DataTable
-                  nonEmptyHeight="300px" 
-                  tableFields={secondaryTableFieldsAll} 
-                  items={secondaryItemsAll} 
-                  visibleItems={secondaryItemsAllResults} 
-                  extraProperties={{ primaryItems, getQuantityAssigned }} 
-                /> 
-              ) || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
+              {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 && 
+                allTable
+               || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
                   <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
                   <SearchIcon sx={{fontSize: '150pt'}} />
@@ -109,14 +148,8 @@ export const AssociationManagementDialog = ({
           <Stack sx={{width: "50%", wordWrap: "break-word"}} spacing={2} textAlign="center">
             <Typography variant="h5">{tableTitleAssigned}</Typography>
             <Box maxHeight="350px">
-              {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && (
-                <DataTable 
-                  tableFields={secondaryTableFieldsAssignedOnly} 
-                  items={secondaryItemsAssigned} 
-                  visibleItems={secondaryItemsAssignedResults} 
-                  extraProperties={{  primaryItems, getQuantityAssigned}} 
-                /> 
-              ) || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
+              {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && assignedTable 
+              || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
                 <Box sx={{width: '100%', height: '100%'}}>
                   <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{height: '100%', opacity: 0.5}}>
                   <SearchIcon sx={{fontSize: '150pt'}} />

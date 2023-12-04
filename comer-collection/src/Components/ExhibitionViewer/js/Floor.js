@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import staticImages from './StaticImages';
 
-export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name, renderer, camera) => {
+export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name, renderer, camera, renderWhenFinished) => {
     let floor_group = new THREE.Group();
     scene.add(floor_group); 
 
@@ -32,7 +32,8 @@ export const setupFloor = (scene, texture_loader, floor_width, floor_length, flo
     
         floor_group.add(floor_plane);
 
-        renderer.render(scene, camera);
+        if(renderWhenFinished)
+            renderer.render(scene, camera);
 
     }); 
     
