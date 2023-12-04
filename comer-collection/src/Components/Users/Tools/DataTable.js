@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { Suspense, useEffect, useMemo } from "react";
 import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,7 +10,11 @@ import { ColumnSortButton } from "./ColumnSortButton";
 
 const DataTableCell = ({tf, item: itemAsString, extraProperties}) => {
   return useMemo(() => {
-    return tf.generateTableCell(JSON.parse(itemAsString), extraProperties)
+    return (
+      <TableCell sx={{maxWidth: tf.maxWidth ?? "unset", wordWrap: tf.maxWidth ? "break-word" : "unset"}}>
+        {tf.generateTableCell(JSON.parse(itemAsString), extraProperties)}
+      </TableCell>
+    )
   }, [itemAsString, extraProperties]);
 }
 
@@ -19,6 +23,22 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
   emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
   const theme = useTheme();
+
+  const handleControlA = (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 'a') {
+      e.preventDefault();
+      setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
+        !selectedItems.map((si) => si.id).includes(parseInt(i.id))
+      ))]);
+    }
+  }
+  
+  useEffect(() => {
+    document.addEventListener('keydown', handleControlA);
+    return () => {
+      document.removeEventListener('keydown', handleControlA);
+    }
+  })
 
   const visibleSelectedItems = (selectedItems ?? []).filter((si) => (
     visibleItems.map((i) => i.id).includes(parseInt(si.id))

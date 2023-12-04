@@ -42,25 +42,7 @@ const ExhibitionManagement = (props) => {
 
   const [selectedExhibitions, setSelectedExhibitions] = useState([]);
 
-//   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-//   const [createDialogExhibitions, createDialogDispatch] = useReducer(createUserDialogReducer, []);
-
   const [searchQuery, setSearchQuery] = useState("");
-
-//   const [userTypeFilter, setUserTypeFilter] = useState(null);
-//   const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
-//   const clearFilters = () => {
-//     setSearchQuery("");
-//     setUserTypeFilter(null);
-//     setUserActivationStatusFilter(null);
-//     setUserPasswordTypeFilter(null);
-//   }
-
-//   const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
-//   const [userActivationStatusMenuAnchorElement, setUserActivationStatusMenuAnchorElement] = useState(null);
-
-//   const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
-//   const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
 
   const [sortColumn, setSortColumn] = useState("Modified");
   const [sortAscending, setSortAscending] = useState(false);
@@ -199,91 +181,76 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
     {
       columnDescription: "ID",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="body1">{exhibition.id}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="body1">{exhibition.id}</Typography>
+        </Stack>
       ),
       generateSortableValue: (exhibition) => exhibition.id
     },
     {
       columnDescription: "Title",
+      maxWidth: "150px",
       generateTableCell: (exhibition) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
-          {
-            exhibition.title ? (
-              <Typography variant="body1">{exhibition.title}</Typography>
-            ) : (
-              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-            )
-          }
-        </TableCell>
+        exhibition.title ? (
+          <Typography variant="body1">{exhibition.title}</Typography>
+        ) : (
+          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+        )
       ),
       generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
     },
     {
       columnDescription: "Owner",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Stack direction="column" paddingTop={1} paddingBottom={1}>
-            <Typography variant="body1">{exhibition.User.full_name_reverse}</Typography>
-            <Typography variant="body1" sx={{opacity: 0.5}}>{exhibition.User.email}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="column" paddingTop={1} paddingBottom={1}>
+          <Typography variant="body1">{exhibition.User.full_name_reverse}</Typography>
+          <Typography variant="body1" sx={{opacity: 0.5}}>{exhibition.User.email}</Typography>
+        </Stack>
       ),
       generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
     },
     {
       columnDescription: "Created",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_created)
     },
     {
       columnDescription: "Modified",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
     },
     {
       columnDescription: "Access",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            {exhibition.privacy == "PRIVATE" && (
-                <LockIcon />
-              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                <VpnLockIcon />
-              ) || exhibition.privacy == "PUBLIC" && (
-                <PublicIcon />
-              )}
-              <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
-                "Private"
-              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                "Public Anonymous"
-              ) || exhibition.privacy == "PUBLIC" && (
-                "Public"
-              )}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          {exhibition.privacy == "PRIVATE" && (
+              <LockIcon />
+            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+              <VpnLockIcon />
+            ) || exhibition.privacy == "PUBLIC" && (
+              <PublicIcon />
+            )}
+            <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
+              "Private"
+            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+              "Public Anonymous"
+            ) || exhibition.privacy == "PUBLIC" && (
+              "Public"
+            )}</Typography>
+        </Stack>
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (exhibition) => (
-        <TableCell sx={{minWidth: "100px"}}>
-          <Stack direction="row" spacing={1}>
-
-        <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
-          <Typography variant="body1">Open</Typography>
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
+            <Typography variant="body1">Open</Typography>
+          </Button>
           <IconButton 
             onClick={() => {
               setEditDialogExhibitionId(exhibition.id);
@@ -302,8 +269,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
           >
             <DeleteIcon />
           </IconButton>
-          </Stack>
-        </TableCell>
+        </Stack>
       )
     }
   ]

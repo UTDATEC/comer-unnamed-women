@@ -113,10 +113,9 @@ const MyExhibitions = (props) => {
   const exhibitionTableFields = [
     {
       columnDescription: "Title",
+      maxWidth: "200px",
       generateTableCell: (exhibition) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{exhibition.title}</Typography>
-        </TableCell>
+        <Typography variant="body1">{exhibition.title}</Typography>
       ),
       generateSortableValue: (exhibition) => exhibition.title.toLowerCase()
     },
@@ -124,83 +123,73 @@ const MyExhibitions = (props) => {
       columnDescription: "Open",
       columnHeaderLabel: "",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
-            <Typography variant="body1">Open</Typography>
-          </Button>
-        </TableCell>
+        <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
+          <Typography variant="body1">Open</Typography>
+        </Button>
       )
     },
     {
       columnDescription: "Date Created",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_created)
     },
     {
       columnDescription: "Date Modified",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
-        </TableCell>
+        <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
     },
     {
       columnDescription: "Access",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            {exhibition.privacy == "PRIVATE" && (
-                <LockIcon />
-              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                <VpnLockIcon />
-              ) || exhibition.privacy == "PUBLIC" && (
-                <PublicIcon />
-              )}
-              <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
-                "Private"
-              ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                "Public Anonymous"
-              ) || exhibition.privacy == "PUBLIC" && (
-                "Public"
-              )}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          {exhibition.privacy == "PRIVATE" && (
+              <LockIcon />
+            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+              <VpnLockIcon />
+            ) || exhibition.privacy == "PUBLIC" && (
+              <PublicIcon />
+            )}
+            <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
+              "Private"
+            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+              "Public Anonymous"
+            ) || exhibition.privacy == "PUBLIC" && (
+              "Public"
+            )}</Typography>
+        </Stack>
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (exhibition) => (
-        <TableCell>
-          <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2}>
 
-            <IconButton 
-              onClick={() => {
-                setDialogIsEditMode(true);
-                setDialogExhibitionId(exhibition.id);
-                setDialogExhibitionAccess(exhibition.privacy);
-                setDialogExhibitionTitle(exhibition.title);
-                setDialogIsOpen(true);
-              }}
-            >
-              <SettingsIcon />
-            </IconButton>
+          <IconButton 
+            onClick={() => {
+              setDialogIsEditMode(true);
+              setDialogExhibitionId(exhibition.id);
+              setDialogExhibitionAccess(exhibition.privacy);
+              setDialogExhibitionTitle(exhibition.title);
+              setDialogIsOpen(true);
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
 
-            <IconButton 
-              onClick={() => {
-                setDeleteDialogExhibition(exhibition);
-                setDeleteDialogIsOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
+          <IconButton 
+            onClick={() => {
+              setDeleteDialogExhibition(exhibition);
+              setDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
 
-          </Stack>
-        </TableCell>
+        </Stack>
       )
     }
   ]

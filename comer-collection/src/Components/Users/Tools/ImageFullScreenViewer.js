@@ -61,7 +61,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
     
     
     return image && (
-        <Dialog open={previewerOpen}  maxWidth="lg" 
+        <Dialog open={previewerOpen}  maxWidth="lg"  sx={{zIndex: 5000}}
         
 
         //     // onClick={() => {

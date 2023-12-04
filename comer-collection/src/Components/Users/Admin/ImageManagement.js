@@ -4,11 +4,9 @@ import {
   Button,
   Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
-import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
-import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -34,11 +32,10 @@ import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createImageDialogReducer } from "../Tools/HelperMethods/reducers";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
-import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
-import PersonAddIcon from "@mui/icons-material/PersonAdd"
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove"
-import CheckIcon from "@mui/icons-material/Check"
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import CheckIcon from "@mui/icons-material/Check";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
@@ -63,6 +60,10 @@ const ImageManagement = (props) => {
   const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
   const [assignArtistDialogImages, setAssignArtistDialogImages] = useState([]);
   const [artistsByImage, setArtistsByImage] = useState({});
+  
+  const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
+  const [assignTagDialogImages, setAssignTagDialogImages] = useState([]);
+  const [tagsByImage, setTagsByImage] = useState({});
 
   const [previewerImage, setPreviewerImage] = useState(null);
   const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -114,6 +115,7 @@ const ImageManagement = (props) => {
     if(appUser.is_admin) {
       fetchImages();
       fetchArtists();
+      fetchTags();
     }
   }, []); 
 
@@ -123,13 +125,9 @@ const ImageManagement = (props) => {
       const imageData = await sendAuthenticatedRequest("GET", "/api/images");
       setImages(imageData.data);
 
-      // const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
-      // setTags(tagData.data);
-
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
-
 
       const artistsByImageDraft = {}
       for(const i of imageData.data) {
@@ -137,56 +135,39 @@ const ImageManagement = (props) => {
       }
       setArtistsByImage({...artistsByImageDraft});
 
+      const tagsByImageDraft = {}
+      for(const i of imageData.data) {
+        tagsByImageDraft[i.id] = i.Tags;
+      }
+      setTagsByImage({...tagsByImageDraft});
+
     } catch (error) {
-      console.error("Error fetching data:", error);
+      return;
     }
   };
 
 
   const fetchArtists = async () => {
     try {
-
       const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
       setArtists(artistData.data);
-
     } catch (error) {
-      console.error("Error fetching data:", error);
+      return;
     }
-
-  }
-
-  /*
-    Image display:
-    Step 1: apply column filters
-    Step 2: apply search query
-    Step 3: apply sorting order
-  */
-
-  const filterImages = () => {
-    return images.filter((image) => {
-      return true;
-      // return (
-      //   // filter by image type
-      //   !imageTypeFilter || imageTypeFilter == "Administrator" && image.is_admin || imageTypeFilter == "Curator" && !image.is_admin
-      // ) && (
-      //   // filter by image activation status
-      //   !imageActivationStatusFilter || imageActivationStatusFilter == "Active" && image.is_active || imageActivationStatusFilter == "Inactive" && !image.is_active
-      // ) && (
-      //   // filter by password type
-      //   !imagePasswordTypeFilter || imagePasswordTypeFilter == "Temporary" && image.pw_temp || imagePasswordTypeFilter == "Permanent" && !image.pw_temp
-      // )
-    })
   }
 
 
-  const filteredImages = useMemo(() => filterImages(
-    // 
-  ), [
-    images
-  ])
+  const fetchTags = async () => {
+    try {
+      const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
+      setTags(tagData.data);
+    } catch (error) {
+      return;
+    }
+  }
 
 
-  const visibleImages = useMemo(() => searchItems(searchQuery, filteredImages, ['title', 'accessionNumber', 'notes']), [filteredImages, searchQuery])
+  const visibleImages = useMemo(() => searchItems(searchQuery, images, ['title', 'accessionNumber', 'notes']), [images, searchQuery])
 
 
   const handleImagesCreate = async(newImageArray) => {
@@ -200,7 +181,6 @@ const ImageManagement = (props) => {
         imagesCreated++;
   
       } catch (error) {
-        console.error(`Error creating image ${JSON.stringify(newImageData)}: ${error}`);
         imageIndicesWithErrors.push(i);
       }
     }
@@ -246,12 +226,11 @@ const ImageManagement = (props) => {
       setEditDialogIsOpen(false);
       setEditDialogFields(getBlankItemFields(imageFieldDefinitions));
 
-      showSnackbar(`Successfully edited image ${imageId}`, "success");
+      showSnackbar(`Successfully edited image`, "success");
 
     } catch (error) {
-      console.error(`Error editing image ${imageId}: ${error}`);
 
-      showSnackbar(`Error editing for image ${imageId}`, "error");
+      showSnackbar(`Error editing for image`, "error");
     }
   }
 
@@ -262,12 +241,11 @@ const ImageManagement = (props) => {
       await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}`);
       fetchImages();
 
-      showSnackbar(`Image ${imageId} has been deleted`, "success")
+      showSnackbar(`Image has been deleted`, "success")
 
     } catch (error) {
-      console.error("Error handling delete operation:", error);
 
-      showSnackbar(`Image ${imageId} could not be deleted`, "error")
+      showSnackbar(`Image could not be deleted`, "error")
     }
 
     setDeleteDialogIsOpen(false);
@@ -285,7 +263,6 @@ const ImageManagement = (props) => {
       showSnackbar(`Artist created`, "success");
 
     } catch (error) {
-      console.error(`Error creating artist: ${error}`);
 
       showSnackbar(`Error creating artist`, "error");
     }
@@ -297,12 +274,11 @@ const ImageManagement = (props) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
       await sendAuthenticatedRequest("POST", `/api/tags/`, filteredTag);
-      fetchArtists();
+      fetchTags();
 
       showSnackbar(`Tag created`, "success");
 
     } catch (error) {
-      console.error(`Error creating tag: ${error}`);
 
       showSnackbar(`Error creating tag`, "error");
     }
@@ -317,13 +293,11 @@ const ImageManagement = (props) => {
 
       setArtistEditDialogIsOpen(false);
       setArtistEditDialogFields(getBlankItemFields(artistFieldDefinitions));
-``
-      showSnackbar(`Successfully edited artist ${artistId}`, "success");
+      showSnackbar(`Successfully edited artist`, "success");
 
     } catch (error) {
-      console.error(`Error editing artist ${artistId}: ${error}`);
 
-      showSnackbar(`Error editing for artist ${artistId}`, "error");
+      showSnackbar(`Error editing for artist`, "error");
     }
   }
 
@@ -333,17 +307,16 @@ const ImageManagement = (props) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}`, filteredtag);
-      fetchArtists();
+      fetchTags();
 
       setTagEditDialogIsOpen(false);
       setTagEditDialogFields(getBlankItemFields(tagFieldDefinitions));
 
-      showSnackbar(`Successfully edited tag ${tagId}`, "success");
+      showSnackbar(`Successfully edited tag`, "success");
 
     } catch (error) {
-      console.error(`Error editing tag ${tagId}: ${error}`);
 
-      showSnackbar(`Error editing for tag ${tagId}`, "error");
+      showSnackbar(`Error editing for tag`, "error");
     }
   }
 
@@ -356,12 +329,11 @@ const ImageManagement = (props) => {
       setArtistDeleteDialogIsOpen(false);
       setArtistDeleteDialogItem(null);
 
-      showSnackbar(`Artist ${artistId} deleted`, "success");
+      showSnackbar(`Artist deleted`, "success");
 
     } catch (error) {
-      console.error(`Error deleting artist ${artistId}: ${error}`);
 
-      showSnackbar(`Error deleting artist ${artistId}`, "error");
+      showSnackbar(`Error deleting artist`, "error");
     }
   }
 
@@ -369,7 +341,7 @@ const ImageManagement = (props) => {
   const handleDeleteTag = async(tagId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/tags/${tagId}`);
-      fetchArtists();
+      fetchTags();
 
       setTagDeleteDialogIsOpen(false);
       setTagDeleteDialogItem(null);
@@ -377,7 +349,6 @@ const ImageManagement = (props) => {
       showSnackbar(`Tag ${tagId} deleted`, "success");
 
     } catch (error) {
-      console.error(`Error deleting tag ${tagId}: ${error}`);
 
       showSnackbar(`Error deleting tag ${tagId}`, "error");
     }
@@ -405,7 +376,6 @@ const ImageManagement = (props) => {
         artistsUpdated++;
   
       } catch (error) {
-        console.error(`Error ${operation}ing artist ${artistId} for image ${imageId}: ${error}`);
         artistIndicesWithErrors.push(i);
       }
     }
@@ -456,7 +426,6 @@ const ImageManagement = (props) => {
         imagesUpdated++;
   
       } catch (error) {
-        console.error(`Error ${operation}ing artist ${artistId} for image ${imageId}: ${error}`);
         imageIndicesWithErrors.push(i);
       }
     }
@@ -485,7 +454,6 @@ const ImageManagement = (props) => {
       showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success")
 
     } catch (error) {
-      console.error(`Error assigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
       showSnackbar(`Failed to assign artist ${artistId} for ${imageIds.length} images`, "error")
     }
     fetchImages();
@@ -499,7 +467,6 @@ const ImageManagement = (props) => {
       showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success")
 
     } catch (error) {
-      console.error(`Error unassigning artist for images ${JSON.stringify(imageIds)}: ${error}`);
       showSnackbar(`Failed to unassign artist ${artistId} for ${imageIds.length} images`, "error")
     }
     fetchImages();
@@ -523,85 +490,73 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Typography variant="body1">{artist.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{artist.id}</Typography>
       )
     },
     {
       columnDescription: "Name",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
-        </TableCell>
+        <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
       )
     },
     {
       columnDescription: "Images",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ImageIcon />
-            <Typography variant="body1">{artist.Images.length}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <ImageIcon />
+          <Typography variant="body1">{artist.Images.length}</Typography>
+        </Stack>
       )
     },
     {
       columnDescription: "Website",
       generateTableCell: (artist) => (
-        <TableCell>
-          {artist.website && (
-            <Button size="small" 
-              sx={{textTransform: "unset"}}
-              endIcon={<ContentCopyIcon />} onClick={() => {
-              handleCopyToClipboard(artist, "website")
-            }}>
-              <Typography variant="body1">{artist.website}</Typography>
-            </Button>
-          )}
-        </TableCell>
+        artist.website && (
+          <Button size="small" 
+            sx={{textTransform: "unset"}}
+            endIcon={<ContentCopyIcon />} onClick={() => {
+            handleCopyToClipboard(artist, "website")
+          }}>
+            <Typography variant="body1">{artist.website}</Typography>
+          </Button>
+        )
       )
     },
     {
       columnDescription: "Notes",
       generateTableCell: (artist) => (
-        <TableCell>
-          {artist.notes && (
-            <Typography variant="body1">{artist.notes}</Typography>
-          ) || !artist.notes && (
-            <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
-          )}
-        </TableCell>
+        artist.notes && (
+          <Typography variant="body1">{artist.notes}</Typography>
+        ) || !artist.notes && (
+          <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
+        )
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Stack direction="row">
-            <IconButton
-              onClick={(e) => {
-                setArtistEditDialogItem(artist);
-                const filteredArtist = filterItemFields(artistFieldDefinitions, artist);
-                setArtistEditDialogFields(filteredArtist);
-                setArtistEditDialogSubmitEnabled(true);
-                setArtistEditDialogIsOpen(true);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton 
-              disabled={!artist.is_deletable} 
-              onClick={(e) => {
-                setArtistDeleteDialogItem(artist);
-                setArtistDeleteDialogIsOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Stack>
-        </TableCell>
+        <Stack direction="row">
+          <IconButton
+            onClick={(e) => {
+              setArtistEditDialogItem(artist);
+              const filteredArtist = filterItemFields(artistFieldDefinitions, artist);
+              setArtistEditDialogFields(filteredArtist);
+              setArtistEditDialogSubmitEnabled(true);
+              setArtistEditDialogIsOpen(true);
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            disabled={!artist.is_deletable} 
+            onClick={(e) => {
+              setArtistDeleteDialogItem(artist);
+              setArtistDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
       )
     }
   ]
@@ -612,69 +567,59 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (tag) => (
-        <TableCell>
-          <Typography variant="body1">{tag.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{tag.id}</Typography>
       )
     },
     {
       columnDescription: "Data",
       generateTableCell: (tag) => (
-        <TableCell>
-          <Typography variant="body1">{tag.data}</Typography>
-        </TableCell>
+        <Typography variant="body1">{tag.data}</Typography>
       )
     },
     {
       columnDescription: "Images",
       generateTableCell: (tag) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ImageIcon />
-            <Typography variant="body1">{tag.Images.length}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <ImageIcon />
+          <Typography variant="body1">{tag.Images.length}</Typography>
+        </Stack>
       )
     },
     {
       columnDescription: "Notes",
       generateTableCell: (tag) => (
-        <TableCell>
-          {tag.notes && (
-            <Typography variant="body1">{tag.notes}</Typography>
-          ) || !tag.notes && (
-            <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
-          )}
-        </TableCell>
+        tag.notes && (
+          <Typography variant="body1">{tag.notes}</Typography>
+        ) || !tag.notes && (
+          <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
+        )
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (tag) => (
-        <TableCell>
-          <Stack direction="row">
-            <IconButton
-              onClick={(e) => {
-                setTagEditDialogItem(tag);
-                const filteredTag = filterItemFields(tagFieldDefinitions, tag);
-                setTagEditDialogFields(filteredTag);
-                setTagEditDialogSubmitEnabled(true);
-                setTagEditDialogIsOpen(true);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton 
-              disabled={!tag.is_deletable} 
-              onClick={(e) => {
-                setTagDeleteDialogItem(tag);
-                setTagDeleteDialogIsOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Stack>
-        </TableCell>
+        <Stack direction="row">
+          <IconButton
+            onClick={(e) => {
+              setTagEditDialogItem(tag);
+              const filteredTag = filterItemFields(tagFieldDefinitions, tag);
+              setTagEditDialogFields(filteredTag);
+              setTagEditDialogSubmitEnabled(true);
+              setTagEditDialogIsOpen(true);
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            disabled={!tag.is_deletable} 
+            onClick={(e) => {
+              setTagDeleteDialogItem(tag);
+              setTagDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
       )
     }
   ]
@@ -684,171 +629,151 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (image) => (
-        <TableCell>
-          <Typography variant="body1">{image.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{image.id}</Typography>
       ),
       generateSortableValue: (image) => image.id
     },
     {
       columnDescription: "Title",
       generateTableCell: (image) => (
-        <TableCell>
-          <Typography variant="body1">{image.title}</Typography>
-        </TableCell>
+        <Typography variant="body1">{image.title}</Typography>
       ),
       generateSortableValue: (image) => image.title.toLowerCase()
     },
     {
       columnDescription: "Preview",
       generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
-            justifyContent="center" alignItems="center">
-          {(image.thumbnailUrl) && (
-            <Button 
-              onClick={() => {
-                setPreviewerImage(image);
-                setPreviewerOpen(true);
-              }}
-            >
-            <img height="50px" src={image.thumbnailUrl} loading="lazy" />
-            </Button>
-          ) || image.url && (
-            <Button variant="outlined" color="primary" 
-              startIcon={<VisibilityIcon />}
-              onClick={() => {
-                setPreviewerImage(image);
-                setPreviewerOpen(true);
-              }}
-            >
-              <Typography variant="body1">View</Typography>
-            </Button>
-          )}
-          </Stack>
-        </TableCell>
+        <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
+          justifyContent="center" alignItems="center">
+        {(image.thumbnailUrl) && (
+          <Button 
+            onClick={() => {
+              setPreviewerImage(image);
+              setPreviewerOpen(true);
+            }}
+          >
+          <img height="50px" src={image.thumbnailUrl} loading="lazy" />
+          </Button>
+        ) || image.url && (
+          <Button variant="outlined" color="primary" 
+            startIcon={<VisibilityIcon />}
+            onClick={() => {
+              setPreviewerImage(image);
+              setPreviewerOpen(true);
+            }}
+          >
+            <Typography variant="body1">View</Typography>
+          </Button>
+        )}
+        </Stack>
       )
     },
     {
       columnDescription: "Accession Number",
       generateTableCell: (image) => (
-        <TableCell>
-          <Typography variant="body1">{image.accessionNumber}</Typography>
-        </TableCell>
+        <Typography variant="body1">{image.accessionNumber}</Typography>
       ),
       generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
     },
     {
       columnDescription: "Year",
       generateTableCell: (image) => (
-        <TableCell>
-          <Typography variant="body1">{image.year}</Typography>
-        </TableCell>
+        <Typography variant="body1">{image.year}</Typography>
       ),
       generateSortableValue: (image) => image.year
     },
     {
       columnDescription: "Location",
       generateTableCell: (image) => (
-        <TableCell>
-          {image.location && (
-            <Stack direction="row" spacing={1}>
-              <PlaceIcon />
-              <Typography variant="body1">{image.location}</Typography>
-            </Stack>
-          )}
-        </TableCell>
+        image.location && (
+          <Stack direction="row" spacing={1}>
+            <PlaceIcon />
+            <Typography variant="body1">{image.location}</Typography>
+          </Stack>
+        )
       )
     },
     {
       columnDescription: "Artists",
       generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" 
-              color="primary"
-              startIcon={<BrushIcon />}
-              onClick={() => {
-                setAssignArtistDialogImages([image]);
-                setAssignArtistDialogIsOpen(true);
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
-                // setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{image.Artists.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text" 
+            color="primary"
+            startIcon={<BrushIcon />}
+            onClick={() => {
+              setAssignArtistDialogImages([image]);
+              setAssignArtistDialogIsOpen(true);
+              // setAssignCourseDialogUser(user);
+              // setAssignCourseDialogCourses([...user.Courses]);
+              // setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{image.Artists.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Tags",
       generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" 
-              color="primary"
-              disabled startIcon={<SellIcon />}
-              onClick={() => {
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
-                // setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{image.Tags.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text" 
+            color="primary"
+            disabled startIcon={<SellIcon />}
+            onClick={() => {
+              // setAssignCourseDialogUser(user);
+              // setAssignCourseDialogCourses([...user.Courses]);
+              // setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{image.Tags.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Exhibitions",
       generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text" 
-              color="primary"
-              disabled startIcon={<PhotoCameraBackIcon />}
-              onClick={() => {
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
-                // setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{image.Exhibitions.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text" 
+            color="primary"
+            disabled startIcon={<PhotoCameraBackIcon />}
+            onClick={() => {
+              // setAssignCourseDialogUser(user);
+              // setAssignCourseDialogCourses([...user.Courses]);
+              // setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{image.Exhibitions.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (image) => (
-        <TableCell>
-          <Stack direction="row">
-            <IconButton 
-              onClick={(e) => {
-                setEditDialogImage(image);
-                const filteredImage = filterItemFields(imageFieldDefinitions, image);
-                setEditDialogFields(filteredImage);
-                setEditDialogSubmitEnabled(true);
-                setEditDialogIsOpen(true)
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton 
-              disabled={!image.is_deletable} 
-              onClick={(e) => {
-                setDeleteDialogImage(image);
-                setDeleteDialogIsOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Stack>
-        </TableCell>
+        <Stack direction="row">
+          <IconButton 
+            onClick={(e) => {
+              setEditDialogImage(image);
+              const filteredImage = filterItemFields(imageFieldDefinitions, image);
+              setEditDialogFields(filteredImage);
+              setEditDialogSubmitEnabled(true);
+              setEditDialogIsOpen(true)
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton 
+            disabled={!image.is_deletable} 
+            onClick={(e) => {
+              setDeleteDialogImage(image);
+              setDeleteDialogIsOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
       )
     }
   ]
@@ -858,26 +783,20 @@ const ImageManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Typography variant="body1">{artist.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{artist.id}</Typography>
       ),
       generateSortableValue: (artist) => artist.id
     },
     {
       columnDescription: "Artist",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
-        </TableCell>
+        <Typography variant="body1">{artist.fullNameReverse ?? `Artist ${artist.id}`}</Typography>
       )
     },
     {
       columnDescription: "Notes",
       generateTableCell: (artist) => (
-        <TableCell>
-          <Typography variant="body1">{artist.notes ?? ""}</Typography>
-        </TableCell>
+        <Typography variant="body1">{artist.notes ?? ""}</Typography>
       )
     }
   ], []);
@@ -889,8 +808,7 @@ const ImageManagement = (props) => {
     generateTableCell: (artist, extraProperties) => {
       const quantity = artist.quantity_assigned;
       return (
-      <TableCell>
-        {quantity == assignArtistDialogImages.length && (
+        quantity == assignArtistDialogImages.length && (
           <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
             {assignArtistDialogImages.length == 1 ? (
               <Typography variant="body1">Added</Typography>
@@ -902,7 +820,7 @@ const ImageManagement = (props) => {
           </Button>) || 
           quantity == 0 && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignImagesToArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+              handleAssignImagesToArtist(artist.id, images.map((i) => i.id));
             }}>
               {assignArtistDialogImages.length == 1 ? (
                 <Typography variant="body1">Add</Typography>
@@ -913,7 +831,7 @@ const ImageManagement = (props) => {
           ) || 
           quantity > 0 && quantity < assignArtistDialogImages.length && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignImagesToArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+              handleAssignImagesToArtist(artist.id, images.map((i) => i.id));
             }}>
               {assignArtistDialogImages.length - quantity == 1 ? (
                 <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more image</Typography>
@@ -922,37 +840,35 @@ const ImageManagement = (props) => {
               )}
             </Button>
           )
-        }
-      </TableCell>
-    )}
-  }], [assignArtistDialogImages, handleAssignImagesToArtist]);
+        )
+      }
+    }
+  ], [assignArtistDialogImages, handleAssignImagesToArtist]);
+
 
   const artistTableFieldsForDialogAssigned = useMemo(() => [...artistTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (artist, extraProperties) => {
       const quantity = artist.quantity_assigned;
       return (
-        <TableCell>
-          {quantity == assignArtistDialogImages.length && (
-              <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
-              }}>
-                {assignArtistDialogImages.length == 1 ? (
-                  <Typography variant="body1">Remove</Typography>
-                  ) : (
-                  <Typography variant="body1">Remove from {quantity} images</Typography>
-                )}
-              </Button>
-            ) || 
-            quantity > 0 && quantity < assignArtistDialogImages.length && (
-              <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
-              }}>
-                <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
-              </Button>
-            )
-          }
-        </TableCell>
+        quantity == assignArtistDialogImages.length && (
+          <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+            handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+          }}>
+            {assignArtistDialogImages.length == 1 ? (
+              <Typography variant="body1">Remove</Typography>
+              ) : (
+              <Typography variant="body1">Remove from {quantity} images</Typography>
+            )}
+          </Button>
+        ) || 
+        quantity > 0 && quantity < assignArtistDialogImages.length && (
+          <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+            handleUnassignImagesFromArtist(artist.id, extraProperties.primaryItems.map((i) => i.id));
+          }}>
+            <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
+          </Button>
+        )
       )
     }
   }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);

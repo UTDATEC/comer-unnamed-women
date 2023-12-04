@@ -35,28 +35,23 @@ export const ExhibitionBrowser = () => {
     const exhibitionTableFields = [
         {
           columnDescription: "Title",
+          maxWidth: "200px",
           generateTableCell: (exhibition) => (
-            <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-              <Typography variant="body1">{exhibition.title}</Typography>
-            </TableCell>
+            <Typography variant="body1">{exhibition.title}</Typography>
           ),
           generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
         },
         {
           columnDescription: "Curator",
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Typography variant="body1">{exhibition.curator}</Typography>
-            </TableCell>
+            <Typography variant="body1">{exhibition.curator}</Typography>
           ),
           generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
         },
         {
           columnDescription: "Last Updated",
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Typography variant="body1">{new Date (exhibition.date_modified).toDateString()}</Typography>
-            </TableCell>
+            <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
           ),
           generateSortableValue: (exhibition) => new Date (exhibition.date_modified)
         },
@@ -64,11 +59,9 @@ export const ExhibitionBrowser = () => {
           columnDescription: "Open",
           columnHeaderLabel: "",
           generateTableCell: (exhibition) => (
-            <TableCell>
-              <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
-                <Typography variant="body1">Open</Typography>
-              </Button>
-            </TableCell>
+            <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
+              <Typography variant="body1">Open</Typography>
+            </Button>
           )
         },
       ]
@@ -76,24 +69,21 @@ export const ExhibitionBrowser = () => {
       
 
     return (
-        <Box component={Paper} square justifyItems="center" sx={{
-            padding: "50px 300px"
-            
-            }} >
-            <Stack spacing={4} padding={5}>
-            <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
-              <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
-                <PhotoCameraBackIcon fontSize="large" />
-                <Typography variant="h4">Public Exhibitions</Typography>
-              </Stack>
-              </Stack>
-                <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
-                    {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
-                    nonEmptyHeight="500px" emptyMinHeight="500px"
-                />
-            </Stack>
-                
-        </Box>
+      <Box component={Paper} square justifyItems="center" sx={{
+        padding: "50px 300px" }} >
+        <Stack spacing={4} padding={5}>
+        <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
+          <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
+            <PhotoCameraBackIcon fontSize="large" />
+            <Typography variant="h4">Public Exhibitions</Typography>
+          </Stack>
+          </Stack>
+            <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
+                {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+                nonEmptyHeight="500px" emptyMinHeight="500px"
+            />
+        </Stack>
+      </Box>
 
     )
 }

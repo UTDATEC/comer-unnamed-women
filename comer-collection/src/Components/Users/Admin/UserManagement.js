@@ -84,10 +84,8 @@ const UserManagement = (props) => {
   }
 
   const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
-  const [userActivationStatusMenuAnchorElement, setUserActivationStatusMenuAnchorElement] = useState(null);
 
   const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
-  const [userPasswordTypeMenuAnchorElement, setUserPasswordTypeMenuAnchorElement] = useState(null);
 
   const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
@@ -98,7 +96,6 @@ const UserManagement = (props) => {
   const { setSelectedNavItem } = props;
   const [appUser, setAppUser] = useAppUser();
   const showSnackbar = useSnackbar();
-  const theme = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -174,16 +171,6 @@ const UserManagement = (props) => {
 
 
   const visibleUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
-
-  // const visibleUsers = filteredAndSearchedUsers.sort((a, b) => {
-  //   if(sortColumn == "Name")
-  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-  //   else if(sortColumn == "ID")
-  //     return !sortAscending ^ (a.id > b.id);
-  //   else if(sortColumn == "Email")
-  //     return !sortAscending ^ (a.email > b.email)
-  // })
-
 
 
   const handleUsersCreate = async(newUserArray) => {
@@ -425,49 +412,42 @@ const UserManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="body1">{user.id}</Typography>
-            {user.id == appUser.id && (
-              <PersonIcon color="secondary" />
-            )}
-          </Stack>
-        </TableCell>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="body1">{user.id}</Typography>
+          {user.id == appUser.id && (
+            <PersonIcon color="secondary" />
+          )}
+        </Stack>
       ),
       generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
+      maxWidth: "150px",
       generateTableCell: (user) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "150px"}}>
-          {
-            user.has_name ? (
-              <Typography variant="body1">{user.full_name_reverse}</Typography>
-            ) : (
-              <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-            )
-          }
-        </TableCell>
+        user.has_name ? (
+          <Typography variant="body1">{user.full_name_reverse}</Typography>
+        ) : (
+          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+        )
       ),
       generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
       generateTableCell: (user) => (
-        <TableCell>
-          <Button color="grey"
-            variant="text" sx={{textTransform: "unset"}}
-            onClick={() => {handleCopyToClipboard(user, "email")}}>
-            <Typography variant="body1">{user.email}</Typography>
-          </Button>
-        </TableCell>
+        <Button color="grey"
+          variant="text" sx={{textTransform: "unset"}}
+          onClick={() => {handleCopyToClipboard(user, "email")}}>
+          <Typography variant="body1">{user.email}</Typography>
+        </Button>
       ),
       generateSortableValue: (user) => user.email
     },
     {
       columnDescription: "Password",
       generateTableCell: (user) => (
-        <TableCell>
+        <>
           {appUser.id == user.id ? (
             <Button startIcon={<OpenInNewIcon />} color={user.is_admin ? "secondary" : "primary"}
             variant="outlined"
@@ -495,87 +475,79 @@ const UserManagement = (props) => {
               <Typography variant="body1">Reset</Typography>
             </Button>
           )}
-        </TableCell>
+        </>
       )
     },
     {
       columnDescription: "Courses",
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text"
-              color={user.is_admin ? "secondary" : "primary"}
-              startIcon={<SchoolIcon />}
-              onClick={() => {
-                setAssignCourseDialogUsers([user])
-                setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{user.Courses.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text"
+            color={user.is_admin ? "secondary" : "primary"}
+            startIcon={<SchoolIcon />}
+            onClick={() => {
+              setAssignCourseDialogUsers([user])
+              setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{user.Courses.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Exhibitions",
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="text"
-              color={user.is_admin ? "secondary" : "primary"}
-              disabled startIcon={<PhotoCameraBackIcon />}
-              onClick={() => {
-                // setAssignCourseDialogUser(user);
-                // setAssignCourseDialogCourses([...user.Courses]);
-                // setAssignCourseDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{user.Exhibitions.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="text"
+            color={user.is_admin ? "secondary" : "primary"}
+            disabled startIcon={<PhotoCameraBackIcon />}
+            onClick={() => {
+              // setAssignCourseDialogUser(user);
+              // setAssignCourseDialogCourses([...user.Courses]);
+              // setAssignCourseDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{user.Exhibitions.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "User Type",
       generateTableCell: (user) => (
-        <TableCell>
-          <Button color="grey" sx={{textTransform: "unset"}}
-            disabled={user.id == appUser.id}
-            onClick={() => {
-              setPrivilegesDialogUser(user);
-              setPrivilegesDialogIsOpen(true);
-            }}
-          >
-            <Stack direction="row" spacing={1}>
-              <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-              {user.is_admin && (<SecurityIcon color="secondary" />)}
-            </Stack>
-          </Button>
-        </TableCell>
+        <Button color="grey" sx={{textTransform: "unset"}}
+          disabled={user.id == appUser.id}
+          onClick={() => {
+            setPrivilegesDialogUser(user);
+            setPrivilegesDialogIsOpen(true);
+          }}
+        >
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
+            {user.is_admin && (<SecurityIcon color="secondary" />)}
+          </Stack>
+        </Button>
       )
     },
     {
       columnDescription: "Active",
       generateTableCell: (user) => (
-        <TableCell>
-          <Switch
-            itemID={user.id}
-            checked={user.is_active}
-            disabled={user.id == appUser.id}
-            color={user.is_admin ? "secondary" : "primary"}
-            onClick={(e) => {
-              handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
-            }}
-          />
-        </TableCell>
+        <Switch
+          itemID={user.id}
+          checked={user.is_active}
+          disabled={user.id == appUser.id}
+          color={user.is_admin ? "secondary" : "primary"}
+          onClick={(e) => {
+            handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
+          }}
+        />
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (user) => (
-        <TableCell sx={{minWidth: "100px"}}>
+        <>
           <IconButton
             disabled={user.id == appUser.id}
             onClick={() => {
@@ -583,7 +555,7 @@ const UserManagement = (props) => {
               const { email, family_name, given_name } = user;
               setEditDialogFields({ email, family_name, given_name });
               setEditDialogSubmitEnabled(true);
-              setEditDialogIsOpen(true)
+              setEditDialogIsOpen(true);
             }}
           >
             <EditIcon />
@@ -597,7 +569,7 @@ const UserManagement = (props) => {
           >
             <DeleteIcon />
           </IconButton>
-        </TableCell>
+        </>
       )
     }
   ]
@@ -606,30 +578,25 @@ const UserManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{course.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.id}</Typography>
       ),
       generateSortableValue: (course) => course.id
     },
     {
       columnDescription: "Name",
+      maxWidth: "200px",
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{course.name}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.name}</Typography>
       ),
       generateSortableValue: (course) => course.name
     },
     {
       columnDescription: "Dates",
       generateTableCell: (course) => (
-        <TableCell>
-          <Stack>
-            <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
-            <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack>
+          <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
+          <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
+        </Stack>
       )
     }
   ]
@@ -638,10 +605,8 @@ const UserManagement = (props) => {
     columnDescription: "Enroll",
     generateTableCell: (course, extraProperties) => {
       const quantity = course.quantity_assigned;
-      // const quantity = extraProperties.getQuantityAssigned(course);
       return (
-      <TableCell>
-        {quantity == assignCourseDialogUsers.length && (
+        quantity == assignCourseDialogUsers.length && (
           <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
             {assignCourseDialogUsers.length == 1 ? (
               <Typography variant="body1">Enrolled</Typography>
@@ -673,10 +638,9 @@ const UserManagement = (props) => {
               )}
             </Button>
           )
-        }
-      </TableCell>
-    )}
-  }]
+        )
+      }
+    }]
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
@@ -685,21 +649,19 @@ const UserManagement = (props) => {
       const quantity = course.quantity_assigned;
 
       return (
-        <TableCell>
-          <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
-            handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
-          }}>
-          {quantity == 1 ? (
-            assignCourseDialogUsers.length == 1 ? (
-              <Typography variant="body1">Unenroll</Typography>
-            ) : (
-              <Typography variant="body1">Unenroll {quantity} user</Typography>
-            )
+        <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
+          handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+        }}>
+        {quantity == 1 ? (
+          assignCourseDialogUsers.length == 1 ? (
+            <Typography variant="body1">Unenroll</Typography>
           ) : (
-            <Typography variant="body1">Unenroll {quantity} users</Typography>
-          )}
-          </Button>
-        </TableCell>
+            <Typography variant="body1">Unenroll {quantity} user</Typography>
+          )
+        ) : (
+          <Typography variant="body1">Unenroll {quantity} users</Typography>
+        )}
+        </Button>
       )
     }
   }]

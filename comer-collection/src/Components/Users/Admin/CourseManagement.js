@@ -164,17 +164,6 @@ const CourseManagement = (props) => {
 
   const visibleCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
 
-  // const visibleCourses = filteredAndSearchedCourses.sort((a, b) => {
-  //   if(sortColumn == "Name")
-  //     return b.family_name && b.given_name && (!sortAscending ^ (a.family_name > b.family_name || (a.family_name == b.family_name && a.given_name > b.given_name)));
-  //   else if(sortColumn == "ID")
-  //     return !sortAscending ^ (a.id > b.id);
-  //   else if(sortColumn == "Email")
-  //     return !sortAscending ^ (a.email > b.email)
-  // })
-  
-
-
 
   const handleCoursesCreate = async(newCourseArray) => {
     let coursesCreated = 0;
@@ -296,102 +285,89 @@ const CourseManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{course.id}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.id}</Typography>
       ),
       generateSortableValue: (course) => course.id
     },
     {
       columnDescription: "Name",
+      maxWidth: "200px",
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{course.name}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.name}</Typography>
       ),
       generateSortableValue: (course) => course.name
     },
     {
       columnDescription: "Start",
       generateTableCell: (course) => (
-        <TableCell>
-          <Stack direction="column" padding={0}>
-            <Typography variant="body1">
-              {new Date (course.date_start).toLocaleDateString([], {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                weekday: 'short'
-              })}
-            </Typography>
-            <Typography variant="body1">{new Date (course.date_start).toLocaleTimeString([], {
-              hour: 'numeric',
-              minute: '2-digit'
-            })}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="column" padding={0}>
+          <Typography variant="body1">
+            {new Date (course.date_start).toLocaleDateString([], {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              weekday: 'short'
+            })}
+          </Typography>
+          <Typography variant="body1">{new Date (course.date_start).toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: '2-digit'
+          })}</Typography>
+        </Stack>
       ),
       generateSortableValue: (course) => new Date(course.date_start)
     },
     {
       columnDescription: "End",
       generateTableCell: (course) => (
-        <TableCell>
-          <Stack direction="column" padding={0}>
-            <Typography variant="body1">
-              {new Date (course.date_end).toLocaleDateString([], {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                weekday: 'short'
-              })}
-            </Typography>
-            <Typography variant="body1">{new Date (course.date_end).toLocaleTimeString([], {
-              hour: 'numeric',
-              minute: '2-digit'
-            })}</Typography>
-          </Stack>
-        </TableCell>
+        <Stack direction="column" padding={0}>
+          <Typography variant="body1">
+            {new Date (course.date_end).toLocaleDateString([], {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              weekday: 'short'
+            })}
+          </Typography>
+          <Typography variant="body1">{new Date (course.date_end).toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: '2-digit'
+          })}</Typography>
+        </Stack>
       ),
       generateSortableValue: (course) => new Date(course.date_end)
     },
     {
       columnDescription: "Status",
       generateTableCell: (course) => (
-        <TableCell>
-          <Typography variant="body1">{course.status}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.status}</Typography>
       )
     },
     {
       columnDescription: "Enrollment",
       generateTableCell: (course) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
-              onClick={() => {
-                setAssignUserDialogCourses([course]);
-                setAssignUserDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">{course.Users.length}</Typography>
-            </Button>
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
+            onClick={() => {
+              setAssignUserDialogCourses([course]);
+              setAssignUserDialogIsOpen(true);
+            }}
+          >
+            <Typography variant="body1">{course.Users.length}</Typography>
+          </Button>
+        </Stack>
       )
     },
     {
       columnDescription: "Notes",
       generateTableCell: (course) => (
-        <TableCell sx={{wordWrap: "break-word", maxWidth: "200px"}}>
-          <Typography variant="body1">{course.notes}</Typography>
-        </TableCell>
+        <Typography variant="body1">{course.notes}</Typography>
       )
     },
     {
       columnDescription: "Options",
       generateTableCell: (course) => (
-        <TableCell>
+        <>
           <IconButton 
             onClick={() => {
               setEditDialogCourse(course);
@@ -411,7 +387,7 @@ const CourseManagement = (props) => {
           >
             <DeleteIcon />
           </IconButton>
-        </TableCell>
+        </>
       )
     }
   ]
@@ -421,30 +397,24 @@ const CourseManagement = (props) => {
     {
       columnDescription: "ID",
       generateTableCell: (user) => (
-        <TableCell>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="body1">{user.id} </Typography>
-            {user.is_admin && (<SecurityIcon color="secondary" />)}
-          </Stack>
-        </TableCell>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body1">{user.id} </Typography>
+          {user.is_admin && (<SecurityIcon color="secondary" />)}
+        </Stack>
       ),
       generateSortableValue: (user) => user.id
     },
     {
       columnDescription: "Name",
       generateTableCell: (user) => (
-        <TableCell>
         <Typography variant="body1">{user.full_name_reverse ?? `User ${id}`}</Typography>
-        </TableCell>
       ),
       generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
     },
     {
       columnDescription: "Email",
       generateTableCell: (user) => (
-        <TableCell>
-          <Typography variant="body1">{user.email}</Typography>
-        </TableCell>
+        <Typography variant="body1">{user.email}</Typography>
       )
     }
   ]
@@ -452,11 +422,9 @@ const CourseManagement = (props) => {
   const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
     columnDescription: "Enroll",
     generateTableCell: (user, extraProperties) => {
-      // const quantity = extraProperties.getQuantityAssigned(user);
       const quantity = user.quantity_assigned
       return (
-      <TableCell>
-        {quantity == assignUserDialogCourses.length && (
+        quantity == assignUserDialogCourses.length && (
           <Button variant="text" color={user.is_admin ? "secondary" : "primary"} disabled startIcon={<CheckIcon />}>
             {assignUserDialogCourses.length == 1 ? (
               <Typography variant="body1">Enrolled</Typography>
@@ -484,38 +452,33 @@ const CourseManagement = (props) => {
               <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
             </Button>
           )
-        }
-      </TableCell>
-    )}
-  }]
+        )
+      }
+    }]
 
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (user, extraProperties) => {
-      // const quantity = extraProperties.getQuantityAssigned(user)
       const quantity = user.quantity_assigned;
       return (
-        <TableCell>
-          {quantity == assignUserDialogCourses.length && (
-              <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
-              }}>
-                {assignUserDialogCourses.length == 1 ? (
-                  <Typography variant="body1">Unenroll</Typography>
-                  ) : (
-                  <Typography variant="body1">Unenroll from {quantity}</Typography>
-                )}
-              </Button>
-            ) || 
-            quantity > 0 && quantity < assignUserDialogCourses.length && (
-              <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
-              }}>
-                <Typography variant="body1">Unenroll from {quantity}</Typography>
-              </Button>
-            )
-          }
-        </TableCell>
+        quantity == assignUserDialogCourses.length && (
+          <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
+            handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+          }}>
+            {assignUserDialogCourses.length == 1 ? (
+              <Typography variant="body1">Unenroll</Typography>
+              ) : (
+              <Typography variant="body1">Unenroll from {quantity}</Typography>
+            )}
+          </Button>
+        ) || 
+        quantity > 0 && quantity < assignUserDialogCourses.length && (
+          <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
+            handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+          }}>
+            <Typography variant="body1">Unenroll from {quantity}</Typography>
+          </Button>
+        )
       )
     }
   }]
