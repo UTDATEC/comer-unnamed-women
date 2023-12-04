@@ -36,7 +36,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
             new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
             new THREE.MeshLambertMaterial({
                 map: wall_texture_frontback,
-                color: side_color,
+                color: main_color,
             }),
         );
     
