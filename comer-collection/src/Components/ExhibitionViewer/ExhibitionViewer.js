@@ -191,7 +191,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     // Manage movement based on key presses
     // and constrain camera position to exhibition boundaries
     useEffect(() => {
-        const distance_threshold = Math.sqrt((primary_json.size.width_ft + primary_json.size.length_ft) / 4) / 6;
+        const distance_threshold = 4;
 
         // manage camera movement
         if(myControls?.isLocked) {
@@ -261,6 +261,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         let closeImage = null;
         for(const [image_id, image_position] of Object.entries(myArtPositionsByImageId ?? {})) {
             const distance_to_art = myCamera.position.distanceTo(image_position);
+            console.log(image_id, distance_to_art, distance_threshold);
             if(distance_to_art < distance_threshold) {
                 closeImage = image_id;
             }
