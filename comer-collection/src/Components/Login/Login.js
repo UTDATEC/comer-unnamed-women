@@ -12,43 +12,34 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
-  const [buttonEnabled, setButtonEnabled] = useState(true);
+  const [formEnabled, setFormEnabled] = useState(true);
 
   const navigate = useNavigate();
 
-
-  //Api call here
   const handleLogin = async (event) => {
     event.preventDefault();
-    setButtonEnabled(false);
-    const response = await sendAuthenticatedRequest("PUT", "/api/account/signin", {
-      email, password
-    });
+    setFormEnabled(false);
 
-    if(response.token) {
-      // alert("Success");
-      localStorage.setItem('token', response.token);
-
-      try {
+    try {
+      const response = await sendAuthenticatedRequest("PUT", "/api/account/signin", {
+        email, password
+      });
+  
+      if(response.token) {
+        localStorage.setItem('token', response.token);
         const profileResponse = await sendAuthenticatedRequest("GET", "/api/account/profile")
         setAppUser(profileResponse.data);
         navigate('/Account');
       }
-      catch(e) {
-        setAppUser(null);
-        localStorage.removeItem('token');
-        setPassword("");
-        setButtonEnabled(true);
-        setError(true);
-      }
-
-      
     }
-    else {
+    catch(e) {
+      setAppUser(null);
+      localStorage.removeItem('token');
       setPassword("");
-      setButtonEnabled(true);
+      setFormEnabled(true);
       setError(true);
     }
+
     
   };
 
@@ -61,6 +52,7 @@ const Login = () => {
               sx={{width: "100%", height: "100%"}}>
               <TextField sx={{minWidth: "400px"}} autoFocus
                 error={Boolean(error)}
+                disabled={!formEnabled}
                 label="Email"
                 type="text"
                 name="email"
@@ -73,6 +65,7 @@ const Login = () => {
               />
               <TextField sx={{minWidth: "400px"}}
                 error={Boolean(error)}
+                disabled={!formEnabled}
                 label="Password"
                 type="password"
                 name="password"
@@ -87,7 +80,7 @@ const Login = () => {
               <Button type="submit" 
                 variant="contained" 
                 sx={{minWidth: "400px"}} 
-                disabled={!(email && password && buttonEnabled)}
+                disabled={!(email && password && formEnabled)}
               >
                 <Typography variant="body1">Log In</Typography>
               </Button>
