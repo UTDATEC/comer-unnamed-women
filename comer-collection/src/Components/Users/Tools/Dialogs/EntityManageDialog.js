@@ -29,8 +29,6 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
 
     internalEditDialogIsOpen, setInternalEditDialogIsOpen, 
     internalEditDialogItem, setInternalEditDialogItem, 
-    internalEditDialogFields, setInternalEditDialogFields,
-    internalEditDialogSubmitEnabled, setInternalEditDialogSubmitEnabled,
 
     onClose
   }) => {
@@ -161,11 +159,7 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
         dialogTitle={`Edit ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
         dialogInstructions="Update"
         handleItemEdit={handleItemEdit}
-        editDialogFields={internalEditDialogFields}
-        setEditDialogFields={setInternalEditDialogFields}
         editDialogFieldDefinitions={dialogFieldDefinitions}
-        editDialogSubmitEnabled={internalEditDialogSubmitEnabled}
-        setEditDialogSubmitEnabled={setInternalEditDialogSubmitEnabled}
         />
       
 

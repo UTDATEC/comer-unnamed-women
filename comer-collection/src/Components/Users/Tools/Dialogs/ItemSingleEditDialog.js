@@ -10,7 +10,7 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString";
 
-export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, setEditDialogSubmitEnabled, handleItemEdit }) => {
+export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, handleItemEdit }) => {
 
 
   const editDialogFieldRefs = useRef([]);
@@ -76,13 +76,11 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
           <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
             setEditDialogIsOpen(false);
-            setEditDialogSubmitEnabled(false);
             editDialogFieldRefs.current = []
           }}>
             <Typography variant="body1">Cancel</Typography>
           </Button>
           <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
-            // disabled={!Boolean(editDialogSubmitEnabled && editDialogFields.email)}
             type="submit">
             <Typography variant="body1">Save {entity}</Typography>
           </Button>

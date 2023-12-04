@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic } = require("./controllers/images.js");
+const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic, assignTagToImages, unassignTagFromImages } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
 const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
@@ -36,6 +36,9 @@ router.put("/artists/:artistId/images/unassign", unassignArtistFromImages);
 // Modify image/tag associations
 router.put("/images/:imageId/tags/:tagId", assignTagToImage);
 router.delete("/images/:imageId/tags/:tagId", unassignTagFromImage);
+
+router.put("/tags/:tagId/images/assign", assignTagToImages);
+router.put("/tags/:tagId/images/unassign", unassignTagFromImages);
 
 // Read artists
 router.get("/artists", listArtists);

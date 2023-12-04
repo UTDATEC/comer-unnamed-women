@@ -1,17 +1,15 @@
-import React, { useCallback, useContext, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import {
   Stack,
   Button,
   Typography,
-  Switch, useTheme, Box, IconButton, Paper, MenuItem, Chip} from "@mui/material";
-import TableCell from "@mui/material/TableCell";
+  Switch, Box, IconButton, Paper
+} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import { ColumnSortButton } from "../Tools/ColumnSortButton";
-import { ColumnFilterButton } from "../Tools/ColumnFilterButton";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -38,8 +36,8 @@ import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/f
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
-import SearchIcon from "@mui/icons-material/Search"
-import InfoIcon from "@mui/icons-material/Info"
+import SearchIcon from "@mui/icons-material/Search";
+import InfoIcon from "@mui/icons-material/Info";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 
@@ -59,8 +57,6 @@ const UserManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogUser, setEditDialogUser] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState({email: '', given_name: '', family_name: ''});
-  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
 
   const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -69,12 +65,10 @@ const UserManagement = (props) => {
   const [coursesByUser, setCoursesByUser] = useState({});
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const [createDialogUsers, createDialogDispatch] = useReducer(createUserDialogReducer, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [userTypeFilter, setUserTypeFilter] = useState(null);
-  const [userTypeMenuAnchorElement, setUserTypeMenuAnchorElement] = useState(null);
   const clearFilters = () => {
     setSearchQuery("");
     setUserTypeFilter(null);
@@ -132,7 +126,6 @@ const UserManagement = (props) => {
 
 
     } catch (error) {
-      console.error("Error fetching data:", error);
     }
   };
 
@@ -174,7 +167,7 @@ const UserManagement = (props) => {
 
 
   const handleUsersCreate = async(newUserArray) => {
-    createUsers(newUserArray, {showSnackbar, setDialogIsOpen, createDialogDispatch, fetchData})
+    return await createUsers(newUserArray, {showSnackbar, setDialogIsOpen, fetchData})
   }
 
 
@@ -185,12 +178,10 @@ const UserManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFields({email: '', given_name: '', family_name: ''})
 
       showSnackbar(`Successfully edited user ${userId}`, "success");
 
     } catch (error) {
-      console.error(`Error editing user ${userId}: ${error}`);
 
       showSnackbar(`Error editing for user ${userId}`, "error")
     }
@@ -210,7 +201,6 @@ const UserManagement = (props) => {
         usersEnrolled++;
 
       } catch (error) {
-        console.error(`Error enrolling user ${userId} in course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
       }
     }
@@ -245,7 +235,6 @@ const UserManagement = (props) => {
         usersUnenrolled++;
 
       } catch (error) {
-        console.error(`Error unenrolling user ${userId} from course ${courseId}: ${error}`);
         userIndicesWithErrors.push(i);
       }
     }
@@ -284,12 +273,10 @@ const UserManagement = (props) => {
         ));
       fetchData();
 
-      showSnackbar(`User ${userId} is now ${willBeActive ? "activated" : "deactivated"}`, "success")
+      showSnackbar(`User ${willBeActive ? "activated" : "deactivated"}`, "success")
 
     } catch (error) {
-      console.error(`Error deactivating user ${userId}: ${error}`);
-
-      showSnackbar(`Error deactivating user ${userId}`, "error")
+      showSnackbar(`Error ${willBeActive ? "activating" : "deactivating"} user`, "error")
     }
   }
 
@@ -308,7 +295,6 @@ const UserManagement = (props) => {
 
 
     } catch (error) {
-      console.error(`Error changing privileges for user ${userId}: ${error}`);
 
       showSnackbar(`Error changing privileges for user ${userId}`, "error")
     }
@@ -332,7 +318,6 @@ const UserManagement = (props) => {
       showSnackbar(`Password reset for user ${userId}`, "success");
 
     } catch (error) {
-      console.error(`Error resetting password for user ${userId}: ${error}`);
 
       showSnackbar(`Error resetting password for user ${userId}`, "error");
     }
@@ -347,7 +332,6 @@ const UserManagement = (props) => {
       showSnackbar(`User ${userId} has been deleted`, "success")
 
     } catch (error) {
-      console.error("Error handling delete operation:", error);
 
       showSnackbar(`User ${userId} could not be deleted`, "error")
     }
@@ -365,7 +349,6 @@ const UserManagement = (props) => {
         await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`);
         usersDeleted++;
       } catch (error) {
-        console.error(`Error deleting user ${userId}: ${error}`);
       }
     }
     fetchData();
@@ -552,9 +535,6 @@ const UserManagement = (props) => {
             disabled={user.id == appUser.id}
             onClick={() => {
               setEditDialogUser(user);
-              const { email, family_name, given_name } = user;
-              setEditDialogFields({ email, family_name, given_name });
-              setEditDialogSubmitEnabled(true);
               setEditDialogIsOpen(true);
             }}
           >
@@ -645,9 +625,7 @@ const UserManagement = (props) => {
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (course, extraProperties) => {
-      // const quantity = extraProperties.getQuantityAssigned(course)
       const quantity = course.quantity_assigned;
-
       return (
         <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
           handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
@@ -778,9 +756,8 @@ const UserManagement = (props) => {
       <ItemMultiCreateDialog entity="user"
         dialogTitle={"Create Users"}
         dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
-        createDialogItems={createDialogUsers}
         handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
+        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
       <ItemSingleEditDialog
         entity="user"
@@ -788,7 +765,7 @@ const UserManagement = (props) => {
         dialogInstructions={"Edit the user fields, then click 'Save'."}
         editDialogItem={editDialogUser}
         handleItemEdit={handleUserEdit}
-        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
       <ItemSingleDeleteDialog
         entity="user"
@@ -833,7 +810,6 @@ const UserManagement = (props) => {
         setDialogIsOpen={setAssignCourseDialogIsOpen}
         secondaryTableFieldsAll={courseTableFieldsForDialogAll}
         secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
-        // handleAssociationAssign={handleAssignCourseToUser}
         secondarySearchFields={['name']}
         secondarySearchBoxPlaceholder="Search courses by name"
       />

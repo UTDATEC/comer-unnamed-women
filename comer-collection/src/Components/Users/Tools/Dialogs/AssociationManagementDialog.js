@@ -70,7 +70,6 @@ export const AssociationManagementDialog = ({
   const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
 
   const allTable = useMemo(() => {
-    console.log("running allTable")
     return <DataTable
       nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAll} 
@@ -81,12 +80,11 @@ export const AssociationManagementDialog = ({
       sortAscending={secondarySortAscending}
       setSortAscending={setSecondarySortAscending}
     />
-  }, [secondaryItemsAllResults, primaryItems, 
+  }, [secondaryItemsAllResults, primaryItems, secondariesByPrimary,
     secondarySortColumn, secondarySortAscending
   ]);
 
   const assignedTable = useMemo(() => {
-    console.log("running assignedTable")
     return <DataTable 
       nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAssignedOnly} 
@@ -97,7 +95,7 @@ export const AssociationManagementDialog = ({
       sortAscending={secondarySortAscending}
       setSortAscending={setSecondarySortAscending}
     />
-  }, [secondaryItemsAssignedResults, primaryItems, 
+  }, [secondaryItemsAssignedResults, primaryItems, secondariesByPrimary,
     secondarySortColumn, secondarySortAscending
   ])
 

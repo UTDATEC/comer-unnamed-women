@@ -66,7 +66,7 @@ export const sendAuthenticatedRequest = async(method, url, payload) => {
 }
 
 
-export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, createDialogDispatch, fetchData}) => {
+export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, fetchData}) => {
   let usersCreated = 0;
   let userIndicesWithErrors = []
   for(const [i, newUserData] of newUserArray.entries()) {
@@ -85,10 +85,10 @@ export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, c
 
   if(usersCreated == newUserArray.length) {
     setDialogIsOpen(false);
-    createDialogDispatch({
-      type: "set",
-      newArray: []
-    })
+    // createDialogDispatch({
+    //   type: "set",
+    //   newArray: []
+    // })
 
     showSnackbar(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`, "success");
 
@@ -101,12 +101,14 @@ export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, c
       showSnackbar(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure each user has a unique email address.`, "error")
     }
 
-    createDialogDispatch({
-      type: "set",
-      newArray: newUserArray.filter((u, i) => {
-        return userIndicesWithErrors.includes(i);
-      })
-    })
+    // createDialogDispatch({
+    //   type: "set",
+    //   newArray: newUserArray.filter((u, i) => {
+    //     return userIndicesWithErrors.includes(i);
+    //   })
+    // })
   }
+
+  return userIndicesWithErrors;
 
 }

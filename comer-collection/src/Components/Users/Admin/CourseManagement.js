@@ -47,16 +47,12 @@ const CourseManagement = (props) => {
 
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
   const [editDialogCourse, setEditDialogCourse] = useState(null);
-  const [editDialogFields, setEditDialogFields] = useState({name: '', date_start: '', date_end: '', notes: ''});
-  const [editDialogSubmitEnabled, setEditDialogSubmitEnabled] = useState(false);
-
 
   const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
 
   const [usersByCourse, setUsersByCourse] = useState({});
-  
 
   const editDialogFieldDefinitions = courseFieldDefinitions;
   const createDialogFieldDefinitions = courseFieldDefinitions;
@@ -112,7 +108,6 @@ const CourseManagement = (props) => {
       for(const c of courseData.data) {
         usersByCourseDraft[c.id] = c.Users;
       }
-      // setAssignUserDialogUsers([...courseData.data.Users]);
       setUsersByCourse({...usersByCourseDraft});
 
 
@@ -121,48 +116,8 @@ const CourseManagement = (props) => {
     }
   };
 
-  const fetchCourseUsers = async () => {
-    try {
-      const response = await sendAuthenticatedRequest("GET", `/api/courses/`);
 
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-    fetchData();
-  }
-
-  /*
-    Course display:
-    Step 1: apply column filters
-    Step 2: apply search query
-    Step 3: apply sorting order
-  */
-
-  const filterCourses = () => {
-    return courses.filter(() => {
-      return true;
-      // return (
-      //   // filter by course type
-      //   !courseTypeFilter || courseTypeFilter == "Administrator" && course.is_admin || courseTypeFilter == "Curator" && !course.is_admin
-      // ) && (
-      //   // filter by course activation status
-      //   !courseActivationStatusFilter || courseActivationStatusFilter == "Active" && course.is_active || courseActivationStatusFilter == "Inactive" && !course.is_active
-      // ) && (
-      //   // filter by password type
-      //   !coursePasswordTypeFilter || coursePasswordTypeFilter == "Temporary" && course.pw_temp || coursePasswordTypeFilter == "Permanent" && !course.pw_temp
-      // )
-    })
-  }
-
-
-  const filteredCourses = useMemo(() => filterCourses(
-    // 
-  ), [
-    courses
-  ])
-
-
-  const visibleCourses = useMemo(() => searchItems(searchQuery, filteredCourses, ['name', 'notes']), [filteredCourses, searchQuery])
+  const visibleCourses = useMemo(() => searchItems(searchQuery, courses, ['name', 'notes']), [courses, searchQuery])
 
 
   const handleCoursesCreate = async(newCourseArray) => {
@@ -249,7 +204,6 @@ const CourseManagement = (props) => {
       fetchData();
 
       setEditDialogIsOpen(false);
-      setEditDialogFields({name: '', date_start: '', date_end: '', notes: ''})
 
       showSnackbar(`Successfully edited course`, "success");
 
@@ -371,8 +325,6 @@ const CourseManagement = (props) => {
           <IconButton 
             onClick={() => {
               setEditDialogCourse(course);
-              setEditDialogFields(filterItemFields(courseFieldDefinitions, course));
-              setEditDialogSubmitEnabled(true);
               setEditDialogIsOpen(true)
             }}
           >
@@ -581,7 +533,7 @@ const CourseManagement = (props) => {
         dialogInstructions={"Edit the course fields, then click 'Save'."}
         editDialogItem={editDialogCourse}
         handleItemEdit={handleCourseEdit}
-        {...{ editDialogFieldDefinitions, editDialogFields, setEditDialogFields, editDialogIsOpen, setEditDialogIsOpen, editDialogSubmitEnabled, setEditDialogSubmitEnabled }} />
+        {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
       <ItemSingleDeleteDialog 
         entity="course"

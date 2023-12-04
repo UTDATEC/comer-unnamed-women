@@ -192,6 +192,51 @@ const unassignArtistFromImages = async (req, res, next) => {
 
 
 
+
+const manageTagForImages = async(tagId, images, isAssign) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const tag = await Tag.findByPk(tagId);
+        if(isAssign)
+            tag.addImages(images)
+        else
+            tag.removeImages(images);
+        await transaction.commit();
+    } catch(e) {
+        await transaction.rollback();
+        throw new Error(e.message);
+    }
+}
+
+const assignTagToImages = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        try {
+            manageTagForImages(req.params.tagId, req.body.images, true);
+            res.sendStatus(204);
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}))
+        }
+    })
+}
+
+const unassignTagFromImages = async (req, res, next) => {
+    adminOperation(req, res, next, async () => {
+        try {
+            manageTagForImages(req.params.tagId, req.body.images, false);
+            res.sendStatus(204);
+        }
+        catch(e) {
+            next(createError(400, {debugMessage: e.message}))
+        }
+    })
+}
+
+
+
+
+
+
 const unassignArtistFromImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const image = await Image.findByPk(req.params.imageId);
@@ -258,7 +303,5 @@ const unassignTagFromImage = async (req, res, next) => {
     })
 }
 
-// Assign tag to image
-// Unassign tag from imaage
 
-module.exports = { downloadImagePublic, listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, assignArtistToImage, assignArtistToImages, unassignArtistFromImages, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage }
+module.exports = { downloadImagePublic, listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, assignArtistToImage, assignArtistToImages, unassignArtistFromImages, unassignArtistFromImage, getTags, assignTagToImage, unassignTagFromImage, assignTagToImages, unassignTagFromImages }
