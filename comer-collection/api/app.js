@@ -1,16 +1,14 @@
 require('dotenv').config()
-// console.log(process.env)
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require("cors");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require("cors");
+const helmet = require("helmet");
+const hpp = require("hpp");
 
-// var uploadRouter = require('./routes/upload');
-// var testAPIRouter = require('./routes/testAPI');
-// var exhibitUploadRouter = require('./routes/exhibitUpload');
-// var getAllArtistsRouter = require('./routes/getAllArtists');
+
 const apiRouter = require('./router');
 
 global.__basedir = __dirname;
@@ -25,15 +23,29 @@ sequelize.sync({ alter: true }).then(() => {
 var app = express();
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
 app.use(cors());
+app.use(hpp());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // This line allows the public files to be read from/rendered by path in the front end
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
+
+
+app.use(helmet.contentSecurityPolicy({
+  useDefaults: false,
+  directives: {
+    "default-src": "none"
+  }
+}));
+
+app.use(helmet.frameguard({
+  action: "deny"
+}));
+
+
 
 // Routes for querying data
 // app.use("/upload", uploadRouter);

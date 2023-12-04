@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { User, Course, Exhibition } = require("../sequelize.js");
+const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
 const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
@@ -257,6 +257,7 @@ const loadExhibitionPublic = async(req, res, next) => {
 
 const saveExhibition = async (req, res, next) => {
     userOperation(req, res, next, async(user_id) => {
+        const transaction = await sequelize.transaction();
         try {
             const ExhibitionWithData = Exhibition.scope('with_data');
             const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
@@ -271,9 +272,14 @@ const saveExhibition = async (req, res, next) => {
                     data: req.body.data,
                     date_modified: Date.now()
                 });
+                await exhibition.setImages(
+                    JSON.parse(req.body.data).images.map((i) => i.image_id)
+                );
+                await transaction.commit();
                 res.status(200).json({data: exhibition})
             }
         } catch(e) {
+            await transaction.rollback();
             next(createError(500), {debugMessage: e.message});
         }
     })
@@ -282,6 +288,7 @@ const saveExhibition = async (req, res, next) => {
 
 const saveExhibitionAdmin = async (req, res, next) => {
     adminOperation(req, res, next, async(user_id) => {
+        const transaction = await sequelize.transaction();
         try {
             const ExhibitionWithData = Exhibition.scope('with_data');
             const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
@@ -294,9 +301,14 @@ const saveExhibitionAdmin = async (req, res, next) => {
                     data: req.body.data,
                     date_modified: Date.now()
                 });
+                await exhibition.setImages(
+                    JSON.parse(req.body.data).images.map((i) => i.image_id)
+                );
+                await transaction.commit();
                 res.status(200).json({data: exhibition})
             }
         } catch(e) {
+            await transaction.rollback();
             next(createError(500), {debugMessage: e.message});
         }
     })

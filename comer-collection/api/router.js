@@ -89,8 +89,6 @@ router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
 // Read exhibitions (admin)
 router.get("/exhibitions", listExhibitions)
 router.get("/exhibitions/:exhibitionId", getExhibition)
-// router.put("/exhibitions", saveExhibition)
-// router.get("/exhibitions/:exhibitionId/load", loadExhibition)
 
 // Modify exhibitions (admin)
 router.put("/exhibitions/:exhibitionId", adminEditExhibition);
