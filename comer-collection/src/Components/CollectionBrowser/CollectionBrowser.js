@@ -24,7 +24,6 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     }, [])
 
     const theme = useTheme();
-    console.log(theme);
 
     return (
         <Box component={Paper} square justifyItems="center" sx={{
