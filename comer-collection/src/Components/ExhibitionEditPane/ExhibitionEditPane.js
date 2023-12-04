@@ -1,14 +1,11 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import CloudUploadIcon from "@mui/icons-material/CloudUpload"
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
-import { useAppUser } from "../App/AppUser";
-import { useSnackbar } from "../App/AppSnackbar";
 
 
 const ColorInput = ({value, onChange, disabled}) => {
@@ -166,6 +163,14 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
 
     const theme = useTheme();
+
+
+    useEffect(() => {
+        const saveInterval = setInterval(saveExhibition, 30000);
+        return () => {
+            clearInterval(saveInterval);
+        }
+    })
 
 
     return (
