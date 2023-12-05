@@ -132,6 +132,23 @@ export const ExhibitionPage = (props) => {
     }, [editModeActive])
 
 
+    const handleControlS = (e) => {
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 's') {
+            e.preventDefault();
+            saveExhibition();
+        }
+    }
+        
+    useEffect(() => {
+        if(editModeActive) {
+            document.addEventListener('keydown', handleControlS);
+            return () => {
+                document.removeEventListener('keydown', handleControlS);
+            }
+        }
+    }, [editModeActive])
+
+
 
     return !isPermissionGranted && (
         <Unauthorized message="This exhibition is private" buttonText="View Public Exhibitions" 
