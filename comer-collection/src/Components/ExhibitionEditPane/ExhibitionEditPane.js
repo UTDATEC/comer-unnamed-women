@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import DeleteIcon from "@mui/icons-material/Delete"
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
@@ -161,6 +162,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
+
+    const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(null);
 
     const theme = useTheme();
 
@@ -363,6 +366,18 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                             }}
                         >
                             <Typography variant="body1">Add Image</Typography>
+                        </Button>
+                    </ExhibitionOption>
+
+                    <ExhibitionOption>
+                        
+                        <Button variant="contained" disabled={!selectedImageId}
+                            startIcon={<DeleteIcon />}
+                            onClick={() => {
+                                setDeleteImageDialogIsOpen(true);
+                            }}
+                        >
+                            <Typography variant="body1">Remove Image</Typography>
                         </Button>
 
                     </ExhibitionOption>
@@ -629,6 +644,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                 })
                 setImageChooserIsOpen(false);
                 setImageChooserSelectedImage(null);
+                setSelectedImageId(imageChooserSelectedImage.id)
             }}>
                 <DialogTitle>Choose an image</DialogTitle>
                 <DialogContent>
@@ -636,9 +652,47 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                         setSelectedItem={setImageChooserSelectedImage} disabledImages={exhibitionState.images} />
                 </DialogContent>
                 <DialogActions>
-                    <Stack direction="row">
+                    <Stack direction="row" spacing={1}>
+                        <Button variant="outlined" onClick={() => {
+                            setImageChooserIsOpen(false);
+                        }}>
+                            <Typography>Cancel</Typography>
+                        </Button>
                         <Button variant="contained" type="submit" disabled={!imageChooserSelectedImage}>
                             <Typography>Select</Typography>
+                        </Button>
+                    </Stack>
+                </DialogActions>
+            </Dialog>
+
+
+            <Dialog component="form" open={deleteImageDialogIsOpen} 
+                sx={{zIndex: 10000}}onSubmit={(e) => {
+                e.preventDefault();
+                exhibitionEditDispatch({
+                    scope: "exhibition",
+                    type: "remove_image",
+                    image_id: selectedImageId
+                })
+                setDeleteImageDialogIsOpen(false);
+                setSelectedImageId(null);
+            }}>
+                <DialogTitle>Remove image</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure you want to remove this image?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Stack direction="row" spacing={1} width="100%" justifyContent="space-between">
+                        <Button variant="outlined" onClick={() => {
+                            setDeleteImageDialogIsOpen(false);
+                        }}>
+                            <Typography>Cancel</Typography>
+                        </Button>
+                        <Button variant="contained" type="submit" >
+                            <Stack direction="row" spacing={1}>
+                                <DeleteIcon />
+                                <Typography>Remove</Typography>
+                            </Stack>
                         </Button>
                     </Stack>
                 </DialogActions>
