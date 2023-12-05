@@ -160,26 +160,6 @@ const Profile = (props) => {
           {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
         </Stack>
       )
-    },
-    {
-      columnDescription: "Options",
-      generateTableHeaderCell: () => (
-        <Typography variant="h6">Options</Typography>
-      ),
-      generateTableCell: (user) => (
-        <IconButton 
-          disabled={user.id == appUser.id} 
-          onClick={(e) => {
-            setEditDialogUser(user);
-            const { email, family_name, given_name } = user;
-            setEditDialogFields({ email, family_name, given_name });
-            setEditDialogSubmitEnabled(true);
-            setEditDialogIsOpen(true)
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-      )
     }
   ]
 
@@ -203,6 +183,7 @@ const Profile = (props) => {
           <Typography variant="h4">Profile Information</Typography>
         </Stack>
         <DataTable
+          items={[appUser]}
           visibleItems={[appUser]}
           tableFields={userTableFields}
         />
@@ -225,7 +206,8 @@ const Profile = (props) => {
         </Stack>
         <DataTable sx={{overflow: "scroll"}}
           nonEmptyHeight="350px"
-          visibleItems={myCourses.sort((a, b) => (a.date_start < b.date_start ? 1 : -1))}
+          items={myCourses}
+          visibleItems={myCourses}
           tableFields={courseTableFields}
           NoContentIcon={SchoolIcon}
           emptyMinHeight="400px"

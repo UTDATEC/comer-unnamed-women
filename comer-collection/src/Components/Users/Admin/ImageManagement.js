@@ -9,13 +9,17 @@ import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { searchItems } from "../Tools/SearchUtilities";
+import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities";
 import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
 import { tagFieldDefinitions } from "../Tools/HelperMethods/fields";
@@ -111,6 +115,12 @@ const ImageManagement = (props) => {
     }
   }, []); 
 
+  const imageFilterFunction = useCallback((image) => {
+    return (
+      doesItemMatchSearchQuery(searchQuery, image, ['title', 'valuationNotes', 'otherNotes'])
+    )
+  }, [searchQuery]);
+
 
   const fetchImages = async () => {
     try {
@@ -158,8 +168,6 @@ const ImageManagement = (props) => {
     }
   }
 
-
-  const visibleImages = useMemo(() => searchItems(searchQuery, images, ['title', 'accessionNumber', 'notes']), [images, searchQuery])
 
 
   const handleImagesCreate = async(newImageArray) => {
@@ -450,13 +458,16 @@ const ImageManagement = (props) => {
       columnDescription: "ID",
       generateTableCell: (artist) => (
         <Typography variant="body1">{artist.id}</Typography>
-      )
+      ),
+      generateSortableValue: (artist) => artist.id
     },
     {
       columnDescription: "Name",
+      maxWidth: "300px",
       generateTableCell: (artist) => (
         <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
-      )
+      ),
+      generateSortableValue: (artist) => `${artist.familyName.toLowerCase()}, ${artist.givenName.toLowerCase()}`
     },
     {
       columnDescription: "Images",
@@ -525,13 +536,16 @@ const ImageManagement = (props) => {
       columnDescription: "ID",
       generateTableCell: (tag) => (
         <Typography variant="body1">{tag.id}</Typography>
-      )
+      ),
+      generateSortableValue: (tag) => tag.id
     },
     {
       columnDescription: "Data",
+      maxWidth: "300px",
       generateTableCell: (tag) => (
         <Typography variant="body1">{tag.data}</Typography>
-      )
+      ),
+      generateSortableValue: (tag) => tag.data.toLowerCase()
     },
     {
       columnDescription: "Images",
@@ -559,7 +573,6 @@ const ImageManagement = (props) => {
           <IconButton
             onClick={(e) => {
               setTagEditDialogItem(tag);
-              const filteredTag = filterItemFields(tagFieldDefinitions, tag);
               setTagEditDialogIsOpen(true);
             }}
           >
@@ -762,7 +775,10 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Tag",
       generateTableCell: (tag) => (
-        <Typography variant="body1">{tag.data}</Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <SellIcon />
+          <Typography variant="body1">{tag.data}</Typography>
+        </Stack>
       )
     },
     {
@@ -834,7 +850,7 @@ const ImageManagement = (props) => {
             )}
           </Button>) || 
           quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
               handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
             }}>
               {assignTagDialogImages.length == 1 ? (
@@ -845,7 +861,7 @@ const ImageManagement = (props) => {
             </Button>
           ) || 
           quantity > 0 && quantity < assignTagDialogImages.length && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
               handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
             }}>
               {assignTagDialogImages.length - quantity == 1 ? (
@@ -896,7 +912,7 @@ const ImageManagement = (props) => {
       const quantity = tag.quantity_assigned;
       return (
         quantity == assignTagDialogImages.length && (
-          <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+          <Button variant="outlined" startIcon={<RemoveIcon />} onClick={() => {
             handleUnassignImagesFromTag(tag.id, assignTagDialogImages.map((i) => i.id));
           }}>
             {assignTagDialogImages.length == 1 ? (
@@ -907,7 +923,7 @@ const ImageManagement = (props) => {
           </Button>
         ) || 
         quantity > 0 && quantity < assignTagDialogImages.length && (
-          <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
+          <Button variant="outlined" startIcon={<RemoveIcon />} onClick={() => {
             handleUnassignImagesFromTag(tag.id, assignTagDialogImages.map((i) => i.id));
           }}>
             <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
@@ -919,20 +935,9 @@ const ImageManagement = (props) => {
 
 
 
-  const imageDataTable = useMemo(() => {
-    console.log("Running imageDataTable")
-    return (
-      <DataTable visibleItems={visibleImages} 
-        {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
-        tableFields={imageTableFields} 
-        rowSelectionEnabled={true} 
-        selectedItems={selectedImages}
-        setSelectedItems={setSelectedImages}
-        // sx={{gridArea: "table"}}
-      />
-    )
-  }, [visibleImages, selectedImages, sortColumn, sortAscending]);
-
+  const visibleImages = useMemo(() => images.filter((image) => {
+    return imageFilterFunction(image);
+  }), [images, searchQuery])
 
 
   return !appUser.is_admin && (
@@ -992,7 +997,24 @@ const ImageManagement = (props) => {
         </Stack>
       </Stack>
       
-      {imageDataTable}
+      <DataTable items={images} visibleItems={visibleImages} 
+        tableFields={imageTableFields} 
+        rowSelectionEnabled={true} 
+        selectedItems={selectedImages}
+        setSelectedItems={setSelectedImages}
+        emptyMinHeight="300px"
+        {...visibleImages.length == images.length && {
+          noContentMessage: "No images yet",
+          noContentButtonAction: () => {setDialogIsOpen(true)},
+          noContentButtonText: "Create a user",
+          NoContentIcon: InfoIcon
+        } || visibleImages.length < images.length && {
+          noContentMessage: "No results",
+          noContentButtonAction: clearFilters,
+          noContentButtonText: "Clear Filters",
+          NoContentIcon: SearchIcon
+        }}
+      />
 
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
         <SelectionSummary

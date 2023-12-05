@@ -10,7 +10,10 @@ const listExhibitions = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
             const exhibitions = await Exhibition.findAll({
-                include: [User]
+                include: [{
+                    model: User,
+                    include: [Course]
+                }]
             })
             res.status(200).json({data: exhibitions})
         } catch(e) {

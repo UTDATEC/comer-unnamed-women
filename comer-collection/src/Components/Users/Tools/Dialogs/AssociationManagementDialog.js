@@ -33,13 +33,11 @@ export const AssociationManagementDialog = ({
   tableTitleAssigned, tableTitleAll, 
   dialogTitle, dialogInstructions, dialogButtonForSecondaryManagement, 
   dialogIsOpen, setDialogIsOpen, 
-  secondarySearchFields, secondarySearchBoxPlaceholder
+  secondarySearchFields, secondarySearchBoxPlaceholder,
+  defaultSortColumn, defaultSortAscending
   }) => {
 
   const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
-
-  const [secondarySortColumn, setSecondarySortColumn] = useState("ID");
-  const [secondarySortAscending, setSecondarySortAscending] = useState(true);
 
   const getQuantityAssigned = useCallback((secondary) => {
     return Object.entries(secondariesByPrimary)
@@ -73,31 +71,23 @@ export const AssociationManagementDialog = ({
     return <DataTable
       nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAll} 
+      items={secondaryItemsAllWithQuantities}
       visibleItems={secondaryItemsAllResults} 
-      extraProperties={{ primaryItems }} 
-      sortColumn={secondarySortColumn}
-      setSortColumn={setSecondarySortColumn}
-      sortAscending={secondarySortAscending}
-      setSortAscending={setSecondarySortAscending}
+      defaultSortColumn={defaultSortColumn}
+      defaultSortAscending={defaultSortAscending}
     />
-  }, [secondaryItemsAllResults, primaryItems, secondariesByPrimary,
-    secondarySortColumn, secondarySortAscending
-  ]);
+  }, [secondaryItemsAllResults, primaryItems, secondariesByPrimary]);
 
   const assignedTable = useMemo(() => {
     return <DataTable 
       nonEmptyHeight="300px" 
       tableFields={secondaryTableFieldsAssignedOnly} 
+      items={secondaryItemsAssignedWithQuantities}
       visibleItems={secondaryItemsAssignedResults} 
-      extraProperties={{  primaryItems }}  
-      sortColumn={secondarySortColumn}
-      setSortColumn={setSecondarySortColumn}
-      sortAscending={secondarySortAscending}
-      setSortAscending={setSecondarySortAscending}
+      defaultSortColumn={defaultSortColumn}
+      defaultSortAscending={defaultSortAscending}
     />
-  }, [secondaryItemsAssignedResults, primaryItems, secondariesByPrimary,
-    secondarySortColumn, secondarySortAscending
-  ])
+  }, [secondaryItemsAssignedResults, primaryItems, secondariesByPrimary])
 
   return (
     <Dialog fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}

@@ -218,8 +218,10 @@ const MyExhibitions = (props) => {
           </Button>
         </Stack>
         <DataTable
+          items={myExhibitions}
           visibleItems={myExhibitions}
-          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+          defaultSortColumn={"Date Modified"}
+          defaultSortAscending={false}
           tableFields={exhibitionTableFields}
           emptyMinHeight="400px"
           NoContentIcon={InfoIcon}

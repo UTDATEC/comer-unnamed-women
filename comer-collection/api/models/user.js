@@ -16,6 +16,12 @@ module.exports = (db) => {
             unique: true,
             field: "user_email"
         },
+        email_without_domain: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.email.substr(0, this.email.lastIndexOf("@"))}`
+            }
+        },
         family_name: {
             type: Sequelize.TEXT('tiny'),
             field: "user_family_name"

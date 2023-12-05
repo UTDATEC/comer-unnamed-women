@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,44 +8,148 @@ import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./ColumnSortButton";
 
 
-const DataTableCell = ({tf, item: itemAsString, extraProperties}) => {
+
+const DataTableCell = ({tf, itemAsString}) => {
   return useMemo(() => {
     return (
       <TableCell sx={{maxWidth: tf.maxWidth ?? "unset", wordWrap: tf.maxWidth ? "break-word" : "unset"}}>
-        {tf.generateTableCell(JSON.parse(itemAsString), extraProperties)}
+        {tf.generateTableCell(JSON.parse(itemAsString))}
       </TableCell>
     )
-  }, [itemAsString, extraProperties]);
+  }, [itemAsString]);
 }
 
 
-export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, extraProperties, rowSelectionEnabled, selectedItems, setSelectedItems, sortColumn, setSortColumn, sortAscending, setSortAscending,
+const DataTableFieldCells = ({tableFields, item: itemAsString}) => {
+  return useMemo(() => {
+    return tableFields.map((tf) => {
+      return (
+        <DataTableCell key={tf.columnDescription} {...{tf, itemAsString}} />
+      )
+    }
+  )}, [itemAsString]);
+}
+
+
+export const DataTable = ({ nonEmptyHeight, tableFields, items, 
+  rowSelectionEnabled, selectedItems, setSelectedItems, visibleItems,
+  defaultSortColumn, defaultSortAscending,
   emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
   const theme = useTheme();
 
-  const handleControlA = (e) => {
-    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 'a') {
-      e.preventDefault();
-      setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
-        !selectedItems.map((si) => si.id).includes(parseInt(i.id))
-      ))]);
-    }
-  }
-  
-  useEffect(() => {
-    document.addEventListener('keydown', handleControlA);
-    return () => {
-      document.removeEventListener('keydown', handleControlA);
-    }
-  })
+  const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
+  const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
 
-  const visibleSelectedItems = (selectedItems ?? []).filter((si) => (
-    visibleItems.map((i) => i.id).includes(parseInt(si.id))
-  ));
+  if(selectedItems) {
+    const handleControlA = (e) => {
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 'a') {
+        e.preventDefault();
+        setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
+          !selectedItems.map((si) => si.id).includes(parseInt(i.id))
+        ))]);
+      }
+    }
+    
+    useEffect(() => {
+      document.addEventListener('keydown', handleControlA);
+      return () => {
+        document.removeEventListener('keydown', handleControlA);
+      }
+    })
+  }
+
+
+  const sortRoutine = useCallback((a, b) => {
+    const [,aSortableValues,] = a;
+    const [,bSortableValues,] = b;
+    return ((aSortableValues[sortColumn] ?? "") > (bSortableValues[sortColumn] ?? "")) ? 1 : -1;
+  }, [sortColumn]);
+
+
+  useEffect(() => {
+    if(selectedItems)
+      setSelectedItems(selectedItems.filter((si) => items.map((i) => i.id).includes(si.id)))
+  }, [items])
+
+
+  const sortableValuesByRow = useMemo(() => {
+    const output = { };
+    (items ?? []).map((item) => {
+      const sortableValues = {}
+      for(const tf of tableFields) {
+        if(tf.generateSortableValue)
+          sortableValues[tf.columnDescription] = tf.generateSortableValue(item);
+      }
+      output[item.id] = sortableValues;
+    })
+    return output;
+  }, [items])
+  
+
+  
+
+  const itemInformation = useMemo(() => {
+    const itemInformationToReturn = (
+      (items ?? []).map((item) => {
+
+        const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
+        const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
+  
+        const sortableValues = sortableValuesByRow[item.id];
+        
+        const renderedTableRow = (
+          <TableRow key={item.id} sx={{
+            [`&:hover`]: {
+              backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
+              
+            },
+            [`&:not(:hover)`]: {
+              backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
+            },
+          }}>
+          {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
+            <Checkbox checked={isSelected} 
+            color={themeColor}
+            onChange={(e) => {
+              if(e.target.checked) {
+                setSelectedItems([...selectedItems, item])
+              } else {
+                setSelectedItems(selectedItems.filter((si) => si.id != item.id))
+              }
+            }}
+            size="medium" />
+          </TableCell>)}
+          <DataTableFieldCells item={JSON.stringify(item)} {...{tableFields}} />
+          </TableRow>
+        )
+  
+        return [item, sortableValues, renderedTableRow];
+  
+      })
+    );
+    return itemInformationToReturn;
+  }, [items, selectedItems]);
+
+
+  const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibleItems.map((vi) => vi.id).includes(r[0].id)), [itemInformation, visibleItems])
+
+  const sortedItemInformation = useMemo(() => visibleItemInformation.toSorted(sortRoutine), [visibleItemInformation, sortColumn]);
+  
+  const renderedItems = useMemo(() => sortedItemInformation.map((r) => r[2]), [sortedItemInformation]);
+
+  const itemsInFinalDisplayOrder = useMemo(() => {
+    if(sortAscending)
+      return renderedItems;
+    else
+      return renderedItems.toReversed();
+  }, [renderedItems, sortAscending])
+
+  const visibleSelectedItems = selectedItems ? visibleItems.filter((i) => selectedItems.map((si) => si.id).includes(parseInt(i.id))) : visibleItems;
+
 
   return (
-    <TableContainer component={Paper} sx={{ width: "100%" || 'calc(100% - 0px)', height: visibleItems.length ? nonEmptyHeight : "unset" , minHeight: visibleItems.length == 0 ? emptyMinHeight : "unset" }}>
+    <TableContainer component={Paper} sx={{ width: "100%" || 'calc(100% - 0px)', height: items.length ? nonEmptyHeight : "unset" , minHeight: items.length == 0 ? emptyMinHeight : "unset" }}>
       <Table stickyHeader size="small" sx={{ width: "100%" }}>
         <TableHead>
           <TableRow>
@@ -92,52 +196,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items, visibleItems, ex
         </TableHead>
 
         <TableBody>
-          {(visibleItems ?? []).map((item) => {
-
-            const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
-            const themeColor = Boolean(item.is_admin) ? "secondary" : "primary"
-
-            const sortableValue = tableFields.find((tf) => tf.columnDescription == sortColumn)?.generateSortableValue(item);
-            
-            const renderedTableRow = (
-              <TableRow key={item.id} sx={{
-                [`&:hover`]: {
-                  backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
-                  
-                },
-                [`&:not(:hover)`]: {
-                  backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
-                }
-              }}>
-              {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-                <Checkbox checked={isSelected} 
-                color={themeColor}
-                onChange={(e) => {
-                  if(e.target.checked) {
-                    setSelectedItems([...selectedItems, item])
-                  } else {
-                    setSelectedItems(selectedItems.filter((si) => si.id != item.id))
-                  }
-                }}
-                size="medium" />
-              </TableCell>)}
-                {tableFields.map((tf) => {
-                  return (
-                    <DataTableCell key={tf.columnDescription} {...{tf, extraProperties, visibleItems}}
-                      item={JSON.stringify(item)}
-                    />
-                  )
-                })}
-              </TableRow>
-            )
-
-            return [sortableValue, renderedTableRow];
-
-          }).sort((a, b) => {
-            const [aSortableValue,] = a;
-            const [bSortableValue,] = b;
-            return ((aSortableValue ?? "") < (bSortableValue ?? "")) ^ sortAscending ? 1 : -1;
-          }).map((r) => r[1])}
+          {itemsInFinalDisplayOrder}
         </TableBody>
       </Table>
       {visibleItems.length == 0 && emptyMinHeight && (

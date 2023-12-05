@@ -78,8 +78,8 @@ export const ExhibitionBrowser = () => {
             <Typography variant="h4">Public Exhibitions</Typography>
           </Stack>
           </Stack>
-            <DataTable visibleItems={exhibitions} tableFields={exhibitionTableFields} 
-                {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+            <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields} 
+                defaultSortAscending={false} defaultSortColumn="Last Updated"
                 nonEmptyHeight="500px" emptyMinHeight="500px"
             />
         </Stack>

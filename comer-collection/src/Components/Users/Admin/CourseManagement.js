@@ -1,15 +1,13 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import {
   Stack,
   Button,
   Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
-import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import AddIcon from "@mui/icons-material/Add";
-import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,17 +20,16 @@ import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog"
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { searchItems } from "../Tools/SearchUtilities";
+import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
-import GroupAddIcon from "@mui/icons-material/GroupAdd"
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields";
 import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
-import SecurityIcon from "@mui/icons-material/Security"
+import SecurityIcon from "@mui/icons-material/Security";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import InfoIcon from "@mui/icons-material/Info";
-import axios from "axios";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 
@@ -86,6 +83,11 @@ const CourseManagement = (props) => {
   }, []); 
 
 
+  const courseFilterFunction = useCallback((course) => {
+    return doesItemMatchSearchQuery(searchQuery, course, ['name', 'notes'])
+  }, [searchQuery]);
+
+
   const fetchData = async () => {
     try {
       const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
@@ -117,7 +119,9 @@ const CourseManagement = (props) => {
   };
 
 
-  const visibleCourses = useMemo(() => searchItems(searchQuery, courses, ['name', 'notes']), [courses, searchQuery])
+  const visibleCourses = useMemo(() => courses.filter((course) => {
+    return courseFilterFunction(course);
+  }), [courses, searchQuery]);
 
 
   const handleCoursesCreate = async(newCourseArray) => {
@@ -249,7 +253,7 @@ const CourseManagement = (props) => {
       generateTableCell: (course) => (
         <Typography variant="body1">{course.name}</Typography>
       ),
-      generateSortableValue: (course) => course.name
+      generateSortableValue: (course) => course.name.toLowerCase()
     },
     {
       columnDescription: "Start",
@@ -373,7 +377,7 @@ const CourseManagement = (props) => {
 
   const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
     columnDescription: "Enroll",
-    generateTableCell: (user, extraProperties) => {
+    generateTableCell: (user) => {
       const quantity = user.quantity_assigned
       return (
         quantity == assignUserDialogCourses.length && (
@@ -388,7 +392,7 @@ const CourseManagement = (props) => {
           </Button>) || 
           quantity == 0 && (
             <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignCoursesToUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+              handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
             }}>
               {assignUserDialogCourses.length == 1 ? (
                 <Typography variant="body1">Enroll</Typography>
@@ -399,7 +403,7 @@ const CourseManagement = (props) => {
           ) || 
           quantity > 0 && quantity < assignUserDialogCourses.length && (
             <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignCoursesToUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+              handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
             }}>
               <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
             </Button>
@@ -410,12 +414,12 @@ const CourseManagement = (props) => {
 
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
-    generateTableCell: (user, extraProperties) => {
+    generateTableCell: (user) => {
       const quantity = user.quantity_assigned;
       return (
         quantity == assignUserDialogCourses.length && (
           <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-            handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+            handleUnassignCoursesFromUser(user.id, assignUserDialogCourses.map((c) => c.id));
           }}>
             {assignUserDialogCourses.length == 1 ? (
               <Typography variant="body1">Unenroll</Typography>
@@ -426,7 +430,7 @@ const CourseManagement = (props) => {
         ) || 
         quantity > 0 && quantity < assignUserDialogCourses.length && (
           <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-            handleUnassignCoursesFromUser(user.id, extraProperties.primaryItems.map((c) => c.id));
+            handleUnassignCoursesFromUser(user.id, assignUserDialogCourses.map((c) => c.id));
           }}>
             <Typography variant="body1">Unenroll from {quantity}</Typography>
           </Button>
@@ -573,6 +577,8 @@ const CourseManagement = (props) => {
         secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
         secondarySearchFields={['given_name']}
         secondarySearchBoxPlaceholder={"Search users by name or email"}
+        defaultSortAscending={true}
+        defaultSortColumn="Name"
       />
 
     </Box>

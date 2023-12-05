@@ -74,9 +74,6 @@ const updateUser = async (req, res, next) => {
             if(user) {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
-                }
-                if(user_id == req.params.userId) {
-                    next(createError(401, {debugMessage: "Admin cannot update self through this method.  Use profile edit instead."}));
                 } else {
                     await user.update({
                         email: req.body.email,

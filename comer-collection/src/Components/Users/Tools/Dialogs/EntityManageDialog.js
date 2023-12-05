@@ -167,7 +167,7 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
         deleteDialogIsOpen={internalDeleteDialogIsOpen} 
         setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen} 
         deleteDialogItem={internalDeleteDialogItem}
-        dialogTitle={`Edit ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
+        dialogTitle={`Delete ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
         entity={entitySingular}
         handleDelete={handleItemDelete}
         />

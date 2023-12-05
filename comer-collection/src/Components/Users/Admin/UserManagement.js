@@ -19,7 +19,7 @@ import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog"
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { searchItems } from "../Tools/SearchUtilities";
+import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities";
 import SchoolIcon from '@mui/icons-material/School';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
@@ -68,27 +68,18 @@ const UserManagement = (props) => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [userTypeFilter, setUserTypeFilter] = useState(null);
   const clearFilters = () => {
     setSearchQuery("");
-    setUserTypeFilter(null);
-    setUserActivationStatusFilter(null);
-    setUserPasswordTypeFilter(null);
     setUserCourseIdFilter(null);
   }
 
-  const [userActivationStatusFilter, setUserActivationStatusFilter] = useState(null);
 
-  const [userPasswordTypeFilter, setUserPasswordTypeFilter] = useState(null);
 
   const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
-  const [sortColumn, setSortColumn] = useState("ID");
-  const [sortAscending, setSortAscending] = useState(true);
-
 
   const { setSelectedNavItem } = props;
-  const [appUser, setAppUser] = useAppUser();
+  const [appUser, setAppUser, initializeAppUser] = useAppUser();
   const showSnackbar = useSnackbar();
   const navigate = useNavigate();
 
@@ -104,11 +95,6 @@ const UserManagement = (props) => {
     try {
       const userData = await sendAuthenticatedRequest("GET", "/api/users")
       setUsers(userData.data);
-
-      setSelectedUsers(selectedUsers.filter((su) => (
-        userData.data.map((u) => u.id).includes(parseInt(su.id))
-      )));
-
 
       const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
       setCourses(courseData.data);
@@ -130,40 +116,14 @@ const UserManagement = (props) => {
   };
 
 
-  /*
-    User display:
-    Step 1: apply column filters
-    Step 2: apply search query
-    Step 3: apply sorting order
-  */
 
-  const filterUsers = (userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter) => {
-    return users.filter((user) => {
-      return (
-        // filter by user type
-        !userTypeFilter || userTypeFilter == "Administrator" && user.is_admin || userTypeFilter == "Curator" && !user.is_admin
-      ) && (
-        // filter by user activation status
-        !userActivationStatusFilter || userActivationStatusFilter == "Active" && user.is_active || userActivationStatusFilter == "Inactive" && !user.is_active
-      ) && (
-        // filter by password type
-        !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && user.pw_temp || userPasswordTypeFilter == "Permanent" && !user.pw_temp
-      ) && (
-        // filter by course
-        !userCourseIdFilter || userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
-      )
-    })
-  }
-
-
-  const filteredUsers = useMemo(() => filterUsers(
-    userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter
-  ), [
-    users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter, userCourseIdFilter
-  ])
-
-
-  const visibleUsers = useMemo(() => searchItems(searchQuery, filteredUsers, ['family_name', 'given_name', 'email']), [filteredUsers, searchQuery])
+  const userFilterFunction = useCallback((user) => {
+    return (
+      !userCourseIdFilter || userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
+    ) && (
+      doesItemMatchSearchQuery(searchQuery, user, ['full_name', 'full_name_reverse', 'email_without_domain'])
+    );
+  }, [userCourseIdFilter, searchQuery])
 
 
   const handleUsersCreate = async(newUserArray) => {
@@ -179,11 +139,13 @@ const UserManagement = (props) => {
 
       setEditDialogIsOpen(false);
 
-      showSnackbar(`Successfully edited user ${userId}`, "success");
+      if(userId == appUser.id)
+        initializeAppUser();
+
+      showSnackbar(`Successfully edited user`, "success");
 
     } catch (error) {
-
-      showSnackbar(`Error editing for user ${userId}`, "error")
+      showSnackbar(`Error editing user`, "error")
     }
   }
 
@@ -532,7 +494,6 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <>
           <IconButton
-            disabled={user.id == appUser.id}
             onClick={() => {
               setEditDialogUser(user);
               setEditDialogIsOpen(true);
@@ -583,7 +544,7 @@ const UserManagement = (props) => {
 
   const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
     columnDescription: "Enroll",
-    generateTableCell: (course, extraProperties) => {
+    generateTableCell: (course) => {
       const quantity = course.quantity_assigned;
       return (
         quantity == assignCourseDialogUsers.length && (
@@ -598,7 +559,7 @@ const UserManagement = (props) => {
           </Button>) ||
           quantity == 0 && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+              handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
             }}>
               {assignCourseDialogUsers.length == 1 ? (
                 <Typography variant="body1">Enroll</Typography>
@@ -609,7 +570,7 @@ const UserManagement = (props) => {
           ) ||
           quantity > 0 && quantity < assignCourseDialogUsers.length && (
             <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignUsersToCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+              handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
             }}>
               {assignCourseDialogUsers.length - quantity == 1 ? (
                 <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
@@ -624,11 +585,11 @@ const UserManagement = (props) => {
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
-    generateTableCell: (course, extraProperties) => {
+    generateTableCell: (course) => {
       const quantity = course.quantity_assigned;
       return (
         <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
-          handleUnassignUsersFromCourse(course.id, extraProperties.primaryItems.map((u) => u.id));
+          handleUnassignUsersFromCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
         }}>
         {quantity == 1 ? (
           assignCourseDialogUsers.length == 1 ? (
@@ -643,6 +604,11 @@ const UserManagement = (props) => {
       )
     }
   }]
+
+
+  const visibleUsers = useMemo(() => users.filter((user) => {
+    return userFilterFunction(user);
+  }), [users, searchQuery, userCourseIdFilter]);
 
 
 
@@ -678,7 +644,7 @@ const UserManagement = (props) => {
               visibleUsers.length > 0 ? "outlined" : "contained"
             } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
-                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter || userCourseIdFilter)
+                !Boolean(searchQuery || userCourseIdFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
@@ -691,10 +657,10 @@ const UserManagement = (props) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={users} visibleItems={visibleUsers} tableFields={userTableFields}
+        <DataTable items={users} tableFields={userTableFields}
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
-          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
+          visibleItems={visibleUsers}
           sx={{gridArea: "table"}}
           emptyMinHeight="300px"
           {...visibleUsers.length == users.length && {

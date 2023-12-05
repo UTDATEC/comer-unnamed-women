@@ -1,14 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Stack,
   Button,
   Typography, useTheme, Box, IconButton, Paper
 } from "@mui/material";
-import TableCell from "@mui/material/TableCell";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
-import { ColumnSortButton } from "../Tools/ColumnSortButton";
 import LockIcon from "@mui/icons-material/Lock";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,18 +14,22 @@ import { DataTable } from "../Tools/DataTable";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import SearchIcon from "@mui/icons-material/Search"
-import InfoIcon from "@mui/icons-material/Info"
+import SearchIcon from "@mui/icons-material/Search";
+import InfoIcon from "@mui/icons-material/Info";
 import VpnLockIcon from "@mui/icons-material/VpnLock";
-import PublicIcon from "@mui/icons-material/Public"
+import PublicIcon from "@mui/icons-material/Public";
 import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog";
-import SettingsIcon from "@mui/icons-material/Settings"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import SettingsIcon from "@mui/icons-material/Settings";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useSnackbar } from "../../App/AppSnackbar";
+import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined"
 import { useAppUser } from "../../App/AppUser";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
+import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 
 const ExhibitionManagement = (props) => {
   const [users, setUsers] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [exhibitions, setExhibitions] = useState([]);
   const [refreshInProgress, setRefreshInProgress] = useState(true);
 
@@ -54,6 +55,16 @@ const ExhibitionManagement = (props) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
+
+  const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
+
+
+  const clearFilters = () => {
+    setUserCourseIdFilter(null);
+    setSearchQuery("");
+  }
+
+
   useEffect(() => {
     setSelectedNavItem("Exhibition Management");
     if(appUser.is_admin) {
@@ -75,58 +86,30 @@ const ExhibitionManagement = (props) => {
       const userData = await sendAuthenticatedRequest("GET", "/api/users")
       setUsers(userData.data);
 
+      const courseData = await sendAuthenticatedRequest("GET", "/api/courses")
+      setCourses(courseData.data);
+
       setTimeout(() => {
         setRefreshInProgress(false);
       }, 1000);
 
 
-    //   const usersByExhibitionDraft = {}
-    //   for(const c of exhibitionData.data) {
-    //     usersByExhibitionDraft[c.id] = c.Courses;
-    //   }
-    //   setCoursesByUser({...usersByExhibitionDraft});
-
-      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
 
-  /*
-    User display:
-    Step 1: apply column filters
-    Step 2: apply search query
-    Step 3: apply sorting order
-  */
 
-  const filterExhibitions = () => {
-    return exhibitions.filter((exhibition) => {
-    //   return (
-    //     // filter by user type
-    //     !userTypeFilter || userTypeFilter == "Administrator" && user.is_admin || userTypeFilter == "Curator" && !user.is_admin
-    //   ) && (
-    //     // filter by user activation status
-    //     !userActivationStatusFilter || userActivationStatusFilter == "Active" && user.is_active || userActivationStatusFilter == "Inactive" && !user.is_active
-    //   ) && (
-    //     // filter by password type
-    //     !userPasswordTypeFilter || userPasswordTypeFilter == "Temporary" && user.pw_temp || userPasswordTypeFilter == "Permanent" && !user.pw_temp
-    //   )
-        return true;
-    })
-  }
+  const exhibitionFilterFunction = useCallback((exhibition) => {
+    return (
+      !userCourseIdFilter || userCourseIdFilter && exhibition.User.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
+    ) && doesItemMatchSearchQuery(searchQuery, exhibition, ['title'])
+  })
 
-
-//   const filteredExhibitions = useMemo(() => filterExhibitions(
-//     // userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
-//   ), [
-//     // users, userTypeFilter, userActivationStatusFilter, userPasswordTypeFilter
-//   ])
-
-
-//   const filteredAndSearchedExhibitions = useMemo(() => searchItems(searchQuery, filteredExhibitions, ['family_name', 'given_name', 'email']), [filteredExhibitions, searchQuery])
-
-  const visibleExhibitions = Array.from(exhibitions);
+  const visibleExhibitions = useMemo(() => exhibitions.filter((exhibition) => {
+    return exhibitionFilterFunction(exhibition);
+  }), [exhibitions, searchQuery, userCourseIdFilter]);
 
 
 const handleExhibitionEditByAdmin = async(exhibitionId, title, privacy) => {
@@ -275,9 +258,6 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
   ]
 
 
-  const clearFilters = () => {
-    
-  }
 
 
   return !appUser.is_admin && (
@@ -298,7 +278,9 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
       `
     }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="50%" />
+          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="30%" />
+          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{courses}} />
+
           <Stack direction="row" spacing={2}>
             <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
               setRefreshInProgress(true);
@@ -307,26 +289,21 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
               disabled={refreshInProgress}>
               <Typography variant="body1">Refresh</Typography>
             </Button>
-            {/* <Button color="primary" variant={
+            <Button color="primary" variant={
               visibleExhibitions.length > 0 ? "outlined" : "contained"
             } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
               disabled={
-                !Boolean(searchQuery || userTypeFilter || userActivationStatusFilter || userPasswordTypeFilter)
+                !Boolean(searchQuery || userCourseIdFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
-            </Button> */}
-            {/* <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
-              onClick={() => {
-                setDialogIsOpen(true);
-              }}
-            >
-              <Typography variant="body1">Create Users</Typography>
-            </Button> */}
+            </Button>
           </Stack>
         </Stack>
         <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields} 
           rowSelectionEnabled={true}
           selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
+          defaultSortColumn="Modified"
+          defaultSortAscending={false}
           {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
           sx={{gridArea: "table"}}
           emptyMinHeight="300px"
