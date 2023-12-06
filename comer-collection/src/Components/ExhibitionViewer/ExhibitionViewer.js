@@ -191,7 +191,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     // Manage movement based on key presses
     // and constrain camera position to exhibition boundaries
     useEffect(() => {
-        const distance_threshold = 4;
+        const distance_threshold = 5;
 
         // manage camera movement
         if(myControls?.isLocked) {
@@ -269,7 +269,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         setInfoMenuImageId(closeImage)
 
 
-    }, [keysPressed, myCamera?.position.x, myCamera?.position.z, primary_json.size]);
+    }, [keysPressed, myCamera?.position.x, myCamera?.position.z, primary_json.size, primary_json.images]);
 
 
 
