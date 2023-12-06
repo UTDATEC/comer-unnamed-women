@@ -3,7 +3,8 @@ const { Image, Artist, Tag, Exhibition, sequelize } = require("../sequelize.js")
 const { adminOperation } = require("../security.js");
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
-const https = require('https')
+const https = require('https');
+const path = require('path');
 
 const isImageDeletable = (imageJSON) => {
     return Boolean(imageJSON.Exhibitions?.length == 0);
@@ -67,11 +68,15 @@ const downloadImagePublic = async(req, res, next) => {
         })
         if(!image)
             throw new Error("Image metadata could not be retrieved from the database")
-        else if(!image?.url)
-            throw new Error("Image does not appear to have a URL");
-        https.get(image.url, (imageRes) => imageRes.pipe(res)).on('error', (e) => {
-            console.error(e);
-        });
+        else if(image.url ?? image.thumbnailUrl) {
+            const downloadedImage = await fetch(image.url ?? image.thumbnailUrl)
+            const imageData = await downloadedImage.blob();
+            const imageBuffer = await imageData.arrayBuffer();
+            res.setHeader('Content-Type', 'image/png')
+            res.status(200).send(Buffer.from(imageBuffer));
+        }
+        else
+            res.status(200).sendFile(path.join(__dirname, '../static', 'utd.jpg'));
     } catch(e) {
         next(createError(500, {debugMessage: e.message}))
     }

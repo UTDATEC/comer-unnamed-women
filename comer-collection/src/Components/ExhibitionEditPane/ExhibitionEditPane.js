@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Icon, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -7,7 +7,10 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
-
+import CollectionsIcon from "@mui/icons-material/Collections"
+import BrokenImageIcon from "@mui/icons-material/BrokenImage"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 
 const ColorInput = ({value, onChange, disabled}) => {
     return (
@@ -154,14 +157,184 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
     )
 }
 
+
+const getSwappedImageArray = (images, imageIdA, imageIdB) => {
+    const imageA = images.find((image) => image.image_id == imageIdA);
+    const imageB = images.find((image) => image.image_id == imageIdB);
+    if(!imageA || !imageB)
+        return images;
+
+    return images.map((image) => {
+        switch (image.image_id) {
+            case imageIdA:
+                return imageB;
+            case imageIdB:
+                return imageA;
+            default:
+                return image;
+        }
+    })
+}
+
+
+
+export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog}) => {
+
+    const [currentWall, setCurrentWall] = useState(1);
+
+    const imagesOnWall = exhibitionState.images.filter((i) => i.metadata?.direction == currentWall);
+
+    const handleImageSwap = (aId, bId) => {
+        const newArray = getSwappedImageArray(exhibitionState.images, aId, bId);
+        exhibitionEditDispatch({
+            scope: "exhibition",
+            type: "set_images",
+            newImages: newArray
+        })
+    }
+
+    return (
+        <Dialog open={imageRearrangerIsOpen}
+            sx={{zIndex: 10000}} fullWidth maxWidth="md"
+        >
+            <DialogTitle>Rearrange images</DialogTitle>
+            <DialogContent>
+
+                <ToggleButtonGroup value={currentWall} exclusive sx={{
+                    width: "100%"
+                }}>
+                    {directionOptions.map((option) => (
+                        <ToggleButton key={option.value} selected={option.value == currentWall} value={option.value} sx={{
+                            textTransform: "unset",
+                            width: "100%"
+                        }}
+                        onClick={(e) => {
+                            setCurrentWall(e.target.value)
+                        }}
+                        >
+                            <Typography>{option.displayText}</Typography>
+                        </ToggleButton>
+                    ))}
+                </ToggleButtonGroup>
+            </DialogContent>
+            <DialogContent>
+                <Stack direction="row" width="100%" spacing={2}>
+                    {imagesOnWall.length > 0 && imagesOnWall.map((i, index) => {
+                        const catalogImage = globalImageCatalog.find((gi) => gi.id == i.image_id)
+                        return (
+                            <Stack key={i.image_id} direction="column" justifyItems="center" alignItems="center" spacing={2}>
+                                <Box width="150px" height="150px" sx={{
+                                    backgroundImage: `url(${catalogImage.thumbnailUrl})`,
+                                    backgroundPosition: "center",
+                                    backgroundSize: "contain",
+                                    backgroundRepeat: "no-repeat"
+                                }}>
+                                    {!catalogImage.thumbnailUrl && (
+                                        <BrokenImageIcon sx={{
+                                            opacity: 0.2,
+                                            width: "100%",
+                                            height: "100%"
+                                        }} />
+                                    )}
+                                </Box>
+                                <Typography>{catalogImage.title}</Typography>
+                                <Stack direction="row">
+                                    <IconButton disabled={index == 0} onClick={() => {
+                                        handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id)
+                                    }}>
+                                        <ArrowBackIcon />
+                                    </IconButton>
+                                    <IconButton disabled={index == imagesOnWall.length - 1} onClick={() => {
+                                        handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id)
+                                    }}>
+                                        <ArrowForwardIcon />
+                                    </IconButton>
+                                </Stack>
+                            </Stack> 
+                            )
+                        })
+                    || imagesOnWall.length == 0 && (
+                        <Stack spacing={1}>
+                            <Typography>The selected wall contains no images.</Typography>
+                            
+                        </Stack>
+
+                    )
+                    }
+                </Stack>
+            </DialogContent>
+            <DialogContent>
+                <Typography sx={{
+                    opacity: 0.5
+                }}>To move images between walls, close this dialog, select the image you want to move, and use the dropdown menu to select the destination wall.</Typography>
+            </DialogContent>
+            <DialogActions>
+                <Stack direction="row" spacing={1} width="100%" justifyContent="right">
+                    <Button variant="contained" sx={{
+                        width: "30%"
+                    }} onClick={() => {
+                        setImageRearrangerIsOpen(false);
+                    }}>
+                        <Typography variant="h6">Close</Typography>
+                    </Button>
+                </Stack>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+
+export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch}) => {
+    
+    const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
+
+    return (
+        <Dialog component="form" open={imageChooserIsOpen} 
+            sx={{zIndex: 10000}} fullWidth maxWidth="xl" onSubmit={(e) => {
+            e.preventDefault();
+            exhibitionEditDispatch({
+                scope: "exhibition",
+                type: "add_image",
+                image_id: imageChooserSelectedImage.id
+            })
+            setImageChooserIsOpen(false);
+            setImageChooserSelectedImage(null);
+            setSelectedImageId(imageChooserSelectedImage.id)
+        }}>
+            <DialogTitle>Choose an image</DialogTitle>
+            <DialogContent>
+                <CollectionBrowser selectedItem={imageChooserSelectedImage} isDialogMode={true}
+                    setSelectedItem={setImageChooserSelectedImage} disabledImages={exhibitionState.images} />
+            </DialogContent>
+            <DialogActions>
+                <Stack direction="row" spacing={1} width="100%" justifyContent="right">
+                    <Button variant="outlined" sx={{
+                        width: "30%"
+                    }} onClick={() => {
+                        setImageChooserIsOpen(false);
+                    }}>
+                        <Typography variant="h6">Cancel</Typography>
+                    </Button>
+                    <Button variant="contained" sx={{
+                        width: "30%"
+                    }} type="submit" disabled={!imageChooserSelectedImage} startIcon={<AddPhotoAlternateIcon />}>
+                        <Typography variant="h6">Add to exhibition</Typography>
+                    </Button>
+                </Stack>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+
 export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, exhibitionIsLoaded, saveExhibition}) => {
     
     const [expandedSection, setExpandedSection] = useState(null);
 
     const [selectedImageId, setSelectedImageId] = useState(null);
 
-    const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
+    const [imageRearrangerIsOpen, setImageRearrangerIsOpen] = useState(false);
 
     const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(false);
 
@@ -340,26 +513,12 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                     {...{expandedSection, setExpandedSection, selectedImageId, setSelectedImageId}}
                 >
 
-                    <ExhibitionOption>
 
-                        <Select sx={{width: "100%"}} 
-                            // label="Select an image"
-                            disabled={!Boolean(exhibitionState.images?.length)}
-                            value={selectedImageId ?? ""} 
-                            onChange={(e) => {
-                                setSelectedImageId(e.target.value)
-                            }}
-                        >
-                            {(exhibitionState.images ?? []).map((image) => {
-                                const image_title = globalImageCatalog?.find((i) => i.id == image.image_id)?.title;
-                                return <MenuItem key={image.image_id} value={image.image_id ?? ''}>{image_title}</MenuItem>
-                            })}
-                        </Select>
-                    </ExhibitionOption>
-
-                    <ExhibitionOption>
+<ExhibitionOption>
                         
-                        <Button variant="contained" 
+                        <Button variant="contained" sx={{
+                            width: "100%"
+                        }}
                             startIcon={<AddPhotoAlternateIcon />}
                             onClick={() => {
                                 setImageChooserIsOpen(true);
@@ -371,14 +530,55 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
                     <ExhibitionOption>
                         
-                        <Button variant="contained" disabled={!selectedImageId}
-                            startIcon={<DeleteIcon />}
+                        <Button variant="outlined"  sx={{
+                            width: "100%"
+                        }}
+                            startIcon={<CollectionsIcon />}
+                            onClick={() => {
+                                setImageRearrangerIsOpen(true);
+                            }}
+                        >
+                            <Typography variant="body1">Rearrange Images</Typography>
+                        </Button>
+
+                    </ExhibitionOption>
+
+
+                    <ExhibitionOption>
+
+                        <Select sx={{width: "100%", minHeight: "70px"}} 
+                            disabled={!Boolean(exhibitionState.images?.length)}
+                            value={selectedImageId ?? ""} 
+                            onChange={(e) => {
+                                setSelectedImageId(e.target.value)
+                            }}
+                        >
+                            {(exhibitionState.images ?? []).map((image) => {
+                                const catalogImage = globalImageCatalog?.find((i) => i.id == image.image_id);
+                                const image_title = catalogImage?.title;
+                                return (
+                                    <MenuItem key={image.image_id} value={image.image_id ?? ''}>
+                                        <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Box width="40px" height="40px" sx={{
+                                                backgroundImage: `url(${catalogImage?.thumbnailUrl})`,
+                                                backgroundSize: "contain",
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundPosition: "center"
+                                            }} />
+                                            <Typography>{image_title}</Typography>
+                                        </Stack>
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+                        
+                        <IconButton variant="contained" disabled={!selectedImageId}
                             onClick={() => {
                                 setDeleteImageDialogIsOpen(true);
                             }}
                         >
-                            <Typography variant="body1">Remove Image</Typography>
-                        </Button>
+                            <DeleteIcon />
+                        </IconButton>
 
                     </ExhibitionOption>
 
@@ -634,37 +834,10 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
             </Stack>
 
 
-            <Dialog component="form" open={imageChooserIsOpen} 
-                sx={{zIndex: 10000}} fullWidth maxWidth="xl" onSubmit={(e) => {
-                e.preventDefault();
-                exhibitionEditDispatch({
-                    scope: "exhibition",
-                    type: "add_image",
-                    image_id: imageChooserSelectedImage.id
-                })
-                setImageChooserIsOpen(false);
-                setImageChooserSelectedImage(null);
-                setSelectedImageId(imageChooserSelectedImage.id)
-            }}>
-                <DialogTitle>Choose an image</DialogTitle>
-                <DialogContent>
-                    <CollectionBrowser selectedItem={imageChooserSelectedImage} isDialogMode={true}
-                        setSelectedItem={setImageChooserSelectedImage} disabledImages={exhibitionState.images} />
-                </DialogContent>
-                <DialogActions>
-                    <Stack direction="row" spacing={1}>
-                        <Button variant="outlined" onClick={() => {
-                            setImageChooserIsOpen(false);
-                        }}>
-                            <Typography>Cancel</Typography>
-                        </Button>
-                        <Button variant="contained" type="submit" disabled={!imageChooserSelectedImage}>
-                            <Typography>Select</Typography>
-                        </Button>
-                    </Stack>
-                </DialogActions>
-            </Dialog>
+            <ImageChooserDialog {...{imageChooserIsOpen, setImageChooserIsOpen, setSelectedImageId,
+                exhibitionState, exhibitionEditDispatch}} />
 
+            <ImageRearrangeDialog {...{imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog}} />
 
             <Dialog component="form" open={deleteImageDialogIsOpen} 
                 sx={{zIndex: 10000}}onSubmit={(e) => {

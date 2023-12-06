@@ -331,9 +331,9 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     
                 // custom position check
                 if (data.position.custom_position == true) {
-                    art_group.position.set(((gallery_width / 2) - wall_offset), // set x - x does not change, this is distance from wall
+                    art_group.position.set(-((gallery_width / 2) - wall_offset), // set x - x does not change, this is distance from wall
                     data.position.custom_y,                                     // set y
-                    data.position.custom_x);                                    // set z
+                    -data.position.custom_x);                                    // set z
                 }
     
                 // default position

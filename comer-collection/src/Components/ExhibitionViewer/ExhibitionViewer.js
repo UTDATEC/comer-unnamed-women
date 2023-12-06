@@ -261,7 +261,6 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         let closeImage = null;
         for(const [image_id, image_position] of Object.entries(myArtPositionsByImageId ?? {})) {
             const distance_to_art = myCamera.position.distanceTo(image_position);
-            console.log(image_id, distance_to_art, distance_threshold);
             if(distance_to_art < distance_threshold) {
                 closeImage = image_id;
             }
@@ -498,7 +497,7 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
                     {infoFromCatalog?.Artists.length > 0 && (
                         <Stack>
                             {infoFromCatalog?.Artists.map((a) => (
-                                <Typography>{a.safe_display_name}</Typography>
+                                <Typography key={a.id}>{a.safe_display_name}</Typography>
                             ))}
                         </Stack>
                     )}
@@ -543,14 +542,12 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
                     {exhibitionMetadata.curator && (
                         <Typography variant="h5">Curated by {exhibitionMetadata.curator}</Typography>
                     )}
-                    {/* <Typography>Photos in this exhibition are from The University of Texas at Dallas' Comer Collection</Typography> */}
                         
                     <Stack sx={{opacity: 0.5}} alignItems="center">
                         <Typography>Controls are paused while you're in this menu.</Typography>
                         <Typography>This menu will reappear whenever you press 'Escape.'</Typography>
                         <Typography>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</Typography>
                         <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
-                        <Typography>Left click near an artwork to be positioned in front of the piece.</Typography>
                     </Stack>
                     <Button variant="contained" color="grey" size="large" id="play_button" 
                         onClick={() => {

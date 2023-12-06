@@ -178,6 +178,11 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             return image.image_id != action.image_id;
                         })
                     };
+                case "set_images":
+                    return {
+                        ...exhibitionData,
+                        images: action.newImages
+                    };
                 default:
                     console.log("Unrecognized exhibition edit action: ", action.type, action);
                     return exhibitionData;

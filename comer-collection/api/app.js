@@ -14,8 +14,6 @@ const apiRouter = require('./router');
 global.__basedir = __dirname;
 
 const { sequelize } = require("./sequelize.js");
-// const Artist = require("./models/artist");
-// const { getAllArtists } = require('./controllers/controller');
 sequelize.sync({ alter: true }).then(() => {
   console.log(`Database & tables created! (unless table already existed)`);
 });
@@ -30,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // This line allows the public files to be read from/rendered by path in the front end
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(helmet());
 
 

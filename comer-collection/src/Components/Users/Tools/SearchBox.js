@@ -11,6 +11,9 @@ const SearchBox = (props) => {
               setSearchQuery(e.target.value)
             }}
             InputProps={{
+              sx: {
+                height: "100%"
+              },
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />

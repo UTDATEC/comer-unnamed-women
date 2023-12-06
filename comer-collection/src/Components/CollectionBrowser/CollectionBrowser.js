@@ -1,14 +1,78 @@
-import { Box, Chip, ImageList, ImageListItem, ImageListItemBar, Paper, Stack, ThemeProvider, ToggleButton, ToggleButtonGroup, Typography, createTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import imageComingSoon from './utd.jpg';
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu";
-import SellIcon from "@mui/icons-material/Sell"
-import PersonIcon from "@mui/icons-material/Person"
-import GridOnIcon from "@mui/icons-material/GridOn"
-import ViewListIcon from "@mui/icons-material/ViewList"
+import SellIcon from "@mui/icons-material/Sell";
+import PersonIcon from "@mui/icons-material/Person";
+import GridOnIcon from "@mui/icons-material/GridOn";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
+import SearchBox from "../Users/Tools/SearchBox";
+import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";
 
+
+
+const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelectedItem, isDisabled}) => {
+
+    const thumbnailBox = useMemo(() => (
+        <Box width="200px" height="150px"
+            sx={{
+                backgroundImage: `url(${image.thumbnailUrl ?? imageComingSoon})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                backgroundPositionX: "center",
+                backgroundPositionY: "top"
+            }}
+        />
+    ), [image]);
+
+    const infoStack = useMemo(() =>(
+        <Stack direction={viewMode == "list" ? "row" : "column"} spacing={2} padding={4}
+            sx={{
+                width: viewMode == "list" ? "500px" : "200px"
+            }}
+            >
+            {thumbnailBox}
+            <Stack direction="column" spacing={1} alignItems={viewMode == "list" ? "left" : "center"}>
+                <Typography variant="h6">{image.title}</Typography>
+                {viewMode == "list" && (
+                    <Typography variant="body1">{image.year}</Typography>
+                )}
+                <Stack direction={viewMode == "list" ? "column" : "row"} spacing={viewMode == "list" ? 0 : 2}>
+                    {image.Artists.map((a) => (
+                        <Stack key={a.id} direction="row" spacing={1} alignItems="center">
+                            <PersonIcon />
+                            <Typography variant="body1">{a.fullName}</Typography>
+                        </Stack>
+                    ))}
+                </Stack>
+                <Stack direction="row" useFlexGap flexWrap="wrap" spacing={1}>
+                    {viewMode == "list" && image.Tags.map((t) => (
+                        <Chip key={t.id} sx={{maxWidth: "150px"}} icon={<SellIcon />} label={<Typography>{t.data}</Typography>} variant="filled" />
+                    ))}
+                </Stack>
+            </Stack>
+        </Stack>
+    ), [image, viewMode]);
+
+    const listItemButton = useMemo(() => (
+        <ListItemButton disableGutters selected={isSelected} disabled={isDisabled} sx={{
+            borderRadius: "10px",
+            justifyContent: "center"
+        }}
+            onClick={() => {
+                setSelectedItem(image)
+            }}>
+            {infoStack}
+        </ListItemButton>
+    ), [image, viewMode, isSelected, isDisabled])
+
+    
+    return setSelectedItem ? listItemButton : infoStack;
+
+}
 
 
 
@@ -16,6 +80,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     
     const [images, setImages] = useState([]);
     const [artists, setArtists] = useState([]);
+    const [tags, setTags] = useState([]);
     
     const [viewMode, setViewMode] = useState("grid");
     
@@ -24,15 +89,17 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     }
     
     const [artistFilter, setArtistFilter] = useState(null);
+    const [tagFilter, setTagFilter] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const fetchImageData = async() => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", '/api/collection/images');
             setImages(imageData.data);
       
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching image metadata:", error);
-          }
+        }
     }
 
     const fetchArtistData = async() => {
@@ -40,30 +107,64 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
             const artistData = await sendAuthenticatedRequest("GET", '/api/artists');
             setArtists(artistData.data);
       
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching artists:", error);
-          }
+        }
+    }
+
+    const fetchTagData = async() => {
+        try {
+            const tagData = await sendAuthenticatedRequest("GET", '/api/tags');
+            setTags(tagData.data);
+      
+        } catch (error) {
+            console.error("Error fetching tags:", error);
+        }
     }
 
     useEffect(() => {
         fetchImageData();
         fetchArtistData();
+        fetchTagData();
     }, [])
 
-    const theme = useTheme();
+    const renderedImageContainerData = useMemo(() => images.map((image) => (
+        [
+            image,
+            <CollectionBrowserImageContainer key={image.id} isSelected={image.id == selectedItem?.id} 
+                isDisabled={(disabledImages ?? []).map((di) => di.image_id).includes(image.id)}
+                {...{image, viewMode, setSelectedItem}} />
+        ]
+    )), [images, selectedItem, disabledImages, viewMode]);
+
+    const renderedImageContainerDataFiltered = useMemo(() => renderedImageContainerData.filter((imageContainerData) => {
+        return (
+            !searchQuery || doesItemMatchSearchQuery(searchQuery, imageContainerData[0], ['title'])
+        ) && (
+            !artistFilter || imageContainerData[0].Artists.map((a) => a.id).includes(parseInt(artistFilter.id))
+        ) && (
+            !tagFilter || imageContainerData[0].Tags.map((t) => t.id).includes(parseInt(tagFilter.id))
+        )
+    }), [renderedImageContainerData, artistFilter, tagFilter, searchQuery]);
+
+    const finalRenderedImageContainers = useMemo(() => renderedImageContainerDataFiltered.map((i) => i[1]), [renderedImageContainerDataFiltered]);
 
     return (
-        <Box component={Paper} square justifyItems="center" sx={{
+        <Box component={Paper} square justifyItems="center" paddingLeft={1} sx={{
             display: "grid",
             gridTemplateColumns: '1fr',
             gridTemplateRows: isDialogMode ? '80px 400px' : '80px calc(100vh - 144px)',
             gridTemplateAreas: `
             "toolbar"
             "gallery"
-            `
+            `,
             }} >
-            <Stack direction="row" sx={{gridArea: "toolbar"}} padding={2} spacing={2}>
-                <ArtistFilterMenu artists={artists} filterValue={artistFilter} setFilterValue={setArtistFilter} />
+            <Stack direction="row" width="100%" justifyContent="space-around" paddingTop={2} paddingBottom={2} spacing={2}>
+                <Stack direction="row" sx={{gridArea: "toolbar"}} spacing={2}>
+                    <SearchBox {...{searchQuery, setSearchQuery}} width="300px" placeholder="Search by image title" />
+                    <ArtistFilterMenu artists={artists} filterValue={artistFilter} setFilterValue={setArtistFilter} />
+                    <TagFilterMenu tags={tags} filterValue={tagFilter} setFilterValue={setTagFilter} />
+                </Stack>
                 <ToggleButtonGroup exclusive={true} value={viewMode} onChange={handleViewModeChange}>
                     <ToggleButton value="grid" key="grid">
                         <GridOnIcon />
@@ -73,44 +174,8 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Stack>
-            <Stack direction="row" useFlexGap flexWrap="wrap" justifyContent="center" sx={{gridArea: "gallery", overflowY: "scroll", justifyItems: "center", width: "100%"}} variant="standard">
-                {images.filter((image) => !artistFilter || image.Artists.map((a) => a.id).includes(parseInt(artistFilter.id)))
-                .map((image) => (
-                    <Stack direction={viewMode == "list" ? "row" : "column"} spacing={2} padding={4}
-                        sx={{
-                            width: viewMode == "list" ? "500px" : "250px",
-                            backgroundColor: image.id == selectedItem?.id ? theme.palette.grey.translucent : "",
-                            opacity: (disabledImages ?? []).map((di) => di.image_id).includes(image.id) ? 0.2 : 1
-                        }} key={image.id} 
-                        onClick={() => {
-                        if(setSelectedItem)
-                            setSelectedItem(image)
-                    }}>
-                        <Box width="200px" height="150px"
-                            sx={{
-                                backgroundImage: `url(${image.thumbnailUrl ?? imageComingSoon})`,
-                                backgroundRepeat: "no-repeat",
-                                backgroundSize: "contain",
-                                backgroundPositionX: "center",
-                                backgroundPositionY: "top"
-                            }}
-                        />
-                        <Stack direction="column" spacing={1}>
-                            <Typography variant="h6">{image.title}</Typography>
-                            {image.Artists.map((a) => (
-                                <Stack direction="row" spacing={1} alignItems="center">
-                                    <PersonIcon />
-                                    <Typography variant="body1">{a.fullName}</Typography>
-                                </Stack>
-                            ))}
-                            <Stack direction="row" useFlexGap flexWrap="wrap" spacing={1}>
-                                {viewMode == "list" && image.Tags.map((t) => (
-                                    <Chip sx={{maxWidth: "150px"}} icon={<SellIcon />} label={<Typography>{t.data}</Typography>} variant="filled" />
-                                ))}
-                            </Stack>
-                        </Stack>
-                    </Stack>
-                ))}
+            <Stack direction="row" useFlexGap flexWrap="wrap" justifyContent="center" sx={{gridArea: "gallery", overflowY: "scroll", justifyItems: "center", width: "100%"}} spacing={1} variant="standard">
+                {finalRenderedImageContainers}
             </Stack>
         </Box>
     )
