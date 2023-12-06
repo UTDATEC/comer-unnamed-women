@@ -543,7 +543,10 @@ const ImageManagement = (props) => {
       columnDescription: "Data",
       maxWidth: "300px",
       generateTableCell: (tag) => (
-        <Typography variant="body1">{tag.data}</Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <SellIcon />
+          <Typography variant="body1">{tag.data}</Typography>
+        </Stack>
       ),
       generateSortableValue: (tag) => tag.data.toLowerCase()
     },
@@ -947,7 +950,7 @@ const ImageManagement = (props) => {
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
-    <Box component={Paper} square sx={{
+    <Box component={Paper} square={true} sx={{
       display: 'grid',
       gridTemplateColumns: '1fr',
       gridTemplateRows: '80px calc(100vh - 224px) 80px',

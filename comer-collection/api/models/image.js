@@ -84,7 +84,12 @@ module.exports = (db) => {
             field: "image_location"
         }
     }, {
-        tableName: "comer_images"
+        tableName: "comer_images",
+        defaultScope: {
+            attributes: {
+                exclude: ['url']
+            }
+        }
     });
 
     return Image;

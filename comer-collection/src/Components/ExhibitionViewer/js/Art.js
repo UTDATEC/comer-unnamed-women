@@ -396,8 +396,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
             images_placed++;
 
-            // if(images_placed >= primary_json.images.length)
-                renderer.render(scene, camera);
+            renderer.render(scene, camera);
 
         }, null, () => {
             console.log("error placing image", data);
@@ -406,6 +405,9 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
         }); // convert image into texture
     });
+
+    if(primary_json.images == 0)
+        renderer.render(scene, camera);
 
     return {all_arts_group, artPositionsByImageId};
 };

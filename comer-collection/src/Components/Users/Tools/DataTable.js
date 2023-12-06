@@ -41,24 +41,6 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
   const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
   const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
 
-  if(selectedItems) {
-    const handleControlA = (e) => {
-      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 'a') {
-        e.preventDefault();
-        setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
-          !selectedItems.map((si) => si.id).includes(parseInt(i.id))
-        ))]);
-      }
-    }
-    
-    useEffect(() => {
-      document.addEventListener('keydown', handleControlA);
-      return () => {
-        document.removeEventListener('keydown', handleControlA);
-      }
-    })
-  }
-
 
   const sortRoutine = useCallback((a, b) => {
     const [,aSortableValues,] = a;
@@ -200,7 +182,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
         </TableBody>
       </Table>
       {visibleItems.length == 0 && emptyMinHeight && (
-        <Box square sx={{width: '100%'}}>
+        <Box sx={{width: '100%'}}>
         <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: '100%'}}>
           {NoContentIcon && (
             <NoContentIcon sx={{fontSize: '150pt', opacity: 0.5}} />

@@ -5,6 +5,7 @@ import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls"
 import { DataTable } from "../Users/Tools/DataTable";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
+import { useNavigate } from "react-router";
 
   
 export const ExhibitionBrowser = () => {
@@ -31,6 +32,7 @@ export const ExhibitionBrowser = () => {
     }, [])
 
     const theme = useTheme();
+    const navigate = useNavigate();
   
     const exhibitionTableFields = [
         {
@@ -80,7 +82,11 @@ export const ExhibitionBrowser = () => {
           </Stack>
             <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields} 
                 defaultSortAscending={false} defaultSortColumn="Last Updated"
-                nonEmptyHeight="500px" emptyMinHeight="500px"
+                nonEmptyHeight="500px" emptyMinHeight="500px" NoContentIcon={PhotoCameraBackIcon}
+                noContentButtonAction={() => {
+                  navigate("/BrowseCollection");
+                }}
+                noContentButtonText="Browse Collection"
             />
         </Stack>
       </Box>

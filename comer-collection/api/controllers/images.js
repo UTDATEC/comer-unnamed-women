@@ -19,7 +19,10 @@ const listImagesPublic = async (req, res, next) => {
 const listImages = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const images = Array.from(await Image.findAll({
-            include: [Artist, Tag, Exhibition]
+            include: [Artist, Tag, Exhibition],
+            attributes: {
+                include: ['url']
+            }
         })).map((i) => {
             const imageJSON = i.toJSON();
             return {
@@ -57,7 +60,11 @@ const getImagePublic = async (req, res, next) => {
 
 const downloadImagePublic = async(req, res, next) => {
     try {
-        const image = await Image.findByPk(req.params.imageId)
+        const image = await Image.findByPk(req.params.imageId, {
+            attributes: {
+                include: ['url']
+            }
+        })
         if(!image)
             throw new Error("Image metadata could not be retrieved from the database")
         else if(!image?.url)

@@ -163,7 +163,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
 
-    const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(null);
+    const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(false);
 
     const theme = useTheme();
 
@@ -648,7 +648,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
             }}>
                 <DialogTitle>Choose an image</DialogTitle>
                 <DialogContent>
-                    <CollectionBrowser selectedItem={imageChooserSelectedImage} 
+                    <CollectionBrowser selectedItem={imageChooserSelectedImage} isDialogMode={true}
                         setSelectedItem={setImageChooserSelectedImage} disabledImages={exhibitionState.images} />
                 </DialogContent>
                 <DialogActions>
