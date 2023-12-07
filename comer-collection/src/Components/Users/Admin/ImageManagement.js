@@ -1009,7 +1009,7 @@ const ImageManagement = (props) => {
         {...visibleImages.length == images.length && {
           noContentMessage: "No images yet",
           noContentButtonAction: () => {setDialogIsOpen(true)},
-          noContentButtonText: "Create a user",
+          noContentButtonText: "Create an image",
           NoContentIcon: InfoIcon
         } || visibleImages.length < images.length && {
           noContentMessage: "No results",
