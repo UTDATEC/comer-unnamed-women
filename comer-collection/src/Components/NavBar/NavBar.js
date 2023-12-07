@@ -1,67 +1,141 @@
-import React from 'react';
-import '../App/App.css';
+import React, { useContext, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Divider, Menu, MenuItem, Stack } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { useTheme } from '@emotion/react';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
+import LogoutIcon from "@mui/icons-material/Logout"
+import { useAppUser } from '../App/AppUser';
 
-const useStyles = makeStyles((theme) => ({
-    abRoot: {
-        backgroundColor: 'darkgreen',
-    },
-    root: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        flexGrow: 1,
-        textAlign: "right",
-    },
-    buttonText: {
-        color: "white",
-    },
-    title: {
-        flexGrow: 1,
-        textAlign: "center",
-        color: 'white',
-        textTransform: "capitalize",
-    },
-    titleButton: {
-        flexGrow: 1,
-        textAlign: "left",
-        width: "20%",
+
+export default function NavBar(props) {
+  
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const {appDarkTheme, setAppDarkTheme} = props;
+
+  const [appUser, setAppUser] = useAppUser();
+  
+  const [buttons, setButtons] = useState([]);
+
+  const [anchorElement, setAnchorElement] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorElement(event.currentTarget);
+  }
+
+  const handleMenuClose = (event) => {
+    setAnchorElement(null);
+  }
+
+  useEffect(() => {
+    const getButtons = (user) => {
+      const output = [
+        { text: "Home", link: "/" },
+        { text: "Browse Collection", link: "/BrowseCollection" },
+        { text: "Public Exhibitions", link: "/Exhibitions" },
+        // { text: "Search", link: "/searchBy" }
+      ]
+      if(!user) {
+        output.push({ text: "Log in", link: "/login" })
+      }
+      return output
     }
-}));
+    setButtons(getButtons(appUser));
+  }, [appUser])
 
-export default function NavBar() {
-    const classes = useStyles();
-    const history = useHistory();
-
-    return (
-        <div className={classes.root}>
-            <AppBar position="fixed" classes={{ root: classes.abRoot}}>
-                <Toolbar>
-                    <Button styles={classes.titleButton} onClick={() => history.push('/')}>
-                    <Typography variant="h6" className={classes.title}>
-                        UTD Comer Collection
-                    </Typography></Button>
-                    <div className={classes.menuButton}>
-                        <Button className="myButton" onClick={() => history.push('/')}>
-                            <div className={classes.buttonText}>Images</div></Button>
-                        {/*<Button className="myButton" onClick={() => history.push('/expandedView')}>
-                            <div className={classes.buttonText}>Expanded</div></Button>*/}
-                        &nbsp;&nbsp;
-                        <Button className="myButton" onClick={() => history.push('/exhibitMain')}>
-                            <div className={classes.buttonText}>Exhibitions</div></Button>
-                        &nbsp;&nbsp;
-                        <Button className="myButton" onClick={() => history.push('/searchBy')}>
-                            <div className={classes.buttonText}>Search</div></Button>
-                    </div>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+  return (
+      <AppBar position="fixed" color="primary" sx={{zIndex: 5000}}>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+          <Stack direction="row" alignItems="center" paddingLeft={2}>
+            {/* Placeholder for logo */}
+            {/* <img src={utd_logo} height="48px" /> */}
+            <Typography variant="h5" sx={{paddingLeft: "25px"}}>
+              UTD Comer Collection
+            </Typography>
+          </Stack>
+          <Toolbar>
+          <Stack spacing={1} direction={'row'}>
+            {buttons.map((button) => (
+              <Button key={button.text} color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => navigate(button.link)}>
+                <Typography variant="body1">{button.text}</Typography>
+              </Button>
+            ))}
+            <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
+              setAppDarkTheme((current) => !current)
+            }}>
+              <Typography variant="body1">Change theme</Typography>
+            </Button>
+            {appUser && (
+              <>
+                <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
+                  aria-haspopup={Boolean(anchorElement)}
+                  aria-expanded={Boolean(anchorElement)}
+                >
+                  <Stack direction="row" alignContent="center" alignItems="center">
+                    <Typography variant="h6" sx={{color: "white"}}>
+                      {appUser.safe_display_name}
+                    </Typography>
+                  </Stack>
+                </Button>
+                <Menu sx={{zIndex: 5000}} MenuListProps={{
+                }} anchorEl={anchorElement} anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right'
+                }} transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    navigate('/Account/Profile')
+                  }}>
+                    <Stack direction="row" spacing={1}>
+                      <AccountCircleIcon />
+                      <Typography variant="body">
+                        My Profile
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    navigate('/Account/MyExhibitions')
+                  }}>
+                    <Stack direction="row" spacing={1}>
+                      <PhotoCameraBackIcon />
+                      <Typography variant="body">
+                        My Exhibitions
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={() => {
+                    handleMenuClose();
+                    setAppUser(null);
+                    localStorage.removeItem('token');
+                    navigate('/')
+                  }}>
+                    <Stack direction="row" spacing={1}>
+                      <LogoutIcon />
+                      <Typography variant="body">
+                        Log Out
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </Stack>
+          </Toolbar>
+        </Stack>
+      </AppBar>
+  );
 }
