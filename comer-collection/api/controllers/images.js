@@ -167,9 +167,9 @@ const manageArtistForImages = async(artistId, images, isAssign) => {
     try {
         const artist = await Artist.findByPk(artistId);
         if(isAssign)
-            artist.addImages(images)
+            await artist.addImages(images)
         else
-            artist.removeImages(images);
+            await artist.removeImages(images);
         await transaction.commit();
     } catch(e) {
         await transaction.rollback();
@@ -180,7 +180,7 @@ const manageArtistForImages = async(artistId, images, isAssign) => {
 const assignArtistToImages = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
-            manageArtistForImages(req.params.artistId, req.body.images, true);
+            await manageArtistForImages(req.params.artistId, req.body.images, true);
             res.sendStatus(204);
         }
         catch(e) {
@@ -192,7 +192,7 @@ const assignArtistToImages = async (req, res, next) => {
 const unassignArtistFromImages = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
-            manageArtistForImages(req.params.artistId, req.body.images, false);
+            await manageArtistForImages(req.params.artistId, req.body.images, false);
             res.sendStatus(204);
         }
         catch(e) {
@@ -210,9 +210,9 @@ const manageTagForImages = async(tagId, images, isAssign) => {
     try {
         const tag = await Tag.findByPk(tagId);
         if(isAssign)
-            tag.addImages(images)
+            await tag.addImages(images)
         else
-            tag.removeImages(images);
+            await tag.removeImages(images);
         await transaction.commit();
     } catch(e) {
         await transaction.rollback();
@@ -223,7 +223,7 @@ const manageTagForImages = async(tagId, images, isAssign) => {
 const assignTagToImages = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
-            manageTagForImages(req.params.tagId, req.body.images, true);
+            await manageTagForImages(req.params.tagId, req.body.images, true);
             res.sendStatus(204);
         }
         catch(e) {
@@ -235,7 +235,7 @@ const assignTagToImages = async (req, res, next) => {
 const unassignTagFromImages = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         try {
-            manageTagForImages(req.params.tagId, req.body.images, false);
+            await manageTagForImages(req.params.tagId, req.body.images, false);
             res.sendStatus(204);
         }
         catch(e) {
@@ -255,7 +255,7 @@ const unassignArtistFromImage = async (req, res, next) => {
         const artist = await Artist.findByPk(req.params.artistId);
             if(image && artist) {
                 try {
-                    image.removeArtist(artist);
+                    await image.removeArtist(artist);
                     res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));
@@ -287,7 +287,7 @@ const assignTagToImage = async (req, res, next) => {
         const tag = await Tag.findByPk(req.params.tagId);
             if(image && tag) {
                 try {
-                    image.addTag(tag);
+                    await image.addTag(tag);
                     res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));
@@ -304,7 +304,7 @@ const unassignTagFromImage = async (req, res, next) => {
         const tag = await Tag.findByPk(req.params.tagId);
             if(image && tag) {
                 try {
-                    image.removeArtist(tag);
+                    await image.removeTag(tag);
                     res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));

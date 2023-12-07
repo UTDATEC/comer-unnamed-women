@@ -93,7 +93,7 @@ const assignUserToCourse = async (req, res, next) => {
         const user = await User.findByPk(req.params.userId);
             if(course && user) {
                 try {
-                    course.addUser(user);
+                    await course.addUser(user);
                     res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));
@@ -110,7 +110,7 @@ const unassignUserFromCourse = async (req, res, next) => {
         const user = await User.findByPk(req.params.userId);
             if(course && user) {
                 try {
-                    course.removeUser(user);
+                    await course.removeUser(user);
                     res.sendStatus(204);
                 } catch(e) {
                     next(createError(400, {debugMessage: e.message}));
