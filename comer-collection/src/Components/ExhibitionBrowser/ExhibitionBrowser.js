@@ -73,7 +73,7 @@ export const ExhibitionBrowser = () => {
     return (
       <Box component={Paper} square justifyItems="center" sx={{
         padding: "50px 300px" }} >
-        <Stack spacing={4} padding={5}>
+        <Stack spacing={4}>
         <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
           <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
             <PhotoCameraBackIcon fontSize="large" />

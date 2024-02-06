@@ -224,7 +224,7 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                         return (
                             <Stack key={i.image_id} direction="column" justifyItems="center" alignItems="center" spacing={2}>
                                 <Box width="150px" height="150px" sx={{
-                                    backgroundImage: `url(${catalogImage.thumbnailUrl})`,
+                                    backgroundImage: `url("${catalogImage.thumbnailUrl}")`,
                                     backgroundPosition: "center",
                                     backgroundSize: "contain",
                                     backgroundRepeat: "no-repeat"
@@ -560,7 +560,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     <MenuItem key={image.image_id} value={image.image_id ?? ''}>
                                         <Stack direction="row" alignItems="center" spacing={1}>
                                             <Box width="40px" height="40px" sx={{
-                                                backgroundImage: `url(${catalogImage?.thumbnailUrl})`,
+                                                backgroundImage: `url("${catalogImage?.thumbnailUrl}")`,
                                                 backgroundSize: "contain",
                                                 backgroundRepeat: "no-repeat",
                                                 backgroundPosition: "center"

@@ -39,9 +39,9 @@ export default function NavBar(props) {
   useEffect(() => {
     const getButtons = (user) => {
       const output = [
-        { text: "Home", link: "/" },
-        { text: "Browse Collection", link: "/BrowseCollection" },
-        { text: "Public Exhibitions", link: "/Exhibitions" },
+        // { text: "Home", link: "/" },
+        { text: "Collection", link: "/BrowseCollection" },
+        { text: "Exhibitions", link: "/Exhibitions" },
         // { text: "Search", link: "/searchBy" }
       ]
       if(!user) {
@@ -63,17 +63,17 @@ export default function NavBar(props) {
             </Typography>
           </Stack>
           <Toolbar>
-          <Stack spacing={1} direction={'row'}>
+          <Stack spacing={2} direction={'row'}>
             {buttons.map((button) => (
               <Button key={button.text} color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => navigate(button.link)}>
                 <Typography variant="body1">{button.text}</Typography>
               </Button>
             ))}
-            <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
+            {/* <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
               setAppDarkTheme((current) => !current)
             }}>
               <Typography variant="body1">Change theme</Typography>
-            </Button>
+            </Button> */}
             {appUser && (
               <>
                 <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
