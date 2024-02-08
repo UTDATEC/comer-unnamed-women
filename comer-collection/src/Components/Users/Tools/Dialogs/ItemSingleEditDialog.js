@@ -7,7 +7,7 @@ import {
   Button,
   Typography, DialogContentText, TextField
 } from "@mui/material";
-import SaveIcon from "@mui/icons-material/Save";
+import { SaveIcon } from "../../../IconImports";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString";
 
 export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, handleItemEdit }) => {

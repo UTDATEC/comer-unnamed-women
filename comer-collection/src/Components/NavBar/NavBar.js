@@ -8,12 +8,12 @@ import Button from '@mui/material/Button';
 
 import { useNavigate } from 'react-router-dom';
 import { Divider, Menu, MenuItem, Stack } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useTheme } from '@emotion/react';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-import LogoutIcon from "@mui/icons-material/Logout"
 import { useAppUser } from '../App/AppUser';
+import { ArrowDropDownIcon, 
+  AccountCircleIcon, 
+  PhotoCameraBackIcon, 
+  LogoutIcon } from '../IconImports';
 
 
 export default function NavBar(props) {

@@ -7,7 +7,7 @@ import {
   Button,
   Typography, DialogContentText, TextField
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { DeleteIcon } from "../../../IconImports";
 import { DataTable } from "../DataTable";
 
 export const ItemMultiDeleteDialog = ({ entitySingular, entityPlural, deleteDialogItems, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {

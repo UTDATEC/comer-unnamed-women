@@ -8,9 +8,8 @@ import { createArt } from './js/Art';
 import { createBoundingBoxes } from './js/BoundingBox';
 import staticImages from './js/StaticImages';
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from '@mui/material';
-import EditIcon from "@mui/icons-material/Edit";
 import { PointerLockControls } from 'three-stdlib';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { EditIcon, VisibilityIcon } from '../IconImports';
 import { useTheme } from '@emotion/react';
 
 

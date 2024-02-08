@@ -1,8 +1,6 @@
 import React from "react";
 import { Stack, Typography, Menu, MenuItem, Divider, Button } from "@mui/material";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import CheckIcon from "@mui/icons-material/Check";
+import { FilterAltOutlinedIcon, FilterAltIcon, CheckIcon } from "../../IconImports";
 
 export const ColumnFilterButton = (props) => {
 

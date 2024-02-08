@@ -1,6 +1,5 @@
 import { TextField, InputAdornment, IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
+import { SearchIcon, ClearIcon } from "../../IconImports";
 
 const SearchBox = (props) => {
     const { searchQuery, setSearchQuery, width, placeholder } = props;

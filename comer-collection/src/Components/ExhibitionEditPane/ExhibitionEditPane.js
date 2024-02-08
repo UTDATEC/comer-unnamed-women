@@ -1,16 +1,17 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Icon, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import DeleteIcon from "@mui/icons-material/Delete"
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
-import CollectionsIcon from "@mui/icons-material/Collections"
-import BrokenImageIcon from "@mui/icons-material/BrokenImage"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import { ExpandMoreIcon,
+    CloudUploadIcon,
+    AddPhotoAlternateIcon,
+    DeleteIcon,
+    CollectionsIcon,
+    BrokenImageIcon,
+    ArrowBackIcon,
+    ArrowForwardIcon,
+} from '../IconImports'
 
 const ColorInput = ({value, onChange, disabled}) => {
     return (

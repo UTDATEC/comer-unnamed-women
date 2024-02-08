@@ -7,7 +7,7 @@ import {
   Button,
   Typography, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { DeleteIcon } from "../../../IconImports";
 import { getBlankItemFields } from "../HelperMethods/fields";
 
 export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate }) => {

@@ -4,14 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 
 
-// Import image files
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import GroupsIcon from '@mui/icons-material/Groups';
-import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-import ImageIcon from '@mui/icons-material/Image';
-import SchoolIcon from '@mui/icons-material/School';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import LockIcon from '@mui/icons-material/Lock';
+import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports";
 import { useAppUser } from "../App/AppUser";
 
 

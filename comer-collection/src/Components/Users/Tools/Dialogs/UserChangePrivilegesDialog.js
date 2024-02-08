@@ -7,8 +7,7 @@ import {
   Button,
   Typography, DialogContentText, TextField
 } from "@mui/material";
-import SecurityIcon from "@mui/icons-material/Security";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { SecurityIcon, ArrowDownwardIcon } from "../../../IconImports";
 
 export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen, handlePromote, handleDemote }) => {
 

@@ -6,23 +6,14 @@ import {
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
-import LockIcon from "@mui/icons-material/Lock";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon } from "../../IconImports";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { DataTable } from "../Tools/DataTable";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import SearchIcon from "@mui/icons-material/Search";
-import InfoIcon from "@mui/icons-material/Info";
-import VpnLockIcon from "@mui/icons-material/VpnLock";
-import PublicIcon from "@mui/icons-material/Public";
 import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog";
-import SettingsIcon from "@mui/icons-material/Settings";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useSnackbar } from "../../App/AppSnackbar";
-import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined"
 import { useAppUser } from "../../App/AppUser";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";

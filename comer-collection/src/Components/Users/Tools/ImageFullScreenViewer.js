@@ -2,7 +2,7 @@ import { useTheme } from "@emotion/react"
 import { Dialog, Box, Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material"
 import { imageFieldDefinitions } from "./HelperMethods/fields";
 import React from "react";
-import PersonIcon from "@mui/icons-material/Person"
+import { PersonIcon } from "../../IconImports";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {
     const theme = useTheme();

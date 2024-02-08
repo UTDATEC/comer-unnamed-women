@@ -4,19 +4,11 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable";
-import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
-import LockIcon from "@mui/icons-material/Lock";
-import PublicIcon from "@mui/icons-material/Public";
-import VpnLockIcon from "@mui/icons-material/VpnLock";
-import AddIcon from "@mui/icons-material/Add"
+import { PhotoCameraBackIcon, LockIcon, PublicIcon, VpnLockIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon } from "../IconImports";
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 import { getBlankItemFields } from "./Tools/HelperMethods/fields";
 import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog";
-import InfoIcon from "@mui/icons-material/Info";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import SettingsIcon from "@mui/icons-material/Settings"
-import DeleteIcon from "@mui/icons-material/Delete"
 import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useAppUser } from "../App/AppUser";

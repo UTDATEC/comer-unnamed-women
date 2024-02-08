@@ -7,8 +7,7 @@ import {
   Button,
   Typography, DialogContentText, Divider, TextField, IconButton, Box
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete"
-import AddIcon from "@mui/icons-material/Add"
+import { AddIcon } from "../../../IconImports";
 import { getBlankItemFields } from "../HelperMethods/fields";
 import { DataTable } from "../DataTable";
 import SearchBox from "../SearchBox";

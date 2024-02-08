@@ -7,8 +7,7 @@ import {
   Button,
   Typography, DialogContentText, Divider, Box
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import SearchIcon from "@mui/icons-material/Search";
+import { InfoIcon, SearchIcon } from "../../../IconImports";
 import { DataTable } from "../DataTable";
 import SearchBox from "../SearchBox";
 import { searchItems } from "../SearchUtilities";

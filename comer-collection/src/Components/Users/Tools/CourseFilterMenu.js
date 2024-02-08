@@ -1,7 +1,6 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import SchoolIcon from '@mui/icons-material/School';
-import CheckIcon from "@mui/icons-material/Check"
+import { SchoolIcon, CheckIcon } from "../../IconImports";
 
 export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
   return (

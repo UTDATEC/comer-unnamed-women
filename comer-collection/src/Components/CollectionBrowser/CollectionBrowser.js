@@ -4,10 +4,7 @@ import imageComingSoon from './utd.jpg';
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu";
-import SellIcon from "@mui/icons-material/Sell";
-import PersonIcon from "@mui/icons-material/Person";
-import GridOnIcon from "@mui/icons-material/GridOn";
-import ViewListIcon from "@mui/icons-material/ViewList";
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from '../IconImports'
 import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
 import SearchBox from "../Users/Tools/SearchBox";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";

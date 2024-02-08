@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { DataTable } from "../Users/Tools/DataTable";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
-import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack"
+import { OpenInNewIcon, PhotoCameraBackIcon } from "../IconImports";
 import { useNavigate } from "react-router";
 
   

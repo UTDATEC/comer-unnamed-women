@@ -1,8 +1,6 @@
 import React from "react";
 import { Button, IconButton, Typography } from "@mui/material";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../IconImports";
 
 export const ColumnSortButton = (props) => {
 

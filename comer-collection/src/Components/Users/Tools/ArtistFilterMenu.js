@@ -1,7 +1,6 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import BrushIcon from '@mui/icons-material/Brush';
-import CheckIcon from "@mui/icons-material/Check"
+import { BrushIcon, CheckIcon } from "../../IconImports";
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
   return (

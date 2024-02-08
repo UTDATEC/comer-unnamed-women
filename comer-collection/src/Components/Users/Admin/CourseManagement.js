@@ -6,16 +6,6 @@ import {
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
-import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import PersonIcon from "@mui/icons-material/Person";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import CheckIcon from "@mui/icons-material/Check";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
@@ -24,14 +14,26 @@ import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities"
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields";
 import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
-import SecurityIcon from "@mui/icons-material/Security";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import InfoIcon from "@mui/icons-material/Info";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
+import {
+  FilterAltOffOutlinedIcon,
+  AddIcon,
+  SearchIcon,
+  RefreshIcon,
+  EditIcon,
+  DeleteIcon,
+  PersonIcon,
+  PersonAddIcon,
+  PersonRemoveIcon,
+  CheckIcon,
+  GroupAddIcon,
+  SecurityIcon,
+  InfoIcon
+} from '../../IconImports'
 
 
 const CourseManagement = (props) => {
