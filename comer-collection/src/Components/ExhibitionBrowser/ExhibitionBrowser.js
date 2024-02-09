@@ -5,6 +5,7 @@ import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls"
 import { DataTable } from "../Users/Tools/DataTable";
 import { OpenInNewIcon, PhotoCameraBackIcon } from "../IconImports";
 import { useNavigate } from "react-router";
+import { useTitle } from "../App/AppTitle";
 
   
 export const ExhibitionBrowser = () => {
@@ -13,6 +14,9 @@ export const ExhibitionBrowser = () => {
 
     const [sortColumn, setSortColumn] = useState("Last Updated");
     const [sortAscending, setSortAscending] = useState(false);
+
+
+    const setTitleText = useTitle();
   
   
 
@@ -27,6 +31,7 @@ export const ExhibitionBrowser = () => {
     }
 
     useEffect(() => {
+        setTitleText("Public Exhibitions")
         fetchPublicExhibitionData();
     }, [])
 

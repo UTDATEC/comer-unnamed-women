@@ -12,12 +12,14 @@ import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDial
 import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useAppUser } from "../App/AppUser";
+import { useTitle } from "../App/AppTitle";
 
 
 const MyExhibitions = (props) => {
 
   const { setSelectedNavItem } = props;
   const showSnackbar = useSnackbar();
+  const setTitleText = useTitle();
 
   const [appUser, setAppUser] = useAppUser();
 
@@ -48,6 +50,7 @@ const MyExhibitions = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("My Exhibitions");
+    setTitleText("My Exhibitions")
     fetchMyExhibitions();
   }, [])
 

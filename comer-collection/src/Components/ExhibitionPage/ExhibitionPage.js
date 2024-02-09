@@ -9,6 +9,7 @@ import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls"
 import { useAppUser } from "../App/AppUser";
 import Unauthorized from "../ErrorPages/Unauthorized";
 import { useSnackbar } from "../App/AppSnackbar";
+import { useTitle } from "../App/AppTitle";
 
 
 export const ExhibitionPage = (props) => {
@@ -38,6 +39,7 @@ export const ExhibitionPage = (props) => {
 
     const [appUser, setAppUser] = useAppUser();
     const showSnackbar = useSnackbar();
+    const setTitleText = useTitle();
 
     
     const getSaveUrl = () => {
@@ -100,6 +102,7 @@ export const ExhibitionPage = (props) => {
                 if(exhibitionData.data?.isEditable) {
                     setExhibitionIsEditable(true);
                 }
+                setTitleText(exhibitionData.data?.title)
                 setExhibitionIsLoaded(true);
             }
             

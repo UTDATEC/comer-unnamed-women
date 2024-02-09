@@ -8,6 +8,7 @@ import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from '../IconImports'
 import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
 import SearchBox from "../Users/Tools/SearchBox";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";
+import { useTitle } from "../App/AppTitle";
 
 
 
@@ -89,6 +90,8 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     const [tagFilter, setTagFilter] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const setTitleText = useTitle();
+
     const fetchImageData = async() => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", '/api/collection/images');
@@ -120,6 +123,9 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     }
 
     useEffect(() => {
+        if(!isDialogMode) {
+            setTitleText("Browse Collection")
+        }
         fetchImageData();
         fetchArtistData();
         fetchTagData();

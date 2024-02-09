@@ -1,8 +1,9 @@
 import { Navigate, useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import { sendAuthenticatedRequest } from '../Users/Tools/HelperMethods/APICalls';
 import { useAppUser } from '../App/AppUser';
+import { useTitle } from '../App/AppTitle';
 
 
 const Login = () => {
@@ -15,6 +16,7 @@ const Login = () => {
   const [formEnabled, setFormEnabled] = useState(true);
 
   const navigate = useNavigate();
+  const setTitleText = useTitle();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -42,6 +44,10 @@ const Login = () => {
 
     
   };
+
+  useEffect(() => {
+    setTitleText("Log In")
+  })
 
     return appUser && (
         <Navigate to="/Account" />
