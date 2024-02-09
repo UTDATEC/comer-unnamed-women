@@ -14,6 +14,7 @@ import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 import { useAppUser } from "../App/AppUser";
 import { useSnackbar } from "../App/AppSnackbar";
+import { useTitle } from "../App/AppTitle";
 
 const Profile = (props) => {
 
@@ -24,6 +25,7 @@ const Profile = (props) => {
 
   const navigate = useNavigate();
   const theme = useTheme();
+  const setTitleText = useTitle();
 
   const [myCourses, setMyCourses] = useState([]);
   const fetchMyCourses = async() => {
@@ -37,6 +39,7 @@ const Profile = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("Profile");
+    setTitleText("Profile");
     fetchMyCourses();
   }, [])
 

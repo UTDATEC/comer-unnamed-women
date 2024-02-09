@@ -24,6 +24,7 @@ import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
+import { useTitle } from "../../App/AppTitle";
 
 
 const UserManagement = (props) => {
@@ -66,9 +67,11 @@ const UserManagement = (props) => {
   const [appUser, setAppUser, initializeAppUser] = useAppUser();
   const showSnackbar = useSnackbar();
   const navigate = useNavigate();
+  const setTitleText = useTitle();
 
   useEffect(() => {
     setSelectedNavItem("User Management");
+    setTitleText("User Management");
     if(appUser.is_admin) {
       fetchData();
     }

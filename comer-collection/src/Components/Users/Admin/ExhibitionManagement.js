@@ -17,6 +17,7 @@ import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
+import { useTitle } from "../../App/AppTitle";
 
 const ExhibitionManagement = (props) => {
   const [users, setUsers] = useState([]);
@@ -45,6 +46,7 @@ const ExhibitionManagement = (props) => {
   const showSnackbar = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
+  const setTitleText = useTitle();
 
 
   const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
@@ -58,6 +60,7 @@ const ExhibitionManagement = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("Exhibition Management");
+    setTitleText("Exhibition Management");
     if(appUser.is_admin) {
       fetchData();
     }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import { useAppUser } from '../App/AppUser';
+import { useTitle } from '../App/AppTitle';
 
 const ChangePassword = (props) => {
   
@@ -16,6 +17,7 @@ const ChangePassword = (props) => {
   const [appUser, setAppUser] = useAppUser();
 
   const navigate = useNavigate();
+  const setTitleText = useTitle();
 
 
   //Api call here
@@ -62,6 +64,7 @@ const ChangePassword = (props) => {
 
   useEffect(() => {
     setSelectedNavItem("Change Password")
+    setTitleText("Change Password")
   });
 
     return (

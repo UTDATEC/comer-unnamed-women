@@ -24,6 +24,7 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
+import { useTitle } from "../../App/AppTitle";
 
 
 const ImageManagement = (props) => {
@@ -86,10 +87,12 @@ const ImageManagement = (props) => {
   const theme = useTheme();
   const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
+  const setTitleText = useTitle();
   
 
   useEffect(() => {
     setSelectedNavItem("Image Management");
+    setTitleText("Image Management");
     if(appUser.is_admin) {
       fetchImages();
       fetchArtists();

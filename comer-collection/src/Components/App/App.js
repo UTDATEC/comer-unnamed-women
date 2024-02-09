@@ -11,6 +11,7 @@ import { ExhibitionPage } from '../ExhibitionPage/ExhibitionPage';
 import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
 import { SnackbarProvider } from './AppSnackbar';
 import { AppUserProvider } from './AppUser';
+import { TitleProvider } from './AppTitle';
 
 
 const App = () => {
@@ -78,6 +79,7 @@ const App = () => {
         <NavBar {...{appDarkTheme, setAppDarkTheme}} sx={{ gridArea: 'header' }} />
         <Box sx={{ gridArea: 'body', position: 'relative' }} >
 
+        <TitleProvider>
         <SnackbarProvider >
         <Routes>
           
@@ -94,6 +96,8 @@ const App = () => {
               
           </Routes>
           </SnackbarProvider>
+
+        </TitleProvider>
         </Box>
         </Box>
         

@@ -34,6 +34,7 @@ import {
   SecurityIcon,
   InfoIcon
 } from '../../IconImports'
+import { useTitle } from "../../App/AppTitle";
 
 
 const CourseManagement = (props) => {
@@ -75,10 +76,12 @@ const CourseManagement = (props) => {
   const theme = useTheme();
   const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
+  const setTitleText = useTitle();
   
 
   useEffect(() => {
     setSelectedNavItem("Course Management");
+    setTitleText("Course Management");
     if(appUser.is_admin) {
       fetchData();
     }

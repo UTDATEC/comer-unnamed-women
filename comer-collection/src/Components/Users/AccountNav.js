@@ -6,6 +6,7 @@ import { useTheme } from "@emotion/react";
 
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports";
 import { useAppUser } from "../App/AppUser";
+import { useTitle } from "../App/AppTitle";
 
 
 const navLinks = [
@@ -68,6 +69,7 @@ const AccountNav = (props) => {
   const [appUser, setAppUser] = useAppUser();
 
   const theme = useTheme();
+
 
   return (
     <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
