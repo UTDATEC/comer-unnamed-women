@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
+import React, { useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,23 +9,19 @@ import { useNavigate } from 'react-router-dom';
 import { Divider, Menu, MenuItem, Stack } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { useAppUser } from '../App/AppUser';
-import { ArrowDropDownIcon, 
-  AccountCircleIcon, 
-  PhotoCameraBackIcon, 
-  LogoutIcon } from '../IconImports';
+import {
+  ArrowDropDownIcon,
+  AccountCircleIcon,
+  PhotoCameraBackIcon,
+  LogoutIcon
+} from '../IconImports';
 
 
-export default function NavBar(props) {
+const NavBarUserMenu = (props) => {
   
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const {appDarkTheme, setAppDarkTheme} = props;
-
-  const [appUser, setAppUser] = useAppUser();
-  
-  const [buttons, setButtons] = useState([]);
-
   const [anchorElement, setAnchorElement] = useState(null);
+  const [appUser, setAppUser] = useAppUser();
+  const navigate = useNavigate();
 
   const handleMenuOpen = (event) => {
     setAnchorElement(event.currentTarget);
@@ -36,21 +31,92 @@ export default function NavBar(props) {
     setAnchorElement(null);
   }
 
-  useEffect(() => {
-    const getButtons = (user) => {
-      const output = [
-        // { text: "Home", link: "/" },
-        { text: "Collection", link: "/BrowseCollection" },
-        { text: "Exhibitions", link: "/Exhibitions" },
-        // { text: "Search", link: "/searchBy" }
-      ]
-      if(!user) {
-        output.push({ text: "Log in", link: "/login" })
-      }
-      return output
-    }
-    setButtons(getButtons(appUser));
-  }, [appUser])
+  return (
+    <>
+      <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
+        aria-haspopup={Boolean(anchorElement)}
+        aria-expanded={Boolean(anchorElement)}
+      >
+        <Stack direction="row" alignContent="center" alignItems="center">
+          <Typography variant="h6" sx={{color: "white"}}>
+            {appUser.safe_display_name}
+          </Typography>
+        </Stack>
+      </Button>
+      <Menu sx={{zIndex: 5000}} MenuListProps={{
+      }} anchorEl={anchorElement} anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right'
+      }} transformOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
+        <MenuItem onClick={() => {
+          handleMenuClose();
+          navigate('/Account/Profile')
+        }}>
+          <Stack direction="row" spacing={1}>
+            <AccountCircleIcon />
+            <Typography variant="body">
+              My Profile
+            </Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem onClick={() => {
+          handleMenuClose();
+          navigate('/Account/MyExhibitions')
+        }}>
+          <Stack direction="row" spacing={1}>
+            <PhotoCameraBackIcon />
+            <Typography variant="body">
+              My Exhibitions
+            </Typography>
+          </Stack>
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => {
+          handleMenuClose();
+          setAppUser(null);
+          localStorage.removeItem('token');
+          navigate('/')
+        }}>
+          <Stack direction="row" spacing={1}>
+            <LogoutIcon />
+            <Typography variant="body">
+              Log Out
+            </Typography>
+          </Stack>
+        </MenuItem>
+      </Menu>
+    </>
+  )
+}
+
+
+const NavBarButton = ({ color, href, text }) => {
+  
+  const navigate = useNavigate();
+  const theme = useTheme();
+
+  const isPageActive = document.location.pathname == href;
+
+  return (
+    <Button spacing={1} color={color ?? "secondary"} sx={{
+      height: "64px",
+      minWidth: "120px",
+      borderBottom: isPageActive ? `5px solid ${theme.palette[color ?? "secondary"].main}` : "5px solid rgba(0, 0, 0, 0)",
+      textTransform: "unset"
+    }} onClick={() => navigate(href)}>
+      <Typography variant="h6" color="white">{text}</Typography>
+    </Button> 
+  )
+}
+
+
+export default function NavBar() {
+  
+  const [appUser, setAppUser] = useAppUser();
+  const navigate = useNavigate();
 
   return (
       <AppBar position="fixed" color="primary" sx={{zIndex: 5000}}>
@@ -64,74 +130,27 @@ export default function NavBar(props) {
           </Stack>
           <Toolbar>
           <Stack spacing={2} direction={'row'}>
-            {buttons.map((button) => (
-              <Button key={button.text} color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => navigate(button.link)}>
-                <Typography variant="body1">{button.text}</Typography>
-              </Button>
-            ))}
-            {/* <Button color="primary" variant="contained" sx={{border: `1px solid ${theme.palette.primary.light}`}} onClick={() => {
-              setAppDarkTheme((current) => !current)
-            }}>
-              <Typography variant="body1">Change theme</Typography>
-            </Button> */}
-            {appUser && (
-              <>
-                <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: '100%', color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: '20px', paddingRight: '10px'}}
-                  aria-haspopup={Boolean(anchorElement)}
-                  aria-expanded={Boolean(anchorElement)}
-                >
-                  <Stack direction="row" alignContent="center" alignItems="center">
-                    <Typography variant="h6" sx={{color: "white"}}>
-                      {appUser.safe_display_name}
-                    </Typography>
-                  </Stack>
+            <Stack spacing={1} paddingRight={2} direction="row">
+              <NavBarButton href="/BrowseCollection" text="Collection" />
+              <NavBarButton href="/Exhibitions" text="Exhibitions" />
+            </Stack>
+            {appUser && <>
+              <Divider sx={{
+                borderWidth: "1px"
+              }} />
+              <NavBarUserMenu />
+            </> ||
+            !appUser && (
+              <Stack direction="column" sx={{
+                justifyContent: "center"
+              }}>
+                <Button variant="contained" sx={{
+                  height: "60%"
+                }} onClick={() => {navigate('/login')}}>
+                  <Typography>Log In</Typography>
                 </Button>
-                <Menu sx={{zIndex: 5000}} MenuListProps={{
-                }} anchorEl={anchorElement} anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right'
-                }} transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }} open={Boolean(anchorElement)} onClose={handleMenuClose}>
-                  <MenuItem onClick={() => {
-                    handleMenuClose();
-                    navigate('/Account/Profile')
-                  }}>
-                    <Stack direction="row" spacing={1}>
-                      <AccountCircleIcon />
-                      <Typography variant="body">
-                        My Profile
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                  <MenuItem onClick={() => {
-                    handleMenuClose();
-                    navigate('/Account/MyExhibitions')
-                  }}>
-                    <Stack direction="row" spacing={1}>
-                      <PhotoCameraBackIcon />
-                      <Typography variant="body">
-                        My Exhibitions
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={() => {
-                    handleMenuClose();
-                    setAppUser(null);
-                    localStorage.removeItem('token');
-                    navigate('/')
-                  }}>
-                    <Stack direction="row" spacing={1}>
-                      <LogoutIcon />
-                      <Typography variant="body">
-                        Log Out
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                </Menu>
-              </>
+              </Stack>
+              
             )}
           </Stack>
           </Toolbar>
