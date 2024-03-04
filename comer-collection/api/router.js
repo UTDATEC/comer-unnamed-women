@@ -3,6 +3,12 @@ const express = require("express");
 const router = express.Router();
 
 
+var bouncer = require("express-bouncer")(500, 900000);
+bouncer.blocked = function(req, res, next, remaining) {
+  next(createError(429, {debugMessage: `remaining wait period: ${remaining}`}));
+}
+
+
 const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic, assignTagToImages, unassignTagFromImages } = require("./controllers/images.js");
 const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
 const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
@@ -97,7 +103,13 @@ router.delete("/exhibitions/:exhibitionId", adminDeleteExhibition);
 
 
 // User interactions
-router.put("/account/signin", signIn);
+router.put("/account/signin", bouncer.block, (req, res, next) => {
+    signIn(req, res, next).then((success) => {
+        if(success) {
+            bouncer.reset(req);
+        }
+    });
+});
 router.put("/account/changepassword", changePassword);
 router.get("/account/profile", getCurrentUser);
 router.get("/account/courses", listMyCourses);
@@ -112,11 +124,6 @@ router.get("/exhibitions/:exhibitionId/load", loadExhibitionAdmin);
 router.get("/exhibitions/public/:exhibitionId/load", loadExhibitionPublic);
 router.put("/account/exhibitions/:exhibitionId/save", saveExhibition);
 router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
-
-
-// router.use(["/images", "/artists", "/tags", "/users", "/sign_up", "/change_password"], (req, res, next) => {
-//     next(createError(405));
-// })
 
 
 module.exports = router;

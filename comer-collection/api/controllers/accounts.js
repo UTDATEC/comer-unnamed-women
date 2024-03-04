@@ -21,18 +21,21 @@ const signIn = async(req, res, next) => {
 
         if(match && user.is_active) {
             token = generateTokenDataFromUserInstance(user);
-            jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
+            await jwt.sign(token, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
                 if (err) {
                     next(createError(500, {debugMessage: err.message}));
                 }
                 res.status(200).json({ token: token });
             });
+            return true;
         } else {
-            next(createError(401));
+            await next(createError(401));
+            return false;
         }
 
     } catch(e) {
-        next(createError(400, {debugMessage: e.message}));
+        await next(createError(400, {debugMessage: e.message}));
+        return false;
     }
 };
 
