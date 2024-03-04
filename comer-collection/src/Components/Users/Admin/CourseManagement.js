@@ -172,6 +172,8 @@ const CourseManagement = (props) => {
       })
     }
 
+    return courseIndicesWithErrors;
+
 
   }
 
