@@ -44,12 +44,7 @@ app.use(helmet.frameguard({
 }));
 
 
-
 // Routes for querying data
-// app.use("/upload", uploadRouter);
-// app.use("/testAPI", testAPIRouter);
-// app.use("/exhibitUpload", exhibitUploadRouter);
-// app.use("/getAllArtists", getAllArtistsRouter);
 app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
