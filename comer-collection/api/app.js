@@ -14,7 +14,7 @@ const apiRouter = require('./router');
 global.__basedir = __dirname;
 
 const { sequelize } = require("./sequelize.js");
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ alter: false }).then(() => {
   console.log(`Database & tables created! (unless table already existed)`);
 });
 
