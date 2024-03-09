@@ -29,6 +29,7 @@
     "sequelize": "^6.37.1",
     "three": "^0.162.0",
     "three-stdlib": "^2.29.5",
+    "toobusy-js": "^0.5.1",
     "web-vitals": "^3.5.2"
   },
   "scripts": {

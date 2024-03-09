@@ -8,6 +8,7 @@ const logger = require('morgan');
 const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
+const toobusy = require("toobusy-js");
 
 
 const apiRouter = require('./router');
@@ -20,6 +21,18 @@ sequelize.sync({ alter: false }).then(() => {
 });
 
 var app = express();
+
+
+
+app.use((req, res, next) => {
+  if(toobusy()) {
+    next(createError(503));
+  } else {
+    next();
+  }
+})
+
+
 
 // view engine setup
 app.use(cors());
