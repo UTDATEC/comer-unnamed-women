@@ -58,6 +58,12 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
         },
+        pw_change_required: {
+            type: Sequelize.BOOLEAN,
+            field: "user_pw_change_required",
+            allowNull: false,
+            defaultValue: true
+        },
         pw_temp: {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_temp"
