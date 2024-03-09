@@ -9,6 +9,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const toobusy = require("toobusy-js");
+const { rateLimit } = require("express-rate-limit")
 
 
 const apiRouter = require('./router');
@@ -22,6 +23,16 @@ sequelize.sync({ alter: false }).then(() => {
 
 var app = express();
 
+
+const limiter = rateLimit({
+  windowMs: 5000,
+  limit: 100,
+  statusCode: 429,
+  standardHeaders: false,
+  legacyHeaders: false
+})
+
+app.use(limiter);
 
 
 app.use((req, res, next) => {
