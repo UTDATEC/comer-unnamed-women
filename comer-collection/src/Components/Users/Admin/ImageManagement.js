@@ -608,7 +608,7 @@ const ImageManagement = (props) => {
               setPreviewerOpen(true);
             }}
           >
-          <img height="50px" src={image.thumbnailUrl} loading="lazy" />
+          <img height="50px" src={`http://localhost:9000/api/collection/images/${image.id}/download`} loading="lazy" />
           </Button>
         ) || image.url && (
           <Button variant="outlined" color="primary" 

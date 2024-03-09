@@ -25,7 +25,7 @@ const ChangePassword = (props) => {
     event.preventDefault();
 
     try {
-      const response = await axios.put('http://localhost:9000/api/account/changepassword', { oldPassword, newPassword }, {
+      const response = await axios.put(`${process.env.REACT_APP_API_HOST}/api/account/changepassword`, { oldPassword, newPassword }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -34,7 +34,7 @@ const ChangePassword = (props) => {
       if(response.data.token) {
         localStorage.setItem('token', response.data.token);
   
-        const profileResponse = await fetch("http://localhost:9000/api/account/profile", {
+        const profileResponse = await fetch(`${process.env.REACT_APP_API_HOST}/api/account/profile`, {
           headers: {
             Authorization: `Bearer ${response.data.token}`
           }

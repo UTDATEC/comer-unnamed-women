@@ -12,6 +12,7 @@ import { ExhibitionBrowser } from '../ExhibitionBrowser/ExhibitionBrowser';
 import { SnackbarProvider } from './AppSnackbar';
 import { AppUserProvider } from './AppUser';
 import { TitleProvider } from './AppTitle';
+import { Helmet } from 'react-helmet'
 
 
 const App = () => {
@@ -63,6 +64,11 @@ const App = () => {
 
 
   return (
+    <>
+    <Helmet>
+      <meta http-equiv='Content-Security-Policy' 
+          content={`default-src 'self' script-src 'unsafe-inline' connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
+    </Helmet>
     <AppUserProvider>
       <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -107,6 +113,7 @@ const App = () => {
 
       </ThemeProvider>
     </AppUserProvider>
+    </>
   );
 }
 

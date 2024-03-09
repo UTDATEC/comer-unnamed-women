@@ -1,7 +1,7 @@
 import axios from "axios";
 import { filterItemFields, userFieldDefinitions } from "./fields";
 
-const apiLocation = "http://localhost:9000";
+const apiLocation = process.env.REACT_APP_API_HOST;
 
 export const sendAuthenticatedRequest = async(method, url, payload) => {
   const axiosMethods = {

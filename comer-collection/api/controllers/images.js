@@ -73,6 +73,7 @@ const downloadImagePublic = async(req, res, next) => {
             const imageData = await downloadedImage.blob();
             const imageBuffer = await imageData.arrayBuffer();
             res.setHeader('Content-Type', 'image/png')
+            res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
             res.status(200).send(Buffer.from(imageBuffer));
         }
         else

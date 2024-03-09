@@ -83,7 +83,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                     overflow: "hidden"
                 }}>
                 <Stack gridArea="image" maxHeight="500px" alignContent="center">
-                    <img src={image.url ? image.url : image.thumbnailUrl} 
+                    <img src={`${process.env.REACT_APP_API_HOST}/api/collection/images/${image.id}/download`} 
                         style={{objectFit: "contain"}} width="auto" height="100%"
                     />
                 </Stack>
