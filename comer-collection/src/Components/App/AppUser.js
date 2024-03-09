@@ -9,7 +9,7 @@ export const AppUserProvider = ({ children }) => {
 
   const initializeAppUser = async() => {
     try {
-      const response = await fetch("http://localhost:9000/api/account/profile", {
+      const response = await fetch(`${process.env.REACT_APP_API_HOST}/api/account/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

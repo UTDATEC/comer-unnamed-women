@@ -21,7 +21,7 @@ export function generateArtData(primary_json, globalImageCatalog) {
 
             image_id: image.image_id,
 
-            img_src: `http://localhost:9000/api/collection/images/${image.image_id}/download` ?? staticImages['./image_not_available.jpg'],
+            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? staticImages['./image_not_available.jpg'],
 
             position: {
                 custom_x: image.position.custom_x,
