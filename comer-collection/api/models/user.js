@@ -54,6 +54,12 @@ module.exports = (db) => {
                 return Boolean(this.family_name || this.given_name)
             }
         },
+        exhibition_quota: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 5,
+            field: "user_exhibition_quota"
+        },
         pw_hash: {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
