@@ -4,7 +4,6 @@ import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane";
 import { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer";
 import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer";
-import primary_json from "../ExhibitionViewer/example2.json"
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { useAppUser } from "../App/AppUser";
 import Unauthorized from "../ErrorPages/Unauthorized";
