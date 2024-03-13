@@ -54,12 +54,12 @@ const MyExhibitions = (props) => {
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null)
       showSnackbar(`Exhibition ${title} created`, "success")
-      initializeAppUser();
     }
     catch(e) {
       console.log(`Error creating exhibition: ${e.message}`)
       showSnackbar(`Error creating exhibition.`, "error")
     }
+    initializeAppUser();
   }
 
   const handleExhibitionEditByOwner = async(exhibitionId, title, privacy) => {
@@ -70,11 +70,11 @@ const MyExhibitions = (props) => {
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null);
       showSnackbar(`Exhibition ${title} updated`, "success");
-      initializeAppUser();
     } catch(e) {
       console.log(`Error updating exhibition: ${e.message}`)
       showSnackbar(`Error updating exhibition`, "error");
     }
+    initializeAppUser();
   }
 
   
@@ -84,11 +84,11 @@ const MyExhibitions = (props) => {
       setDeleteDialogIsOpen(false);
       setDeleteDialogExhibition(null);
       showSnackbar(`Exhibition deleted`, "success");
-      initializeAppUser();
     } catch(e) {
       console.log(`Error deleting exhibition: ${e.message}`)
       showSnackbar(`Error deleting exhibition`, "error");
     }
+    initializeAppUser();
   }
 
   
@@ -225,10 +225,11 @@ const MyExhibitions = (props) => {
         setDeleteDialogIsOpen={setDeleteDialogIsOpen}
       />
 
-      <ExhibitionSettingsDialog editMode={isDialogInEditMode} {...{dialogExhibitionId, dialogExhibitionAccess, setDialogExhibitionAccess, 
+      <ExhibitionSettingsDialog editMode={isDialogInEditMode} 
+          dialogIsOpen={dialogIsOpen && (isDialogInEditMode || appUser.can_create_exhibition)}
+          {...{dialogExhibitionId, dialogExhibitionAccess, setDialogExhibitionAccess, 
           dialogExhibitionTitle, setDialogExhibitionTitle, 
-          dialogIsOpen, setDialogIsOpen, 
-          handleExhibitionCreate, handleExhibitionEdit: handleExhibitionEditByOwner}} />
+          setDialogIsOpen, handleExhibitionCreate, handleExhibitionEdit: handleExhibitionEditByOwner}} />
     </Box>
   );
 }
