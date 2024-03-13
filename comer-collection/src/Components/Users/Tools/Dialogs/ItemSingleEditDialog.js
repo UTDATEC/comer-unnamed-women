@@ -59,8 +59,11 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
         for(const r of editDialogFieldRefs.current) {
           editDialogFieldData[r.name] = r.value;
         }
-        handleItemEdit(editDialogItem.id, editDialogFieldData);
-        editDialogFieldRefs.current = []
+        handleItemEdit(editDialogItem.id, editDialogFieldData).then(() => {
+          editDialogFieldRefs.current = []
+        }).catch((e) => {
+          console.log("Error within handleItemEdit subroutine")
+        });
       }}
     >
       <DialogTitle variant="h4" textAlign="center">{dialogTitle}</DialogTitle>

@@ -133,6 +133,7 @@ const UserManagement = (props) => {
 
     } catch (error) {
       showSnackbar(`Error editing user`, "error")
+      throw "TestError"
     }
   }
 
