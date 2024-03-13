@@ -1,10 +1,8 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import imageComingSoon from './utd.jpg';
-import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu";
-import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from '../IconImports'
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from '../IconImports';
 import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
 import SearchBox from "../Users/Tools/SearchBox";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";

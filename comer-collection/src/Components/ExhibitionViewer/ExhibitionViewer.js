@@ -536,7 +536,7 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
             sx={{position: "absolute"}}>
             <DialogContent>
                 <Stack alignItems="center" spacing={2}>
-                    <img src={selectedImageSrc} style={{maxWidth: "200px"}}/>
+                    <img src="/images/logo_square_orange.png" style={{maxWidth: "200px"}}/>
                     <Typography variant="h4">{exhibitionMetadata.title}</Typography>
                     {exhibitionMetadata.curator && (
                         <Typography variant="h5">Curated by {exhibitionMetadata.curator}</Typography>
