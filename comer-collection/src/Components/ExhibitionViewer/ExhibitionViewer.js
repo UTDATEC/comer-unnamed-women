@@ -6,11 +6,9 @@ import { setupFloor } from './js/Floor';
 import { setupCeiling } from './js/Ceiling';
 import { createArt } from './js/Art';
 import { createBoundingBoxes } from './js/BoundingBox';
-import staticImages from './js/StaticImages';
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from '@mui/material';
 import { PointerLockControls } from 'three-stdlib';
 import { EditIcon, VisibilityIcon } from '../IconImports';
-import { useTheme } from '@emotion/react';
 
 
 
@@ -526,9 +524,6 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
 
 
 const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen}) => {
-        
-    const selectedImageKey = './logo.png'; // Replace this with the desired key
-    const selectedImageSrc = staticImages[selectedImageKey];
 
     return (
         <Dialog open={dialogIsOpen} className="background_menu" fullWidth maxWidth="md"
