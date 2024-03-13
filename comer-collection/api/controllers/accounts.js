@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
-const { User, Course } = require('../sequelize')
+const { User, Course, Exhibition } = require('../sequelize')
 const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
 const { canUserCreateExhibition } = require('./users.js');
 
@@ -89,7 +89,7 @@ const getCurrentUser = async(req, res, next) => {
     userOperation(req, res, next, async(user_id, password_change_required) => {
         try {
             const user = await User.findByPk(user_id, {
-                include: [Course]
+                include: [Course, Exhibition]
             });
             const dataToSend = {...user.toJSON(), 
                 password_change_required,

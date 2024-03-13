@@ -68,7 +68,7 @@ const createExhibition = async (req, res, next) => {
     userOperation(req, res, next, async(user_id) => {
         try {
             const user = await User.findByPk(user_id, {
-                include: [Course]
+                include: [Course, Exhibition]
             });
             if(req.body.id)
                 throw new Error("Image id should not be included when creating an Image");

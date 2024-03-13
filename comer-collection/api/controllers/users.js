@@ -12,7 +12,7 @@ const isUserDeletable = (userJSON) => {
 }
 
 const canUserCreateExhibition = (userJSON) => {
-    return Boolean(userJSON.is_admin || userJSON.Courses?.filter((c) => c.status == "Active").length);
+    return Boolean(userJSON.is_admin || userJSON.Courses?.filter((c) => c.status == "Active").length && userJSON.exhibition_quota > userJSON.Exhibitions.length);
 }
 
 
