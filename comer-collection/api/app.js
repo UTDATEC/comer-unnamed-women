@@ -84,7 +84,7 @@ app.use(function(err, req, res, next) {
   res.json({ error: {
     status: err.status || 500,
     message: err.message,
-    debugMessage: req.app.get('env') === 'development' ? err.debugMessage : ""
+    debugMessage: req.app.get('env') === 'development' ? (err.debugMessage + "\n" + err.stack) : ""
   }})
 });
 
