@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-// import { generateArtData } from './ArtData.js'
 import { createFrame } from './Frames.js';
 import { createMatte } from './Matte.js';
 import { createSpotlight } from './Lighting.js';
