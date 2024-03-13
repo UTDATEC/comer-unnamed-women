@@ -73,7 +73,6 @@ const createExhibition = async (req, res, next) => {
             if(req.body.id)
                 throw new Error("Image id should not be included when creating an Image");
             else if(!canUserCreateExhibition(user.toJSON())) {
-                console.log(user.toJSON(), canUserCreateExhibition(user.toJSON()));
                 next(createError(403, {debugMessage: "User is not eligible to create an exhibition."}))
             } else {
                 const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
