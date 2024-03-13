@@ -27,6 +27,13 @@ export const userFieldDefinitions = [
     displayName: "Email",
     isRequired: true,
     inputType: "email"
+  },
+  {
+    fieldName: "exhibition_quota",
+    displayName: "Exhibition Quota",
+    isRequired: true,
+    inputType: "number",
+    minValue: 0
   }
 ];
 export const courseFieldDefinitions = [

@@ -40,9 +40,9 @@ const createUser = async (req, res, next) => {
         try {
             if(req.body.id)
                 throw new Error("User id should not be included when creating a user")
-            const {email, given_name, family_name} = req.body;
+            const {email, given_name, family_name, exhibition_quota} = req.body;
             const newUser = await User.create({
-                email, given_name, family_name,
+                email, given_name, family_name, exhibition_quota,
                 pw_temp: randomPassword(),
                 ps_hash: null,
                 is_admin: false,
@@ -78,7 +78,8 @@ const updateUser = async (req, res, next) => {
                     await user.update({
                         email: req.body.email,
                         family_name: req.body.family_name,
-                        given_name: req.body.given_name
+                        given_name: req.body.given_name,
+                        exhibition_quota: req.body.exhibition_quota
                     })
                     res.status(200).json({ data: user })
                 }

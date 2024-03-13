@@ -34,7 +34,8 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
               editDialogItem?.[f.fieldName]
             }
             inputProps={{
-              type: f.inputType
+              type: f.inputType,
+              min: f.minValue ?? ""
             }}
             >
           </TextField>

@@ -58,6 +58,9 @@ module.exports = (db) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 5,
+            validate: {
+                min: 0
+            },
             field: "user_exhibition_quota"
         },
         pw_hash: {

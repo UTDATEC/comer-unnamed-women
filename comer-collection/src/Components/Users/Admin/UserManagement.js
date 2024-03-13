@@ -431,7 +431,7 @@ const UserManagement = (props) => {
       columnDescription: "Exhibitions",
       generateTableCell: (user) => (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Button variant="text"
+          <Button variant="text" sx={{textTransform: "unset"}}
             color={user.is_admin ? "secondary" : "primary"}
             disabled startIcon={<PhotoCameraBackIcon />}
             onClick={() => {
@@ -440,7 +440,7 @@ const UserManagement = (props) => {
               // setAssignCourseDialogIsOpen(true);
             }}
           >
-            <Typography variant="body1">{user.Exhibitions.length}</Typography>
+            <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
           </Button>
         </Stack>
       )
