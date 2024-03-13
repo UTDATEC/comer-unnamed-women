@@ -1,6 +1,4 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,6 +16,8 @@
       "sizes": "512x512"
     }
   ],
+  "short_name": "UTD Comer Collection",
+  "name": "UT Dallas Comer Collection",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
