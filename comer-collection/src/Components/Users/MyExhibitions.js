@@ -21,9 +21,7 @@ const MyExhibitions = (props) => {
   const showSnackbar = useSnackbar();
   const setTitleText = useTitle();
 
-  const [appUser, setAppUser] = useAppUser();
-
-  const [myExhibitions, setMyExhibitions] = useState([]);
+  const [appUser, setAppUser, initializeAppUser] = useAppUser();
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [dialogExhibitionId, setDialogExhibitionId] = useState(null);
@@ -36,22 +34,11 @@ const MyExhibitions = (props) => {
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
 
-  const [sortColumn, setSortColumn] = useState("Date Modified");
-  const [sortAscending, setSortAscending] = useState(false);
-
-  const fetchMyExhibitions = async() => {
-    try {
-      const response = await sendAuthenticatedRequest("GET", `/api/account/exhibitions`);
-      setMyExhibitions(response.data);
-    } catch(e) {
-      console.log(`Error fetching courses: ${e.message}`);
-    }
-  }
 
   useEffect(() => {
     setSelectedNavItem("My Exhibitions");
     setTitleText("My Exhibitions")
-    fetchMyExhibitions();
+    initializeAppUser();
   }, [])
 
   const theme = useTheme();
@@ -67,12 +54,12 @@ const MyExhibitions = (props) => {
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null)
       showSnackbar(`Exhibition ${title} created`, "success")
+      initializeAppUser();
     }
     catch(e) {
       console.log(`Error creating exhibition: ${e.message}`)
       showSnackbar(`Error creating exhibition.`, "error")
     }
-    fetchMyExhibitions();
   }
 
   const handleExhibitionEditByOwner = async(exhibitionId, title, privacy) => {
@@ -83,11 +70,11 @@ const MyExhibitions = (props) => {
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null);
       showSnackbar(`Exhibition ${title} updated`, "success");
+      initializeAppUser();
     } catch(e) {
       console.log(`Error updating exhibition: ${e.message}`)
       showSnackbar(`Error updating exhibition`, "error");
     }
-    fetchMyExhibitions();
   }
 
   
@@ -97,11 +84,11 @@ const MyExhibitions = (props) => {
       setDeleteDialogIsOpen(false);
       setDeleteDialogExhibition(null);
       showSnackbar(`Exhibition deleted`, "success");
+      initializeAppUser();
     } catch(e) {
       console.log(`Error deleting exhibition: ${e.message}`)
       showSnackbar(`Error deleting exhibition`, "error");
     }
-    fetchMyExhibitions();
   }
 
   
@@ -213,8 +200,8 @@ const MyExhibitions = (props) => {
           </Button>
         </Stack>
         <DataTable
-          items={myExhibitions}
-          visibleItems={myExhibitions}
+          items={appUser.Exhibitions}
+          visibleItems={appUser.Exhibitions}
           defaultSortColumn={"Date Modified"}
           defaultSortAscending={false}
           tableFields={exhibitionTableFields}
