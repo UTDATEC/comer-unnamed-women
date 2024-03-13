@@ -1,14 +1,11 @@
 import * as THREE from 'three';
-import staticImages from './StaticImages';
 
 export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name, renderer, camera, renderWhenFinished) => {
     let floor_group = new THREE.Group();
     scene.add(floor_group); 
 
 
-    const floor_texture_key = `./${floor_texture_name}`;
-    const floor_texture_path = staticImages[floor_texture_key];
-    texture_loader.load(floor_texture_path, (floor_texture) => {
+    texture_loader.load(`/images/textures/${floor_texture_name}`, (floor_texture) => {
 
         floor_texture.wrapS = THREE.RepeatWrapping;                     // horizontal wrap
         floor_texture.wrapT = THREE.RepeatWrapping;                     // vertical wrap

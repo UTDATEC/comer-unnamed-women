@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { createFrame } from './Frames.js';
 import { createMatte } from './Matte.js';
 import { createSpotlight } from './Lighting.js';
-import staticImages from './StaticImages.js';
 
 export function generateArtData(primary_json, globalImageCatalog) {
 
@@ -21,7 +20,7 @@ export function generateArtData(primary_json, globalImageCatalog) {
 
             image_id: image.image_id,
 
-            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? staticImages['./image_not_available.jpg'],
+            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? '/images/image_coming_soon.png',
 
             position: {
                 custom_x: image.position.custom_x,
