@@ -5,7 +5,7 @@ import {
   Typography,
   Switch, Box, IconButton, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, ContentCopyIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon } from "../../IconImports";
+import { FilterAltOffOutlinedIcon, ContentCopyIcon, LockAddIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
@@ -25,6 +25,7 @@ import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 import { useTitle } from "../../App/AppTitle";
+import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog";
 
 
 const UserManagement = (props) => {
@@ -34,6 +35,9 @@ const UserManagement = (props) => {
 
   const [privilegesDialogIsOpen, setPrivilegesDialogIsOpen] = useState(false);
   const [privilegesDialogUser, setPrivilegesDialogUser] = useState(null);
+
+  const [resetPasswordDialogIsOpen, setResetPasswordDialogIsOpen] = useState(false);
+  const [resetPasswordDialogUser, setResetPasswordDialogUser] = useState(null);
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogUser, setDeleteDialogUser] = useState(null);
@@ -260,9 +264,9 @@ const UserManagement = (props) => {
 
 
 
-  const handleResetPassword = async(userId) => {
+  const handleResetPassword = async(userId, newPassword) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`)
+      await sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`, {newPassword})
       fetchData();
 
       showSnackbar(`Password reset for user ${userId}`, "success");
@@ -270,6 +274,8 @@ const UserManagement = (props) => {
     } catch (error) {
 
       showSnackbar(`Error resetting password for user ${userId}`, "error");
+
+      throw "Reset Password error"
     }
   }
 
@@ -327,9 +333,7 @@ const UserManagement = (props) => {
   const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
       navigator.clipboard.writeText(user[fieldName]);
-      if(fieldName == "pw_temp") {
-        showSnackbar(`Password for user ${user.id} copied to clipboard`, "success");
-      } else if(fieldName == "email") {
+      if(fieldName == "email") {
         showSnackbar(`Email address for user ${user.id} copied to clipboard`, "success");
       } else {
         showSnackbar(`Text copied to clipboard`, "success");
@@ -389,23 +393,20 @@ const UserManagement = (props) => {
             }}>
             <Typography variant="body1">Change</Typography>
           </Button>
-          ) : user.pw_temp ? (
-            <Button startIcon={<ContentCopyIcon />} color={user.is_admin ? "secondary" : "primary"}
-              variant="outlined"
-              onClick={() => {handleCopyToClipboard(user, "pw_temp")}}>
-              <Typography variant="body1">Copy</Typography>
-            </Button>
           ) : (
             <Button
-              startIcon={<LockResetIcon />}
+              startIcon={user.has_password ? <LockResetIcon /> : <LockIcon/>}
               color={user.is_admin ? "secondary" : "primary"}
               itemID={user.id}
-              variant="outlined"
-              disabled={appUser.id == user.id}
+              variant={user.has_password ? "outlined" : "contained"}
+              // disabled={true}
               onClick={(e) => {
-                handleResetPassword(user.id);
+                setResetPasswordDialogUser(user)
+                setResetPasswordDialogIsOpen(true);
               }}>
-              <Typography variant="body1">Reset</Typography>
+              <Typography variant="body1">
+                {user.has_password ? "Reset" : "Set"}
+              </Typography>
             </Button>
           )}
         </>
@@ -431,7 +432,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "Exhibitions",
       generateTableCell: (user) => (
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1}>
           <Button variant="text" sx={{textTransform: "unset"}}
             color={user.is_admin ? "secondary" : "primary"}
             disabled startIcon={<PhotoCameraBackIcon />}
@@ -468,8 +469,8 @@ const UserManagement = (props) => {
       generateTableCell: (user) => (
         <Switch
           itemID={user.id}
-          checked={user.is_active}
-          disabled={user.id == appUser.id}
+          checked={user.is_active && user.has_password}
+          disabled={user.id == appUser.id || !user.has_password}
           color={user.is_admin ? "secondary" : "primary"}
           onClick={(e) => {
             handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked)
@@ -603,7 +604,7 @@ const UserManagement = (props) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.password_change_required && (
+  appUser.pw_change_required && (
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (
@@ -774,6 +775,13 @@ const UserManagement = (props) => {
         setDialogIsOpen={setPrivilegesDialogIsOpen}
         handlePromote={handleUserPromote}
         handleDemote={handleUserDemote}
+      />
+
+      <UserResetPasswordDialog 
+        dialogIsOpen={resetPasswordDialogIsOpen}
+        dialogUser={resetPasswordDialogUser}
+        setDialogIsOpen={setResetPasswordDialogIsOpen}
+        handleResetPassword={handleResetPassword}
       />
 
     </Box>

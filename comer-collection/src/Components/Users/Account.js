@@ -38,8 +38,8 @@ const Account = (props) => {
           
           <Routes>
             <Route index element={
-              !appUser.password_change_required && (<Navigate to='Profile' replace />) ||
-              appUser.password_change_required && (<Navigate to='ChangePassword' replace />)
+              !appUser.pw_change_required && (<Navigate to='Profile' replace />) ||
+              appUser.pw_change_required && (<Navigate to='ChangePassword' replace />)
             } />
             <Route path="Profile" element={<Profile {...{selectedNavItem, setSelectedNavItem }} />} />
             <Route path="ChangePassword" element={<ChangePassword {...{selectedNavItem, setSelectedNavItem}} />} />

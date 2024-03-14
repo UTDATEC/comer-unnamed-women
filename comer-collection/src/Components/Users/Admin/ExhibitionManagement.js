@@ -140,9 +140,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
   const handleCopyToClipboard = useCallback((exhibition, fieldName) => {
     try {
       navigator.clipboard.writeText(exhibition[fieldName]);
-      if(fieldName == "pw_temp") {
-        showSnackbar(`Password for exhibition ${exhibition.id} copied to clipboard`, "success");
-      } else if(fieldName == "email") {
+      if(fieldName == "email") {
         showSnackbar(`Email address for exhibition ${exhibition.id} copied to clipboard`, "success");
       } else {
         showSnackbar(`Text copied to clipboard`, "success");
@@ -257,7 +255,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.password_change_required && (
+  appUser.pw_change_required && (
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (

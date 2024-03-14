@@ -30,6 +30,7 @@ export { default as GroupAddIcon } from "@mui/icons-material/GroupAdd";
 export { default as GroupsIcon } from "@mui/icons-material/Groups";
 export { default as ImageIcon } from "@mui/icons-material/Image";
 export { default as InfoIcon } from "@mui/icons-material/Info";
+export { default as LockAddIcon } from "@mui/icons-material/EnhancedEncryption"
 export { default as LockIcon } from "@mui/icons-material/Lock";
 export { default as LockResetIcon } from "@mui/icons-material/LockReset";
 export { default as LogoutIcon } from "@mui/icons-material/Logout";
@@ -49,6 +50,7 @@ export { default as SearchIcon } from "@mui/icons-material/Search";
 export { default as SecurityIcon } from "@mui/icons-material/Security";
 export { default as SellIcon } from "@mui/icons-material/Sell";
 export { default as SettingsIcon } from "@mui/icons-material/Settings";
+export { default as SyncIcon } from "@mui/icons-material/Sync";
 export { default as SwapVertIcon } from "@mui/icons-material/SwapVert";
 export { default as ViewListIcon } from "@mui/icons-material/ViewList";
 export { default as VisibilityIcon } from "@mui/icons-material/Visibility";

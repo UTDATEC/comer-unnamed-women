@@ -931,7 +931,7 @@ const ImageManagement = (props) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.password_change_required && (
+  appUser.pw_change_required && (
     <Navigate to="/Account/ChangePassword" />
   ) ||
   appUser.is_admin && (

@@ -179,9 +179,9 @@ const MyExhibitions = (props) => {
   
 
 
-  return appUser.password_change_required && (
+  return appUser.pw_change_required && (
     <Navigate to="/Account/ChangePassword" />
-  ) || !appUser.password_change_required && (
+  ) || !appUser.pw_change_required && (
     <Box component={Paper} square sx={{height: "100%"}}>
     <Stack spacing={4} padding={5}>
       <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">

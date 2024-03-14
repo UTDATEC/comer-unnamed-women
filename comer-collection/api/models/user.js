@@ -67,15 +67,17 @@ module.exports = (db) => {
             type: Sequelize.TEXT('tiny'),
             field: "user_pw_hash"
         },
+        has_password: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return Boolean(this.pw_updated)
+            }
+        },
         pw_change_required: {
             type: Sequelize.BOOLEAN,
             field: "user_pw_change_required",
             allowNull: false,
             defaultValue: true
-        },
-        pw_temp: {
-            type: Sequelize.TEXT('tiny'),
-            field: "user_pw_temp"
         },
         pw_updated: {
             type: Sequelize.DATE(3),
@@ -96,7 +98,7 @@ module.exports = (db) => {
         tableName: "comer_users",
         defaultScope: {
             attributes: {
-                exclude: ['pw_hash', 'pw_temp']
+                exclude: ['pw_hash']
             }
         }
     });

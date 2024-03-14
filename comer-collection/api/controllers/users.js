@@ -1,10 +1,9 @@
+const bcrypt = require('bcrypt')
 const createError = require('http-errors');
 const { User, Course, Exhibition } = require("../sequelize.js");
 const { adminOperation, verifyPasswordWithHash } = require('../security.js');
 
-const randomPassword = () => {
-    return Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-}
+
 
 
 const isUserDeletable = (userJSON) => {
@@ -19,10 +18,7 @@ const canUserCreateExhibition = (userJSON) => {
 const listUsers = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const users = Array.from(await User.findAll({
-            include: [Course, Exhibition],
-            attributes: {
-                include: ['pw_temp']
-            }
+            include: [Course, Exhibition]
         })).map((u) => {
             const userJSON = u.toJSON();
             return {
@@ -43,10 +39,9 @@ const createUser = async (req, res, next) => {
             const {email, given_name, family_name, exhibition_quota} = req.body;
             const newUser = await User.create({
                 email, given_name, family_name, exhibition_quota,
-                pw_temp: randomPassword(),
-                ps_hash: null,
+                pw_hash: null,
                 is_admin: false,
-                pw_updated: Date.now()
+                pw_updated: null
             });
             
             res.status(201).json({ data: {
@@ -54,7 +49,6 @@ const createUser = async (req, res, next) => {
                 email: newUser.email, 
                 given_name: newUser.given_name,
                 family_name: newUser.family_name,
-                pw_temp: newUser.pw_temp,
                 is_admin: newUser.is_admin
             }});
         } catch (e) {
@@ -66,11 +60,7 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     adminOperation(req, res, next, async (user_id) => {
         try {
-            const user = await User.findByPk(req.params.userId, {
-                attributes: {
-                    include: ['pw_temp']
-                }
-            });
+            const user = await User.findByPk(req.params.userId);
             if(user) {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
@@ -132,16 +122,8 @@ const activateUser = async (req, res, next) => {
 const promoteUser = async (req, res, next) => {
     adminOperation(req, res, next, async (user_id) => {
         const user = await User.findByPk(req.params.userId);
-        const appUser = await User.findByPk(user_id, {
-            attributes: {
-                include: ['pw_hash']
-            }
-        });
         if(user) {
-            const passwordVerified = await verifyPasswordWithHash(req.body.verifyPassword, appUser.pw_hash);
-            if(!passwordVerified)
-                next(createError(401, {debugMessage: "Password verification failed"}));
-            else if(user_id == req.params.userId)
+            if(user_id == req.params.userId)
                 next(createError(401, {debugMessage: "Admin cannot promote self"}));
             else {
                 await user.update({
@@ -158,16 +140,8 @@ const promoteUser = async (req, res, next) => {
 const demoteUser = async (req, res, next) => {
     adminOperation(req, res, next, async (user_id) => {
         const user = await User.findByPk(req.params.userId);
-        const appUser = await User.findByPk(user_id, {
-            attributes: {
-                include: ['pw_hash']
-            }
-        });
         if(user) {
-            const passwordVerified = await verifyPasswordWithHash(req.body.verifyPassword, appUser.pw_hash);
-            if(!passwordVerified)
-                next(createError(401, {debugMessage: "Password verification failed"}));
-            else if(user_id == req.params.userId)
+            if(user_id == req.params.userId)
                 next(createError(401, {debugMessage: "Admin cannot demote self"}));
             else {
                 await user.update({
@@ -204,10 +178,7 @@ const deleteUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
     adminOperation(req, res, next, async () => {
         const user = await User.findByPk(req.params.userId, {
-            include: [Course, Exhibition],
-            attributes: {
-                include: ['pw_temp']
-            }
+            include: [Course, Exhibition]
         });
         if (user) {
             const userData = {...user.toJSON(), 
@@ -229,18 +200,19 @@ const resetUserPassword = async(req, res, next) => {
             if(currentUserId == req.params.userId) {
                 throw new Error("User is trying to reset own password and should use change password instead")
             }
-            const user = await User.findByPk(req.params.userId, {
-                attributes: {
-                    include: ['pw_temp']
-                }
-            });
+            const user = await User.findByPk(req.params.userId);
             if(user) {
                 if(req.body.id && req.body.id !== req.params.userId) {
                     throw new Error("User id in request body does not match User id in URL")
                 }
+                else if(!req.body.newPassword) {
+                    throw new Error("Password reset request must contain the new password in the request body")
+                }
+                const salt = bcrypt.genSaltSync(10);
+                const hash = bcrypt.hashSync(req.body.newPassword, salt);
                 await user.update({
-                    pw_temp: randomPassword(),
-                    pw_hash: null,
+                    pw_hash: hash, 
+                    pw_change_required: true,
                     pw_updated: Date.now()
                 })
                 res.status(200).json({ data: user })

@@ -72,7 +72,7 @@ const ChangePassword = (props) => {
       <Box component="form" sx={{height: "100%"}} onSubmit={handleChangePassword}>
           <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
             sx={{width: "100%", height: "100%"}}>
-              {appUser.password_change_required && (
+              {appUser.pw_change_required && (
                 <>
                   <Typography variant="h5">Please change your password.</Typography>
                   <Divider />
@@ -123,7 +123,7 @@ const ChangePassword = (props) => {
             >
               <Typography variant="body1">Change Password</Typography>
             </Button>
-            {!appUser.password_change_required && (<Button onClick={() => {
+            {!appUser.pw_change_required && (<Button onClick={() => {
               navigate('/Account/Profile')
             }} 
               variant="outlined" 

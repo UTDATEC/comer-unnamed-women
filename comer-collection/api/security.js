@@ -15,11 +15,7 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
         const token = header.replace("Bearer ","");
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await User.findByPk(decoded.id, {
-            attributes: {
-                include: ['pw_hash', 'pw_temp']
-            }
-        });
+        const user = await User.findByPk(decoded.id);
         
         
         if(!user)
@@ -33,7 +29,7 @@ const userOperation = async (req, res, next, callback, requirePermanentPassword 
             throw new Error("Token password update time does not match the latest password update time")
         
         // Check if temporary password is being used improperly
-        else if(requirePermanentPassword && !user.getDataValue('pw_hash')) 
+        else if(requirePermanentPassword && user.pw_change_required) 
             throw new Error("Temporary password in use when permanent password is required");
         
         // Check if a non-admin user is attempting an admin operation

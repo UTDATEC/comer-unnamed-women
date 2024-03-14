@@ -76,7 +76,7 @@ const AccountNav = (props) => {
       <Typography variant="h5" alignSelf="center" paddingTop="10px">Account</Typography>
         <List>
           {navLinks.map((item) => (
-            <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.password_change_required)}
+            <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.pw_change_required)}
               key={item.title}
               onClick={() => {
                 setSelectedNavItem(item.title);
@@ -112,7 +112,7 @@ const AccountNav = (props) => {
           <Typography variant="h5" alignSelf="center" paddingTop="10px">Admin</Typography>
           <List>
             {adminNavLinks.map((item) => (
-              <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.password_change_required)}
+              <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.pw_change_required)}
                 key={item.title}
                 onClick={() => {
                   setSelectedNavItem(item.title);
