@@ -710,7 +710,7 @@ const UserManagement = (props) => {
 
       <ItemMultiCreateDialog entity="user"
         dialogTitle={"Create Users"}
-        dialogInstructions={"Add users, edit the user fields, then click 'Create'.  The system will generate temporary passwords for each user."}
+        dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
         handleItemsCreate={handleUsersCreate}
         {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
