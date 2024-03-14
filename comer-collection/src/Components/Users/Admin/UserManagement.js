@@ -690,7 +690,7 @@ const UserManagement = (props) => {
                       setMultiDeleteDialogIsOpen(true);
                     }
                   }}>
-                  <Typography variant="body1">Delete {selectedDeletableUsers.length} {selectedDeletableUsers.length == 1 ? "user" : "users"}</Typography>
+                  <Typography variant="body1">{selectedDeletableUsers.length}</Typography>
                 </Button>
               )
             })()}
