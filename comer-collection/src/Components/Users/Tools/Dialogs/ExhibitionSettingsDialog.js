@@ -97,6 +97,8 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
         <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
           <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
             setDialogIsOpen(false);
+            setDialogExhibitionAccess(null);
+            setDialogExhibitionTitle("");
           }}>
             <Typography variant="body1">Cancel</Typography>
           </Button>

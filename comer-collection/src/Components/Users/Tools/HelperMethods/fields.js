@@ -33,6 +33,7 @@ export const userFieldDefinitions = [
     displayName: "Exhibition Quota",
     isRequired: true,
     inputType: "number",
+    blank: 5,
     minValue: 0
   }
 ];

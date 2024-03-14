@@ -78,7 +78,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                 {createDialogFieldDefinitions.map((f, fi) => (
                   <TextField key={f.fieldName} 
                     name={f.fieldName} 
-                    label={f.displayName} 
+                    label={f.displayName ?? ""} 
                     autoFocus={fi==0} 
                     value={u[f.fieldName]} 
                     multiline={f.multiline}
@@ -88,11 +88,21 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                     }}
                     inputProps={{
                       type: f.inputType ?? "text",
-                      maxLength: f.maxlength ?? 255
+                      maxLength: f.maxlength ?? 255,
+                      min: f.minValue
                     }}
-                    InputLabelProps={{
-                      [f.inputType == "datetime-local" ? "shrink" : ""]: true
-                    }}
+                    InputLabelProps={
+                      (() => {
+                        if(f.inputType == "datetime-local") {
+                          return {
+                            "shrink": true
+                          }
+                        }
+                      })()
+                      // {
+                      //   [f.inputType == "datetime-local" ? "shrink" : ""]: true
+                      // }
+                    }
                     required={Boolean(f.isRequired)}
                   onChange={(e) => {
                     createDialogDispatch({

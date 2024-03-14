@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable";
-import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon } from "../IconImports";
+import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon } from "../IconImports";
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 import { useAppUser } from "../App/AppUser";
@@ -159,6 +159,19 @@ const Profile = (props) => {
           {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
         </Stack>
       )
+    },
+    {
+      columnDescription: "Exhibition Quota",
+      generateTableHeaderCell: () => (
+        <Typography variant="h6">Exhibition Quota</Typography>
+      ),
+      generateTableCell: (user) => (
+        <Stack direction="row" spacing={1}>
+          <PhotoCameraBackIcon />
+          <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota} </Typography>
+          <Typography variant="body1" color="gray">{user.is_admin ? " (ignored for administrators)" : ""}</Typography>
+        </Stack>
+      )
     }
   ]
 
@@ -171,9 +184,9 @@ const Profile = (props) => {
     }
   }, [])
 
-  return appUser.password_change_required && (
+  return appUser.pw_change_required && (
     <Navigate to="/Account/ChangePassword" />
-  ) || !appUser.password_change_required && (
+  ) || !appUser.pw_change_required && (
     <Box component={Paper} square sx={{height: "100%"}}>
     <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5}>
       <Stack spacing={2}>
