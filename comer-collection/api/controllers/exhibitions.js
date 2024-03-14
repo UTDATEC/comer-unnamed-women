@@ -259,12 +259,12 @@ const loadExhibitionPublic = async(req, res, next) => {
 
 const saveExhibition = async (req, res, next) => {
     userOperation(req, res, next, async(user_id) => {
-        const transaction = await sequelize.transaction();
+        const t = await sequelize.transaction();
         try {
             const ExhibitionWithData = Exhibition.scope('with_data');
             const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
                 include: [User]
-            });
+            }, { transaction: t });
             if(!exhibition)
                 next(createError(404));
             else if(exhibition.User.id != user_id)
@@ -273,15 +273,15 @@ const saveExhibition = async (req, res, next) => {
                 await exhibition.update({
                     data: req.body.data,
                     date_modified: Date.now()
-                });
+                }, { transaction: t });
                 await exhibition.setImages(
-                    JSON.parse(req.body.data).images.map((i) => i.image_id)
+                    JSON.parse(req.body.data).images.map((i) => i.image_id), { transaction: t }
                 );
-                await transaction.commit();
+                await t.commit();
                 res.status(200).json({data: exhibition})
             }
         } catch(e) {
-            await transaction.rollback();
+            await t.rollback();
             next(createError(500), {debugMessage: e.message});
         }
     })
@@ -290,27 +290,29 @@ const saveExhibition = async (req, res, next) => {
 
 const saveExhibitionAdmin = async (req, res, next) => {
     adminOperation(req, res, next, async(user_id) => {
-        const transaction = await sequelize.transaction();
+        const t = await sequelize.transaction();
         try {
             const ExhibitionWithData = Exhibition.scope('with_data');
             const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
                 include: [User]
-            });
+            }, { transaction: t });
             if(!exhibition)
                 next(createError(404));
             else {
                 await exhibition.update({
                     data: req.body.data,
                     date_modified: Date.now()
-                });
+                }, { transaction: t });
                 await exhibition.setImages(
-                    JSON.parse(req.body.data).images.map((i) => i.image_id)
+                    JSON.parse(req.body.data).images.map((i) => i.image_id), {
+                        transaction: t
+                    }
                 );
-                await transaction.commit();
+                await t.commit();
                 res.status(200).json({data: exhibition})
             }
         } catch(e) {
-            await transaction.rollback();
+            await t.rollback();
             next(createError(500), {debugMessage: e.message});
         }
     })

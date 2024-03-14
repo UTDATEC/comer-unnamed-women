@@ -164,16 +164,16 @@ const assignArtistToImage = async (req, res, next) => {
 
 
 const manageArtistForImages = async(artistId, images, isAssign) => {
-    const transaction = await sequelize.transaction();
+    const t = await sequelize.transaction();
     try {
         const artist = await Artist.findByPk(artistId);
         if(isAssign)
-            await artist.addImages(images)
+            await artist.addImages(images, {transaction: t})
         else
-            await artist.removeImages(images);
-        await transaction.commit();
+            await artist.removeImages(images, {transaction: t});
+        await t.commit();
     } catch(e) {
-        await transaction.rollback();
+        await t.rollback();
         throw new Error(e.message);
     }
 }
@@ -207,16 +207,16 @@ const unassignArtistFromImages = async (req, res, next) => {
 
 
 const manageTagForImages = async(tagId, images, isAssign) => {
-    const transaction = await sequelize.transaction();
+    const t = await sequelize.transaction();
     try {
-        const tag = await Tag.findByPk(tagId);
+        const tag = await Tag.findByPk(tagId, { transaction: t });
         if(isAssign)
-            await tag.addImages(images)
+            await tag.addImages(images, { transaction: t })
         else
-            await tag.removeImages(images);
-        await transaction.commit();
+            await tag.removeImages(images, { transaction: t });
+        await t.commit();
     } catch(e) {
-        await transaction.rollback();
+        await t.rollback();
         throw new Error(e.message);
     }
 }
