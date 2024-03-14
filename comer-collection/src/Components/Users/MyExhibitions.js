@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable";
-import { PhotoCameraBackIcon, LockIcon, PublicIcon, VpnLockIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon } from "../IconImports";
+import { PhotoCameraBackIcon, LockIcon, PublicIcon, VpnLockIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../IconImports";
 import { useTheme } from "@emotion/react";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
 import { getBlankItemFields } from "./Tools/HelperMethods/fields";
@@ -198,6 +198,26 @@ const MyExhibitions = (props) => {
           >
             <Typography variant="body1">Create Exhibition</Typography>
           </Button>
+        </Stack>
+        <Stack direction="column" spacing={2}>
+          {appUser.is_admin && (
+            <Stack direction="row" spacing={2} color="gray">
+              <SecurityIcon color="secondary" />
+              <Typography variant="body1">Restrictions on exhibition creation are removed for administrators.</Typography>
+            </Stack>
+          )}
+          {!appUser.is_admin && appUser.Courses.filter((c) => c.status == "Active").length == 0 && (
+            <Stack direction="row" spacing={2} color="gray">
+              <InfoIcon />
+              <Typography variant="body1">You must be enrolled in at least one active course to create exhibitions.</Typography>
+            </Stack>
+          )}
+          {!appUser.is_admin && appUser.Exhibitions.length >= appUser.exhibition_quota && (
+            <Stack direction="row" spacing={2} color="gray">
+              <InfoIcon />
+              <Typography variant="body1">Your account has reached its exhibition quota.  To create an exhibition, first delete an existing exhibition, or contact your instructor to request a quota increase.</Typography>
+            </Stack>
+          )}
         </Stack>
         <DataTable
           items={appUser.Exhibitions}
