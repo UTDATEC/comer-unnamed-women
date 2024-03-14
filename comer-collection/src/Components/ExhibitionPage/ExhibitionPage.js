@@ -153,7 +153,7 @@ export const ExhibitionPage = (props) => {
 
 
     return !isPermissionGranted && (
-        <Unauthorized message="This exhibition is private" buttonText="View Public Exhibitions" 
+        <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
                 buttonDestination="/Exhibitions" />
     ) || isPermissionGranted && (
         <Box 
