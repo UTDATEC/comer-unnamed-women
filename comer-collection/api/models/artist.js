@@ -34,11 +34,17 @@ module.exports = (db) => {
         },
         website: {
             type: Sequelize.TEXT('tiny'),
-            field: "artist_website"
+            field: "artist_website",
+            set(value) {
+                this.setDataValue('website', Boolean(value) ? value : null);
+            }
         },
         notes: {
             type: Sequelize.TEXT('tiny'),
-            field: "artist_notes"
+            field: "artist_notes",
+            set(value) {
+                this.setDataValue('notes', Boolean(value) ? value : null);
+            }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
