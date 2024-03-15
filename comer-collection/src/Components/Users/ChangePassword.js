@@ -4,6 +4,8 @@ import { Box, Button, Divider, Paper, Stack, TextField, Typography } from '@mui/
 import axios from 'axios';
 import { useAppUser } from '../App/AppUser';
 import { useTitle } from '../App/AppTitle';
+import { useSnackbar } from '../App/AppSnackbar';
+import { sendAuthenticatedRequest } from './Tools/HelperMethods/APICalls';
 
 const ChangePassword = (props) => {
   
@@ -13,9 +15,12 @@ const ChangePassword = (props) => {
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [error, setError] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(true);
 
-  const [appUser, setAppUser] = useAppUser();
+  const [appUser, setAppUser, initializeAppUser] = useAppUser();
 
+  const showSnackbar = useSnackbar();
+  
   const navigate = useNavigate();
   const setTitleText = useTitle();
 
@@ -23,31 +28,17 @@ const ChangePassword = (props) => {
   //Api call here
   const handleChangePassword = async (event) => {
     event.preventDefault();
+    setSubmitEnabled(false);
 
     try {
-      const response = await axios.put(`${process.env.REACT_APP_API_HOST}/api/account/changepassword`, { oldPassword, newPassword }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      const response = await sendAuthenticatedRequest("PUT", `/api/account/changepassword`, { oldPassword, newPassword });
   
-      if(response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      if(response.token) {
+        localStorage.setItem('token', response.token);
   
-        const profileResponse = await fetch(`${process.env.REACT_APP_API_HOST}/api/account/profile`, {
-          headers: {
-            Authorization: `Bearer ${response.data.token}`
-          }
-        })
-        if(profileResponse.status == 200) {
-          let profileResponseJson = await profileResponse.json();
-          setAppUser(profileResponseJson.data);
-          navigate('/Account');
-        }
-        else {
-          throw new Error("Could not retrieve user profile after password change");
-        }
-  
+        initializeAppUser();
+        navigate('/Account');
+        showSnackbar("Password changed", "success")
         
       }
       else {
@@ -58,6 +49,7 @@ const ChangePassword = (props) => {
       setNewPassword("");
       setNewPasswordConfirm("");
       setError(true);
+      setSubmitEnabled(true)
     }
     
   };
@@ -119,11 +111,11 @@ const ChangePassword = (props) => {
             <Button type="submit" 
               variant="contained" 
               sx={{minWidth: "400px"}} 
-              disabled={!(oldPassword && newPassword && newPassword == newPasswordConfirm)}
+              disabled={!(submitEnabled && oldPassword && newPassword && newPassword == newPasswordConfirm)}
             >
               <Typography variant="body1">Change Password</Typography>
             </Button>
-            {!appUser.pw_change_required && (<Button onClick={() => {
+            {!appUser.pw_change_required && (<Button disabled={!submitEnabled} onClick={() => {
               navigate('/Account/Profile')
             }} 
               variant="outlined" 
