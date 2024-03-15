@@ -87,7 +87,7 @@ module.exports = (db) => {
         tableName: "comer_images",
         defaultScope: {
             attributes: {
-                exclude: ['url']
+                exclude: ['url', 'thumbnailUrl']
             }
         }
     });
