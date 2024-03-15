@@ -15,9 +15,9 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
 
   const editDialogFieldRefs = useRef([]);
 
+  editDialogFieldRefs.current = [];
 
   const editDialogEntryFields = useMemo(() => {
-    editDialogFieldRefs.current = [];
     return (
       editDialogFieldDefinitions.map((f) => {
         return (
