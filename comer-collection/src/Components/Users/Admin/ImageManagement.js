@@ -272,6 +272,7 @@ const ImageManagement = (props) => {
     } catch (error) {
 
       showSnackbar(`Error editing for artist`, "error");
+      throw "Error editing artist"
     }
   }
 
