@@ -29,7 +29,7 @@ const Login = () => {
   
       if(response.token) {
         localStorage.setItem('token', response.token);
-        const profileResponse = await sendAuthenticatedRequest("GET", "/api/account/profile")
+        const profileResponse = await sendAuthenticatedRequest("GET", "/api/user/profile")
         setAppUser(profileResponse.data);
         navigate('/Account');
       }

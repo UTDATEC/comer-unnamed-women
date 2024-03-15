@@ -136,7 +136,7 @@ const ImageManagement = (props) => {
 
   const fetchArtists = async () => {
     try {
-      const artistData = await sendAuthenticatedRequest("GET", "/api/artists");
+      const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
       setArtists(artistData.data);
     } catch (error) {
       return;
@@ -232,7 +232,7 @@ const ImageManagement = (props) => {
   const handleCreateArtist = async(newArtist) => {
     try {
       let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
-      await sendAuthenticatedRequest("POST", `/api/artists/`, filteredArtist);
+      await sendAuthenticatedRequest("POST", `/api/admin/artists/`, filteredArtist);
       fetchArtists();
 
       showSnackbar(`Artist created`, "success");
@@ -263,7 +263,7 @@ const ImageManagement = (props) => {
   const handleEditArtist = async(artistId, updateFields) => {
     try {
       let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
-      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}`, filteredartist);
+      await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}`, filteredartist);
       fetchArtists();
 
       setArtistEditDialogIsOpen(false);
@@ -296,7 +296,7 @@ const ImageManagement = (props) => {
 
   const handleDeleteArtist = async(artistId) => {
     try {
-      await sendAuthenticatedRequest("DELETE", `/api/artists/${artistId}`);
+      await sendAuthenticatedRequest("DELETE", `/api/admin/artists/${artistId}`);
       fetchArtists();
 
       setArtistDeleteDialogIsOpen(false);
@@ -373,7 +373,7 @@ const ImageManagement = (props) => {
 
   const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/assign`, {
+      await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}/images/assign`, {
         images: imageIds
       });
       showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success")
@@ -386,7 +386,7 @@ const ImageManagement = (props) => {
 
   const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/artists/${artistId}/images/unassign`, {
+      await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}/images/unassign`, {
         images: imageIds
       });
       showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success")

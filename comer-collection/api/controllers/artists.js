@@ -24,17 +24,11 @@ const listArtists = async (req, res) => {
 };
 
 const createArtist = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            if(req.body.id)
-                throw new Error("Artist id should not be included when creating an Artist");
-            const artistData = convertEmptyFieldsToNullFields(req.body);
-            const newArtist = await Artist.create(artistData);
-            res.status(201).json({ data: newArtist });
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    if(req.body.id)
+        throw new Error("Artist id should not be included when creating an Artist");
+    const artistData = convertEmptyFieldsToNullFields(req.body);
+    const newArtist = await Artist.create(artistData);
+    res.status(201).json({ data: newArtist });
 };
 
 const getArtist = async (req, res, next) => {

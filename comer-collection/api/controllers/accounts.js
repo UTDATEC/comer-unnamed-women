@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
-const { User, Course, Exhibition } = require('../sequelize')
+const { User, Course, Exhibition, sequelize } = require('../sequelize')
 const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
 const { canUserCreateExhibition } = require('./users.js');
 
@@ -29,12 +29,13 @@ const signIn = async(req, res, next) => {
             });
             return true;
         } else {
+            console.log(match, user.is_active);
             await next(createError(401));
             return false;
         }
 
     } catch(e) {
-        await next(createError(400, {debugMessage: e.message}));
+        await next(createError(400, {debugMessage: e.message + "\n" + e.stack}));
         return false;
     }
 };
@@ -83,19 +84,15 @@ const changePassword = async(req, res, next) => {
 };
 
 const getCurrentUser = async(req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        try {
-            const user = await User.findByPk(user_id, {
-                include: [Course, Exhibition]
-            });
-            const dataToSend = {...user.toJSON(),
-                can_create_exhibition: canUserCreateExhibition(user.toJSON())
-            }
-            res.status(200).json({ data: dataToSend });
-        } catch(e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    }, false);
+    console.log("started getCurrentUser")
+    const { app_user } = req;
+    const dataToSend = {...app_user.toJSON(),
+        can_create_exhibition: canUserCreateExhibition(app_user.toJSON())
+    }
+    dataToSend.Courses = await app_user.getCourses();
+    dataToSend.Exhibitions = await app_user.getExhibitions();
+    res.status(200).json({ data: dataToSend });
+    console.log("reached the end of getCurrentUser")
 }
 
 module.exports = { changePassword, signIn, getCurrentUser }
