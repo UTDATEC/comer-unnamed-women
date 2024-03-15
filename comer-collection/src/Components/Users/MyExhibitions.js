@@ -38,7 +38,6 @@ const MyExhibitions = (props) => {
   useEffect(() => {
     setSelectedNavItem("My Exhibitions");
     setTitleText("My Exhibitions")
-    initializeAppUser();
   }, [])
 
   const theme = useTheme();

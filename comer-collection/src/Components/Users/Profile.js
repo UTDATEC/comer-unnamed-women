@@ -27,20 +27,9 @@ const Profile = (props) => {
   const theme = useTheme();
   const setTitleText = useTitle();
 
-  const [myCourses, setMyCourses] = useState([]);
-  const fetchMyCourses = async() => {
-    try {
-      const response = await sendAuthenticatedRequest("GET", `/api/account/courses`);
-      setMyCourses(response.data);
-    } catch(e) {
-      console.log(`Error fetching courses: ${e.message}`);
-    }
-  }
-
   useEffect(() => {
     setSelectedNavItem("Profile");
     setTitleText("Profile");
-    fetchMyCourses();
   }, [])
 
 
@@ -218,8 +207,8 @@ const Profile = (props) => {
         </Stack>
         <DataTable sx={{overflow: "scroll"}}
           nonEmptyHeight="350px"
-          items={myCourses}
-          visibleItems={myCourses}
+          items={appUser.Courses}
+          visibleItems={appUser.Courses}
           tableFields={courseTableFields}
           NoContentIcon={SchoolIcon}
           emptyMinHeight="400px"
