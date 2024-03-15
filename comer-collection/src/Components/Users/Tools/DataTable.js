@@ -165,7 +165,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
                 <React.Fragment key={tf.columnDescription}>
                   <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                      <Typography variant="h6">{tf.generateTableHeaderCell ? tf.generateTableHeaderCell() : tf.columnDescription}</Typography>
+                      <Typography variant="h6">{tf.columnDescription}</Typography>
                       {tf.generateSortableValue && (
                         <ColumnSortButton columnName={tf.columnDescription} {...{sortAscending, setSortAscending, sortColumn, setSortColumn}} />
                       )}
