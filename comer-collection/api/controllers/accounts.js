@@ -1,9 +1,8 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
-const { User, Course, Exhibition, sequelize } = require('../sequelize')
-const { userOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash } = require("../security.js");
-const { canUserCreateExhibition } = require('./users.js');
+const { User } = require('../sequelize')
+const { userOperation, generateTokenDataFromUserInstance, verifyPasswordWithHash } = require("../security.js");
 
 const signIn = async(req, res, next) => {
     try {
