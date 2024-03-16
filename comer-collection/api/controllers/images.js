@@ -103,27 +103,6 @@ const getImage = async (req, res, next) => {
     })
 };
 
-// const updateImage = async (req, res, next) => {
-//     adminOperation(req, res, next, async () => {
-//         try {
-//             const image = await Image.findByPk(req.params.imageId);
-//             if(image) {
-//                 console.log(req.body.id, req.params.imageId);
-//                 if(req.body.id && req.body.id !== req.params.imageId) {
-//                     throw new Error("Image id in request body does not match Image id in URL");
-//                 }
-//                 const imageData = convertEmptyFieldsToNullFields(req.body);
-//                 await image.update(imageData);
-//                 res.status(200).json({ data: imageData });
-//             }
-//             else
-//                 next(createError(404));
-//         }
-//         catch(e) {
-//             next(createError(400, {debugMessage: e.message}));
-//         }
-//     })
-// };
 
 const updateImage = async (req, res, next) => {
     await updateItem(req, res, next, Image, req.params.imageId);
@@ -253,9 +232,6 @@ const unassignTagFromImages = async (req, res, next) => {
         }
     })
 }
-
-
-
 
 
 
