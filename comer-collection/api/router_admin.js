@@ -5,7 +5,7 @@ const router = express.Router();
 const { listArtists, createArtist, updateArtist, deleteArtist, getArtist } = require('./controllers/artists.js');
 const { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, promoteUser, demoteUser, getUser, resetUserPassword } = require('./controllers/users.js');
 const { deleteCourse, updateCourse, createCourse, listCourses, getCourse } = require('./controllers/courses.js');
-const { deleteImage, updateImage } = require('./controllers/images.js');
+const { deleteImage, updateImage, listImages, getImage, createImage } = require('./controllers/images.js');
 const { deleteTag, listTags, getTag, createTag, updateTag } = require('./controllers/tags.js');
 const { assignImageTags, unassignImageTags } = require('./controllers/imagetags.js');
 const { assignImageArtists, unassignImageArtists } = require('./controllers/imageartists.js');
@@ -45,6 +45,9 @@ router.delete("/courses/:courseId", deleteCourse);
 
 
 // Handle images
+router.get("/images", listImages);
+router.get("/images/:imageId", getImage)
+router.post("/images", createImage);
 router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
 

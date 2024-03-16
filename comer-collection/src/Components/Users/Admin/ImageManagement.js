@@ -82,11 +82,9 @@ const ImageManagement = (props) => {
   const [sortAscending, setSortAscending] = useState(true);
 
 
-  const { selectedNavItem, setSelectedNavItem } = props;
+  const { setSelectedNavItem } = props;
   const showSnackbar = useSnackbar();
-  const theme = useTheme();
   const [appUser, setAppUser] = useAppUser();
-  const navigate = useNavigate();
   const setTitleText = useTitle();
   
 
@@ -109,7 +107,7 @@ const ImageManagement = (props) => {
 
   const fetchImages = async () => {
     try {
-      const imageData = await sendAuthenticatedRequest("GET", "/api/images");
+      const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
       setImages(imageData.data);
 
       setTimeout(() => {
@@ -161,7 +159,7 @@ const ImageManagement = (props) => {
     for(const [i, newImageData] of newImageArray.entries()) {
       try {
         let filteredImage = filterItemFields(imageFieldDefinitions, newImageData);
-        await sendAuthenticatedRequest("POST", `/api/images`, filteredImage);
+        await sendAuthenticatedRequest("POST", `/api/admin/images`, filteredImage);
 
         imagesCreated++;
   
@@ -331,48 +329,6 @@ const ImageManagement = (props) => {
 
 
 
-  const handleManageArtistsForImage = async(operation, imageId, artistIds) => {
-    let artistsUpdated = 0;
-    let artistIndicesWithErrors = []
-    for(const [i, artistId] of artistIds.entries()) {
-      try {
-        switch (operation) {
-          case "assign":
-            await sendAuthenticatedRequest("PUT", `/api/images/${imageId}/artists/${artistId}`, null);
-            break;
-          case "unassign":
-            await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}/artists/${artistId}`);
-            break;
-          default:
-            throw Error("Operation must be 'assign' or 'unassign'");
-        }
-        
-
-        artistsUpdated++;
-  
-      } catch (error) {
-        artistIndicesWithErrors.push(i);
-      }
-    }
-    await fetchImages();
-
-    if(artistsUpdated == artistIds.length) {
-      showSnackbar(`Successfully ${operation}ed ${artistsUpdated} artists for image ${imageId}`, "success")
-
-    } else if(artistsUpdated < artistIds.length) {
-
-      if(artistsUpdated > 0) {
-        showSnackbar(`${artistsUpdated} of ${artistIds.length} ${artistIds.length == 1 ? "artist" : "artists"} ${operation}ed for image ${imageId}`, "warning");
-      }
-      else {
-        showSnackbar(`Failed to ${operation} ${artistIds.length} ${artistIds.length == 1 ? "artist" : "artists"} for image ${imageId}`, "error");
-      }
-
-    }
-  }
-
-
-
   const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/imageartists/assign`, {
@@ -498,9 +454,8 @@ const ImageManagement = (props) => {
       generateTableCell: (artist) => (
         <Stack direction="row">
           <IconButton
-            onClick={(e) => {
+            onClick={() => {
               setArtistEditDialogItem(artist);
-              const filteredArtist = filterItemFields(artistFieldDefinitions, artist);
               setArtistEditDialogIsOpen(true);
             }}
           >
@@ -508,7 +463,7 @@ const ImageManagement = (props) => {
           </IconButton>
           <IconButton 
             disabled={artist.Images.length} 
-            onClick={(e) => {
+            onClick={() => {
               setArtistDeleteDialogItem(artist);
               setArtistDeleteDialogIsOpen(true);
             }}
@@ -565,7 +520,7 @@ const ImageManagement = (props) => {
       generateTableCell: (tag) => (
         <Stack direction="row">
           <IconButton
-            onClick={(e) => {
+            onClick={() => {
               setTagEditDialogItem(tag);
               setTagEditDialogIsOpen(true);
             }}
@@ -574,7 +529,7 @@ const ImageManagement = (props) => {
           </IconButton>
           <IconButton 
             disabled={tag.Images.length} 
-            onClick={(e) => {
+            onClick={() => {
               setTagDeleteDialogItem(tag);
               setTagDeleteDialogIsOpen(true);
             }}
@@ -712,17 +667,16 @@ const ImageManagement = (props) => {
       generateTableCell: (image) => (
         <Stack direction="row">
           <IconButton 
-            onClick={(e) => {
+            onClick={() => {
               setEditDialogImage(image);
-              const filteredImage = filterItemFields(imageFieldDefinitions, image);
               setEditDialogIsOpen(true)
             }}
           >
             <EditIcon />
           </IconButton>
           <IconButton 
-            // disabled={!image.is_deletable} 
-            onClick={(e) => {
+            disabled={image.Exhibitions.length} 
+            onClick={() => {
               setDeleteDialogImage(image);
               setDeleteDialogIsOpen(true);
             }}

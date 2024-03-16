@@ -1,17 +1,13 @@
 const createError = require('http-errors');
-const { Image, Artist, Tag, Exhibition, sequelize } = require("../sequelize.js");
+const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
 const { adminOperation } = require("../security.js");
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
-const https = require('https');
 const path = require('path');
-const { deleteItem, updateItem } = require('./items.js');
+const { deleteItem, updateItem, listItems, getItem, createItem } = require('./items.js');
 
-const isImageDeletable = (imageJSON) => {
-    return Boolean(imageJSON.Exhibitions?.length == 0);
-}
 
-const listImagesPublic = async (req, res, next) => {
+const listImagesPublic = async (req, res) => {
     const images = await Image.findAll({
         include: [Artist, Tag]
     });
@@ -19,35 +15,13 @@ const listImagesPublic = async (req, res, next) => {
 };
 
 const listImages = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const images = Array.from(await Image.findAll({
-            include: [Artist, Tag, Exhibition],
-            attributes: {
-                include: ['url']
-            }
-        })).map((i) => {
-            const imageJSON = i.toJSON();
-            return {
-                ...imageJSON, 
-                is_deletable: isImageDeletable(imageJSON)
-            };
-        })
-        res.status(200).json({ data: images });
-    })
+    await listItems(req, res, next, Image.scope('admin'), [
+        Artist, Tag, Exhibition
+    ]);
 };
 
 const createImage = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            if(req.body.id)
-                throw new Error("Image id should not be included when creating an Image");
-            const imageData = convertEmptyFieldsToNullFields(req.body);
-            const newImage = await Image.create(imageData);
-            res.status(201).json({ data: newImage });
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await createItem(req, res, next, Image);
 };
 
 const getImagePublic = async (req, res, next) => {
@@ -85,22 +59,9 @@ const downloadImagePublic = async(req, res, next) => {
 }
 
 const getImage = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: [Artist, Tag, Exhibition]
-        });
-        if(image) {
-            const imageJSON = image.toJSON();
-            res.status(200).json({ 
-                data: {
-                    ...imageJSON, 
-                    is_deletable: isImageDeletable(imageJSON)
-                } 
-            });
-        }
-        else
-            next(createError(404));
-    })
+    await getItem(req, res, next, Image.scope('admin'), [
+        Artist, Tag, Exhibition
+    ], req.params.imageId);
 };
 
 

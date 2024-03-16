@@ -9,23 +9,18 @@ bouncer.blocked = function(req, res, next, remaining) {
 }
 
 
-const { listImages, createImage, getImage, listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
+const { listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
 const { listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 // Read images
-router.get("/images", listImages);
-router.get("/images/:imageId", getImage)
 
 router.get("/collection/images", listImagesPublic);
 router.get("/collection/images/:imageId", getImagePublic);
 router.get("/exhibitions/public", listPublicExhibitions);
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);
-
-// Modify images
-router.post("/images", createImage);
 
 
 // Read exhibitions (admin)
