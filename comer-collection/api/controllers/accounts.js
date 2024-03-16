@@ -89,8 +89,6 @@ const getCurrentUser = async(req, res, next) => {
     const dataToSend = {...app_user.toJSON(),
         can_create_exhibition: canUserCreateExhibition(app_user.toJSON())
     }
-    dataToSend.Courses = await app_user.getCourses();
-    dataToSend.Exhibitions = await app_user.getExhibitions();
     res.status(200).json({ data: dataToSend });
     console.log("reached the end of getCurrentUser")
 }
