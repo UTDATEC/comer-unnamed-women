@@ -8,6 +8,9 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
         }
         const item = await model.findByPk(itemId, { include })
+        if(!item) {
+            next(createError(404));
+        }
         let i = item.toJSON();
         for(let f in itemFunctions) {
             i[f] = itemFunctions[f](i);
