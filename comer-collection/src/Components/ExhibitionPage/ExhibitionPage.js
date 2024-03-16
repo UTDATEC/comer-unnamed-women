@@ -32,7 +32,7 @@ export const ExhibitionPage = (props) => {
     const [editModeActive, setEditModeActive] = useState(false);
 
     const loadCatalog = async() => {
-        const catalogData = await sendAuthenticatedRequest("GET", "/api/collection/images");
+        const catalogData = await sendAuthenticatedRequest("GET", "/api/public/images");
         setGlobalImageCatalog(catalogData.data);
     }
 

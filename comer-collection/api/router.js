@@ -9,14 +9,11 @@ bouncer.blocked = function(req, res, next, remaining) {
 }
 
 
-const { listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
+const { downloadImagePublic } = require("./controllers/images.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
 const { saveExhibition, loadExhibition, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
-// Read images
 
-router.get("/collection/images", listImagesPublic);
-router.get("/collection/images/:imageId", getImagePublic);
 router.get("/exhibitions/public", listPublicExhibitions);
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);

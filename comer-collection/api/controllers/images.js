@@ -8,10 +8,9 @@ const { deleteItem, updateItem, listItems, getItem, createItem } = require('./it
 
 
 const listImagesPublic = async (req, res) => {
-    const images = await Image.findAll({
-        include: [Artist, Tag]
-    });
-    res.status(200).json({ data: images });
+    await listItems(req, res, next, Image, [
+        Artist, Tag
+    ]);
 };
 
 const listImages = async (req, res, next) => {
@@ -25,13 +24,9 @@ const createImage = async (req, res, next) => {
 };
 
 const getImagePublic = async (req, res, next) => {
-    const image = await Image.findByPk(req.params.imageId, {
-        include: [Artist, Tag]
-    });
-    if(image)
-        res.status(200).json({ data: image });
-    else
-        next(createError(404));
+    await getItem(req, res, next, Image, [
+        Artist, Tag
+    ], req.params.imageId);
 };
 
 const downloadImagePublic = async(req, res, next) => {

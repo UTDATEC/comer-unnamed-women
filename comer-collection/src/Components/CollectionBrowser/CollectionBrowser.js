@@ -92,7 +92,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
     const fetchImageData = async() => {
         try {
-            const imageData = await sendAuthenticatedRequest("GET", '/api/collection/images');
+            const imageData = await sendAuthenticatedRequest("GET", '/api/public/images');
             setImages(imageData.data);
       
         } catch (error) {

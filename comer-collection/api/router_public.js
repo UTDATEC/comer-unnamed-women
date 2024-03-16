@@ -4,6 +4,12 @@ const router = express.Router();
 
 const { listArtists, getArtist } = require("./controllers/artists.js");
 const { listTags, getTag } = require('./controllers/tags.js');
+const { listImagesPublic, getImagePublic } = require('./controllers/images.js');
+
+
+// Read images
+router.get("/images", listImagesPublic);
+router.get("/images/:imageId", getImagePublic);
 
 
 // Read artists
