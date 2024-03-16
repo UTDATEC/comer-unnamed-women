@@ -42,7 +42,6 @@ router.put("/account/signin", bouncer.block, (req, res, next) => {
     });
 });
 router.put("/account/changepassword", changePassword);
-// router.get("/account/profile", getCurrentUser);
 
 router.post("/account/exhibitions", createExhibition);
 router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
