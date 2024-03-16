@@ -87,7 +87,7 @@ const UserManagement = (props) => {
       const userData = await sendAuthenticatedRequest("GET", "/api/admin/users")
       setUsers(userData.data);
 
-      const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
+      const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
       setCourses(courseData.data);
 
       setTimeout(() => {
@@ -143,79 +143,35 @@ const UserManagement = (props) => {
 
 
 
+  const handleAssignUsersToCourse = useCallback(async(courseId, userIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/assign`, {
+        users: userIds,
+        courses: [courseId]
+      });
+      showSnackbar(`Successfully enrolled`, "success")
 
-
-  const handleAssignUsersToCourse = async(courseId, userIds) => {
-    let usersEnrolled = 0;
-    let userIndicesWithErrors = []
-    for(const [i, userId] of userIds.entries()) {
-      try {
-        await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}/users/${userId}`);
-
-        usersEnrolled++;
-
-      } catch (error) {
-        userIndicesWithErrors.push(i);
-      }
+    } catch (error) {
+      showSnackbar(`Failed to enroll`, "error")
     }
-    fetchData();
+    await fetchData();
+  }, [showSnackbar]);
 
-    if(usersEnrolled == userIds.length) {
-      setDialogIsOpen(false);
 
-      showSnackbar(`Successfully enrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
+  
+  const handleUnassignUsersFromCourse = useCallback(async(courseId, userIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/unassign`, {
+        users: userIds,
+        courses: [courseId]
+      });
+      showSnackbar(`Successfully enrolled`, "success")
 
-    } else if(usersEnrolled < userIds.length) {
-
-      if(usersEnrolled > 0) {
-        showSnackbar(`Enrolled ${usersEnrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "warning")
-      }
-      else {
-        showSnackbar(`Failed to enroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "error")
-      }
-
+    } catch (error) {
+      showSnackbar(`Failed to enroll`, "error")
     }
-
-
-  }
-
-  const handleUnassignUsersFromCourse = async(courseId, userIds) => {
-    let usersUnenrolled = 0;
-    let userIndicesWithErrors = []
-    for(const [i, userId] of userIds.entries()) {
-      try {
-        await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}/users/${userId}`)
-
-        usersUnenrolled++;
-
-      } catch (error) {
-        userIndicesWithErrors.push(i);
-      }
-    }
-    fetchData();
-
-    if(usersUnenrolled == userIds.length) {
-      setDialogIsOpen(false);
-
-      showSnackbar(`Successfully unenrolled ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "success")
-
-    } else if(usersUnenrolled < userIds.length) {
-
-      if(usersUnenrolled > 0) {
-        showSnackbar(`Unenrolled ${usersUnenrolled} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "warning")
-      }
-      else {
-        showSnackbar(`Failed to unenroll ${userIds.length} ${userIds.length == 1 ? "user" : "users"} from course ${courseId}`, "error")
-      }
-
-    }
-
-
-  }
-
-
-
-
+    await fetchData();
+  }, [showSnackbar]);
 
 
 

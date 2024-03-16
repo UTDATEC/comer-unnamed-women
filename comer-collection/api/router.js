@@ -28,11 +28,6 @@ router.get("/collection/images/:imageId/download", downloadImagePublic);
 router.post("/images", createImage);
 
 
-// Modify user/course associations
-router.put("/courses/:courseId/users/:userId", assignUserToCourse);
-router.delete("/courses/:courseId/users/:userId", unassignUserFromCourse);
-
-
 // Read exhibitions (admin)
 router.get("/exhibitions", listExhibitions)
 router.get("/exhibitions/:exhibitionId", getExhibition)

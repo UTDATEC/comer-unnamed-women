@@ -178,34 +178,36 @@ const CourseManagement = (props) => {
   }
 
 
-  const handleAssignCoursesToUser = async(userId, courseIds) => {
+  const handleAssignCoursesToUser = useCallback(async(userId, courseIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", courseIds.map((c) => `/api/courses/${c}/users/${userId}`));
-      showSnackbar(`Successfully enrolled in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
-      fetchData();
+      await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/assign`, {
+        courses: courseIds,
+        users: [userId]
+      });
+      showSnackbar(`Successfully enrolled`, "success");
+      
     } catch (error) {
-      console.log("error assigning courses for user", error.message);
-      showSnackbar(`Failed to enroll in ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
+      showSnackbar(`Failed to enroll`, "error");
     }
-  }
-
+    await fetchData();
+  }, [showSnackbar]);
 
   
-  const handleUnassignCoursesFromUser = async(userId, courseIds) => {
-    try {
-      await sendAuthenticatedRequest("DELETE", courseIds.map((c) => `/api/courses/${c}/users/${userId}`));
-      showSnackbar(`Successfully unenrolled from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "success");
-      fetchData();
-    } catch (error) {
-      console.log("error unassigning courses for user", error.message);
-      showSnackbar(`Failed to unenroll from ${courseIds.length} ${courseIds.length == 1 ? "course" : "courses"}`, "error");
-    }
-  }
-
-
   
-
-
+  const handleUnassignCoursesFromUser = useCallback(async(userId, courseIds) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/unassign`, {
+        courses: courseIds,
+        users: [userId]
+      });
+      showSnackbar(`Successfully unenrolled`, "success");
+      
+    } catch (error) {
+      showSnackbar(`Failed to unenroll`, "error");
+    }
+    await fetchData();
+  }, [showSnackbar]);
+  
 
   
   const handleCourseEdit = async(courseId, updateFields) => {
