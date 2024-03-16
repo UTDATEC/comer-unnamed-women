@@ -36,7 +36,7 @@ const updateUser = async (req, res, next) => {
 
 const deactivateUser = async (req, res, next) => {
     if(req.params.userId == req.app_user.id) {
-        next(createError(401, {debugMessage: "Admin cannot deactivate self"}))
+        next(createError(403, {debugMessage: "Admin cannot deactivate self"}))
     }
     req.body = {is_active: false};
     await updateItem(req, res, next, User, req.params.userId, ['is_active'])
@@ -44,7 +44,7 @@ const deactivateUser = async (req, res, next) => {
 
 const activateUser = async (req, res, next) => {
     if(req.params.userId == req.app_user.id) {
-        next(createError(401, {debugMessage: "Admin cannot activate self"}))
+        next(createError(403, {debugMessage: "Admin cannot activate self"}))
     }
     req.body = {is_active: true};
     await updateItem(req, res, next, User, req.params.userId, ['is_active'])
@@ -52,7 +52,7 @@ const activateUser = async (req, res, next) => {
 
 const promoteUser = async (req, res, next) => {
     if(req.params.userId == req.app_user.id) {
-        next(createError(401, {debugMessage: "Admin cannot promote self"}))
+        next(createError(403, {debugMessage: "Admin cannot promote self"}))
     }
     req.body = {is_admin: true};
     await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
@@ -60,7 +60,7 @@ const promoteUser = async (req, res, next) => {
 
 const demoteUser = async (req, res, next) => {
     if(req.params.userId == req.app_user.id) {
-        next(createError(401, {debugMessage: "Admin cannot demote self"}))
+        next(createError(403, {debugMessage: "Admin cannot demote self"}))
     }
     req.body = {is_admin: false};
     await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
