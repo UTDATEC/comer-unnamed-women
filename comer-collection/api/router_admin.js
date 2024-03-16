@@ -10,6 +10,7 @@ const { deleteTag, listTags, getTag, createTag, updateTag } = require('./control
 const { assignImageTags, unassignImageTags } = require('./controllers/imagetags.js');
 const { assignImageArtists, unassignImageArtists } = require('./controllers/imageartists.js');
 const { assignUserCourses, unassignUserCourses } = require('./controllers/enrollments.js');
+const { listExhibitions, getExhibition } = require('./controllers/exhibitions.js');
 
 
 // Handle artists
@@ -73,6 +74,12 @@ router.put("/imageartists/unassign", unassignImageArtists);
 // Handle user/course assignments
 router.put("/enrollments/assign", assignUserCourses);
 router.put("/enrollments/unassign", unassignUserCourses);
+
+
+// Handle exhibitions
+router.get("/exhibitions", listExhibitions)
+router.get("/exhibitions/:exhibitionId", getExhibition)
+
 
 
 module.exports = router;

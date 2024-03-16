@@ -69,7 +69,7 @@ const ExhibitionManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const exhibitionData = await sendAuthenticatedRequest("GET", "/api/exhibitions")
+      const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions")
       setExhibitions(exhibitionData.data);
 
       setSelectedExhibitions(selectedExhibitions.filter((su) => (

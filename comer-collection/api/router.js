@@ -12,7 +12,7 @@ bouncer.blocked = function(req, res, next, remaining) {
 const { listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
 const { listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
-const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
+const { listExhibitions, getExhibition, saveExhibition, loadExhibition, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 // Read images
 
@@ -22,10 +22,6 @@ router.get("/exhibitions/public", listPublicExhibitions);
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);
 
-
-// Read exhibitions (admin)
-router.get("/exhibitions", listExhibitions)
-router.get("/exhibitions/:exhibitionId", getExhibition)
 
 // Modify exhibitions (admin)
 router.put("/exhibitions/:exhibitionId", adminEditExhibition);
