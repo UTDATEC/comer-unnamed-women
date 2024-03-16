@@ -35,7 +35,6 @@ router.put("/account/signin", bouncer.block, (req, res, next) => {
 });
 router.put("/account/changepassword", changePassword);
 
-router.post("/account/exhibitions", createExhibition);
 router.put("/account/exhibitions/:exhibitionId", ownerEditExhibition);
 router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
 

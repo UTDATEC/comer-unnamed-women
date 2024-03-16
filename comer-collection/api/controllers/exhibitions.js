@@ -4,7 +4,7 @@ const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
-const { listItems, getItem } = require('./items.js');
+const { listItems, getItem, createItem } = require('./items.js');
 
 
 const listExhibitions = async (req, res, next) => {
@@ -41,31 +41,21 @@ const listPublicExhibitions = async (req, res, next) => {
 }
 
 const createExhibition = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        try {
-            const user = await User.findByPk(user_id, {
-                include: [Course, Exhibition]
-            });
-            if(req.body.id)
-                throw new Error("Image id should not be included when creating an Image");
-            else if(!canUserCreateExhibition(user.toJSON())) {
-                next(createError(403, {debugMessage: "User is not eligible to create an exhibition."}))
-            } else {
-                const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
-                const now = Date.now()
-                const newExhibition = await Exhibition.create({
-                    title: exhibitionFields.title,
-                    privacy: exhibitionFields.privacy,
-                    date_created: now,
-                    date_modified: now
-                })
-                newExhibition.setUser(user);
-                res.status(201).json({ data: newExhibition });
-            }
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    if(!canUserCreateExhibition(req.app_user)) {
+        return next(createError(403));
+    }
+    const now = Date.now();
+    req.body = {
+        ...req.body,
+        date_created: now,
+        date_modified: now,
+        exhibition_owner: req.app_user.id
+    }
+    await createItem(req, res, next, Exhibition, [
+        'title', 'privacy', 
+        'date_created', 'date_modified', 
+        'exhibition_owner'
+    ])
 }
 
 const getExhibition = async (req, res, next) => {

@@ -47,7 +47,7 @@ const MyExhibitions = (props) => {
 
   const handleExhibitionCreate = async(title, privacy) => {
     try {
-      await sendAuthenticatedRequest("POST", "/api/account/exhibitions", {title, privacy});
+      await sendAuthenticatedRequest("POST", "/api/user/exhibitions", {title, privacy});
       setDialogIsOpen(false);
       setDialogExhibitionId(null);
       setDialogExhibitionTitle("");
