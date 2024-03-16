@@ -15,29 +15,9 @@ const listExhibitions = async (req, res, next) => {
 }
 
 const listPublicExhibitions = async (req, res, next) => {
-    try {
-        const publicExhibitions = Array.from(await Exhibition.findAll({
-            where: {
-                [Op.or]: [
-                    {privacy: "PUBLIC"},
-                    {privacy: "PUBLIC_ANONYMOUS"}
-                ]
-            }
-        }));
-        const response = [];
-        for(const ex of publicExhibitions) {
-            const {id, title, date_created, date_modified} = ex.toJSON();
-            const exhibitionItem = {id, title, date_created, date_modified}
-            if(ex.privacy == "PUBLIC") {
-                const owner = await ex.getUser();
-                exhibitionItem.curator = owner.full_name;
-            }
-            response.push(exhibitionItem);
-        }
-        res.status(200).json({data: response});
-    } catch(e) {
-        next(createError(500, {debugMessage: e.message}));
-    }
+    await listItems(req, res, next, Exhibition.scope('with_public_curators'), [], {
+        privacy: ["PUBLIC", "PUBLIC_ANONYMOUS"]
+    })
 }
 
 const createExhibition = async (req, res, next) => {

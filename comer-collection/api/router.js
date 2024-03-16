@@ -14,7 +14,6 @@ const { changePassword, signIn } = require("./controllers/accounts.js");
 const { saveExhibition, loadExhibition, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 
-router.get("/exhibitions/public", listPublicExhibitions);
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);
 

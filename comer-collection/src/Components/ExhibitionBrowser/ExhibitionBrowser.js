@@ -19,7 +19,7 @@ export const ExhibitionBrowser = () => {
 
     const fetchPublicExhibitionData = async() => {
         try {
-            const imageData = await sendAuthenticatedRequest("GET", '/api/exhibitions/public');
+            const imageData = await sendAuthenticatedRequest("GET", '/api/public/exhibitions');
             setExhibitions(imageData.data);
       
           } catch (error) {
