@@ -46,15 +46,6 @@ router.delete("/images/:imageId/tags/:tagId", unassignTagFromImage);
 router.put("/tags/:tagId/images/assign", assignTagToImages);
 router.put("/tags/:tagId/images/unassign", unassignTagFromImages);
 
-// Read artists
-// router.get("/artists", listArtists);
-// router.get("/artists/:artistId", getArtist);
-
-// Modify artists
-// router.post("/artists", createArtist);
-// router.put("/artists/:artistId", updateArtist);
-// router.delete("/artists/:artistId", deleteArtist);
-
 // Read tags
 router.get("/tags", listTags);
 router.get("/tags/:tagId", getTag);
