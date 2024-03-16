@@ -20,7 +20,7 @@ const apiRouterAdmin = require('./router_admin.js');
 
 global.__basedir = __dirname;
 
-const { User, sequelize } = require("./sequelize.js");
+const { User, sequelize, Course, Exhibition } = require("./sequelize.js");
 sequelize.sync({ alter: false }).then(() => {
   console.log(`Database & tables created! (unless table already existed)`);
 });
@@ -85,7 +85,9 @@ const requireAuthenticatedUser = async(req, res, next) => {
     const token = header.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findByPk(decoded.id);
+    const user = await User.findByPk(decoded.id, {
+      include: [Course, Exhibition]
+    });
 
     if (!user)
       throw new Error("User not found");
