@@ -4,7 +4,7 @@ const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
-const { listItems, getItem, createItem, updateItem } = require('./items.js');
+const { listItems, getItem, createItem, updateItem, deleteItem } = require('./items.js');
 
 
 const isAppUserExhibitionOwner = (app_user, exhibition_id) => {
@@ -64,21 +64,10 @@ const ownerEditExhibitionSettings = async (req, res, next) => {
 }
 
 const ownerDeleteExhibition = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        try {
-            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
-                include: [User]
-            })
-            if(exhibition.User.id != user_id) {
-                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
-            } else {
-                await exhibition.destroy();
-                res.sendStatus(204);
-            }
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+        return next(createError(403));
+    }
+    await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
 }
 
 

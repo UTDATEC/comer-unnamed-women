@@ -11,7 +11,7 @@ bouncer.blocked = function(req, res, next, remaining) {
 
 const { downloadImagePublic } = require("./controllers/images.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
-const { saveExhibition, loadExhibition, createExhibition, listPublicExhibitions, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
+const { saveExhibition, loadExhibition, adminEditExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 
 
@@ -34,7 +34,6 @@ router.put("/account/signin", bouncer.block, (req, res, next) => {
 });
 router.put("/account/changepassword", changePassword);
 
-router.delete("/account/exhibitions/:exhibitionId", ownerDeleteExhibition);
 
 router.get("/account/exhibitions/:exhibitionId/load", loadExhibition);
 router.get("/exhibitions/:exhibitionId/load", loadExhibitionAdmin);

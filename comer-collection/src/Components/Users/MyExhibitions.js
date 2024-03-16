@@ -79,7 +79,7 @@ const MyExhibitions = (props) => {
   
   const handleExhibitionDeleteByOwner = async(exhibitionId) => {
     try {
-      await sendAuthenticatedRequest("DELETE", `/api/account/exhibitions/${exhibitionId}`);
+      await sendAuthenticatedRequest("DELETE", `/api/user/exhibitions/${exhibitionId}`);
       setDeleteDialogIsOpen(false);
       setDeleteDialogExhibition(null);
       showSnackbar(`Exhibition deleted`, "success");
