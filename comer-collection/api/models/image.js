@@ -134,6 +134,13 @@ module.exports = (db) => {
             attributes: {
                 exclude: ['url', 'thumbnailUrl']
             }
+        },
+        scopes: {
+            admin: {
+                attributes: {
+                    include: ['url', 'thumbnailUrl']
+                }
+            }
         }
     });
 
