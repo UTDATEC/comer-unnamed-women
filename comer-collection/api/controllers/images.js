@@ -5,6 +5,7 @@ const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
 const https = require('https');
 const path = require('path');
+const { deleteItem, updateItem } = require('./items.js');
 
 const isImageDeletable = (imageJSON) => {
     return Boolean(imageJSON.Exhibitions?.length == 0);
@@ -102,46 +103,54 @@ const getImage = async (req, res, next) => {
     })
 };
 
+// const updateImage = async (req, res, next) => {
+//     adminOperation(req, res, next, async () => {
+//         try {
+//             const image = await Image.findByPk(req.params.imageId);
+//             if(image) {
+//                 console.log(req.body.id, req.params.imageId);
+//                 if(req.body.id && req.body.id !== req.params.imageId) {
+//                     throw new Error("Image id in request body does not match Image id in URL");
+//                 }
+//                 const imageData = convertEmptyFieldsToNullFields(req.body);
+//                 await image.update(imageData);
+//                 res.status(200).json({ data: imageData });
+//             }
+//             else
+//                 next(createError(404));
+//         }
+//         catch(e) {
+//             next(createError(400, {debugMessage: e.message}));
+//         }
+//     })
+// };
+
 const updateImage = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            const image = await Image.findByPk(req.params.imageId);
-            if(image) {
-                console.log(req.body.id, req.params.imageId);
-                if(req.body.id && req.body.id !== req.params.imageId) {
-                    throw new Error("Image id in request body does not match Image id in URL");
-                }
-                const imageData = convertEmptyFieldsToNullFields(req.body);
-                await image.update(imageData);
-                res.status(200).json({ data: imageData });
-            }
-            else
-                next(createError(404));
-        }
-        catch(e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
-};
+    await updateItem(req, res, next, Image, req.params.imageId);
+}
 
 const deleteImage = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const image = await Image.findByPk(req.params.imageId, {
-            include: [Exhibition]
-        });
-        if(image) {
-            if(!isImageDeletable(image.toJSON())) {
-                next(createError(422, {debugMessage: "Image is not eligible for deletion."}))
-            }
-            else {
-                await image.destroy();
-                res.sendStatus(204);
-            }
-        }
-        else
-            next(createError(404));
-    })
-};
+    await deleteItem(req, res, next, Image, req.params.imageId);
+}
+
+// const deleteImage = async (req, res, next) => {
+//     adminOperation(req, res, next, async () => {
+//         const image = await Image.findByPk(req.params.imageId, {
+//             include: [Exhibition]
+//         });
+//         if(image) {
+//             if(!isImageDeletable(image.toJSON())) {
+//                 next(createError(422, {debugMessage: "Image is not eligible for deletion."}))
+//             }
+//             else {
+//                 await image.destroy();
+//                 res.sendStatus(204);
+//             }
+//         }
+//         else
+//             next(createError(404));
+//     })
+// };
 
 const assignArtistToImage = async (req, res, next) => {
     adminOperation(req, res, next, async () => {

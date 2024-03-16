@@ -9,12 +9,9 @@ bouncer.blocked = function(req, res, next, remaining) {
 }
 
 
-const { listImages, createImage, getImage, updateImage, deleteImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, getTags, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic, assignTagToImages, unassignTagFromImages } = require("./controllers/images.js");
-const { listArtists, createArtist, getArtist, updateArtist, deleteArtist } = require("./controllers/artists.js");
-const { listTags, createTag, updateTag, deleteTag, getTag } = require("./controllers/tags.js");
-const { listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser } = require("./controllers/users.js");
-const { createCourse, getCourse, listCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
-const { changePassword, signIn, getCurrentUser } = require("./controllers/accounts.js");
+const { listImages, createImage, getImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic, assignTagToImages, unassignTagFromImages } = require("./controllers/images.js");
+const { assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
+const { changePassword, signIn } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 // Read images
@@ -29,8 +26,6 @@ router.get("/collection/images/:imageId/download", downloadImagePublic);
 
 // Modify images
 router.post("/images", createImage);
-router.put("/images/:imageId", updateImage);
-router.delete("/images/:imageId", deleteImage);
 
 // Modify image/artist associations
 router.put("/images/:imageId/artists/:artistId", assignArtistToImage);
@@ -45,38 +40,6 @@ router.delete("/images/:imageId/tags/:tagId", unassignTagFromImage);
 
 router.put("/tags/:tagId/images/assign", assignTagToImages);
 router.put("/tags/:tagId/images/unassign", unassignTagFromImages);
-
-// Read tags
-router.get("/tags", listTags);
-router.get("/tags/:tagId", getTag);
-
-// Modify tags
-router.post("/tags", createTag);
-router.put("/tags/:tagId", updateTag)
-router.delete("/tags/:tagId", deleteTag)
-
-// Read users (admin)
-router.get("/users", listUsers);
-router.get("/users/:userId", getUser);
-
-// Modify users
-router.post("/users", createUser);
-router.put("/users/:userId", updateUser);
-router.put("/users/:userId/deactivate", deactivateUser);
-router.put("/users/:userId/promote", promoteUser);
-router.put("/users/:userId/demote", demoteUser);
-router.put("/users/:userId/activate", activateUser);
-router.delete("/users/:userId", deleteUser);
-router.put("/users/:userId/resetpassword", resetUserPassword);
-
-// Read courses
-router.get("/courses", listCourses);
-router.get("/courses/:courseId", getCourse);
-
-// Modify courses
-router.post("/courses", createCourse);
-router.put("/courses/:courseId", updateCourse);
-router.delete("/courses/:courseId", deleteCourse);
 
 // Modify user/course associations
 router.put("/courses/:courseId/users/:userId", assignUserToCourse);
@@ -102,7 +65,7 @@ router.put("/account/signin", bouncer.block, (req, res, next) => {
     });
 });
 router.put("/account/changepassword", changePassword);
-router.get("/account/profile", getCurrentUser);
+// router.get("/account/profile", getCurrentUser);
 router.get("/account/courses", listMyCourses);
 router.get("/account/exhibitions", listMyExhibitions);
 

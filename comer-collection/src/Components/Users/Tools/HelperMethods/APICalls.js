@@ -72,7 +72,7 @@ export const createUsers = async(newUserArray, {showSnackbar, setDialogIsOpen, f
   for(const [i, newUserData] of newUserArray.entries()) {
     try {
       let filteredUser = filterItemFields(userFieldDefinitions, newUserData)
-      await sendAuthenticatedRequest("POST", "/api/users", filteredUser)
+      await sendAuthenticatedRequest("POST", "/api/admin/users", filteredUser)
 
       usersCreated++;
 

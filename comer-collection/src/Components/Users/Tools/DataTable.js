@@ -91,7 +91,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
             },
           }}>
           {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-            <Checkbox checked={isSelected} 
+            <Checkbox checked={isSelected}
             color={themeColor}
             onChange={(e) => {
               if(e.target.checked) {
@@ -100,7 +100,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
                 setSelectedItems(selectedItems.filter((si) => si.id != item.id))
               }
             }}
-            size="medium" />
+            size="large" />
           </TableCell>)}
           <DataTableFieldCells item={JSON.stringify(item)} {...{tableFields}} />
           </TableRow>
@@ -156,7 +156,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
                       )))
                     }
                   }}
-                  size="medium" />
+                  size="large" />
                 </Typography>
               </TableCell>
             )}

@@ -19,11 +19,17 @@ module.exports = (db) => {
         },
         year: {
             type: Sequelize.INTEGER,
-            field: "image_year"
+            field: "image_year",
+            set(value) {
+                this.setDataValue('year', Boolean(value) ? value : null);
+            }
         },
         additionalPrintYear: {
             type: Sequelize.INTEGER,
-            field: "image_addl_print_year"
+            field: "image_addl_print_year",
+            set(value) {
+                this.setDataValue('additionalPrintYear', Boolean(value) ? value : null);
+            }
         },
         medium: {
             type: Sequelize.TEXT('tiny'),
@@ -41,11 +47,17 @@ module.exports = (db) => {
         },
         matWidth: {
             type: Sequelize.DECIMAL(7, 4),
-            field: "image_mat_width"
+            field: "image_mat_width",
+            set(value) {
+                this.setDataValue('matWidth', Boolean(value) ? value : null);
+            }
         },
         matHeight: {
             type: Sequelize.DECIMAL(7, 4),
-            field: "image_mat_height"
+            field: "image_mat_height",
+            set(value) {
+                this.setDataValue('matHeight', Boolean(value) ? value : null);
+            }
         },
         edition: {
             type: Sequelize.TEXT('tiny'),

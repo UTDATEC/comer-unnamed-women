@@ -84,7 +84,7 @@ const UserManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const userData = await sendAuthenticatedRequest("GET", "/api/users")
+      const userData = await sendAuthenticatedRequest("GET", "/api/admin/users")
       setUsers(userData.data);
 
       const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
@@ -125,7 +125,7 @@ const UserManagement = (props) => {
   const handleUserEdit = async(userId, updateFields) => {
     const filteredUser = filterItemFields(userFieldDefinitions, updateFields);
     try {
-      await sendAuthenticatedRequest("PUT", `/api/users/${userId}`, filteredUser);
+      await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}`, filteredUser);
       fetchData();
 
       setEditDialogIsOpen(false);
@@ -222,8 +222,8 @@ const UserManagement = (props) => {
   const handleChangeUserActivationStatus = async(userId, willBeActive) => {
     try {
       await sendAuthenticatedRequest("PUT", (willBeActive ?
-        `/api/users/${userId}/activate` :
-        `/api/users/${userId}/deactivate`
+        `/api/admin/users/${userId}/activate` :
+        `/api/admin/users/${userId}/deactivate`
         ));
       fetchData();
 
@@ -238,8 +238,8 @@ const UserManagement = (props) => {
   const handleChangeUserPrivileges = async(userId, verifyPassword, isPromotion) => {
     try {
       await sendAuthenticatedRequest("PUT", (isPromotion ?
-        `/api/users/${userId}/promote` :
-        `/api/users/${userId}/demote`
+        `/api/admin/users/${userId}/promote` :
+        `/api/admin/users/${userId}/demote`
         ), {verifyPassword})
       fetchData();
 
@@ -266,7 +266,7 @@ const UserManagement = (props) => {
 
   const handleResetPassword = async(userId, newPassword) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/users/${userId}/resetpassword`, {newPassword})
+      await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}/resetpassword`, {newPassword})
       fetchData();
 
       showSnackbar(`Password reset for user ${userId}`, "success");
@@ -282,7 +282,7 @@ const UserManagement = (props) => {
 
   const handleDelete = async (userId) => {
     try {
-      await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`)
+      await sendAuthenticatedRequest("DELETE", `/api/admin/users/${userId}`)
       fetchData();
 
       showSnackbar(`User ${userId} has been deleted`, "success")
@@ -399,7 +399,6 @@ const UserManagement = (props) => {
               color={user.is_admin ? "secondary" : "primary"}
               itemID={user.id}
               variant={user.has_password ? "outlined" : "contained"}
-              // disabled={true}
               onClick={(e) => {
                 setResetPasswordDialogUser(user)
                 setResetPasswordDialogIsOpen(true);
@@ -491,7 +490,7 @@ const UserManagement = (props) => {
             <EditIcon />
           </IconButton>
           <IconButton
-            disabled={!user.is_deletable}
+            disabled={Boolean(user.Courses.length || user.Exhibitions.length || user.id == appUser.id)}
             onClick={() => {
               setDeleteDialogUser(user);
               setDeleteDialogIsOpen(true);

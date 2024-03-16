@@ -1,15 +1,11 @@
 const createError = require('http-errors');
 const { User, Course } = require("../sequelize.js");
 const { adminOperation, userOperation } = require("../security.js");
+const { deleteItem, updateItem, createItem, listItems, getItem } = require('./items.js');
 
 
 const listCourses = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const courses = await Course.findAll({
-            include: [User]
-        });
-        res.status(200).json({ data: courses });
-    })
+    await listItems(req, res, next, Course, [User], {});
 };
 
 const listMyCourses = async (req, res, next) => {
@@ -29,62 +25,19 @@ const listMyCourses = async (req, res, next) => {
 }
 
 const createCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            if(req.body.id)
-                throw new Error("Course id should not be included when creating an Course");
-            const newCourse = await Course.create(req.body);
-            res.status(201).json({ data: newCourse });
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await createItem(req, res, next, Course);
 };
 
 const getCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const course = await Course.findByPk(req.params.courseId, {
-            include: [User]
-        });
-        if(course)
-            res.status(200).json({ data: course });
-        else
-            next(createError(404));
-    })
+    await getItem(req, res, next, Course, [User], req.params.courseId);
 };
 
 const updateCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            const course = await Course.findByPk(req.params.courseId);
-            if(course) {
-                console.log(req.body.id, req.params.courseId);
-                if(req.body.id && req.body.id !== req.params.courseId) {
-                    throw new Error("Course id in request body does not match Image id in URL");
-                }
-                course.set(req.body)
-                await course.save();
-                res.status(200).json({ data: course });
-            }
-            else
-                next(createError(404));
-        }
-        catch(e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await updateItem(req, res, next, Course, req.params.courseId);
 };
 
 const deleteCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const course = await Course.findByPk(req.params.courseId);
-            if(course) {
-                await course.destroy();
-                res.sendStatus(204);
-            }
-            else
-                next(createError(404));
-    })
+    await deleteItem(req, res, next, Course, req.params.courseId);
 };
 
 const assignUserToCourse = async (req, res, next) => {

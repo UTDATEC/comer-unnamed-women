@@ -40,7 +40,10 @@ module.exports = (db) => {
         },
         notes: {
             type: Sequelize.TEXT('tiny'),
-            field: "course_notes"
+            field: "course_notes",
+            set(value) {
+                this.setDataValue('course_notes', Boolean(value) ? value : null);
+            }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,

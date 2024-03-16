@@ -2,228 +2,103 @@ const bcrypt = require('bcrypt')
 const createError = require('http-errors');
 const { User, Course, Exhibition } = require("../sequelize.js");
 const { adminOperation, verifyPasswordWithHash } = require('../security.js');
+const { deleteItem, updateItem, createItem, listItems, getItem } = require('./items.js');
 
 
 
-
-const isUserDeletable = (userJSON) => {
-    return Boolean(!userJSON.is_admin && userJSON.Courses?.length == 0 && userJSON.Exhibitions?.length == 0);
-}
 
 const canUserCreateExhibition = (userJSON) => {
     return Boolean(userJSON.is_admin || userJSON.Courses?.filter((c) => c.status == "Active").length && userJSON.exhibition_quota > userJSON.Exhibitions.length);
 }
 
 
+const userItemFunctions = {
+    can_create_exhibition(user) {
+        return canUserCreateExhibition(user);
+    }
+};
+
 const listUsers = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const users = Array.from(await User.findAll({
-            include: [Course, Exhibition]
-        })).map((u) => {
-            const userJSON = u.toJSON();
-            return {
-                ...userJSON, 
-                is_deletable: isUserDeletable(userJSON),
-                can_create_exhibition: canUserCreateExhibition(userJSON)
-            };
-        })
-        res.status(200).json({ data: users });
-    })
+    listItems(req, res, next, User, [Course, Exhibition], {}, userItemFunctions);
 };
 
 const createUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            if(req.body.id)
-                throw new Error("User id should not be included when creating a user")
-            const {email, given_name, family_name, exhibition_quota} = req.body;
-            const newUser = await User.create({
-                email, given_name, family_name, exhibition_quota,
-                pw_hash: null,
-                is_admin: false,
-                pw_updated: null
-            });
-            
-            res.status(201).json({ data: {
-                id: newUser.id,
-                email: newUser.email, 
-                given_name: newUser.given_name,
-                family_name: newUser.family_name,
-                is_admin: newUser.is_admin
-            }});
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await createItem(req, res, next, User, [
+        'email', 'given_name', 'family_name', 'exhibition_quota'
+    ]);
 };
 
 const updateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async (user_id) => {
-        try {
-            const user = await User.findByPk(req.params.userId);
-            if(user) {
-                if(req.body.id && req.body.id !== req.params.userId) {
-                    throw new Error("User id in request body does not match User id in URL")
-                } else {
-                    await user.update({
-                        email: req.body.email,
-                        family_name: req.body.family_name,
-                        given_name: req.body.given_name,
-                        exhibition_quota: req.body.exhibition_quota
-                    })
-                    res.status(200).json({ data: user })
-                }
-            }
-            else
-                next(createError(404));
-        }
-        catch(e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await updateItem(req, res, next, User, req.params.userId, [
+        'email', 'family_name', 'given_name', 'exhibition_quota'
+    ]);
 };
 
 const deactivateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async (user_id) => {
-        const user = await User.findByPk(req.params.userId);
-        if(user) {
-            if(user_id == req.params.userId)
-                next(createError(401, {debugMessage: "Admin cannot deactivate self"}));
-            else {
-                await user.update({
-                    is_active: false
-                })
-                res.status(200).json({ data: user })
-            }
-        }
-        else
-            next(createError(404))
-    })
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot deactivate self"}))
+    }
+    req.body = {is_active: false};
+    await updateItem(req, res, next, User, req.params.userId, ['is_active'])
 };
 
 const activateUser = async (req, res, next) => {
-    adminOperation(req, res, next, async (user_id) => {
-        const user = await User.findByPk(req.params.userId);
-        if(user) {
-            if(user_id == req.params.userId)
-                next(createError(401, {debugMessage: "Admin cannot activate self"}));
-            else {
-                await user.update({
-                    is_active: true
-                })
-                res.status(200).json({ data: user })
-            }
-        }
-        else
-            next(createError(404))
-    })
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot activate self"}))
+    }
+    req.body = {is_active: true};
+    await updateItem(req, res, next, User, req.params.userId, ['is_active'])
 };
 
 const promoteUser = async (req, res, next) => {
-    adminOperation(req, res, next, async (user_id) => {
-        const user = await User.findByPk(req.params.userId);
-        if(user) {
-            if(user_id == req.params.userId)
-                next(createError(401, {debugMessage: "Admin cannot promote self"}));
-            else {
-                await user.update({
-                    is_admin: true
-                })
-                res.status(200).json({ data: user })
-            }
-        }
-        else
-            next(createError(404))
-    })
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot promote self"}))
+    }
+    req.body = {is_admin: true};
+    await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
 }
 
 const demoteUser = async (req, res, next) => {
-    adminOperation(req, res, next, async (user_id) => {
-        const user = await User.findByPk(req.params.userId);
-        if(user) {
-            if(user_id == req.params.userId)
-                next(createError(401, {debugMessage: "Admin cannot demote self"}));
-            else {
-                await user.update({
-                    is_admin: false
-                })
-                res.status(200).json({ data: user })
-            }
-        }
-        else
-            next(createError(404))
-    })
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot demote self"}))
+    }
+    req.body = {is_admin: false};
+    await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
 }
 
 const deleteUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const user = await User.findByPk(req.params.userId, {
-            include: [Course, Exhibition]
-        });
-        if(user) {
-            if(!isUserDeletable(user.toJSON()))
-                next(createError(422, {debugMessage: "User is not eligible for deletion."}))
-            else if(user.is_admin)
-                next(createError(401, {debugMessage: "Admin cannot delete admin"}));
-            else {
-                await user.destroy();
-                res.sendStatus(204);
-            }
-        }
-        else
-            next(createError(404))
-    })
-};
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot delete self"}))
+    }
+    await deleteItem(req, res, next, User, req.params.userId);
+}
+
 
 const getUser = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const user = await User.findByPk(req.params.userId, {
-            include: [Course, Exhibition]
-        });
-        if (user) {
-            const userData = {...user.toJSON(), 
-                is_deletable: isUserDeletable(user.toJSON()),
-                can_create_exhibition: canUserCreateExhibition(userJSON)
-            }
-            res.status(200).json({ data: userData });
-        }
-        else {
-            next(createError(404));
-        }
-    })
+    await getItem(req, res, next, User, [Course, Exhibition], req.params.userId, userItemFunctions);
 };
+
+const getCurrentUser = async (req, res, next) => {
+    await getItem(req, res, next, User, [Course, Exhibition], req.app_user.id, userItemFunctions);
+}
 
 
 const resetUserPassword = async(req, res, next) => {
-    adminOperation(req, res, next, async (currentUserId) => {
-        try {
-            if(currentUserId == req.params.userId) {
-                throw new Error("User is trying to reset own password and should use change password instead")
-            }
-            const user = await User.findByPk(req.params.userId);
-            if(user) {
-                if(req.body.id && req.body.id !== req.params.userId) {
-                    throw new Error("User id in request body does not match User id in URL")
-                }
-                else if(!req.body.newPassword) {
-                    throw new Error("Password reset request must contain the new password in the request body")
-                }
-                const salt = bcrypt.genSaltSync(10);
-                const hash = bcrypt.hashSync(req.body.newPassword, salt);
-                await user.update({
-                    pw_hash: hash, 
-                    pw_change_required: true,
-                    pw_updated: Date.now()
-                })
-                res.status(200).json({ data: user })
-            }
-            else
-                next(createError(404));
-        }
-        catch(e) {
-            next(createError(400, {debugMessage: e.message}));
-        } 
-    });
+    if(req.params.userId == req.app_user.id) {
+        next(createError(401, {debugMessage: "Admin cannot reset own password.  Use Change Password instead."}))
+    }
+    else if(!req.body.newPassword) {
+        next(createError(400, {debugMessage: "Password reset request must contain the new password in the request body"}))
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.newPassword, salt);
+    req.body = {
+        pw_hash: hash, 
+        pw_change_required: true,
+        pw_updated: Date.now()
+    };
+    await updateItem(req, res, next, User, req.params.userId, ['pw_hash', 'pw_change_required', 'pw_updated']);
+
 }
 
-module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }
+module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }

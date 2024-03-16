@@ -146,7 +146,7 @@ const ImageManagement = (props) => {
 
   const fetchTags = async () => {
     try {
-      const tagData = await sendAuthenticatedRequest("GET", "/api/tags");
+      const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
       setTags(tagData.data);
     } catch (error) {
       return;
@@ -196,7 +196,7 @@ const ImageManagement = (props) => {
   const handleImageEdit = async(imageId, updateFields) => {
     try {
       let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
-      await sendAuthenticatedRequest("PUT", `/api/images/${imageId}`, filteredImage);
+      await sendAuthenticatedRequest("PUT", `/api/admin/images/${imageId}`, filteredImage);
       await fetchImages();
 
       setEditDialogIsOpen(false);
@@ -206,6 +206,7 @@ const ImageManagement = (props) => {
     } catch (error) {
 
       showSnackbar(`Error editing for image`, "error");
+      throw "ImageEditError";
     }
   }
 
@@ -213,7 +214,7 @@ const ImageManagement = (props) => {
 
   const handleDelete = async (imageId) => {
     try {
-      await sendAuthenticatedRequest("DELETE", `/api/images/${imageId}`);
+      await sendAuthenticatedRequest("DELETE", `/api/admin/images/${imageId}`);
       await fetchImages();
 
       showSnackbar(`Image has been deleted`, "success")
@@ -248,7 +249,7 @@ const ImageManagement = (props) => {
   const handleCreateTag = async(newTag) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
-      await sendAuthenticatedRequest("POST", `/api/tags/`, filteredTag);
+      await sendAuthenticatedRequest("POST", `/api/admin/tags/`, filteredTag);
       fetchTags();
 
       showSnackbar(`Tag created`, "success");
@@ -281,7 +282,7 @@ const ImageManagement = (props) => {
   const handleEditTag = async(tagId, updateFields) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
-      await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}`, filteredtag);
+      await sendAuthenticatedRequest("PUT", `/api/admin/tags/${tagId}`, filteredtag);
       fetchTags();
 
       setTagEditDialogIsOpen(false);
@@ -314,7 +315,7 @@ const ImageManagement = (props) => {
   
   const handleDeleteTag = async(tagId) => {
     try {
-      await sendAuthenticatedRequest("DELETE", `/api/tags/${tagId}`);
+      await sendAuthenticatedRequest("DELETE", `/api/admin/tags/${tagId}`);
       fetchTags();
 
       setTagDeleteDialogIsOpen(false);
@@ -502,7 +503,7 @@ const ImageManagement = (props) => {
             <EditIcon />
           </IconButton>
           <IconButton 
-            disabled={!artist.is_deletable} 
+            disabled={artist.Images.length} 
             onClick={(e) => {
               setArtistDeleteDialogItem(artist);
               setArtistDeleteDialogIsOpen(true);
@@ -568,7 +569,7 @@ const ImageManagement = (props) => {
             <EditIcon />
           </IconButton>
           <IconButton 
-            disabled={!tag.is_deletable} 
+            disabled={tag.Images.length} 
             onClick={(e) => {
               setTagDeleteDialogItem(tag);
               setTagDeleteDialogIsOpen(true);
@@ -716,7 +717,7 @@ const ImageManagement = (props) => {
             <EditIcon />
           </IconButton>
           <IconButton 
-            disabled={!image.is_deletable} 
+            // disabled={!image.is_deletable} 
             onClick={(e) => {
               setDeleteDialogImage(image);
               setDeleteDialogIsOpen(true);

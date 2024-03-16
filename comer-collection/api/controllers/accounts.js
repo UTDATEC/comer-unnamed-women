@@ -83,14 +83,5 @@ const changePassword = async(req, res, next) => {
     }, false, false);
 };
 
-const getCurrentUser = async(req, res, next) => {
-    console.log("started getCurrentUser")
-    const { app_user } = req;
-    const dataToSend = {...app_user.toJSON(),
-        can_create_exhibition: canUserCreateExhibition(app_user.toJSON())
-    }
-    res.status(200).json({ data: dataToSend });
-    console.log("reached the end of getCurrentUser")
-}
 
-module.exports = { changePassword, signIn, getCurrentUser }
+module.exports = { changePassword, signIn }

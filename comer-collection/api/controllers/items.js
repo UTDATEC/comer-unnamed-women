@@ -1,10 +1,77 @@
 const createError = require('http-errors');
 const { sequelize } = require("../sequelize.js");
 
-const updateItem = async (req, res, next, model, itemId) => {
+
+const getItem = async (req, res, next, model, include, itemId, itemFunctions = {}) => {
     try {
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
+        }
+        const item = await model.findByPk(itemId, { include })
+        let i = item.toJSON();
+        for(let f in itemFunctions) {
+            i[f] = itemFunctions[f](i);
+        }
+        console.log(i);
+        res.status(200).json({data: i});
+    } catch (e) {
+        next(createError(400, { debugMessage: e.message }));
+    }
+}
+
+
+const listItems = async (req, res, next, model, include, where, itemFunctions = {}) => {
+    try {
+        const items = Array.from(await model.findAll({ include, where })).map((i) => {
+            i = i.toJSON();
+            for(let f in itemFunctions) {
+                i[f] = itemFunctions[f](i);
+            }
+            console.log(i);
+            return i;
+        })
+        res.status(200).json({data: items});
+    } catch (e) {
+        next(createError(400, { debugMessage: e.message }));
+    }
+}
+
+
+const createItem = async (req, res, next, model, restrictFields = null) => {
+    try {
+        if (req.body.id) {
+            throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
+        }
+        else if(restrictFields) {
+            for(let f in req.body) {
+                if(restrictFields.indexOf(f) < 0) {
+                    throw new Error(`Request body contains field ${f} which is not in restrictFields`);
+                }
+            }
+        }
+        const newItem = await sequelize.transaction(async (t) => {
+            return await model.create(req.body, {
+                transaction: t
+            });
+        });
+        res.status(201).json({data: newItem.toJSON()});
+    } catch (e) {
+        next(createError(400, { debugMessage: e.message }));
+    }
+}
+
+
+const updateItem = async (req, res, next, model, itemId, restrictFields = null) => {
+    try {
+        if (req.body.id) {
+            throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
+        }
+        else if(restrictFields) {
+            for(let f in req.body) {
+                if(restrictFields.indexOf(f) < 0) {
+                    throw new Error(`Request body contains field ${f} which is not in restrictFields`);
+                }
+            }
         }
         await sequelize.transaction(async (t) => {
             const [rowsUpdated] = await model.update(req.body, {
@@ -17,7 +84,7 @@ const updateItem = async (req, res, next, model, itemId) => {
         });
         res.sendStatus(204);
     } catch (e) {
-        next(createError(400, { debugMessage: e.message }));
+        next(createError(400, { debugMessage: e.message + "\n" + e.stack }));
     }
 };
 
@@ -41,4 +108,4 @@ const deleteItem = async (req, res, next, model, itemId) => {
     }
 }
 
-module.exports = { updateItem, deleteItem }
+module.exports = { getItem, listItems, updateItem, deleteItem, createItem }

@@ -95,7 +95,7 @@ const CourseManagement = (props) => {
 
   const fetchData = async () => {
     try {
-      const courseData = await sendAuthenticatedRequest("GET", "/api/courses");
+      const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
       setCourses(courseData.data);
 
       setSelectedCourses(selectedCourses.filter((sc) => (
@@ -103,7 +103,7 @@ const CourseManagement = (props) => {
       )));
 
 
-      const userData = await sendAuthenticatedRequest("GET", "/api/users");
+      const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
       setUsers(userData.data);
 
       setTimeout(() => {
@@ -135,7 +135,7 @@ const CourseManagement = (props) => {
     for(const [i, newCourseData] of newCourseArray.entries()) {
       try {
         let filteredCourse = filterItemFields(courseFieldDefinitions, newCourseData)
-        await sendAuthenticatedRequest("POST", '/api/courses', filteredCourse);
+        await sendAuthenticatedRequest("POST", '/api/admin/courses', filteredCourse);
 
         coursesCreated++;
   
@@ -211,7 +211,7 @@ const CourseManagement = (props) => {
   const handleCourseEdit = async(courseId, updateFields) => {
     try {
       const filteredCourse = filterItemFields(courseFieldDefinitions, updateFields);
-      await sendAuthenticatedRequest("PUT", `/api/courses/${courseId}`, filteredCourse);
+      await sendAuthenticatedRequest("PUT", `/api/admin/courses/${courseId}`, filteredCourse);
       fetchData();
 
       setEditDialogIsOpen(false);
@@ -229,7 +229,7 @@ const CourseManagement = (props) => {
 
   const handleDelete = async (courseId) => {
     try {
-      const response = await sendAuthenticatedRequest("DELETE", `/api/courses/${courseId}`);
+      const response = await sendAuthenticatedRequest("DELETE", `/api/admin/courses/${courseId}`);
       fetchData();
 
       showSnackbar(`Course ${courseId} has been deleted`, "success")

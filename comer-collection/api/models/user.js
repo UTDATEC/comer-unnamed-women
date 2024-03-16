@@ -19,7 +19,7 @@ module.exports = (db) => {
         email_without_domain: {
             type: DataTypes.VIRTUAL,
             get() {
-                return `${this.email.substr(0, this.email.lastIndexOf("@"))}`
+                return `${this.email?.substr(0, this.email?.lastIndexOf("@"))}`
             }
         },
         family_name: {
@@ -65,7 +65,8 @@ module.exports = (db) => {
         },
         pw_hash: {
             type: Sequelize.TEXT('tiny'),
-            field: "user_pw_hash"
+            field: "user_pw_hash",
+            defaultValue: null
         },
         has_password: {
             type: DataTypes.VIRTUAL,
@@ -81,7 +82,8 @@ module.exports = (db) => {
         },
         pw_updated: {
             type: Sequelize.DATE(3),
-            field: "user_pw_last_updated"
+            field: "user_pw_last_updated",
+            defaultValue: null
         },
         is_active: {
             type: Sequelize.BOOLEAN,
@@ -92,7 +94,8 @@ module.exports = (db) => {
         is_admin: {
             type: Sequelize.BOOLEAN,
             field: "user_is_admin",
-            allowNull: false
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         tableName: "comer_users",
