@@ -10,7 +10,10 @@ module.exports = (db) => {
         },
         accessionNumber: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_acc_no"
+            field: "image_acc_no",
+            set(value) {
+                this.setDataValue('image_acc_no', Boolean(value) ? value : null);
+            }
         },
         title: {
             type: Sequelize.TEXT('tiny'),
@@ -33,7 +36,10 @@ module.exports = (db) => {
         },
         medium: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_medium"
+            field: "image_medium",
+            set(value) {
+                this.setDataValue('image_medium', Boolean(value) ? value : null);
+            }
         },
         width: {
             type: Sequelize.DECIMAL(7, 4),
@@ -61,39 +67,66 @@ module.exports = (db) => {
         },
         edition: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_edition"
+            field: "image_edition",
+            set(value) {
+                this.setDataValue('image_edition', Boolean(value) ? value : null);
+            }
         },
         condition: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_condition"
+            field: "image_condition",
+            set(value) {
+                this.setDataValue('image_condition', Boolean(value) ? value : null);
+            }
         },
         valuationNotes: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_valuation"
+            field: "image_valuation",
+            set(value) {
+                this.setDataValue('image_valuation', Boolean(value) ? value : null);
+            }
         },
         otherNotes: {
             type: Sequelize.TEXT('medium'),
-            field: "image_notes_other"
+            field: "image_notes_other",
+            set(value) {
+                this.setDataValue('image_notes_other', Boolean(value) ? value : null);
+            }
         },
         copyright: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_copyright"
+            field: "image_copyright",
+            set(value) {
+                this.setDataValue('image_copyright', Boolean(value) ? value : null);
+            }
         },
         subject: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_subject"
+            field: "image_subject",
+            set(value) {
+                this.setDataValue('image_subject', Boolean(value) ? value : null);
+            }
         },
         url: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_url"
+            field: "image_url",
+            set(value) {
+                this.setDataValue('image_url', Boolean(value) ? value : null);
+            }
         },
         thumbnailUrl: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_thumbnail_url"
+            field: "image_thumbnail_url",
+            set(value) {
+                this.setDataValue('image_thumbnail_url', Boolean(value) ? value : null);
+            }
         },
         location: {
             type: Sequelize.TEXT('tiny'),
-            field: "image_location"
+            field: "image_location",
+            set(value) {
+                this.setDataValue('image_location', Boolean(value) ? value : null);
+            }
         }
     }, {
         tableName: "comer_images",
