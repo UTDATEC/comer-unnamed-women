@@ -8,22 +8,6 @@ const listCourses = async (req, res, next) => {
     await listItems(req, res, next, Course, [User], {});
 };
 
-const listMyCourses = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        const user = await User.findByPk(user_id);
-        const myCourses = await user.getCourses();
-        if(user) {
-            try {
-                res.status(200).json({ data: myCourses });
-            } catch(e) {
-                next(createError(400, {debugMessage: e.message}));
-            }
-        }
-        else
-            next(createError(404));
-    })
-}
-
 const createCourse = async (req, res, next) => {
     await createItem(req, res, next, Course);
 };
