@@ -139,12 +139,9 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   const res_status = err.status || 500;
   res.status(res_status);
-  req.sequelize_transaction?.rollback().catch((e) => {
-    console.log("Error rolling back transaction as part of error handling: " + e.message);
-  });
   res.json({
     error: {
-      status: err.status || 500,
+      status: res_status,
       message: err.message,
       debugMessage: req.app.get('env') === 'development' ? (err.debugMessage + "\n" + err.stack) : ""
     }
