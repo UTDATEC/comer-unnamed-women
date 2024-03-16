@@ -23,13 +23,13 @@ const manageManyToManyAssociation = async (req, res, next, model, association, a
             for(let p of primaries) {
                 switch (action) {
                     case 'set':
-                        p[set](secondaryIds);
+                        await p[set](secondaryIds);
                         break;
                     case 'assign':
-                        p[addMultiple](secondaryIds);
+                        await p[addMultiple](secondaryIds);
                         break;
                     case 'unassign':
-                        p[removeMultiple](secondaryIds);
+                        await p[removeMultiple](secondaryIds);
                         break;
                     default:
                         throw "Invalid action for M:N association"
