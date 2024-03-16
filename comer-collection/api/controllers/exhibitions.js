@@ -71,33 +71,14 @@ const ownerDeleteExhibition = async (req, res, next) => {
 }
 
 
-const adminEditExhibition = async (req, res, next) => {
-    adminOperation(req, res, next, async() => {
-        try {
-            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
-            const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
-            const now = Date.now()
-            const updatedExhibition = await exhibition.update({
-                title: exhibitionFields.title,
-                privacy: exhibitionFields.privacy
-            })
-            res.status(200).json({ data: updatedExhibition });
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+const adminEditExhibitionSettings = async (req, res, next) => {
+    await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
+        'title', 'privacy'
+    ]);
 }
 
 const adminDeleteExhibition = async (req, res, next) => {
-    adminOperation(req, res, next, async() => {
-        try {
-            const exhibition = await Exhibition.findByPk(req.params.exhibitionId)
-            await exhibition.destroy();
-            res.sendStatus(204);
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+    await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
 }
 
 const loadExhibition = async (req, res, next) => {
@@ -238,4 +219,4 @@ const saveExhibitionAdmin = async (req, res, next) => {
     })
 }
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }

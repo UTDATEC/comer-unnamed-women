@@ -108,12 +108,12 @@ const ExhibitionManagement = (props) => {
 
 const handleExhibitionEditByAdmin = async(exhibitionId, title, privacy) => {
   try {
-    await sendAuthenticatedRequest("PUT", `/api/exhibitions/${exhibitionId}`, {title, privacy});
+    await sendAuthenticatedRequest("PUT", `/api/admin/exhibitions/${exhibitionId}`, {title, privacy});
     setEditDialogIsOpen(false);
     setEditDialogExhibitionId(null);
     setEditDialogExhibitionTitle("");
     setEditDialogExhibitionAccess(null);
-    showSnackbar(`Exhibition ${title} updated`, "success");
+    showSnackbar(`Exhibition updated`, "success");
   } catch(e) {
     console.log(`Error updating exhibition: ${e.message}`)
     showSnackbar(`Error updating exhibition`, "error");
@@ -125,7 +125,7 @@ const handleExhibitionEditByAdmin = async(exhibitionId, title, privacy) => {
 
 const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
   try {
-    await sendAuthenticatedRequest("DELETE", `/api/exhibitions/${exhibitionId}`);
+    await sendAuthenticatedRequest("DELETE", `/api/admin/exhibitions/${exhibitionId}`);
     setDeleteDialogIsOpen(false);
     setDeleteDialogExhibition(null);
     showSnackbar(`Exhibition deleted`, "success");
