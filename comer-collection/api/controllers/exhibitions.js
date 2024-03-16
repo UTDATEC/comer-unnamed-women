@@ -4,7 +4,7 @@ const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
-const { listItems, getItem, createItem } = require('./items.js');
+const { listItems, getItem, createItem, updateItem } = require('./items.js');
 
 
 const listExhibitions = async (req, res, next) => {
@@ -45,27 +45,18 @@ const getExhibition = async (req, res, next) => {
     }, req.params.exhibitionId);
 }
 
-const ownerEditExhibition = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        try {
-            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
-                include: [User]
-            })
-            if(exhibition.User.id != user_id) {
-                next(createError(403, {debugMessage: "User is not the owner of this exhibition."}))
-            } else {
-                const exhibitionFields = convertEmptyFieldsToNullFields(req.body);
-                const now = Date.now()
-                const updatedExhibition = await exhibition.update({
-                    title: exhibitionFields.title,
-                    privacy: exhibitionFields.privacy
-                })
-                res.status(200).json({ data: updatedExhibition });
-            }
-        } catch (e) {
-            next(createError(400, {debugMessage: e.message}));
-        }
-    })
+const ownerEditExhibitionSettings = async (req, res, next) => {
+    // Exhibitions owned by current app user are already included 
+    // during authentication process.  Scan that list to determine
+    // whether the exhibition being edited is owned by the current user.
+    const isAppUserExhibitionOwner = Boolean(req.app_user.Exhibitions
+        .filter((ex) => ex.id == req.params.exhibitionId).length);
+    if(!isAppUserExhibitionOwner) {
+        return next(createError(403, {debugMessage: "Exhibition is not owned by current app user"}));
+    }
+    await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
+        'title', 'privacy'
+    ]);
 }
 
 const ownerDeleteExhibition = async (req, res, next) => {
@@ -254,4 +245,4 @@ const saveExhibitionAdmin = async (req, res, next) => {
     })
 }
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }

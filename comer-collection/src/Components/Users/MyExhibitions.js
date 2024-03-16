@@ -63,7 +63,7 @@ const MyExhibitions = (props) => {
 
   const handleExhibitionEditByOwner = async(exhibitionId, title, privacy) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/account/exhibitions/${exhibitionId}`, {title, privacy});
+      await sendAuthenticatedRequest("PUT", `/api/user/exhibitions/${exhibitionId}`, {title, privacy});
       setDialogIsOpen(false);
       setDialogExhibitionId(null);
       setDialogExhibitionTitle("");
