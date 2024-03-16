@@ -25,4 +25,4 @@ const deleteCourse = async (req, res, next) => {
 };
 
 
-module.exports = { createCourse, getCourse, listCourses, listMyCourses, deleteCourse, updateCourse }
+module.exports = { createCourse, getCourse, listCourses, deleteCourse, updateCourse }
