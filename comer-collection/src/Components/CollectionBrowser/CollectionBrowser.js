@@ -112,7 +112,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
     const fetchTagData = async() => {
         try {
-            const tagData = await sendAuthenticatedRequest("GET", '/api/tags');
+            const tagData = await sendAuthenticatedRequest("GET", '/api/public/tags');
             setTags(tagData.data);
       
         } catch (error) {
