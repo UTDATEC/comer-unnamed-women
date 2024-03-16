@@ -77,10 +77,10 @@ const ExhibitionManagement = (props) => {
       )));
 
 
-      const userData = await sendAuthenticatedRequest("GET", "/api/users")
+      const userData = await sendAuthenticatedRequest("GET", "/api/admin/users")
       setUsers(userData.data);
 
-      const courseData = await sendAuthenticatedRequest("GET", "/api/courses")
+      const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses")
       setCourses(courseData.data);
 
       setTimeout(() => {
