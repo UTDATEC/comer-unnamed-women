@@ -102,7 +102,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
     const fetchArtistData = async() => {
         try {
-            const artistData = await sendAuthenticatedRequest("GET", '/api/artists');
+            const artistData = await sendAuthenticatedRequest("GET", '/api/public/artists');
             setArtists(artistData.data);
       
         } catch (error) {
