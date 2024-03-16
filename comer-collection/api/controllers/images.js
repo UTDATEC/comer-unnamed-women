@@ -7,7 +7,7 @@ const path = require('path');
 const { deleteItem, updateItem, listItems, getItem, createItem } = require('./items.js');
 
 
-const listImagesPublic = async (req, res) => {
+const listImagesPublic = async (req, res, next) => {
     await listItems(req, res, next, Image, [
         Artist, Tag
     ]);
