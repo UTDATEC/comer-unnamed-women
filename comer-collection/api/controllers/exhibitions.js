@@ -14,22 +14,6 @@ const listExhibitions = async (req, res, next) => {
     });
 }
 
-const listMyExhibitions = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        const user = await User.findByPk(user_id);
-        const myExhibitions = await user.getExhibitions();
-        if(user) {
-            try {
-                res.status(200).json({ data: myExhibitions });
-            } catch(e) {
-                next(createError(400, {debugMessage: e.message}));
-            }
-        }
-        else
-            next(createError(404));
-    })
-}
-
 const listPublicExhibitions = async (req, res, next) => {
     try {
         const publicExhibitions = Array.from(await Exhibition.findAll({
@@ -300,4 +284,4 @@ const saveExhibitionAdmin = async (req, res, next) => {
     })
 }
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin, listMyExhibitions }
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibition, ownerEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }
