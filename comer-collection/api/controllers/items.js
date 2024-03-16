@@ -12,7 +12,6 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
         for(let f in itemFunctions) {
             i[f] = itemFunctions[f](i);
         }
-        console.log(i);
         res.status(200).json({data: i});
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
@@ -27,7 +26,6 @@ const listItems = async (req, res, next, model, include, where, itemFunctions = 
             for(let f in itemFunctions) {
                 i[f] = itemFunctions[f](i);
             }
-            console.log(i);
             return i;
         })
         res.status(200).json({data: items});
