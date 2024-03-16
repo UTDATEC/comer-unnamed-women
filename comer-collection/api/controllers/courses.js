@@ -40,38 +40,5 @@ const deleteCourse = async (req, res, next) => {
     await deleteItem(req, res, next, Course, req.params.courseId);
 };
 
-const assignUserToCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const course = await Course.findByPk(req.params.courseId);
-        const user = await User.findByPk(req.params.userId);
-            if(course && user) {
-                try {
-                    await course.addUser(user);
-                    res.sendStatus(204);
-                } catch(e) {
-                    next(createError(400, {debugMessage: e.message}));
-                }
-            }
-            else
-                next(createError(404));
-    })
-};
 
-const unassignUserFromCourse = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        const course = await Course.findByPk(req.params.courseId);
-        const user = await User.findByPk(req.params.userId);
-            if(course && user) {
-                try {
-                    await course.removeUser(user);
-                    res.sendStatus(204);
-                } catch(e) {
-                    next(createError(400, {debugMessage: e.message}));
-                }
-            }
-            else
-                next(createError(404));
-    })
-}
-
-module.exports = { createCourse, getCourse, listCourses, listMyCourses, deleteCourse, updateCourse, assignUserToCourse, unassignUserFromCourse }
+module.exports = { createCourse, getCourse, listCourses, listMyCourses, deleteCourse, updateCourse }

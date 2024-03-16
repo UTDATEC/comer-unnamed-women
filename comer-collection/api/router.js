@@ -10,7 +10,7 @@ bouncer.blocked = function(req, res, next, remaining) {
 
 
 const { listImages, createImage, getImage, listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
-const { assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
+const { listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
