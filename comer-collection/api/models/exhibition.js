@@ -3,6 +3,20 @@ const { User } = require("../sequelize.js")
 
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
+
+
+    const public_curator_subquery = [
+        sequelize.literal(`(
+            SELECT if(exhibition.exhibition_privacy = 'PUBLIC',
+                concat(user_given_name, ' ', user_family_name), ''
+            )
+            FROM comer_users AS user
+            WHERE
+                user.user_id = exhibition.exhibition_owner
+        )`), 'curator'
+    ];
+
+
     const Exhibition = sequelize.define("Exhibition", {
         id: {
             type: Sequelize.INTEGER,
@@ -57,6 +71,11 @@ module.exports = (db) => {
         },
         scopes: {
             with_data: {
+            },
+            with_public_curators: {
+                attributes: {
+                    include: [public_curator_subquery]
+                }
             }
         },
         sequelize,
