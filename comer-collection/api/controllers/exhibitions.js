@@ -7,6 +7,15 @@ const { Op } = require('sequelize');
 const { listItems, getItem, createItem, updateItem } = require('./items.js');
 
 
+const isAppUserExhibitionOwner = (app_user, exhibition_id) => {
+    // Exhibitions owned by current app user are already included 
+    // during authentication process.  Scan that list to determine
+    // whether the exhibition being edited is owned by the current user.
+    return Boolean(app_user.Exhibitions
+        .filter((ex) => ex.id == exhibition_id).length)
+}
+
+
 const listExhibitions = async (req, res, next) => {
     await listItems(req, res, next, Exhibition, {
         model: User,
@@ -46,13 +55,8 @@ const getExhibition = async (req, res, next) => {
 }
 
 const ownerEditExhibitionSettings = async (req, res, next) => {
-    // Exhibitions owned by current app user are already included 
-    // during authentication process.  Scan that list to determine
-    // whether the exhibition being edited is owned by the current user.
-    const isAppUserExhibitionOwner = Boolean(req.app_user.Exhibitions
-        .filter((ex) => ex.id == req.params.exhibitionId).length);
-    if(!isAppUserExhibitionOwner) {
-        return next(createError(403, {debugMessage: "Exhibition is not owned by current app user"}));
+    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+        return next(createError(403));
     }
     await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
         'title', 'privacy'
