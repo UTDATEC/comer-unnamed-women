@@ -52,7 +52,7 @@ const MyExhibitions = (props) => {
       setDialogExhibitionId(null);
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null)
-      showSnackbar(`Exhibition ${title} created`, "success")
+      showSnackbar(`Exhibition created`, "success")
     }
     catch(e) {
       console.log(`Error creating exhibition: ${e.message}`)
@@ -68,7 +68,7 @@ const MyExhibitions = (props) => {
       setDialogExhibitionId(null);
       setDialogExhibitionTitle("");
       setDialogExhibitionAccess(null);
-      showSnackbar(`Exhibition ${title} updated`, "success");
+      showSnackbar(`Exhibition updated`, "success");
     } catch(e) {
       console.log(`Error updating exhibition: ${e.message}`)
       showSnackbar(`Error updating exhibition`, "error");
