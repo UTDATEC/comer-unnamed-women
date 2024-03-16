@@ -9,7 +9,7 @@ bouncer.blocked = function(req, res, next, remaining) {
 }
 
 
-const { listImages, createImage, getImage, assignArtistToImage, unassignArtistFromImage, assignTagToImage, unassignTagFromImage, listImagesPublic, getImagePublic, assignArtistToImages, unassignArtistFromImages, downloadImagePublic, assignTagToImages, unassignTagFromImages } = require("./controllers/images.js");
+const { listImages, createImage, getImage, listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
 const { assignUserToCourse, unassignUserFromCourse, listMyCourses } = require("./controllers/courses.js");
 const { changePassword, signIn } = require("./controllers/accounts.js");
 const { listExhibitions, getExhibition, saveExhibition, loadExhibition, listMyExhibitions, createExhibition, listPublicExhibitions, ownerEditExhibition, adminEditExhibition, ownerDeleteExhibition, adminDeleteExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
@@ -26,13 +26,6 @@ router.get("/collection/images/:imageId/download", downloadImagePublic);
 
 // Modify images
 router.post("/images", createImage);
-
-// Modify image/artist associations
-router.put("/images/:imageId/artists/:artistId", assignArtistToImage);
-router.delete("/images/:imageId/artists/:artistId", unassignArtistFromImage);
-
-router.put("/artists/:artistId/images/assign", assignArtistToImages);
-router.put("/artists/:artistId/images/unassign", unassignArtistFromImages);
 
 
 // Modify user/course associations

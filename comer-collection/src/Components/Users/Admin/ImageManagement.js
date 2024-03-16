@@ -375,8 +375,9 @@ const ImageManagement = (props) => {
 
   const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}/images/assign`, {
-        images: imageIds
+      await sendAuthenticatedRequest("PUT", `/api/admin/imageartists/assign`, {
+        images: imageIds,
+        artists: [artistId]
       });
       showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success")
 
@@ -388,8 +389,9 @@ const ImageManagement = (props) => {
 
   const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}/images/unassign`, {
-        images: imageIds
+      await sendAuthenticatedRequest("PUT", `/api/admin/imageartists/unassign`, {
+        images: imageIds,
+        artists: [artistId]
       });
       showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success")
 
