@@ -4,21 +4,13 @@ const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
 const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
 const { Op } = require('sequelize');
+const { listItems, getItem } = require('./items.js');
 
 
 const listExhibitions = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            const exhibitions = await Exhibition.findAll({
-                include: [{
-                    model: User,
-                    include: [Course]
-                }]
-            })
-            res.status(200).json({data: exhibitions})
-        } catch(e) {
-            next(createError(500), {debugMessage: e.message});
-        }
+    await listItems(req, res, next, Exhibition, {
+        model: User,
+        include: [Course]
     });
 }
 
@@ -93,20 +85,10 @@ const createExhibition = async (req, res, next) => {
 }
 
 const getExhibition = async (req, res, next) => {
-    adminOperation(req, res, next, async () => {
-        try {
-            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
-                include: [User]
-            })
-            if(!exhibition)
-                next(createError(404));
-            else
-                res.status(200).json({data: exhibition})
-
-        } catch(e) {
-            next(createError(500), {debugMessage: e.message});
-        }
-    });
+    await getItem(req, res, next, Exhibition, {
+        model: User,
+        include: [Course]
+    }, req.params.exhibitionId);
 }
 
 const ownerEditExhibition = async (req, res, next) => {
