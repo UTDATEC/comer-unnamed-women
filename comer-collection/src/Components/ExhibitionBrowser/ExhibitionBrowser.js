@@ -12,9 +12,6 @@ export const ExhibitionBrowser = () => {
 
     const [exhibitions, setExhibitions] = useState([]);
 
-    const [sortColumn, setSortColumn] = useState("Last Updated");
-    const [sortAscending, setSortAscending] = useState(false);
-
 
     const setTitleText = useTitle();
   
