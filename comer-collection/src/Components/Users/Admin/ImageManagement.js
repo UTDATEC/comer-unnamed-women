@@ -402,8 +402,9 @@ const ImageManagement = (props) => {
   
   const handleAssignImagesToTag = useCallback(async(tagId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}/images/assign`, {
-        images: imageIds
+      await sendAuthenticatedRequest("PUT", `/api/admin/imagetags/assign`, {
+        images: imageIds,
+        tags: [tagId]
       });
       showSnackbar(`Successfully assigned tag ${tagId} for ${imageIds.length} images`, "success")
 
@@ -415,13 +416,14 @@ const ImageManagement = (props) => {
 
   const handleUnassignImagesFromTag = useCallback(async(tagId, imageIds) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/tags/${tagId}/images/unassign`, {
-        images: imageIds
+      await sendAuthenticatedRequest("PUT", `/api/admin/imagetags/unassign`, {
+        images: imageIds,
+        tags: [tagId]
       });
-      showSnackbar(`Successfully unassigned tag ${tagId} for ${imageIds.length} images`, "success")
+      showSnackbar(`Successfully unassigned tag`, "success")
 
     } catch (error) {
-      showSnackbar(`Failed to unassign tag ${tagId} for ${imageIds.length} images`, "error")
+      showSnackbar(`Failed to unassign tag`, "error")
     }
     await fetchImages();
   }, [showSnackbar]);

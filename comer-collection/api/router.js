@@ -34,12 +34,6 @@ router.delete("/images/:imageId/artists/:artistId", unassignArtistFromImage);
 router.put("/artists/:artistId/images/assign", assignArtistToImages);
 router.put("/artists/:artistId/images/unassign", unassignArtistFromImages);
 
-// Modify image/tag associations
-router.put("/images/:imageId/tags/:tagId", assignTagToImage);
-router.delete("/images/:imageId/tags/:tagId", unassignTagFromImage);
-
-router.put("/tags/:tagId/images/assign", assignTagToImages);
-router.put("/tags/:tagId/images/unassign", unassignTagFromImages);
 
 // Modify user/course associations
 router.put("/courses/:courseId/users/:userId", assignUserToCourse);

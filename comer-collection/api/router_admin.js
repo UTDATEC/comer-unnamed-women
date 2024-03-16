@@ -7,6 +7,7 @@ const { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateU
 const { deleteCourse, updateCourse, createCourse, listCourses, getCourse } = require('./controllers/courses.js');
 const { deleteImage, updateImage } = require('./controllers/images.js');
 const { deleteTag, listTags, getTag, createTag, updateTag } = require('./controllers/tags.js');
+const { assignImageTags, unassignImageTags } = require('./controllers/imagetags.js');
 
 
 // Handle artists
@@ -53,5 +54,9 @@ router.post("/tags", createTag);
 router.put("/tags/:tagId", updateTag);
 router.delete("/tags/:tagId", deleteTag);
 
+
+// Handle image/tag assignments
+router.put("/imagetags/assign", assignImageTags);
+router.put("/imagetags/unassign", unassignImageTags);
 
 module.exports = router;
