@@ -42,13 +42,12 @@ export const ExhibitionPage = (props) => {
 
     
     const getSaveUrl = () => {
-        switch (true) {
-            case appUser && appUser.is_admin:
-                return `/api/exhibitions/${exhibitionId}/save`
-            case appUser && !appUser.is_admin:
-                return `/api/account/exhibitions/${exhibitionId}/save`
-            default:
-                throw Error("Save operation is not permitted");
+        if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
+            return `/api/user/exhibitions/${exhibitionId}/save`;
+        } else if(appUser?.is_admin) {
+            return `/api/admin/exhibitions/${exhibitionId}/save`;
+        } else {
+            throw Error("Save operation is not permitted");
         }
     }
 
@@ -72,10 +71,10 @@ export const ExhibitionPage = (props) => {
 
 
     const getLoadUrl = () => {
-        if(appUser?.is_admin) {
-            return `/api/admin/exhibitions/${exhibitionId}/load`;
-        } else if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
+        if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
             return `/api/user/exhibitions/${exhibitionId}/load`;
+        } else if(appUser?.is_admin) {
+            return `/api/admin/exhibitions/${exhibitionId}/load`;
         } else {
             return `/api/public/exhibitions/${exhibitionId}/load`;
         }

@@ -10,16 +10,9 @@ bouncer.blocked = function(req, res, next, remaining) {
 
 
 const { downloadImagePublic } = require("./controllers/images.js");
-const { saveExhibition, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
-
 
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);
-
-
-
-router.put("/account/exhibitions/:exhibitionId/save", saveExhibition);
-router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
 
 
 module.exports = router;

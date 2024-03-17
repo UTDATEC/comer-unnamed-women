@@ -82,6 +82,9 @@ const adminDeleteExhibition = async (req, res, next) => {
 }
 
 const loadExhibitionOwner = async (req, res, next) => {
+    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+        return next(createError(403));
+    }
     try {
         const exhibition = await Exhibition.scope([
             'with_data', 
@@ -89,8 +92,6 @@ const loadExhibitionOwner = async (req, res, next) => {
         ]).findByPk(req.params.exhibitionId);
         if(!exhibition) {
             next(createError(404));
-        } else if(exhibition.exhibition_owner != req.app_user.id) {
-            next(createError(403));
         } else {
             res.status(200).json({
                 data: {
@@ -154,17 +155,13 @@ const loadExhibitionPublic = async(req, res, next) => {
 
 
 const saveExhibition = async (req, res, next) => {
-    userOperation(req, res, next, async(user_id) => {
-        const t = await sequelize.transaction();
-        try {
-            const ExhibitionWithData = Exhibition.scope('with_data');
-            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
-                include: [User]
-            }, { transaction: t });
+    try {
+        await sequelize.transaction(async(t) => {
+            const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
+                transaction: t
+            });
             if(!exhibition)
                 next(createError(404));
-            else if(exhibition.User.id != user_id)
-                next(createError(403, {debugMessage: "Cannot save exhibition you do not own"}))
             else {
                 await exhibition.update({
                     data: req.body.data,
@@ -173,45 +170,25 @@ const saveExhibition = async (req, res, next) => {
                 await exhibition.setImages(
                     JSON.parse(req.body.data).images.map((i) => i.image_id), { transaction: t }
                 );
-                await t.commit();
-                res.status(200).json({data: exhibition})
             }
-        } catch(e) {
-            await t.rollback();
-            next(createError(500), {debugMessage: e.message});
-        }
-    })
+            res.sendStatus(204);
+        })
+    } catch(e) {
+        next(createError(400), {debugMessage: e.message + "\n" + e.stack});
+    }
+}
+
+
+const saveExhibitionOwner = async (req, res, next) => {
+    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+        return next(createError(403));
+    }
+    await saveExhibition(req, res, next);
 }
 
 
 const saveExhibitionAdmin = async (req, res, next) => {
-    adminOperation(req, res, next, async(user_id) => {
-        const t = await sequelize.transaction();
-        try {
-            const ExhibitionWithData = Exhibition.scope('with_data');
-            const exhibition = await ExhibitionWithData.findByPk(req.params.exhibitionId, {
-                include: [User]
-            }, { transaction: t });
-            if(!exhibition)
-                next(createError(404));
-            else {
-                await exhibition.update({
-                    data: req.body.data,
-                    date_modified: Date.now()
-                }, { transaction: t });
-                await exhibition.setImages(
-                    JSON.parse(req.body.data).images.map((i) => i.image_id), {
-                        transaction: t
-                    }
-                );
-                await t.commit();
-                res.status(200).json({data: exhibition})
-            }
-        } catch(e) {
-            await t.rollback();
-            next(createError(500), {debugMessage: e.message});
-        }
-    })
+    await saveExhibition(req, res, next);
 }
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibitionOwner, loadExhibitionAdmin, loadExhibitionPublic, saveExhibition, saveExhibitionAdmin }
+module.exports = { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibitionOwner, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionOwner, saveExhibitionAdmin }
