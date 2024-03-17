@@ -107,6 +107,7 @@ export const ExhibitionPage = (props) => {
         } catch(e) {
             console.log("Error getting permission to open exhibition")
             setIsPermissionGranted(false);
+            setTitleText("Exhibition Unavailable")
         }
     }
 
