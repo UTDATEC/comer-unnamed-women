@@ -9,6 +9,7 @@ import { useAppUser } from "../App/AppUser";
 import Unauthorized from "../ErrorPages/Unauthorized";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useTitle } from "../App/AppTitle";
+import { AccessTimeIcon } from "../IconImports";
 
 
 export const ExhibitionPage = (props) => {
@@ -36,7 +37,7 @@ export const ExhibitionPage = (props) => {
         setGlobalImageCatalog(catalogData.data);
     }
 
-    const [appUser, setAppUser] = useAppUser();
+    const [appUser, , , appUserIsLoaded] = useAppUser();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 
@@ -150,10 +151,12 @@ export const ExhibitionPage = (props) => {
 
 
 
-    return !isPermissionGranted && (
+    return !appUserIsLoaded && (
+        <Unauthorized message="Loading exhibition..." customIcon={AccessTimeIcon} />
+    ) || appUserIsLoaded && !isPermissionGranted && (
         <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
                 buttonDestination="/Exhibitions" />
-    ) || isPermissionGranted && (
+    ) || appUserIsLoaded && isPermissionGranted && (
         <Box 
             sx={{
                 width: "100%", 

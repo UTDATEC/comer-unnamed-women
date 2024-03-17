@@ -3,6 +3,7 @@
 // and makes them available to the other components without
 // having to specify a different package for each type of icon.
 
+export { default as AccessTimeIcon } from "@mui/icons-material/AccessTime";
 export { default as AccountCircleIcon } from "@mui/icons-material/AccountCircle";
 export { default as AddIcon } from "@mui/icons-material/Add";
 export { default as AddPhotoAlternateIcon } from "@mui/icons-material/AddPhotoAlternate";

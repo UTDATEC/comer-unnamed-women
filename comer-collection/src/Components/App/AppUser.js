@@ -6,6 +6,7 @@ export const AppUserProvider = ({ children }) => {
 
   
   const [appUser, setAppUser] = useState(null);
+  const [appUserIsLoaded, setAppUserIsLoaded] = useState(false);
 
   const initializeAppUser = async() => {
     try {
@@ -31,18 +32,20 @@ export const AppUserProvider = ({ children }) => {
 
   
   useEffect(() => {
-    initializeAppUser();
+    initializeAppUser().then(() => {
+      setAppUserIsLoaded(true);
+    });
   }, []);
 
   
   return (
-    <AppUserContext.Provider value={{ appUser, setAppUser, initializeAppUser }}>
+    <AppUserContext.Provider value={{ appUser, setAppUser, initializeAppUser, appUserIsLoaded }}>
       {children}
     </AppUserContext.Provider>
   );
 };
 
 export const useAppUser = () => {
-  const { appUser, setAppUser, initializeAppUser } = useContext(AppUserContext);
-  return [appUser, setAppUser, initializeAppUser];
+  const { appUser, setAppUser, initializeAppUser, appUserIsLoaded } = useContext(AppUserContext);
+  return [appUser, setAppUser, initializeAppUser, appUserIsLoaded];
 };
