@@ -10,24 +10,12 @@ bouncer.blocked = function(req, res, next, remaining) {
 
 
 const { downloadImagePublic } = require("./controllers/images.js");
-const { changePassword, signIn } = require("./controllers/accounts.js");
 const { saveExhibition, loadExhibition, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
 
 
 
 router.get("/collection/images/:imageId/download", downloadImagePublic);
 
-
-
-// User interactions
-router.put("/account/signin", bouncer.block, (req, res, next) => {
-    signIn(req, res, next).then((success) => {
-        if(success) {
-            bouncer.reset(req);
-        }
-    });
-});
-router.put("/account/changepassword", changePassword);
 
 
 router.get("/account/exhibitions/:exhibitionId/load", loadExhibition);

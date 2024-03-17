@@ -52,18 +52,6 @@ const adminOperation = async (req, res, next, callback) => {
     await userOperation(req, res, next, callback, true, true);
 }
 
-// the user parameter is a sequelize User instance
-const generateTokenDataFromUserInstance = (user) => {
-    return {
-        id: user.id,
-        // email: user.email,
-        // is_admin: user.is_admin,
-        // pw_type: user.pw_type,
-        pw_updated: user.pw_updated
-    };
-}
-
-
 const filterUserData = (user) => {
     const { id, email, family_name, given_name, pw_updated, is_admin } = user;
     return { id, email, family_name, given_name, pw_updated, is_admin };
@@ -75,4 +63,4 @@ const verifyPasswordWithHash = async(password, pw_hash) => {
 }
 
 
-module.exports = {userOperation, adminOperation, generateTokenDataFromUserInstance, filterUserData, verifyPasswordWithHash};
+module.exports = {userOperation, adminOperation, filterUserData, verifyPasswordWithHash};

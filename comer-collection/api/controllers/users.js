@@ -1,10 +1,34 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const createError = require('http-errors');
-const { User, Course, Exhibition } = require("../sequelize.js");
-const { adminOperation, verifyPasswordWithHash } = require('../security.js');
+const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
 const { deleteItem, updateItem, createItem, listItems, getItem } = require('./items.js');
 
 
+
+// the user parameter is a sequelize User instance
+const generateTokenDataFromUserInstance = (user) => {
+    return {
+        id: user.id,
+        // email: user.email,
+        // is_admin: user.is_admin,
+        // pw_type: user.pw_type,
+        pw_updated: user.pw_updated
+    };
+};
+
+const getSignedTokenForUser = async(user) => {
+    const tokenData = {
+        id: user.id,
+        pw_updated: user.pw_updated
+    };
+    return jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '10d' } );
+}
+
+const doesPasswordMatchHash = async(password, hash) => {
+    return Boolean(password) && Boolean(hash) &&
+        bcrypt.compareSync(password, hash);
+}
 
 
 const canUserCreateExhibition = (userJSON) => {
@@ -101,4 +125,72 @@ const resetUserPassword = async(req, res, next) => {
 
 }
 
-module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser }
+
+const signIn = async(req, res, next) => {
+    try {
+        await sequelize.transaction(async(t) => {
+            const { email, password } = req.body;
+            const user = await User.findOne({
+                where: { 
+                    email: email 
+                },
+                attributes: {
+                    include: ['pw_hash']
+                }
+            });
+
+            if(!user) {
+                throw new Error("user does not exist");
+            } else if(!user.is_active) {
+                throw new Error("user is not active");
+            } 
+
+            if(await doesPasswordMatchHash(password, user.pw_hash)) {
+                const token = await getSignedTokenForUser(user);
+                res.status(200).json({ token });
+            } else {
+                throw new Error("password is incorrect");
+            }
+
+        })
+    } catch(e) {
+        await next(createError(401, {debugMessage: e.message + "\n" + e.stack}))
+    }
+}
+
+
+const changePassword = async(req, res, next) => {
+    try {
+        await sequelize.transaction(async(t) => {
+            const user = await User.findByPk(req.app_user.id, {
+                attributes: {
+                    include: ['pw_hash']
+                }
+            }, { transaction: t });
+            const { oldPassword, newPassword } = req.body;
+            if(!oldPassword || !newPassword)
+                throw new Error("Request must have both oldPassword and newPassword parameters");
+            else if(!user.pw_hash) {
+                throw new Error("No current pw_hash found");
+            }
+            else if(!doesPasswordMatchHash(oldPassword, user.pw_hash)) {
+                throw new Error("oldPassword is incorrect");
+            }
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(newPassword, salt);
+            await user.update({
+                pw_hash: hash, 
+                pw_change_required: false,
+                pw_updated: Date.now()
+            });
+
+            const token = await getSignedTokenForUser(user);
+            res.status(200).json({ token });
+        })
+    } catch(e) {
+        next(createError(400, {debugMessage: e.message}));
+    }
+}
+
+
+module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword, generateTokenDataFromUserInstance };

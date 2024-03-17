@@ -6,6 +6,11 @@ const { listArtists, getArtist } = require("./controllers/artists.js");
 const { listTags, getTag } = require('./controllers/tags.js');
 const { listImagesPublic, getImagePublic } = require('./controllers/images.js');
 const { listPublicExhibitions } = require('./controllers/exhibitions.js');
+const { signIn } = require('./controllers/users.js');
+
+
+// Authentication
+router.put("/signin", signIn)
 
 
 // Read images
