@@ -1,9 +1,4 @@
 export const blankExhibitionData = {
-    "main": {
-        "exhibition_name": "Placeholder Exhibition Name",
-        "curator": "Placeholder Curator Name",
-        "date_created": "Placeholder Date Created"
-    },
     "appearance": {
         "main_wall_color": "#ffffff",
         "side_wall_color": "#ffffff",
