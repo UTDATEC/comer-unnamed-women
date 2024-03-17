@@ -5,7 +5,7 @@ const router = express.Router();
 const { listArtists, getArtist } = require("./controllers/artists.js");
 const { listTags, getTag } = require('./controllers/tags.js');
 const { listImagesPublic, getImagePublic } = require('./controllers/images.js');
-const { listPublicExhibitions } = require('./controllers/exhibitions.js');
+const { listPublicExhibitions, loadExhibitionPublic } = require('./controllers/exhibitions.js');
 const { signIn } = require('./controllers/users.js');
 
 
@@ -30,6 +30,7 @@ router.get("/tags/:tagId", getTag);
 
 // Read exhibitions
 router.get("/exhibitions", listPublicExhibitions);
+router.get("/exhibitions/:exhibitionId/load", loadExhibitionPublic);
 
 
 module.exports = router;

@@ -72,13 +72,12 @@ export const ExhibitionPage = (props) => {
 
 
     const getLoadUrl = () => {
-        switch (true) {
-            case appUser && appUser.is_admin:
-                return `/api/exhibitions/${exhibitionId}/load`;
-            case appUser && !appUser.is_admin:
-                return `/api/account/exhibitions/${exhibitionId}/load`;
-            default:
-                return `/api/exhibitions/public/${exhibitionId}/load`;
+        if(appUser?.is_admin) {
+            return `/api/admin/exhibitions/${exhibitionId}/load`;
+        } else if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
+            return `/api/user/exhibitions/${exhibitionId}/load`;
+        } else {
+            return `/api/public/exhibitions/${exhibitionId}/load`;
         }
     }
     
