@@ -36,7 +36,7 @@ const ChangePassword = (props) => {
       if(response.token) {
         localStorage.setItem('token', response.token);
   
-        initializeAppUser();
+        await initializeAppUser();
         navigate('/Account');
         showSnackbar("Password changed", "success")
         
