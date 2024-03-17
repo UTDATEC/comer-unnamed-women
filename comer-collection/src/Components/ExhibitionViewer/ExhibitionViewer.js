@@ -8,7 +8,8 @@ import { createArt } from './js/Art';
 import { createBoundingBoxes } from './js/BoundingBox';
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from '@mui/material';
 import { PointerLockControls } from 'three-stdlib';
-import { EditIcon, VisibilityIcon } from '../IconImports';
+import { EditIcon, SecurityIcon, VisibilityIcon } from '../IconImports';
+import { useAppUser } from '../App/AppUser';
 
 
 
@@ -69,6 +70,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         width: null,
         height: null
     })
+
+
+    const [appUser] = useAppUser();
 
 
     const [dialogIsOpen, setDialogIsOpen] = useState(true);
@@ -448,7 +452,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             <div id="exhibition-canvas" ref={canvasRef}>
             </div>
             {exhibitionIsEditable && (
-                <Fab variant="extended" color="primary" sx={{position: "absolute", right: 20, bottom: 20, zIndex: 1500}}
+                <Fab variant="extended" color={
+                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                } sx={{position: "absolute", right: 20, bottom: 20, zIndex: 1500}}
                 onClick={() => {
                     if(editModeActive) {
                         setEditModeActive(false);
@@ -461,7 +467,9 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                         {editModeActive && (
                             <VisibilityIcon fontSize="large" />
                         ) || !editModeActive && (
-                            <EditIcon fontSize="large" />
+                            appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? 
+                                <SecurityIcon fontSize="large" /> :
+                                <EditIcon fontSize="large" />
                         )}
                         <Typography variant="h6">
                             {editModeActive ? "Preview" : "Edit"}

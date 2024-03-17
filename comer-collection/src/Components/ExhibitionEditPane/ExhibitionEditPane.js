@@ -11,7 +11,9 @@ import { ExpandMoreIcon,
     BrokenImageIcon,
     ArrowBackIcon,
     ArrowForwardIcon,
+    SecurityIcon,
 } from '../IconImports'
+import { useAppUser } from "../App/AppUser";
 
 const ColorInput = ({value, onChange, disabled}) => {
     return (
@@ -340,6 +342,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
     const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(false);
 
     const theme = useTheme();
+    const [appUser] = useAppUser();
 
 
     useEffect(() => {
@@ -828,7 +831,11 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                 }} 
             >
                 
-                <Button variant="contained" startIcon={<CloudUploadIcon />} onClick={saveExhibition} >
+                <Button variant="contained" startIcon={
+                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? <SecurityIcon /> : <CloudUploadIcon />
+                } color={
+                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                } onClick={saveExhibition} >
                     <Typography variant="body1">Save</Typography>
                 </Button>
                 
