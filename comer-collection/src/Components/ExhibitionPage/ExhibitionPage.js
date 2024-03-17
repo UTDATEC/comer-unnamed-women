@@ -112,9 +112,14 @@ export const ExhibitionPage = (props) => {
 
     useEffect(() => {
         loadExhibition();
-        loadCatalog();
     }, [appUser])
 
+
+    useEffect(() => {
+        if(isPermissionGranted) {
+            loadCatalog();
+        }
+    }, [isPermissionGranted])
     
 
     useEffect(() => {
