@@ -2,12 +2,7 @@ const createError = require('http-errors');
 const express = require("express");
 const router = express.Router();
 
-const { getCurrentUser } = require("./controllers/users.js");
 const { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition } = require('./controllers/exhibitions.js');
-
-
-// Get current user
-router.get("/profile", getCurrentUser);
 
 
 

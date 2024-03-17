@@ -15,6 +15,7 @@ const jwt = require('jsonwebtoken')
 
 const apiRouter = require('./router');
 const apiRouterPublic = require('./router_public.js');
+const apiRouterUserTempPw = require('./router_user_temp_pw.js');
 const apiRouterUser = require('./router_user.js');
 const apiRouterAdmin = require('./router_admin.js');
 
@@ -98,11 +99,6 @@ const requireAuthenticatedUser = async(req, res, next) => {
     else if (`"${decoded.pw_updated}"` !== JSON.stringify(user.pw_updated))
       throw new Error("Token password update time does not match the latest password update time");
 
-    // Check if temporary password is being used improperly
-    else if (user.pw_change_required)
-      throw new Error("Temporary password in use when permanent password is required");
-
-    
     req.app_user = user;
     console.log("authorized successfully and User instance attached to request object")
     next();
@@ -117,7 +113,17 @@ const requireAdmin = async(req, res, next) => {
   if(app_user?.is_admin) {
     next();
   } else {
-    next(createError(403, {debugMessage: e.message}));
+    next(createError(403, {debugMessage: "Action requires admin privileges"}));
+  }
+}
+
+
+const requirePermanentPassword = async(req, res, next) => {
+  const { app_user } = req;
+  if(app_user && !app_user.pw_change_required) {
+    next();
+  } else {
+    next(createError(401, {debugMessage: "Please change your password and try again"}));
   }
 }
 
@@ -125,8 +131,9 @@ const requireAdmin = async(req, res, next) => {
 // Routes for querying data
 app.use("/api", apiRouter);
 app.use("/api/public", apiRouterPublic);
-app.use("/api/user", requireAuthenticatedUser, apiRouterUser);
-app.use("/api/admin", requireAuthenticatedUser, requireAdmin, apiRouterAdmin);
+app.use("/api/user", requireAuthenticatedUser, apiRouterUserTempPw);
+app.use("/api/user", requirePermanentPassword, apiRouterUser);
+app.use("/api/admin", requireAuthenticatedUser, requirePermanentPassword, requireAdmin, apiRouterAdmin);
 
 
 
