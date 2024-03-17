@@ -103,7 +103,7 @@ const getUser = async (req, res, next) => {
 };
 
 const getCurrentUser = async (req, res, next) => {
-    res.status(200).send({data: req.app_user});
+    await getItem(req, res, next, User, [Course, Exhibition], req.app_user.id, userItemFunctions);
 }
 
 
