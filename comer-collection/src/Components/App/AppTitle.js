@@ -6,7 +6,7 @@ const TitleContext = createContext();
 export const TitleProvider = ({ children }) => {
 
     const [titleText, setTitleText] = useState(null);
-    if(titleText == null) {
+    if(!Boolean(titleText)) {
         document.title = defaultSuffix;
     } else {
         document.title = `${titleText} - ${defaultSuffix}`;
