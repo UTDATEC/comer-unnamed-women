@@ -1,87 +1,74 @@
-import { useTheme } from "@emotion/react"
-import { Dialog, Box, Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material"
-import { imageFieldDefinitions } from "./HelperMethods/fields";
+import { Dialog, Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material";
 import React from "react";
 import { PersonIcon } from "../../IconImports";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {
-    const theme = useTheme();
-
-
     const fields = [
-    {
-        fieldName: 'accessionNumber',
-        displayName: "Accession Number"
-    },
-    {
-        fieldName: 'year',
-        displayName: "Year"
-    },
-    {
-        fieldName: 'additionalPrintYear',
-        displayName: "Additional Print Year"
-    },
-    {
-        fieldName: 'medium',
-        displayName: "Medium"
-    },
-    {
-        fieldName: 'edition',
-        displayName: "Edition"
-    },
-    {
-        fieldName: 'condition',
-        displayName: "Condition"
-    },
-    {
-        fieldName: 'valuationNotes',
-        displayName: "Valuation Notes"
-    },
-    {
-        fieldName: 'other notes',
-        displayName: "Other Notes"
-    },
-    {
-        fieldName: 'copyright',
-        displayName: "Copyright"
-    },
-    {
-        fieldName: 'subject',
-        displayName: "Subject"
-    },
-    {
-        fieldName: 'location',
-        displayName: "Location"
-    }]
+        {
+            fieldName: "accessionNumber",
+            displayName: "Accession Number"
+        },
+        {
+            fieldName: "year",
+            displayName: "Year"
+        },
+        {
+            fieldName: "additionalPrintYear",
+            displayName: "Additional Print Year"
+        },
+        {
+            fieldName: "medium",
+            displayName: "Medium"
+        },
+        {
+            fieldName: "edition",
+            displayName: "Edition"
+        },
+        {
+            fieldName: "condition",
+            displayName: "Condition"
+        },
+        {
+            fieldName: "valuationNotes",
+            displayName: "Valuation Notes"
+        },
+        {
+            fieldName: "other notes",
+            displayName: "Other Notes"
+        },
+        {
+            fieldName: "copyright",
+            displayName: "Copyright"
+        },
+        {
+            fieldName: "subject",
+            displayName: "Subject"
+        },
+        {
+            fieldName: "location",
+            displayName: "Location"
+        }];
 
 
     const artists = image?.Artists.sort((a, b) => {
         return a.fullNameReverse < b.fullNameReverse ? 1 : -1;
-    })
+    });
     
     
     return image && (
-        <Dialog open={previewerOpen}  maxWidth="lg"  sx={{zIndex: 5000}}
-        
-
-        //     // onClick={() => {
-        //     // setPreviewerOpen(false);
-        //     // setImage(null);
-        // }}
-        
-        >
-            {/* <DialogTitle>Test</DialogTitle> */}
+        <Dialog open={previewerOpen}  maxWidth="lg"  sx={{zIndex: 5000}}>
+            
             <DialogTitle textAlign="center" variant="h4">{image.title}</DialogTitle>
 
             <DialogContent sx={{height: "100%",
-                    display: "grid",
-                    gridTemplateColumns: '20px 60% 30px 30% 20px',
-                    gridTemplateRows: '1fr',
-                    gridTemplateAreas: `
+                display: "grid",
+                gridTemplateColumns: "20px 60% 30px 30% 20px",
+                gridTemplateRows: "1fr",
+                gridTemplateAreas: `
                         'paddingLeft image paddingMiddle fields paddingRight'
                     `,
-                    overflow: "hidden"
-                }}>
+                overflow: "hidden"
+            }}>
                 <Stack gridArea="image" maxHeight="500px" alignContent="center">
                     <img src={`${process.env.REACT_APP_API_HOST}/api/collection/images/${image.id}/download`} 
                         style={{objectFit: "contain"}} width="auto" height="100%"
@@ -111,7 +98,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                             <Stack direction="column" key={field.fieldName}>
                                 <Typography variant="h6">{field.displayName}</Typography>
                                 <Typography sx={{opacity: 0.5}} variant="body1">{
-                                     image[field.fieldName]
+                                    image[field.fieldName]
                                 }</Typography>
                             </Stack>
                         ))}
@@ -128,5 +115,5 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
             </DialogActions>
 
         </Dialog>
-    )
-}
+    );
+};

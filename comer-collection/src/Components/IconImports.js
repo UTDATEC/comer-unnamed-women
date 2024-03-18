@@ -8,7 +8,7 @@ export { default as AccountCircleIcon } from "@mui/icons-material/AccountCircle"
 export { default as AddIcon } from "@mui/icons-material/Add";
 export { default as AddPhotoAlternateIcon } from "@mui/icons-material/AddPhotoAlternate";
 export { default as ArrowBackIcon } from "@mui/icons-material/ArrowBack";
-export { default as ArrowDropDownIcon } from '@mui/icons-material/ArrowDropDown';
+export { default as ArrowDropDownIcon } from "@mui/icons-material/ArrowDropDown";
 export { default as ArrowDownwardIcon } from "@mui/icons-material/ArrowDownward";
 export { default as ArrowForwardIcon } from "@mui/icons-material/ArrowForward";
 export { default as ArrowUpwardIcon } from "@mui/icons-material/ArrowUpward";
@@ -31,7 +31,7 @@ export { default as GroupAddIcon } from "@mui/icons-material/GroupAdd";
 export { default as GroupsIcon } from "@mui/icons-material/Groups";
 export { default as ImageIcon } from "@mui/icons-material/Image";
 export { default as InfoIcon } from "@mui/icons-material/Info";
-export { default as LockAddIcon } from "@mui/icons-material/EnhancedEncryption"
+export { default as LockAddIcon } from "@mui/icons-material/EnhancedEncryption";
 export { default as LockIcon } from "@mui/icons-material/Lock";
 export { default as LockResetIcon } from "@mui/icons-material/LockReset";
 export { default as LogoutIcon } from "@mui/icons-material/Logout";

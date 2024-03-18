@@ -1,8 +1,8 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
 import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu";
-import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from '../IconImports';
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../IconImports";
 import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
 import SearchBox from "../Users/Tools/SearchBox";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";
@@ -29,7 +29,7 @@ const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelect
             sx={{
                 width: viewMode == "list" ? "500px" : "200px"
             }}
-            >
+        >
             {thumbnailBox}
             <Stack direction="column" spacing={1} alignItems={viewMode == "list" ? "left" : "center"}>
                 <Typography variant="h6">{image.title}</Typography>
@@ -58,17 +58,17 @@ const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelect
             borderRadius: "10px",
             justifyContent: "center"
         }}
-            onClick={() => {
-                setSelectedItem(image)
-            }}>
+        onClick={() => {
+            setSelectedItem(image);
+        }}>
             {infoStack}
         </ListItemButton>
-    ), [image, viewMode, isSelected, isDisabled])
+    ), [image, viewMode, isSelected, isDisabled]);
 
     
     return setSelectedItem ? listItemButton : infoStack;
 
-}
+};
 
 
 
@@ -82,7 +82,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     
     const handleViewModeChange = (event, next) => {
         setViewMode(next);
-    }
+    };
     
     const [artistFilter, setArtistFilter] = useState(null);
     const [tagFilter, setTagFilter] = useState(null);
@@ -92,42 +92,42 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
     const fetchImageData = async() => {
         try {
-            const imageData = await sendAuthenticatedRequest("GET", '/api/public/images');
+            const imageData = await sendAuthenticatedRequest("GET", "/api/public/images");
             setImages(imageData.data);
       
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
-    }
+    };
 
     const fetchArtistData = async() => {
         try {
-            const artistData = await sendAuthenticatedRequest("GET", '/api/public/artists');
+            const artistData = await sendAuthenticatedRequest("GET", "/api/public/artists");
             setArtists(artistData.data);
       
         } catch (error) {
             console.error("Error fetching artists:", error);
         }
-    }
+    };
 
     const fetchTagData = async() => {
         try {
-            const tagData = await sendAuthenticatedRequest("GET", '/api/public/tags');
+            const tagData = await sendAuthenticatedRequest("GET", "/api/public/tags");
             setTags(tagData.data);
       
         } catch (error) {
             console.error("Error fetching tags:", error);
         }
-    }
+    };
 
     useEffect(() => {
         if(!isDialogMode) {
-            setTitleText("Browse Collection")
+            setTitleText("Browse Collection");
         }
         fetchImageData();
         fetchArtistData();
         fetchTagData();
-    }, [])
+    }, []);
 
     const renderedImageContainerData = useMemo(() => images.map((image) => (
         [
@@ -140,12 +140,12 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
     const renderedImageContainerDataFiltered = useMemo(() => renderedImageContainerData.filter((imageContainerData) => {
         return (
-            !searchQuery || doesItemMatchSearchQuery(searchQuery, imageContainerData[0], ['title'])
+            !searchQuery || doesItemMatchSearchQuery(searchQuery, imageContainerData[0], ["title"])
         ) && (
             !artistFilter || imageContainerData[0].Artists.map((a) => a.id).includes(parseInt(artistFilter.id))
         ) && (
             !tagFilter || imageContainerData[0].Tags.map((t) => t.id).includes(parseInt(tagFilter.id))
-        )
+        );
     }), [renderedImageContainerData, artistFilter, tagFilter, searchQuery]);
 
     const finalRenderedImageContainers = useMemo(() => renderedImageContainerDataFiltered.map((i) => i[1]), [renderedImageContainerDataFiltered]);
@@ -153,13 +153,13 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
     return (
         <Box component={Paper} square justifyItems="center" paddingLeft={1} sx={{
             display: "grid",
-            gridTemplateColumns: '1fr',
-            gridTemplateRows: isDialogMode ? '80px 400px' : '80px calc(100vh - 144px)',
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: isDialogMode ? "80px 400px" : "80px calc(100vh - 144px)",
             gridTemplateAreas: `
             "toolbar"
             "gallery"
             `,
-            }} >
+        }} >
             <Stack direction="row" width="100%" justifyContent="space-around" paddingTop={2} paddingBottom={2} spacing={2}>
                 <Stack direction="row" sx={{gridArea: "toolbar"}} spacing={2}>
                     <SearchBox {...{searchQuery, setSearchQuery}} width="300px" placeholder="Search by image title" />
@@ -179,5 +179,5 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
                 {finalRenderedImageContainers}
             </Stack>
         </Box>
-    )
-}
+    );
+};

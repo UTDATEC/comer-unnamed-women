@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane";
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer";
 import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
@@ -12,12 +12,12 @@ import { useTitle } from "../App/AppTitle";
 import { AccessTimeIcon } from "../IconImports";
 
 
-export const ExhibitionPage = (props) => {
+export const ExhibitionPage = () => {
     
     const onUnload = async() => {
         await saveExhibition();
         return false;
-    }
+    };
     
 
     const { exhibitionId } = useParams();
@@ -35,7 +35,7 @@ export const ExhibitionPage = (props) => {
     const loadCatalog = async() => {
         const catalogData = await sendAuthenticatedRequest("GET", "/api/public/images");
         setGlobalImageCatalog(catalogData.data);
-    }
+    };
 
     const [appUser, , , appUserIsLoaded] = useAppUser();
     const showSnackbar = useSnackbar();
@@ -50,7 +50,7 @@ export const ExhibitionPage = (props) => {
         } else {
             throw Error("Save operation is not permitted");
         }
-    }
+    };
 
     const saveExhibition = async() => {
         try {
@@ -60,15 +60,15 @@ export const ExhibitionPage = (props) => {
                     data: JSON.stringify(exhibitionState)
                 });
                 window.onbeforeunload = null;
-                showSnackbar("Exhibition saved", "success")
+                showSnackbar("Exhibition saved", "success");
             } catch(e) {
                 console.log("Error saving exhibition", e.message);
                 showSnackbar("Could not save exhibition", "error");
             }
         } catch(e) {
-            console.log("No save URL available", e.message)
+            console.log("No save URL available", e.message);
         }
-    }
+    };
 
 
     const getLoadUrl = () => {
@@ -79,7 +79,7 @@ export const ExhibitionPage = (props) => {
         } else {
             return `/api/public/exhibitions/${exhibitionId}/load`;
         }
-    }
+    };
     
     const loadExhibition = async() => {
         try {
@@ -100,27 +100,27 @@ export const ExhibitionPage = (props) => {
                 if(exhibitionData.data?.isEditable) {
                     setExhibitionIsEditable(true);
                 }
-                setTitleText(exhibitionData.data?.title)
+                setTitleText(exhibitionData.data?.title);
                 setExhibitionIsLoaded(true);
             }
             
         } catch(e) {
-            console.log("Error getting permission to open exhibition")
+            console.log("Error getting permission to open exhibition");
             setIsPermissionGranted(false);
-            setTitleText("Exhibition Unavailable")
+            setTitleText("Exhibition Unavailable");
         }
-    }
+    };
 
     useEffect(() => {
         loadExhibition();
-    }, [appUser])
+    }, [appUser]);
 
 
     useEffect(() => {
         if(isPermissionGranted) {
             loadCatalog();
         }
-    }, [isPermissionGranted])
+    }, [isPermissionGranted]);
     
 
     useEffect(() => {
@@ -128,32 +128,32 @@ export const ExhibitionPage = (props) => {
             window.onbeforeunload = onUnload;
             return () => {
                 window.onbeforeunload = null;
-            }
+            };
         }
-    }, [exhibitionState])
+    }, [exhibitionState]);
 
     
     useEffect(() => {
         if(exhibitionIsLoaded && !editModeActive)
             saveExhibition();
-    }, [editModeActive])
+    }, [editModeActive]);
 
 
     const handleControlS = (e) => {
-        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == 's') {
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == "s") {
             e.preventDefault();
             saveExhibition();
         }
-    }
+    };
         
     useEffect(() => {
         if(editModeActive) {
-            document.addEventListener('keydown', handleControlS);
+            document.addEventListener("keydown", handleControlS);
             return () => {
-                document.removeEventListener('keydown', handleControlS);
-            }
+                document.removeEventListener("keydown", handleControlS);
+            };
         }
-    }, [editModeActive])
+    }, [editModeActive]);
 
 
 
@@ -161,15 +161,15 @@ export const ExhibitionPage = (props) => {
         <Unauthorized message="Loading exhibition..." customIcon={AccessTimeIcon} />
     ) || appUserIsLoaded && !isPermissionGranted && (
         <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
-                buttonDestination="/Exhibitions" />
+            buttonDestination="/Exhibitions" />
     ) || appUserIsLoaded && isPermissionGranted && (
         <Box 
             sx={{
                 width: "100%", 
                 height: "100%",
                 display: "grid",
-                gridTemplateRows: '1fr',
-                gridTemplateColumns: editModeActive ? 'calc(100vw - 300px) 300px' : '100vw 0px',
+                gridTemplateRows: "1fr",
+                gridTemplateColumns: editModeActive ? "calc(100vw - 300px) 300px" : "100vw 0px",
                 gridTemplateAreas: `
                     "viewer editpane"
                 `
@@ -190,5 +190,5 @@ export const ExhibitionPage = (props) => {
             
 
         </Box>
-    )
-}
+    );
+};

@@ -1,9 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Icon, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
-import { ExpandMoreIcon,
+import {
+    ExpandMoreIcon,
     CloudUploadIcon,
     AddPhotoAlternateIcon,
     DeleteIcon,
@@ -12,7 +13,7 @@ import { ExpandMoreIcon,
     ArrowBackIcon,
     ArrowForwardIcon,
     SecurityIcon,
-} from '../IconImports'
+} from "../IconImports";
 import { useAppUser } from "../App/AppUser";
 
 const ColorInput = ({value, onChange, disabled}) => {
@@ -21,8 +22,8 @@ const ColorInput = ({value, onChange, disabled}) => {
             value={value ?? ""}
             {...{onChange, disabled}} 
         />
-    )
-}
+    );
+};
 
 const AccordionSubHeading = ({text}) => {
     const theme = useTheme();
@@ -31,8 +32,8 @@ const AccordionSubHeading = ({text}) => {
             <Divider />
             <Typography variant="h6" align="center" color={theme.palette.grey.main}>{text}</Typography>
         </>
-    )
-}
+    );
+};
 
 const moodinessOptions = [
     {
@@ -51,7 +52,7 @@ const moodinessOptions = [
         value: "bright",
         displayText: "Bright"
     }
-]
+];
 
 
 const directionOptions = [
@@ -71,7 +72,7 @@ const directionOptions = [
         value: 4,
         displayText: "Left"
     }
-]
+];
 
 
 const textureOptions = [
@@ -103,7 +104,7 @@ const textureOptions = [
         value: "parquet_wood.jpg",
         displayText: "Parquet Wood"
     }
-]
+];
 
 
 const ExhibitionOption = ({description, children, vertical}) => {
@@ -115,8 +116,8 @@ const ExhibitionOption = ({description, children, vertical}) => {
             <Typography variant="body1">{description}</Typography>
             {children}
         </Stack>
-    )
-}
+    );
+};
 
 
 const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSection, children}) => {
@@ -132,13 +133,13 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
                 background: theme.palette.grey.translucent,
                 zIndex: 100
             }}
-                component={Paper}
+            component={Paper}
             >
                 <ListItemButton
                     onClick={() => {
                         setExpandedSection((expandedSection) => (
                             expandedSection == id ? null : id
-                        ))
+                        ));
                     }}
                 > 
                     <AccordionSummary sx={{width: "100%"}}
@@ -157,8 +158,8 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
             
         </Accordion>
 
-    )
-}
+    );
+};
 
 
 const getSwappedImageArray = (images, imageIdA, imageIdB) => {
@@ -169,15 +170,15 @@ const getSwappedImageArray = (images, imageIdA, imageIdB) => {
 
     return images.map((image) => {
         switch (image.image_id) {
-            case imageIdA:
-                return imageB;
-            case imageIdB:
-                return imageA;
-            default:
-                return image;
+        case imageIdA:
+            return imageB;
+        case imageIdB:
+            return imageA;
+        default:
+            return image;
         }
-    })
-}
+    });
+};
 
 
 
@@ -193,8 +194,8 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
             scope: "exhibition",
             type: "set_images",
             newImages: newArray
-        })
-    }
+        });
+    };
 
     return (
         <Dialog open={imageRearrangerIsOpen}
@@ -212,7 +213,7 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                             width: "100%"
                         }}
                         onClick={(e) => {
-                            setCurrentWall(e.target.value)
+                            setCurrentWall(e.target.value);
                         }}
                         >
                             <Typography>{option.displayText}</Typography>
@@ -223,7 +224,7 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
             <DialogContent>
                 <Stack direction="row" width="100%" spacing={2}>
                     {imagesOnWall.length > 0 && imagesOnWall.map((i, index) => {
-                        const catalogImage = globalImageCatalog.find((gi) => gi.id == i.image_id)
+                        const catalogImage = globalImageCatalog.find((gi) => gi.id == i.image_id);
                         return (
                             <Stack key={i.image_id} direction="column" justifyItems="center" alignItems="center" spacing={2}>
                                 <Box width="150px" height="150px" sx={{
@@ -243,19 +244,19 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                                 <Typography>{catalogImage.title}</Typography>
                                 <Stack direction="row">
                                     <IconButton disabled={index == 0} onClick={() => {
-                                        handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id)
+                                        handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id);
                                     }}>
                                         <ArrowBackIcon />
                                     </IconButton>
                                     <IconButton disabled={index == imagesOnWall.length - 1} onClick={() => {
-                                        handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id)
+                                        handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id);
                                     }}>
                                         <ArrowForwardIcon />
                                     </IconButton>
                                 </Stack>
                             </Stack> 
-                            )
-                        })
+                        );
+                    })
                     || imagesOnWall.length == 0 && (
                         <Stack spacing={1}>
                             <Typography>The selected wall contains no images.</Typography>
@@ -283,8 +284,8 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                 </Stack>
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
 
 export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch}) => {
@@ -294,16 +295,16 @@ export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, e
     return (
         <Dialog component="form" open={imageChooserIsOpen} 
             sx={{zIndex: 10000}} fullWidth maxWidth="xl" onSubmit={(e) => {
-            e.preventDefault();
-            exhibitionEditDispatch({
-                scope: "exhibition",
-                type: "add_image",
-                image_id: imageChooserSelectedImage.id
-            })
-            setImageChooserIsOpen(false);
-            setImageChooserSelectedImage(null);
-            setSelectedImageId(imageChooserSelectedImage.id)
-        }}>
+                e.preventDefault();
+                exhibitionEditDispatch({
+                    scope: "exhibition",
+                    type: "add_image",
+                    image_id: imageChooserSelectedImage.id
+                });
+                setImageChooserIsOpen(false);
+                setImageChooserSelectedImage(null);
+                setSelectedImageId(imageChooserSelectedImage.id);
+            }}>
             <DialogTitle>Choose an image</DialogTitle>
             <DialogContent>
                 <CollectionBrowser selectedItem={imageChooserSelectedImage} isDialogMode={true}
@@ -326,8 +327,8 @@ export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, e
                 </Stack>
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
 
 export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, exhibitionIsLoaded, saveExhibition}) => {
@@ -349,17 +350,17 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
         const saveInterval = setInterval(saveExhibition, 30000);
         return () => {
             clearInterval(saveInterval);
-        }
-    })
+        };
+    });
 
 
     return (
         
         <Box component={Paper} square
             sx={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gridTemplateRows: `60px calc(100vh - 184px) 60px`,
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: "60px calc(100vh - 184px) 60px",
                 gridTemplateAreas: `
                     "header"
                     "accordions"
@@ -392,8 +393,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     type: "set_main_wall_color",
                                     newColor: e.target.value
                                 }
-                            )
-                        }} />
+                                );
+                            }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Side Wall Color">
                         <ColorInput value={exhibitionState.appearance.side_wall_color} 
@@ -403,8 +404,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     type: "set_side_wall_color",
                                     newColor: e.target.value
                                 }
-                            )
-                        }} />
+                                );
+                            }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Floor Color">
                         <ColorInput value={exhibitionState.appearance.floor_color} 
@@ -414,8 +415,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     type: "set_floor_color",
                                     newColor: e.target.value
                                 }
-                            )
-                        }} />
+                                );
+                            }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Ceiling Color">
                         <ColorInput value={exhibitionState.appearance.ceiling_color} 
@@ -425,17 +426,17 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     type: "set_ceiling_color",
                                     newColor: e.target.value
                                 }
-                            )
-                        }} />
+                                );
+                            }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Floor Texture">
-                    <Select value={exhibitionState.appearance.floor_texture ?? ''} 
+                        <Select value={exhibitionState.appearance.floor_texture ?? ""} 
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_floor_texture",
                                     newTexture: e.target.value
-                                })
+                                });
                             }}
                         >
                             {textureOptions.map((option) => (
@@ -447,13 +448,13 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                     <AccordionSubHeading text="Ambient Lighting" />
 
                     <ExhibitionOption description="Moodiness">
-                        <Select value={exhibitionState.appearance.moodiness ?? ''} 
+                        <Select value={exhibitionState.appearance.moodiness ?? ""} 
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_moodiness",
                                     newMoodiness: e.target.value
-                                })
+                                });
                             }}
                         >
                             {moodinessOptions.map((option) => (
@@ -469,8 +470,8 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     type: "set_ambient_light_color",
                                     newColor: e.target.value
                                 }
-                            )
-                        }} />
+                                );
+                            }} />
                     </ExhibitionOption>
 
                     <AccordionSubHeading text="Exhibition Dimensions" />
@@ -482,7 +483,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     scope: "exhibition",
                                     type: "set_length",
                                     newValue: e.target.value
-                                })
+                                });
                             }}
                         />
                     </ExhibitionOption>
@@ -493,7 +494,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     scope: "exhibition",
                                     type: "set_width",
                                     newValue: e.target.value
-                                })
+                                });
                             }}
                         />
                     </ExhibitionOption>
@@ -504,7 +505,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                     scope: "exhibition",
                                     type: "set_height",
                                     newValue: e.target.value
-                                })
+                                });
                             }}
                         />
                     </ExhibitionOption>
@@ -518,15 +519,15 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                 >
 
 
-<ExhibitionOption>
+                    <ExhibitionOption>
                         
                         <Button variant="contained" sx={{
                             width: "100%"
                         }}
-                            startIcon={<AddPhotoAlternateIcon />}
-                            onClick={() => {
-                                setImageChooserIsOpen(true);
-                            }}
+                        startIcon={<AddPhotoAlternateIcon />}
+                        onClick={() => {
+                            setImageChooserIsOpen(true);
+                        }}
                         >
                             <Typography variant="body1">Add Image</Typography>
                         </Button>
@@ -537,10 +538,10 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                         <Button variant="outlined"  sx={{
                             width: "100%"
                         }}
-                            startIcon={<CollectionsIcon />}
-                            onClick={() => {
-                                setImageRearrangerIsOpen(true);
-                            }}
+                        startIcon={<CollectionsIcon />}
+                        onClick={() => {
+                            setImageRearrangerIsOpen(true);
+                        }}
                         >
                             <Typography variant="body1">Rearrange Images</Typography>
                         </Button>
@@ -551,17 +552,17 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                     <ExhibitionOption>
 
                         <Select sx={{width: "100%", minHeight: "70px"}} 
-                            disabled={!Boolean(exhibitionState.images?.length)}
+                            disabled={!exhibitionState.images?.length}
                             value={selectedImageId ?? ""} 
                             onChange={(e) => {
-                                setSelectedImageId(e.target.value)
+                                setSelectedImageId(e.target.value);
                             }}
                         >
                             {(exhibitionState.images ?? []).map((image) => {
                                 const catalogImage = globalImageCatalog?.find((i) => i.id == image.image_id);
                                 const image_title = catalogImage?.title;
                                 return (
-                                    <MenuItem key={image.image_id} value={image.image_id ?? ''}>
+                                    <MenuItem key={image.image_id} value={image.image_id ?? ""}>
                                         <Stack direction="row" alignItems="center" spacing={1}>
                                             <Box width="40px" height="40px" sx={{
                                                 backgroundImage: `url("${catalogImage?.thumbnailUrl}")`,
@@ -572,7 +573,7 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
                                             <Typography>{image_title}</Typography>
                                         </Stack>
                                     </MenuItem>
-                                )
+                                );
                             })}
                         </Select>
                         
@@ -588,231 +589,231 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
                     
                     { selectedImageId && ( <>
-                    <AccordionSubHeading text="Position" />
+                        <AccordionSubHeading text="Position" />
 
-                    <ExhibitionOption description="Wall">
-                        <Select value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ''} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_direction",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        >
-                            {directionOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>{option.displayText}</MenuItem>
-                            ))}
-                        </Select>
+                        <ExhibitionOption description="Wall">
+                            <Select value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ""} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_direction",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            >
+                                {directionOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>{option.displayText}</MenuItem>
+                                ))}
+                            </Select>
 
-                    </ExhibitionOption>
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Custom Position">
+                        <ExhibitionOption description="Custom Position">
                         
 
-                        <Checkbox 
-                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_position_custom_enabled",
-                                    isEnabled: e.target.checked
-                                })
-                            }}
-                        />
+                            <Checkbox 
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_position_custom_enabled",
+                                        isEnabled: e.target.checked
+                                    });
+                                }}
+                            />
                         
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_position_custom_x",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.position.custom_position}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_position_custom_x",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
 
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_y ?? ""}
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_position_custom_y",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_y ?? ""}
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.position.custom_position}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_position_custom_y",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
 
-                    </ExhibitionOption>
+                        </ExhibitionOption>
 
-                    <AccordionSubHeading text="Matte" />
-                    <ExhibitionOption description="Color">
-                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.matte.color} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_matte_color",
-                                    newColor: e.target.value
-                                }
-                            )
-                        }} />
+                        <AccordionSubHeading text="Matte" />
+                        <ExhibitionOption description="Color">
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.matte.color} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_matte_color",
+                                        newColor: e.target.value
+                                    }
+                                    );
+                                }} />
 
-                    </ExhibitionOption>
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Custom Weight">
+                        <ExhibitionOption description="Custom Weight">
                         
-                        <Checkbox 
-                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_matte_weight_enabled",
-                                    isEnabled: e.target.checked
-                                })
-                            }}
-                        />
+                            <Checkbox 
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_matte_weight_enabled",
+                                        isEnabled: e.target.checked
+                                    });
+                                }}
+                            />
                         
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.matte.weighted_value ?? ""}
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_matte_weight_value",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.matte.weighted_value ?? ""}
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.matte.weighted}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_matte_weight_value",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
 
-                    <AccordionSubHeading text="Frame" />
-                    <ExhibitionOption description="Custom Frame">
-                        <Checkbox 
-                            checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_frame_custom_enabled",
-                                    isEnabled: e.target.checked
-                                })
-                            }}
-                        />
+                        <AccordionSubHeading text="Frame" />
+                        <ExhibitionOption description="Custom Frame">
+                            <Checkbox 
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_frame_custom_enabled",
+                                        isEnabled: e.target.checked
+                                    });
+                                }}
+                            />
 
-                    </ExhibitionOption>
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Color">
-                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color} 
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_frame_color",
-                                    newColor: e.target.value
-                                }
-                            )
-                        }} />
+                        <ExhibitionOption description="Color">
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color} 
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_frame_color",
+                                        newColor: e.target.value
+                                    }
+                                    );
+                                }} />
 
-                    </ExhibitionOption>
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Width">
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.frame.width ?? ""}
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_frame_width",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                        <ExhibitionOption description="Width">
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.frame.width ?? ""}
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_frame_width",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Height">
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.frame.height ?? ""}
-                            disabled={!Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_frame_height",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                        <ExhibitionOption description="Height">
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.frame.height ?? ""}
+                                disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_frame_height",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
 
-                    <AccordionSubHeading text="Spotlight" />
-                    <ExhibitionOption description="Color">
-                        <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color} 
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_light_color",
-                                    newColor: e.target.value
-                                }
-                            )
-                        }} />
-                    </ExhibitionOption>
+                        <AccordionSubHeading text="Spotlight" />
+                        <ExhibitionOption description="Color">
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color} 
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_light_color",
+                                        newColor: e.target.value
+                                    }
+                                    );
+                                }} />
+                        </ExhibitionOption>
 
-                    <ExhibitionOption description="Intensity">
-                        <Input type="number"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.light.intensity ?? ""}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_light_intensity",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                        <ExhibitionOption description="Intensity">
+                            <Input type="number"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.light.intensity ?? ""}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_light_intensity",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
                     
-                    <AccordionSubHeading text="Curator's Notes" />
-                    <ExhibitionOption vertical description="Description">
-                        <TextField type="textarea" multiline rows={4}
-                        variant="outlined" placeholder="Enter text"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.metadata.description ?? ""}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_description",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                        <AccordionSubHeading text="Curator's Notes" />
+                        <ExhibitionOption vertical description="Description">
+                            <TextField type="textarea" multiline rows={4}
+                                variant="outlined" placeholder="Enter text"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.metadata.description ?? ""}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_description",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
 
-                    <ExhibitionOption vertical description="Additional Information">
-                        <TextField type="textarea" multiline rows={2}
-                            variant="outlined" placeholder="Enter text"
-                            value={getImageStateById(exhibitionState, selectedImageId)?.metadata.additional_information ?? ""}
-                            onChange={(e) => {
-                                exhibitionEditDispatch({
-                                    scope: "image",
-                                    image_id: selectedImageId,
-                                    type: "set_additional_information",
-                                    newValue: e.target.value
-                                })
-                            }}
-                        />
-                    </ExhibitionOption>
+                        <ExhibitionOption vertical description="Additional Information">
+                            <TextField type="textarea" multiline rows={2}
+                                variant="outlined" placeholder="Enter text"
+                                value={getImageStateById(exhibitionState, selectedImageId)?.metadata.additional_information ?? ""}
+                                onChange={(e) => {
+                                    exhibitionEditDispatch({
+                                        scope: "image",
+                                        image_id: selectedImageId,
+                                        type: "set_additional_information",
+                                        newValue: e.target.value
+                                    });
+                                }}
+                            />
+                        </ExhibitionOption>
                     </>
                     )}
                     
@@ -849,15 +850,15 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
             <Dialog component="form" open={deleteImageDialogIsOpen} 
                 sx={{zIndex: 10000}}onSubmit={(e) => {
-                e.preventDefault();
-                exhibitionEditDispatch({
-                    scope: "exhibition",
-                    type: "remove_image",
-                    image_id: selectedImageId
-                })
-                setDeleteImageDialogIsOpen(false);
-                setSelectedImageId(null);
-            }}>
+                    e.preventDefault();
+                    exhibitionEditDispatch({
+                        scope: "exhibition",
+                        type: "remove_image",
+                        image_id: selectedImageId
+                    });
+                    setDeleteImageDialogIsOpen(false);
+                    setSelectedImageId(null);
+                }}>
                 <DialogTitle>Remove image</DialogTitle>
                 <DialogContent>
                     <Typography>Are you sure you want to remove this image?</Typography>
@@ -881,5 +882,5 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
 
         </Box>
-    )
-}
+    );
+};
