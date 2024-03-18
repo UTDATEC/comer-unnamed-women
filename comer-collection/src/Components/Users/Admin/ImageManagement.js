@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Stack,
   Button,
-  Typography, useTheme, Box, IconButton, Paper
+  Typography, Box, IconButton, Paper
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
@@ -11,8 +11,8 @@ import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog"
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities";
-import { Navigate, useNavigate } from "react-router";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
+import { Navigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
 import { tagFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { filterItemFields } from "../Tools/HelperMethods/fields";
@@ -40,11 +40,11 @@ const ImageManagement = (props) => {
   const [editDialogImage, setEditDialogImage] = useState(null);
 
   const [selectedImages, setSelectedImages] = useState([]);
-  
+
   const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
   const [assignArtistDialogImages, setAssignArtistDialogImages] = useState([]);
   const [artistsByImage, setArtistsByImage] = useState({});
-  
+
   const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
   const [assignTagDialogImages, setAssignTagDialogImages] = useState([]);
   const [tagsByImage, setTagsByImage] = useState({});
@@ -86,17 +86,17 @@ const ImageManagement = (props) => {
   const showSnackbar = useSnackbar();
   const [appUser, setAppUser] = useAppUser();
   const setTitleText = useTitle();
-  
+
 
   useEffect(() => {
     setSelectedNavItem("Image Management");
     setTitleText("Image Management");
-    if(appUser.is_admin) {
+    if (appUser.is_admin) {
       fetchImages();
       fetchArtists();
       fetchTags();
     }
-  }, []); 
+  }, []);
 
   const imageFilterFunction = useCallback((image) => {
     return (
@@ -115,16 +115,16 @@ const ImageManagement = (props) => {
       }, 1000);
 
       const artistsByImageDraft = {}
-      for(const i of imageData.data) {
+      for (const i of imageData.data) {
         artistsByImageDraft[i.id] = i.Artists;
       }
-      setArtistsByImage({...artistsByImageDraft});
+      setArtistsByImage({ ...artistsByImageDraft });
 
       const tagsByImageDraft = {}
-      for(const i of imageData.data) {
+      for (const i of imageData.data) {
         tagsByImageDraft[i.id] = i.Tags;
       }
-      setTagsByImage({...tagsByImageDraft});
+      setTagsByImage({ ...tagsByImageDraft });
 
     } catch (error) {
       return;
@@ -153,29 +153,29 @@ const ImageManagement = (props) => {
 
 
 
-  const handleImagesCreate = async(newImageArray) => {
+  const handleImagesCreate = async (newImageArray) => {
     let imagesCreated = 0;
     let imageIndicesWithErrors = []
-    for(const [i, newImageData] of newImageArray.entries()) {
+    for (const [i, newImageData] of newImageArray.entries()) {
       try {
         let filteredImage = filterItemFields(imageFieldDefinitions, newImageData);
         await sendAuthenticatedRequest("POST", `/api/admin/images`, filteredImage);
 
         imagesCreated++;
-  
+
       } catch (error) {
         imageIndicesWithErrors.push(i);
       }
     }
     await fetchImages();
 
-    if(imagesCreated == newImageArray.length) {
+    if (imagesCreated == newImageArray.length) {
       setDialogIsOpen(false);
       showSnackbar(`Successfully created ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "success");
 
-    } else if(imagesCreated < newImageArray.length) {
+    } else if (imagesCreated < newImageArray.length) {
 
-      if(imagesCreated > 0) {
+      if (imagesCreated > 0) {
         showSnackbar(`Created ${imagesCreated} of ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "warning");
       }
       else {
@@ -190,8 +190,8 @@ const ImageManagement = (props) => {
   }
 
 
-  
-  const handleImageEdit = async(imageId, updateFields) => {
+
+  const handleImageEdit = async (imageId, updateFields) => {
     try {
       let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/admin/images/${imageId}`, filteredImage);
@@ -227,8 +227,8 @@ const ImageManagement = (props) => {
   };
 
 
-  
-  const handleCreateArtist = async(newArtist) => {
+
+  const handleCreateArtist = async (newArtist) => {
     try {
       let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
       await sendAuthenticatedRequest("POST", `/api/admin/artists/`, filteredArtist);
@@ -243,8 +243,8 @@ const ImageManagement = (props) => {
   }
 
 
-  
-  const handleCreateTag = async(newTag) => {
+
+  const handleCreateTag = async (newTag) => {
     try {
       let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
       await sendAuthenticatedRequest("POST", `/api/admin/tags/`, filteredTag);
@@ -258,8 +258,8 @@ const ImageManagement = (props) => {
     }
   }
 
-  
-  const handleEditArtist = async(artistId, updateFields) => {
+
+  const handleEditArtist = async (artistId, updateFields) => {
     try {
       let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}`, filteredartist);
@@ -276,8 +276,8 @@ const ImageManagement = (props) => {
   }
 
 
-  
-  const handleEditTag = async(tagId, updateFields) => {
+
+  const handleEditTag = async (tagId, updateFields) => {
     try {
       let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/admin/tags/${tagId}`, filteredtag);
@@ -294,7 +294,7 @@ const ImageManagement = (props) => {
   }
 
 
-  const handleDeleteArtist = async(artistId) => {
+  const handleDeleteArtist = async (artistId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/admin/artists/${artistId}`);
       fetchArtists();
@@ -310,8 +310,8 @@ const ImageManagement = (props) => {
     }
   }
 
-  
-  const handleDeleteTag = async(tagId) => {
+
+  const handleDeleteTag = async (tagId) => {
     try {
       await sendAuthenticatedRequest("DELETE", `/api/admin/tags/${tagId}`);
       fetchTags();
@@ -329,7 +329,7 @@ const ImageManagement = (props) => {
 
 
 
-  const handleAssignImagesToArtist = useCallback(async(artistId, imageIds) => {
+  const handleAssignImagesToArtist = useCallback(async (artistId, imageIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/imageartists/assign`, {
         images: imageIds,
@@ -343,7 +343,7 @@ const ImageManagement = (props) => {
     await fetchImages();
   }, [showSnackbar]);
 
-  const handleUnassignImagesFromArtist = useCallback(async(artistId, imageIds) => {
+  const handleUnassignImagesFromArtist = useCallback(async (artistId, imageIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/imageartists/unassign`, {
         images: imageIds,
@@ -357,8 +357,8 @@ const ImageManagement = (props) => {
     await fetchImages();
   }, [showSnackbar]);
 
-  
-  const handleAssignImagesToTag = useCallback(async(tagId, imageIds) => {
+
+  const handleAssignImagesToTag = useCallback(async (tagId, imageIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/imagetags/assign`, {
         images: imageIds,
@@ -372,7 +372,7 @@ const ImageManagement = (props) => {
     await fetchImages();
   }, [showSnackbar]);
 
-  const handleUnassignImagesFromTag = useCallback(async(tagId, imageIds) => {
+  const handleUnassignImagesFromTag = useCallback(async (tagId, imageIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/imagetags/unassign`, {
         images: imageIds,
@@ -388,7 +388,7 @@ const ImageManagement = (props) => {
 
 
 
-  
+
   const handleCopyToClipboard = useCallback((item, fieldName) => {
     try {
       navigator.clipboard.writeText(item[fieldName]);
@@ -429,11 +429,11 @@ const ImageManagement = (props) => {
       columnDescription: "Website",
       generateTableCell: (artist) => (
         artist.website && (
-          <Button size="small" 
-            sx={{textTransform: "unset"}}
+          <Button size="small"
+            sx={{ textTransform: "unset" }}
             endIcon={<ContentCopyIcon />} onClick={() => {
-            handleCopyToClipboard(artist, "website")
-          }}>
+              handleCopyToClipboard(artist, "website")
+            }}>
             <Typography variant="body1">{artist.website}</Typography>
           </Button>
         )
@@ -445,7 +445,7 @@ const ImageManagement = (props) => {
         artist.notes && (
           <Typography variant="body1">{artist.notes}</Typography>
         ) || !artist.notes && (
-          <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
+          <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
         )
       )
     },
@@ -461,8 +461,8 @@ const ImageManagement = (props) => {
           >
             <EditIcon />
           </IconButton>
-          <IconButton 
-            disabled={artist.Images.length} 
+          <IconButton
+            disabled={artist.Images.length}
             onClick={() => {
               setArtistDeleteDialogItem(artist);
               setArtistDeleteDialogIsOpen(true);
@@ -476,7 +476,7 @@ const ImageManagement = (props) => {
   ]
 
 
-  
+
   const tagTableFields = [
     {
       columnDescription: "ID",
@@ -511,7 +511,7 @@ const ImageManagement = (props) => {
         tag.notes && (
           <Typography variant="body1">{tag.notes}</Typography>
         ) || !tag.notes && (
-          <Typography variant="body1" sx={{opacity: 0.5}}></Typography>
+          <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
         )
       )
     },
@@ -527,8 +527,8 @@ const ImageManagement = (props) => {
           >
             <EditIcon />
           </IconButton>
-          <IconButton 
-            disabled={tag.Images.length} 
+          <IconButton
+            disabled={tag.Images.length}
             onClick={() => {
               setTagDeleteDialogItem(tag);
               setTagDeleteDialogIsOpen(true);
@@ -560,28 +560,28 @@ const ImageManagement = (props) => {
     {
       columnDescription: "Preview",
       generateTableCell: (image) => (
-        <Stack direction="row" sx={{height: "50px", maxWidth: "100px"}} 
+        <Stack direction="row" sx={{ height: "50px", maxWidth: "100px" }}
           justifyContent="center" alignItems="center">
-        {(image.thumbnailUrl) && (
-          <Button 
-            onClick={() => {
-              setPreviewerImage(image);
-              setPreviewerOpen(true);
-            }}
-          >
-          <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/collection/images/${image.id}/download`} loading="lazy" />
-          </Button>
-        ) || image.url && (
-          <Button variant="outlined" color="primary" 
-            startIcon={<VisibilityIcon />}
-            onClick={() => {
-              setPreviewerImage(image);
-              setPreviewerOpen(true);
-            }}
-          >
-            <Typography variant="body1">View</Typography>
-          </Button>
-        )}
+          {(image.thumbnailUrl) && (
+            <Button
+              onClick={() => {
+                setPreviewerImage(image);
+                setPreviewerOpen(true);
+              }}
+            >
+              <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/collection/images/${image.id}/download`} loading="lazy" />
+            </Button>
+          ) || image.url && (
+            <Button variant="outlined" color="primary"
+              startIcon={<VisibilityIcon />}
+              onClick={() => {
+                setPreviewerImage(image);
+                setPreviewerOpen(true);
+              }}
+            >
+              <Typography variant="body1">View</Typography>
+            </Button>
+          )}
         </Stack>
       )
     },
@@ -614,7 +614,7 @@ const ImageManagement = (props) => {
       columnDescription: "Artists",
       generateTableCell: (image) => (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Button variant="text" 
+          <Button variant="text"
             color="primary"
             startIcon={<BrushIcon />}
             onClick={() => {
@@ -631,7 +631,7 @@ const ImageManagement = (props) => {
       columnDescription: "Tags",
       generateTableCell: (image) => (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Button variant="text" 
+          <Button variant="text"
             color="primary"
             startIcon={<SellIcon />}
             onClick={() => {
@@ -648,7 +648,7 @@ const ImageManagement = (props) => {
       columnDescription: "Exhibitions",
       generateTableCell: (image) => (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Button variant="text" 
+          <Button variant="text"
             color="primary"
             disabled startIcon={<PhotoCameraBackIcon />}
             onClick={() => {
@@ -666,7 +666,7 @@ const ImageManagement = (props) => {
       columnDescription: "Options",
       generateTableCell: (image) => (
         <Stack direction="row">
-          <IconButton 
+          <IconButton
             onClick={() => {
               setEditDialogImage(image);
               setEditDialogIsOpen(true)
@@ -674,8 +674,8 @@ const ImageManagement = (props) => {
           >
             <EditIcon />
           </IconButton>
-          <IconButton 
-            disabled={image.Exhibitions.length} 
+          <IconButton
+            disabled={image.Exhibitions.length}
             onClick={() => {
               setDeleteDialogImage(image);
               setDeleteDialogIsOpen(true);
@@ -689,7 +689,7 @@ const ImageManagement = (props) => {
   ]
 
 
-  const artistTableFieldsForDialog = useMemo(() =>[
+  const artistTableFieldsForDialog = useMemo(() => [
     {
       columnDescription: "ID",
       generateTableCell: (artist) => (
@@ -712,7 +712,7 @@ const ImageManagement = (props) => {
   ], []);
 
 
-  const tagTableFieldsForDialog = useMemo(() =>[
+  const tagTableFieldsForDialog = useMemo(() => [
     {
       columnDescription: "ID",
       generateTableCell: (tag) => (
@@ -736,7 +736,7 @@ const ImageManagement = (props) => {
       )
     }
   ], []);
-  
+
 
 
   const artistTableFieldsForDialogAll = useMemo(() => [...artistTableFieldsForDialog, {
@@ -753,32 +753,32 @@ const ImageManagement = (props) => {
                 {quantity == 2 ? `Added to both images` : `Added to all ${quantity} images`}
               </Typography>
             )}
-          </Button>) || 
-          quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-            }}>
-              {assignArtistDialogImages.length == 1 ? (
-                <Typography variant="body1">Add</Typography>
-                ) : (
-                <Typography variant="body1">Add to {assignArtistDialogImages.length} images</Typography>
-              )}
-            </Button>
-          ) || 
-          quantity > 0 && quantity < assignArtistDialogImages.length && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-            }}>
-              {assignArtistDialogImages.length - quantity == 1 ? (
-                <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more image</Typography>
-              ) : (
-                <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more images</Typography>
-              )}
-            </Button>
-          )
+          </Button>) ||
+        quantity == 0 && (
+          <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
+          }}>
+            {assignArtistDialogImages.length == 1 ? (
+              <Typography variant="body1">Add</Typography>
+            ) : (
+              <Typography variant="body1">Add to {assignArtistDialogImages.length} images</Typography>
+            )}
+          </Button>
+        ) ||
+        quantity > 0 && quantity < assignArtistDialogImages.length && (
+          <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
+          }}>
+            {assignArtistDialogImages.length - quantity == 1 ? (
+              <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more image</Typography>
+            ) : (
+              <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more images</Typography>
+            )}
+          </Button>
         )
-      }
+      )
     }
+  }
   ], [assignArtistDialogImages, handleAssignImagesToArtist]);
 
 
@@ -796,32 +796,32 @@ const ImageManagement = (props) => {
                 {quantity == 2 ? `Added to both images` : `Added to all ${quantity} images`}
               </Typography>
             )}
-          </Button>) || 
-          quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
-              handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
-            }}>
-              {assignTagDialogImages.length == 1 ? (
-                <Typography variant="body1">Add</Typography>
-                ) : (
-                <Typography variant="body1">Add to {assignTagDialogImages.length} images</Typography>
-              )}
-            </Button>
-          ) || 
-          quantity > 0 && quantity < assignTagDialogImages.length && (
-            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
-              handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
-            }}>
-              {assignTagDialogImages.length - quantity == 1 ? (
-                <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more image</Typography>
-              ) : (
-                <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more images</Typography>
-              )}
-            </Button>
-          )
+          </Button>) ||
+        quantity == 0 && (
+          <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
+            handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
+          }}>
+            {assignTagDialogImages.length == 1 ? (
+              <Typography variant="body1">Add</Typography>
+            ) : (
+              <Typography variant="body1">Add to {assignTagDialogImages.length} images</Typography>
+            )}
+          </Button>
+        ) ||
+        quantity > 0 && quantity < assignTagDialogImages.length && (
+          <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
+            handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
+          }}>
+            {assignTagDialogImages.length - quantity == 1 ? (
+              <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more image</Typography>
+            ) : (
+              <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more images</Typography>
+            )}
+          </Button>
         )
-      }
+      )
     }
+  }
   ], [assignTagDialogImages, handleAssignImagesToTag]);
 
 
@@ -836,11 +836,11 @@ const ImageManagement = (props) => {
           }}>
             {assignArtistDialogImages.length == 1 ? (
               <Typography variant="body1">Remove</Typography>
-              ) : (
+            ) : (
               <Typography variant="body1">Remove from {quantity} images</Typography>
             )}
           </Button>
-        ) || 
+        ) ||
         quantity > 0 && quantity < assignArtistDialogImages.length && (
           <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
             handleUnassignImagesFromArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
@@ -853,7 +853,7 @@ const ImageManagement = (props) => {
   }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);
 
 
-  
+
   const tagTableFieldsForDialogAssigned = useMemo(() => [...tagTableFieldsForDialog, {
     columnDescription: "",
     generateTableCell: (tag) => {
@@ -865,11 +865,11 @@ const ImageManagement = (props) => {
           }}>
             {assignTagDialogImages.length == 1 ? (
               <Typography variant="body1">Remove</Typography>
-              ) : (
+            ) : (
               <Typography variant="body1">Remove from {quantity} images</Typography>
             )}
           </Button>
-        ) || 
+        ) ||
         quantity > 0 && quantity < assignTagDialogImages.length && (
           <Button variant="outlined" startIcon={<RemoveIcon />} onClick={() => {
             handleUnassignImagesFromTag(tag.id, assignTagDialogImages.map((i) => i.id));
@@ -891,268 +891,268 @@ const ImageManagement = (props) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.pw_change_required && (
-    <Navigate to="/Account/ChangePassword" />
-  ) ||
-  appUser.is_admin && (
-    <Box component={Paper} square={true} sx={{
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: '80px calc(100vh - 224px) 80px',
-      gridTemplateAreas: `
+    appUser.pw_change_required && (
+      <Navigate to="/Account/ChangePassword" />
+    ) ||
+    appUser.is_admin && (
+      <Box component={Paper} square={true} sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '80px calc(100vh - 224px) 80px',
+        gridTemplateAreas: `
         "top"
         "table"
         "bottom"
       `
-    }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-        <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search image fields and notes" width="30%" />
-        <Stack direction="row" spacing={2}>
-          <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
-            setRefreshInProgress(true);
-            fetchImages();
-          }}
-            disabled={refreshInProgress}>
-            <Typography variant="body1">Refresh</Typography>
-          </Button>
-          <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
-            disabled={
-              !Boolean(searchQuery)
-            }>
-            <Typography variant="body1">Clear Filters</Typography>
-          </Button>
-          <Button color="primary" variant="outlined" startIcon={<SellIcon />}
-            onClick={() => {
-              setManageTagDialogIsOpen(true);
+      }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+          <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search image fields and notes" width="30%" />
+          <Stack direction="row" spacing={2}>
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
+              setRefreshInProgress(true);
+              fetchImages();
             }}
-          >
-            <Typography variant="body1">Tags</Typography>
-          </Button>
-          <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
-            onClick={() => {
-              setManageArtistDialogIsOpen(true);
-            }}
-          >
-            <Typography variant="body1">Artists</Typography>
-          </Button>
-          <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon/>}
-            onClick={() => {
-              setDialogIsOpen(true);
-            }}
-          >
-            <Typography variant="body1">Create Images</Typography>
-          </Button>
+              disabled={refreshInProgress}>
+              <Typography variant="body1">Refresh</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
+              disabled={
+                !Boolean(searchQuery)
+              }>
+              <Typography variant="body1">Clear Filters</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<SellIcon />}
+              onClick={() => {
+                setManageTagDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Tags</Typography>
+            </Button>
+            <Button color="primary" variant="outlined" startIcon={<BrushIcon />}
+              onClick={() => {
+                setManageArtistDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Artists</Typography>
+            </Button>
+            <Button color="primary" variant="contained" startIcon={<AddPhotoAlternateIcon />}
+              onClick={() => {
+                setDialogIsOpen(true);
+              }}
+            >
+              <Typography variant="body1">Create Images</Typography>
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-      
-      <DataTable items={images} visibleItems={visibleImages} 
-        tableFields={imageTableFields} 
-        rowSelectionEnabled={true} 
-        selectedItems={selectedImages}
-        setSelectedItems={setSelectedImages}
-        emptyMinHeight="300px"
-        {...visibleImages.length == images.length && {
-          noContentMessage: "No images yet",
-          noContentButtonAction: () => {setDialogIsOpen(true)},
-          noContentButtonText: "Create an image",
-          NoContentIcon: InfoIcon
-        } || visibleImages.length < images.length && {
-          noContentMessage: "No results",
-          noContentButtonAction: clearFilters,
-          noContentButtonText: "Clear Filters",
-          NoContentIcon: SearchIcon
-        }}
-      />
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
-        <SelectionSummary
-          items={images}
+        <DataTable items={images} visibleItems={visibleImages}
+          tableFields={imageTableFields}
+          rowSelectionEnabled={true}
           selectedItems={selectedImages}
           setSelectedItems={setSelectedImages}
-          visibleItems={visibleImages}
-          entitySingular="image"
-          entityPlural="images"
+          emptyMinHeight="300px"
+          {...visibleImages.length == images.length && {
+            noContentMessage: "No images yet",
+            noContentButtonAction: () => { setDialogIsOpen(true) },
+            noContentButtonText: "Create an image",
+            NoContentIcon: InfoIcon
+          } || visibleImages.length < images.length && {
+            noContentMessage: "No results",
+            noContentButtonAction: clearFilters,
+            noContentButtonText: "Clear Filters",
+            NoContentIcon: SearchIcon
+          }}
         />
-        <Stack direction="row" spacing={2} >
-          <Button variant="outlined"
-            disabled={selectedImages.length == 0}
-            startIcon={<BrushIcon />}
-            onClick={() => {
-            setAssignArtistDialogImages([...selectedImages])
-            setAssignArtistDialogIsOpen(true);
-          }}>
-            <Typography variant="body1">Manage Credits for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
-          </Button>
-          <Button variant="outlined"
-            disabled={selectedImages.length == 0}
-            startIcon={<SellIcon />}
-            onClick={() => {
-            setAssignTagDialogImages([...selectedImages])
-            setAssignTagDialogIsOpen(true);
-          }}>
-            <Typography variant="body1">Manage Tags for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
-          </Button>
+
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+          <SelectionSummary
+            items={images}
+            selectedItems={selectedImages}
+            setSelectedItems={setSelectedImages}
+            visibleItems={visibleImages}
+            entitySingular="image"
+            entityPlural="images"
+          />
+          <Stack direction="row" spacing={2} >
+            <Button variant="outlined"
+              disabled={selectedImages.length == 0}
+              startIcon={<BrushIcon />}
+              onClick={() => {
+                setAssignArtistDialogImages([...selectedImages])
+                setAssignArtistDialogIsOpen(true);
+              }}>
+              <Typography variant="body1">Manage Credits for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
+            </Button>
+            <Button variant="outlined"
+              disabled={selectedImages.length == 0}
+              startIcon={<SellIcon />}
+              onClick={() => {
+                setAssignTagDialogImages([...selectedImages])
+                setAssignTagDialogIsOpen(true);
+              }}>
+              <Typography variant="body1">Manage Tags for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
 
-      <ItemMultiCreateDialog entity="image"
-        dialogTitle={"Create Images"}
-        dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
-        handleItemsCreate={handleImagesCreate}
-        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
+        <ItemMultiCreateDialog entity="image"
+          dialogTitle={"Create Images"}
+          dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
+          handleItemsCreate={handleImagesCreate}
+          {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
-      <ItemSingleEditDialog 
-        entity="image"
-        dialogTitle={"Edit Image"}
-        dialogInstructions={"Edit the image fields, then click 'Save'."}
-        editDialogItem={editDialogImage}
-        handleItemEdit={handleImageEdit}
-        {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+        <ItemSingleEditDialog
+          entity="image"
+          dialogTitle={"Edit Image"}
+          dialogInstructions={"Edit the image fields, then click 'Save'."}
+          editDialogItem={editDialogImage}
+          handleItemEdit={handleImageEdit}
+          {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
-      <ItemSingleDeleteDialog 
-        entity="image"
-        dialogTitle="Delete Image"
-        deleteDialogItem={deleteDialogImage}
-        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
-
-
-      <EntityManageDialog 
-        entitySingular="artist" entityPlural="artists"
-        dialogTitle="Manage Artists"
-        dialogInstructionsTable="Edit or delete existing artists"
-        dialogInstructionsForm="Create a new artist"
-        dialogItems={artists}
-        setDialogItems={setArtists}
-        dialogFieldDefinitions={artistFieldDefinitions}
-        dialogTableFields={artistTableFields}
-        dialogIsOpen={manageArtistDialogIsOpen}
-        setDialogIsOpen={setManageArtistDialogIsOpen}
-        handleItemCreate={handleCreateArtist}
-        handleItemEdit={handleEditArtist}
-        handleItemDelete={handleDeleteArtist}
-        searchBoxFields={['fullName', 'fullNameReverse', 'notes']}
-        searchBoxPlaceholder="Search artists by name or notes"
-        internalDeleteDialogIsOpen={artistDeleteDialogIsOpen}
-        setInternalDeleteDialogIsOpen={setArtistDeleteDialogIsOpen}
-        internalDeleteDialogItem={artistDeleteDialogItem}
-        setInternalDeleteDialogItem={setArtistDeleteDialogItem}
-        internalEditDialogIsOpen={artistEditDialogIsOpen}
-        setInternalEditDialogIsOpen={setArtistEditDialogIsOpen}
-        internalEditDialogItem={artistEditDialogItem}
-        setInternalEditDialogItem={setArtistEditDialogItem}
-        itemSearchQuery={artistDialogSearchQuery}
-        setItemSearchQuery={setArtistDialogSearchQuery}
-      />
-
-      <EntityManageDialog 
-        entitySingular="tag" entityPlural="tags"
-        dialogTitle="Manage Tags"
-        dialogInstructionsTable="Edit or delete existing tags"
-        dialogInstructionsForm="Create a new tag"
-        dialogItems={tags}
-        setDialogItems={setTags}
-        dialogFieldDefinitions={tagFieldDefinitions}
-        dialogTableFields={tagTableFields}
-        dialogIsOpen={manageTagDialogIsOpen}
-        setDialogIsOpen={setManageTagDialogIsOpen}
-        handleItemCreate={handleCreateTag}
-        handleItemEdit={handleEditTag}
-        handleItemDelete={handleDeleteTag}
-        searchBoxFields={['data', 'notes']}
-        searchBoxPlaceholder="Search tags by name or notes"
-        internalDeleteDialogIsOpen={tagDeleteDialogIsOpen}
-        setInternalDeleteDialogIsOpen={setTagDeleteDialogIsOpen}
-        internalDeleteDialogItem={tagDeleteDialogItem}
-        setInternalDeleteDialogItem={setTagDeleteDialogItem}
-        internalEditDialogIsOpen={tagEditDialogIsOpen}
-        setInternalEditDialogIsOpen={setTagEditDialogIsOpen}
-        internalEditDialogItem={tagEditDialogItem}
-        setInternalEditDialogItem={setTagEditDialogItem}
-        itemSearchQuery={tagDialogSearchQuery}
-        setItemSearchQuery={setTagDialogSearchQuery}
-      />
-
-      <ImageFullScreenViewer 
-        image={previewerImage} 
-        setImage={setPreviewerImage}
-        previewerOpen={previewerOpen}
-        setPreviewerOpen={setPreviewerOpen}
-      />
+        <ItemSingleDeleteDialog
+          entity="image"
+          dialogTitle="Delete Image"
+          deleteDialogItem={deleteDialogImage}
+          {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
 
-      <AssociationManagementDialog
-        primaryEntity="image"
-        secondaryEntity="artist"
-        primaryItems={assignArtistDialogImages}
-        secondaryItemsAll={artists}
-        secondariesByPrimary={artistsByImage}
-        dialogTitle={
-          assignArtistDialogImages.length == 1 ?
-            `Edit Listed Artists for ${assignArtistDialogImages[0].title}` :
-            `Edit Listed Artists for ${assignArtistDialogImages.length} Selected Images`
-        }
-        dialogButtonForSecondaryManagement={<>
-          <Button variant="outlined" onClick={() => {
-            setAssignArtistDialogIsOpen(false);
-            setManageArtistDialogIsOpen(true);
-          }}>
-            <Typography>Go to artist management</Typography>
-          </Button>
-        </>}
-        dialogIsOpen={assignArtistDialogIsOpen}
-        tableTitleAssigned={
-          assignArtistDialogImages.length == 1 ?
-            `Listed Artists for ${assignArtistDialogImages[0].title}` :
-            `Listed Artists for Selected Images`
-        }
-        tableTitleAll={`All Artists`}
-        setDialogIsOpen={setAssignArtistDialogIsOpen}
-        secondaryFieldInPrimary="Artists"
-        secondaryTableFieldsAll={artistTableFieldsForDialogAll}
-        secondaryTableFieldsAssignedOnly={artistTableFieldsForDialogAssigned}
-        secondarySearchFields={['fullName', 'fullNameReverse', 'notes']}
-        secondarySearchBoxPlaceholder={"Search artists by name or notes"}
-      />
+        <EntityManageDialog
+          entitySingular="artist" entityPlural="artists"
+          dialogTitle="Manage Artists"
+          dialogInstructionsTable="Edit or delete existing artists"
+          dialogInstructionsForm="Create a new artist"
+          dialogItems={artists}
+          setDialogItems={setArtists}
+          dialogFieldDefinitions={artistFieldDefinitions}
+          dialogTableFields={artistTableFields}
+          dialogIsOpen={manageArtistDialogIsOpen}
+          setDialogIsOpen={setManageArtistDialogIsOpen}
+          handleItemCreate={handleCreateArtist}
+          handleItemEdit={handleEditArtist}
+          handleItemDelete={handleDeleteArtist}
+          searchBoxFields={['fullName', 'fullNameReverse', 'notes']}
+          searchBoxPlaceholder="Search artists by name or notes"
+          internalDeleteDialogIsOpen={artistDeleteDialogIsOpen}
+          setInternalDeleteDialogIsOpen={setArtistDeleteDialogIsOpen}
+          internalDeleteDialogItem={artistDeleteDialogItem}
+          setInternalDeleteDialogItem={setArtistDeleteDialogItem}
+          internalEditDialogIsOpen={artistEditDialogIsOpen}
+          setInternalEditDialogIsOpen={setArtistEditDialogIsOpen}
+          internalEditDialogItem={artistEditDialogItem}
+          setInternalEditDialogItem={setArtistEditDialogItem}
+          itemSearchQuery={artistDialogSearchQuery}
+          setItemSearchQuery={setArtistDialogSearchQuery}
+        />
+
+        <EntityManageDialog
+          entitySingular="tag" entityPlural="tags"
+          dialogTitle="Manage Tags"
+          dialogInstructionsTable="Edit or delete existing tags"
+          dialogInstructionsForm="Create a new tag"
+          dialogItems={tags}
+          setDialogItems={setTags}
+          dialogFieldDefinitions={tagFieldDefinitions}
+          dialogTableFields={tagTableFields}
+          dialogIsOpen={manageTagDialogIsOpen}
+          setDialogIsOpen={setManageTagDialogIsOpen}
+          handleItemCreate={handleCreateTag}
+          handleItemEdit={handleEditTag}
+          handleItemDelete={handleDeleteTag}
+          searchBoxFields={['data', 'notes']}
+          searchBoxPlaceholder="Search tags by name or notes"
+          internalDeleteDialogIsOpen={tagDeleteDialogIsOpen}
+          setInternalDeleteDialogIsOpen={setTagDeleteDialogIsOpen}
+          internalDeleteDialogItem={tagDeleteDialogItem}
+          setInternalDeleteDialogItem={setTagDeleteDialogItem}
+          internalEditDialogIsOpen={tagEditDialogIsOpen}
+          setInternalEditDialogIsOpen={setTagEditDialogIsOpen}
+          internalEditDialogItem={tagEditDialogItem}
+          setInternalEditDialogItem={setTagEditDialogItem}
+          itemSearchQuery={tagDialogSearchQuery}
+          setItemSearchQuery={setTagDialogSearchQuery}
+        />
+
+        <ImageFullScreenViewer
+          image={previewerImage}
+          setImage={setPreviewerImage}
+          previewerOpen={previewerOpen}
+          setPreviewerOpen={setPreviewerOpen}
+        />
 
 
-      <AssociationManagementDialog
-        primaryEntity="image"
-        secondaryEntity="tag"
-        primaryItems={assignTagDialogImages}
-        secondaryItemsAll={tags}
-        secondariesByPrimary={tagsByImage}
-        dialogTitle={
-          assignTagDialogImages.length == 1 ?
-            `Edit Listed Tags for ${assignTagDialogImages[0].title}` :
-            `Edit Listed Tags for ${assignTagDialogImages.length} Selected Images`
-        }
-        dialogButtonForSecondaryManagement={<>
-          <Button variant="outlined" onClick={() => {
-            setAssignTagDialogIsOpen(false);
-            setManageTagDialogIsOpen(true);
-          }}>
-            <Typography>Go to tag management</Typography>
-          </Button>
-        </>}
-        dialogIsOpen={assignTagDialogIsOpen}
-        tableTitleAssigned={
-          assignTagDialogImages.length == 1 ?
-            `Listed Tags for ${assignTagDialogImages[0].title}` :
-            `Listed Tags for Selected Images`
-        }
-        tableTitleAll={`All Tags`}
-        setDialogIsOpen={setAssignTagDialogIsOpen}
-        secondaryFieldInPrimary="Tags"
-        secondaryTableFieldsAll={tagTableFieldsForDialogAll}
-        secondaryTableFieldsAssignedOnly={tagTableFieldsForDialogAssigned}
-        secondarySearchFields={['data', 'notes']}
-        secondarySearchBoxPlaceholder={"Search tags by name or notes"}
-      />
+        <AssociationManagementDialog
+          primaryEntity="image"
+          secondaryEntity="artist"
+          primaryItems={assignArtistDialogImages}
+          secondaryItemsAll={artists}
+          secondariesByPrimary={artistsByImage}
+          dialogTitle={
+            assignArtistDialogImages.length == 1 ?
+              `Edit Listed Artists for ${assignArtistDialogImages[0].title}` :
+              `Edit Listed Artists for ${assignArtistDialogImages.length} Selected Images`
+          }
+          dialogButtonForSecondaryManagement={<>
+            <Button variant="outlined" onClick={() => {
+              setAssignArtistDialogIsOpen(false);
+              setManageArtistDialogIsOpen(true);
+            }}>
+              <Typography>Go to artist management</Typography>
+            </Button>
+          </>}
+          dialogIsOpen={assignArtistDialogIsOpen}
+          tableTitleAssigned={
+            assignArtistDialogImages.length == 1 ?
+              `Listed Artists for ${assignArtistDialogImages[0].title}` :
+              `Listed Artists for Selected Images`
+          }
+          tableTitleAll={`All Artists`}
+          setDialogIsOpen={setAssignArtistDialogIsOpen}
+          secondaryFieldInPrimary="Artists"
+          secondaryTableFieldsAll={artistTableFieldsForDialogAll}
+          secondaryTableFieldsAssignedOnly={artistTableFieldsForDialogAssigned}
+          secondarySearchFields={['fullName', 'fullNameReverse', 'notes']}
+          secondarySearchBoxPlaceholder={"Search artists by name or notes"}
+        />
+
+
+        <AssociationManagementDialog
+          primaryEntity="image"
+          secondaryEntity="tag"
+          primaryItems={assignTagDialogImages}
+          secondaryItemsAll={tags}
+          secondariesByPrimary={tagsByImage}
+          dialogTitle={
+            assignTagDialogImages.length == 1 ?
+              `Edit Listed Tags for ${assignTagDialogImages[0].title}` :
+              `Edit Listed Tags for ${assignTagDialogImages.length} Selected Images`
+          }
+          dialogButtonForSecondaryManagement={<>
+            <Button variant="outlined" onClick={() => {
+              setAssignTagDialogIsOpen(false);
+              setManageTagDialogIsOpen(true);
+            }}>
+              <Typography>Go to tag management</Typography>
+            </Button>
+          </>}
+          dialogIsOpen={assignTagDialogIsOpen}
+          tableTitleAssigned={
+            assignTagDialogImages.length == 1 ?
+              `Listed Tags for ${assignTagDialogImages[0].title}` :
+              `Listed Tags for Selected Images`
+          }
+          tableTitleAll={`All Tags`}
+          setDialogIsOpen={setAssignTagDialogIsOpen}
+          secondaryFieldInPrimary="Tags"
+          secondaryTableFieldsAll={tagTableFieldsForDialogAll}
+          secondaryTableFieldsAssignedOnly={tagTableFieldsForDialogAssigned}
+          secondarySearchFields={['data', 'notes']}
+          secondarySearchBoxPlaceholder={"Search tags by name or notes"}
+        />
 
 
       </Box>
 
-  );
+    );
 }
 
 
