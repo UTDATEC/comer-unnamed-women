@@ -25,9 +25,10 @@ import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 import { useTitle } from "../../App/AppTitle";
 import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog";
+import { useAccountNav } from "../Account";
 
 
-const UserManagement = (props) => {
+const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [courses, setCourses] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
@@ -66,7 +67,7 @@ const UserManagement = (props) => {
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
     const [appUser, , initializeAppUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();

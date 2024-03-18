@@ -18,8 +18,9 @@ import { useAppUser } from "../../App/AppUser";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
 import { useTitle } from "../../App/AppTitle";
+import { useAccountNav } from "../Account";
 
-const ExhibitionManagement = (props) => {
+const ExhibitionManagement = () => {
     const [, setUsers] = useState([]);
     const [courses, setCourses] = useState([]);
     const [exhibitions, setExhibitions] = useState([]);
@@ -41,7 +42,7 @@ const ExhibitionManagement = (props) => {
     const [sortAscending, setSortAscending] = useState(false);
 
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();

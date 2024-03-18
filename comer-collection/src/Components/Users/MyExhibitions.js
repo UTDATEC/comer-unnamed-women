@@ -11,11 +11,12 @@ import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useAppUser } from "../App/AppUser";
 import { useTitle } from "../App/AppTitle";
+import { useAccountNav } from "./Account";
 
 
-const MyExhibitions = (props) => {
+const MyExhibitions = () => {
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 

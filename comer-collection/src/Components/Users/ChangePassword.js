@@ -5,10 +5,11 @@ import { useAppUser } from "../App/AppUser";
 import { useTitle } from "../App/AppTitle";
 import { useSnackbar } from "../App/AppSnackbar";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
+import { useAccountNav } from "./Account";
 
-const ChangePassword = (props) => {
+const ChangePassword = () => {
   
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");

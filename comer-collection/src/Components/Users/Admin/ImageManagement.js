@@ -25,9 +25,10 @@ import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
 import { useTitle } from "../../App/AppTitle";
+import { useAccountNav } from "../Account";
 
 
-const ImageManagement = (props) => {
+const ImageManagement = () => {
     const [images, setImages] = useState([]);
     const [artists, setArtists] = useState([]);
     const [tags, setTags] = useState([]);
@@ -78,7 +79,7 @@ const ImageManagement = (props) => {
     };
 
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
     const showSnackbar = useSnackbar();
     const [appUser] = useAppUser();
     const setTitleText = useTitle();

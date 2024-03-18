@@ -34,9 +34,10 @@ import {
     InfoIcon
 } from "../../IconImports";
 import { useTitle } from "../../App/AppTitle";
+import { useAccountNav } from "../Account";
 
 
-const CourseManagement = (props) => {
+const CourseManagement = () => {
     const [courses, setCourses] = useState([]);
     const [users, setUsers] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
@@ -69,7 +70,7 @@ const CourseManagement = (props) => {
     const [sortAscending, setSortAscending] = useState(true);
 
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
     const showSnackbar = useSnackbar();
     const [appUser] = useAppUser();
     const navigate = useNavigate();

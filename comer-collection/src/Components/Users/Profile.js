@@ -11,10 +11,11 @@ import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBac
 import { useAppUser } from "../App/AppUser";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useTitle } from "../App/AppTitle";
+import { useAccountNav } from "./Account";
 
-const Profile = (props) => {
+const Profile = () => {
 
-    const { setSelectedNavItem } = props;
+    const [, setSelectedNavItem] = useAccountNav();
 
     const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();

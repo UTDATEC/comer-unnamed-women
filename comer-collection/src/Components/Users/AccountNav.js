@@ -2,11 +2,9 @@ import React from "react";
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-
-
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports";
 import { useAppUser } from "../App/AppUser";
-
+import { useAccountNav } from "./Account";
 
 const navLinks = [
     {
@@ -58,17 +56,14 @@ const adminNavLinks = [
 
 
 
-const AccountNav = (props) => {
+const AccountNav = () => {
+
+    const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
     const navigate = useNavigate();
     const location = useLocation();
-
-    const { selectedNavItem, setSelectedNavItem } = props;
-
     const [appUser] = useAppUser();
-
     const theme = useTheme();
-
 
     return (
         <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
