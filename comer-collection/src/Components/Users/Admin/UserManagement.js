@@ -76,7 +76,7 @@ const UserManagement = (props) => {
   useEffect(() => {
     setSelectedNavItem("User Management");
     setTitleText("User Management");
-    if(appUser.is_admin) {
+    if (appUser.is_admin) {
       fetchData();
     }
   }, []);
@@ -96,10 +96,10 @@ const UserManagement = (props) => {
 
 
       const coursesByUserDraft = {}
-      for(const c of userData.data) {
+      for (const c of userData.data) {
         coursesByUserDraft[c.id] = c.Courses;
       }
-      setCoursesByUser({...coursesByUserDraft});
+      setCoursesByUser({ ...coursesByUserDraft });
 
 
     } catch (error) {
@@ -112,17 +112,17 @@ const UserManagement = (props) => {
     return (
       !userCourseIdFilter || userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
     ) && (
-      doesItemMatchSearchQuery(searchQuery, user, ['full_name', 'full_name_reverse', 'email_without_domain'])
-    );
+        doesItemMatchSearchQuery(searchQuery, user, ['full_name', 'full_name_reverse', 'email_without_domain'])
+      );
   }, [userCourseIdFilter, searchQuery])
 
 
-  const handleUsersCreate = async(newUserArray) => {
-    return await createUsers(newUserArray, {showSnackbar, setDialogIsOpen, fetchData})
+  const handleUsersCreate = async (newUserArray) => {
+    return await createUsers(newUserArray, { showSnackbar, setDialogIsOpen, fetchData })
   }
 
 
-  const handleUserEdit = async(userId, updateFields) => {
+  const handleUserEdit = async (userId, updateFields) => {
     const filteredUser = filterItemFields(userFieldDefinitions, updateFields);
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}`, filteredUser);
@@ -130,7 +130,7 @@ const UserManagement = (props) => {
 
       setEditDialogIsOpen(false);
 
-      if(userId == appUser.id)
+      if (userId == appUser.id)
         initializeAppUser();
 
       showSnackbar(`Successfully edited user`, "success");
@@ -143,7 +143,7 @@ const UserManagement = (props) => {
 
 
 
-  const handleAssignUsersToCourse = useCallback(async(courseId, userIds) => {
+  const handleAssignUsersToCourse = useCallback(async (courseId, userIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/assign`, {
         users: userIds,
@@ -158,8 +158,8 @@ const UserManagement = (props) => {
   }, [showSnackbar]);
 
 
-  
-  const handleUnassignUsersFromCourse = useCallback(async(courseId, userIds) => {
+
+  const handleUnassignUsersFromCourse = useCallback(async (courseId, userIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/unassign`, {
         users: userIds,
@@ -175,12 +175,12 @@ const UserManagement = (props) => {
 
 
 
-  const handleChangeUserActivationStatus = async(userId, willBeActive) => {
+  const handleChangeUserActivationStatus = async (userId, willBeActive) => {
     try {
       await sendAuthenticatedRequest("PUT", (willBeActive ?
         `/api/admin/users/${userId}/activate` :
         `/api/admin/users/${userId}/deactivate`
-        ));
+      ));
       fetchData();
 
       showSnackbar(`User ${willBeActive ? "activated" : "deactivated"}`, "success")
@@ -191,12 +191,12 @@ const UserManagement = (props) => {
   }
 
 
-  const handleChangeUserPrivileges = async(userId, verifyPassword, isPromotion) => {
+  const handleChangeUserPrivileges = async (userId, verifyPassword, isPromotion) => {
     try {
       await sendAuthenticatedRequest("PUT", (isPromotion ?
         `/api/admin/users/${userId}/promote` :
         `/api/admin/users/${userId}/demote`
-        ), {verifyPassword})
+      ), { verifyPassword })
       fetchData();
 
       setPrivilegesDialogIsOpen(false);
@@ -210,19 +210,19 @@ const UserManagement = (props) => {
     }
   }
 
-  const handleUserPromote = async(userId, verifyPassword) => {
+  const handleUserPromote = async (userId, verifyPassword) => {
     await handleChangeUserPrivileges(userId, verifyPassword, true);
   }
 
-  const handleUserDemote = async(userId, verifyPassword) => {
+  const handleUserDemote = async (userId, verifyPassword) => {
     await handleChangeUserPrivileges(userId, verifyPassword, false);
   }
 
 
 
-  const handleResetPassword = async(userId, newPassword) => {
+  const handleResetPassword = async (userId, newPassword) => {
     try {
-      await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}/resetpassword`, {newPassword})
+      await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}/resetpassword`, { newPassword })
       fetchData();
 
       showSnackbar(`Password reset for user ${userId}`, "success");
@@ -253,10 +253,10 @@ const UserManagement = (props) => {
   };
 
 
-  const handleDeleteMultiple = async(userIds) => {
-    
+  const handleDeleteMultiple = async (userIds) => {
+
     let usersDeleted = 0;
-    for(const [i, userId] of userIds.entries()) {
+    for (const [i, userId] of userIds.entries()) {
       try {
         await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`);
         usersDeleted++;
@@ -265,16 +265,16 @@ const UserManagement = (props) => {
     }
     fetchData();
 
-    if(usersDeleted == userIds.length) {
+    if (usersDeleted == userIds.length) {
       setDialogIsOpen(false);
 
       showSnackbar(`Successfully deleted ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success")
 
       setMultiDeleteDialogIsOpen(false);
 
-    } else if(usersDeleted < userIds.length) {
+    } else if (usersDeleted < userIds.length) {
 
-      if(usersDeleted > 0) {
+      if (usersDeleted > 0) {
         showSnackbar(`Deleted ${usersDeleted} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "warning")
       }
       else {
@@ -289,7 +289,7 @@ const UserManagement = (props) => {
   const handleCopyToClipboard = useCallback((user, fieldName) => {
     try {
       navigator.clipboard.writeText(user[fieldName]);
-      if(fieldName == "email") {
+      if (fieldName == "email") {
         showSnackbar(`Email address for user ${user.id} copied to clipboard`, "success");
       } else {
         showSnackbar(`Text copied to clipboard`, "success");
@@ -321,7 +321,7 @@ const UserManagement = (props) => {
         user.has_name ? (
           <Typography variant="body1">{user.full_name_reverse}</Typography>
         ) : (
-          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+          <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
         )
       ),
       generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
@@ -330,8 +330,8 @@ const UserManagement = (props) => {
       columnDescription: "Email",
       generateTableCell: (user) => (
         <Button color="grey"
-          variant="text" sx={{textTransform: "unset"}}
-          onClick={() => {handleCopyToClipboard(user, "email")}}>
+          variant="text" sx={{ textTransform: "unset" }}
+          onClick={() => { handleCopyToClipboard(user, "email") }}>
           <Typography variant="body1">{user.email}</Typography>
         </Button>
       ),
@@ -343,15 +343,15 @@ const UserManagement = (props) => {
         <>
           {appUser.id == user.id ? (
             <Button startIcon={<OpenInNewIcon />} color={user.is_admin ? "secondary" : "primary"}
-            variant="outlined"
-            onClick={() => {
-              navigate('/Account/ChangePassword');
-            }}>
-            <Typography variant="body1">Change</Typography>
-          </Button>
+              variant="outlined"
+              onClick={() => {
+                navigate('/Account/ChangePassword');
+              }}>
+              <Typography variant="body1">Change</Typography>
+            </Button>
           ) : (
             <Button
-              startIcon={user.has_password ? <LockResetIcon /> : <LockIcon/>}
+              startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
               color={user.is_admin ? "secondary" : "primary"}
               itemID={user.id}
               variant={user.has_password ? "outlined" : "contained"}
@@ -388,7 +388,7 @@ const UserManagement = (props) => {
       columnDescription: "Exhibitions",
       generateTableCell: (user) => (
         <Stack direction="row" spacing={1}>
-          <Button variant="text" sx={{textTransform: "unset"}}
+          <Button variant="text" sx={{ textTransform: "unset" }}
             color={user.is_admin ? "secondary" : "primary"}
             disabled startIcon={<PhotoCameraBackIcon />}
             onClick={() => {
@@ -405,7 +405,7 @@ const UserManagement = (props) => {
     {
       columnDescription: "User Type",
       generateTableCell: (user) => (
-        <Button color="grey" sx={{textTransform: "unset"}}
+        <Button color="grey" sx={{ textTransform: "unset" }}
           disabled={user.id == appUser.id}
           onClick={() => {
             setPrivilegesDialogUser(user);
@@ -479,8 +479,8 @@ const UserManagement = (props) => {
       columnDescription: "Dates",
       generateTableCell: (course) => (
         <Stack>
-          <Typography variant="body1">{new Date (course.date_start).toLocaleDateString()}</Typography>
-          <Typography variant="body1">{new Date (course.date_end).toLocaleDateString()}</Typography>
+          <Typography variant="body1">{new Date(course.date_start).toLocaleDateString()}</Typography>
+          <Typography variant="body1">{new Date(course.date_end).toLocaleDateString()}</Typography>
         </Stack>
       )
     }
@@ -501,31 +501,31 @@ const UserManagement = (props) => {
               </Typography>
             )}
           </Button>) ||
-          quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
-            }}>
-              {assignCourseDialogUsers.length == 1 ? (
-                <Typography variant="body1">Enroll</Typography>
-                ) : (
-                <Typography variant="body1">Enroll {assignCourseDialogUsers.length} users</Typography>
-              )}
-            </Button>
-          ) ||
-          quantity > 0 && quantity < assignCourseDialogUsers.length && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
-            }}>
-              {assignCourseDialogUsers.length - quantity == 1 ? (
-                <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
-              ) : (
-                <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more users</Typography>
-              )}
-            </Button>
-          )
+        quantity == 0 && (
+          <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
+          }}>
+            {assignCourseDialogUsers.length == 1 ? (
+              <Typography variant="body1">Enroll</Typography>
+            ) : (
+              <Typography variant="body1">Enroll {assignCourseDialogUsers.length} users</Typography>
+            )}
+          </Button>
+        ) ||
+        quantity > 0 && quantity < assignCourseDialogUsers.length && (
+          <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
+          }}>
+            {assignCourseDialogUsers.length - quantity == 1 ? (
+              <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
+            ) : (
+              <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more users</Typography>
+            )}
+          </Button>
         )
-      }
-    }]
+      )
+    }
+  }]
 
   const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
     columnDescription: "",
@@ -535,15 +535,15 @@ const UserManagement = (props) => {
         <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
           handleUnassignUsersFromCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
         }}>
-        {quantity == 1 ? (
-          assignCourseDialogUsers.length == 1 ? (
-            <Typography variant="body1">Unenroll</Typography>
+          {quantity == 1 ? (
+            assignCourseDialogUsers.length == 1 ? (
+              <Typography variant="body1">Unenroll</Typography>
+            ) : (
+              <Typography variant="body1">Unenroll {quantity} user</Typography>
+            )
           ) : (
-            <Typography variant="body1">Unenroll {quantity} user</Typography>
-          )
-        ) : (
-          <Typography variant="body1">Unenroll {quantity} users</Typography>
-        )}
+            <Typography variant="body1">Unenroll {quantity} users</Typography>
+          )}
         </Button>
       )
     }
@@ -559,25 +559,25 @@ const UserManagement = (props) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.pw_change_required && (
-    <Navigate to="/Account/ChangePassword" />
-  ) ||
-  appUser.is_admin && (
-    <Box component={Paper} square sx={{
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: '80px calc(100vh - 224px) 80px',
-      gridTemplateAreas: `
+    appUser.pw_change_required && (
+      <Navigate to="/Account/ChangePassword" />
+    ) ||
+    appUser.is_admin && (
+      <Box component={Paper} square sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '80px calc(100vh - 224px) 80px',
+        gridTemplateAreas: `
         "top"
         "table"
         "bottom"
       `
-    }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="30%" />
-          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{courses}} />
+      }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+          <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
+          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
           <Stack direction="row" spacing={2}>
-            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
               setRefreshInProgress(true);
               fetchData();
             }}
@@ -586,13 +586,13 @@ const UserManagement = (props) => {
             </Button>
             <Button color="primary" variant={
               visibleUsers.length > 0 ? "outlined" : "contained"
-            } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery || userCourseIdFilter)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
-            <Button color="primary" variant="contained" startIcon={<GroupAddIcon/>}
+            <Button color="primary" variant="contained" startIcon={<GroupAddIcon />}
               onClick={() => {
                 setDialogIsOpen(true);
               }}
@@ -605,11 +605,11 @@ const UserManagement = (props) => {
           rowSelectionEnabled={true}
           selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
           visibleItems={visibleUsers}
-          sx={{gridArea: "table"}}
+          sx={{ gridArea: "table" }}
           emptyMinHeight="300px"
           {...visibleUsers.length == users.length && {
             noContentMessage: "No users yet",
-            noContentButtonAction: () => {setDialogIsOpen(true)},
+            noContentButtonAction: () => { setDialogIsOpen(true) },
             noContentButtonText: "Create a user",
             NoContentIcon: InfoIcon
           } || visibleUsers.length < users.length && {
@@ -619,7 +619,7 @@ const UserManagement = (props) => {
             NoContentIcon: SearchIcon
           }}
         />
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
           <SelectionSummary
             items={users}
             selectedItems={selectedUsers}
@@ -628,7 +628,7 @@ const UserManagement = (props) => {
             entitySingular="user"
             entityPlural="users"
           />
-         <Stack direction="row" spacing={2} >
+          <Stack direction="row" spacing={2} >
             {(() => {
               const selectedDeletableUsers = selectedUsers.filter((u) => u.is_deletable);
               return (
@@ -638,7 +638,7 @@ const UserManagement = (props) => {
                   }}
                   startIcon={<DeleteIcon />}
                   onClick={() => {
-                    if(selectedDeletableUsers.length == 1) {
+                    if (selectedDeletableUsers.length == 1) {
                       setDeleteDialogUser(selectedDeletableUsers[0]);
                       setDeleteDialogIsOpen(true);
                     } else {
@@ -655,92 +655,92 @@ const UserManagement = (props) => {
               }}
               startIcon={<SchoolIcon />}
               onClick={() => {
-              setAssignCourseDialogUsers([...selectedUsers])
-              setAssignCourseDialogIsOpen(true);
-            }}>
+                setAssignCourseDialogUsers([...selectedUsers])
+                setAssignCourseDialogIsOpen(true);
+              }}>
               <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"}</Typography>
             </Button>
           </Stack>
         </Stack>
 
-      <ItemMultiCreateDialog entity="user"
-        dialogTitle={"Create Users"}
-        dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-        handleItemsCreate={handleUsersCreate}
-        {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
+        <ItemMultiCreateDialog entity="user"
+          dialogTitle={"Create Users"}
+          dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
+          handleItemsCreate={handleUsersCreate}
+          {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
-      <ItemSingleEditDialog
-        entity="user"
-        dialogTitle={"Edit User"}
-        dialogInstructions={"Edit the user fields, then click 'Save'."}
-        editDialogItem={editDialogUser}
-        handleItemEdit={handleUserEdit}
-        {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+        <ItemSingleEditDialog
+          entity="user"
+          dialogTitle={"Edit User"}
+          dialogInstructions={"Edit the user fields, then click 'Save'."}
+          editDialogItem={editDialogUser}
+          handleItemEdit={handleUserEdit}
+          {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
-      <ItemSingleDeleteDialog
-        entity="user"
-        dialogTitle="Delete User"
-        deleteDialogItem={deleteDialogUser}
-        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+        <ItemSingleDeleteDialog
+          entity="user"
+          dialogTitle="Delete User"
+          deleteDialogItem={deleteDialogUser}
+          {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
-      <ItemMultiDeleteDialog
-        entitySingular="user"
-        entityPlural="users"
-        deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
-        deleteDialogIsOpen={multiDeleteDialogIsOpen}
-        setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
-        handleDelete={handleDeleteMultiple}
-      />
+        <ItemMultiDeleteDialog
+          entitySingular="user"
+          entityPlural="users"
+          deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
+          deleteDialogIsOpen={multiDeleteDialogIsOpen}
+          setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
+          handleDelete={handleDeleteMultiple}
+        />
 
-      <AssociationManagementDialog
-        primaryEntity="user"
-        secondaryEntity="course"
-        primaryItems={assignCourseDialogUsers}
-        secondaryItemsAll={courses}
-        secondariesByPrimary={coursesByUser}
-        dialogTitle={
-          assignCourseDialogUsers.length == 1 ?
-            `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
-            `Manage Course Enrollments for ${assignCourseDialogUsers.length} Selected Users`
-        }
-        dialogButtonForSecondaryManagement={<>
-          <Button variant="outlined" onClick={() => {
-            navigate('/Account/CourseManagement')
-          }}>
-            <Typography>Go to course management</Typography>
-          </Button>
-        </>}
-        dialogIsOpen={assignCourseDialogIsOpen}
-        tableTitleAssigned={
-          assignCourseDialogUsers.length == 1 ?
-            `Current Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
-            `Current Courses with Selected Users`
-        }
-        tableTitleAll={`All Courses`}
-        setDialogIsOpen={setAssignCourseDialogIsOpen}
-        secondaryTableFieldsAll={courseTableFieldsForDialogAll}
-        secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
-        secondarySearchFields={['name']}
-        secondarySearchBoxPlaceholder="Search courses by name"
-      />
+        <AssociationManagementDialog
+          primaryEntity="user"
+          secondaryEntity="course"
+          primaryItems={assignCourseDialogUsers}
+          secondaryItemsAll={courses}
+          secondariesByPrimary={coursesByUser}
+          dialogTitle={
+            assignCourseDialogUsers.length == 1 ?
+              `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
+              `Manage Course Enrollments for ${assignCourseDialogUsers.length} Selected Users`
+          }
+          dialogButtonForSecondaryManagement={<>
+            <Button variant="outlined" onClick={() => {
+              navigate('/Account/CourseManagement')
+            }}>
+              <Typography>Go to course management</Typography>
+            </Button>
+          </>}
+          dialogIsOpen={assignCourseDialogIsOpen}
+          tableTitleAssigned={
+            assignCourseDialogUsers.length == 1 ?
+              `Current Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
+              `Current Courses with Selected Users`
+          }
+          tableTitleAll={`All Courses`}
+          setDialogIsOpen={setAssignCourseDialogIsOpen}
+          secondaryTableFieldsAll={courseTableFieldsForDialogAll}
+          secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
+          secondarySearchFields={['name']}
+          secondarySearchBoxPlaceholder="Search courses by name"
+        />
 
-      <UserChangePrivilegesDialog
-        dialogUser={privilegesDialogUser}
-        dialogIsOpen={privilegesDialogIsOpen}
-        setDialogIsOpen={setPrivilegesDialogIsOpen}
-        handlePromote={handleUserPromote}
-        handleDemote={handleUserDemote}
-      />
+        <UserChangePrivilegesDialog
+          dialogUser={privilegesDialogUser}
+          dialogIsOpen={privilegesDialogIsOpen}
+          setDialogIsOpen={setPrivilegesDialogIsOpen}
+          handlePromote={handleUserPromote}
+          handleDemote={handleUserDemote}
+        />
 
-      <UserResetPasswordDialog 
-        dialogIsOpen={resetPasswordDialogIsOpen}
-        dialogUser={resetPasswordDialogUser}
-        setDialogIsOpen={setResetPasswordDialogIsOpen}
-        handleResetPassword={handleResetPassword}
-      />
+        <UserResetPasswordDialog
+          dialogIsOpen={resetPasswordDialogIsOpen}
+          dialogUser={resetPasswordDialogUser}
+          setDialogIsOpen={setResetPasswordDialogIsOpen}
+          handleResetPassword={handleResetPassword}
+        />
 
-    </Box>
-  );
+      </Box>
+    );
 }
 
 
