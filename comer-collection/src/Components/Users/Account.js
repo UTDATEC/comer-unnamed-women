@@ -11,6 +11,7 @@ import CourseManagement from "./Admin/CourseManagement";
 import MyExhibitions from "./MyExhibitions";
 import ExhibitionManagement from "./Admin/ExhibitionManagement";
 import { useAppUser } from "../App/AppUser";
+import { LockIcon } from "../IconImports";
 
 
 const Account = () => {
@@ -58,7 +59,7 @@ const Account = () => {
             </Box>
         </>
     ) || !appUser && (
-        <Unauthorized />
+        <Unauthorized Icon={LockIcon} message="Unauthorized" buttonDestination="/login" buttonText="Return to Login" />
     );
 };
 
