@@ -5,6 +5,7 @@ import {
     Typography
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../../IconImports";
+import PropTypes from "prop-types";
 
 export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visibleItems, entitySingular, entityPlural }) => {
 
@@ -46,4 +47,13 @@ export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visib
             )}
         </Stack>
     );
+};
+
+SelectionSummary.propTypes = {
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    selectedItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setSelectedItems: PropTypes.func,
+    visibleItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+    entitySingular: PropTypes.string,
+    entityPlural: PropTypes.string
 };
