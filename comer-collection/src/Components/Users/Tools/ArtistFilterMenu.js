@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import { BrushIcon, CheckIcon } from "../../IconImports";
+import PropTypes from "prop-types";
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
     return (
@@ -34,7 +35,7 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
             placeholder="All artists"
         >
             <ListItemButton key={""} value={""}
-                onClick={(e) => {
+                onClick={() => {
                     setFilterValue(null);
                 }}>
                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -47,7 +48,7 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
             <Divider sx={{padding: "4px"}} />
             {artists.sort((a, b) => a.fullNameReverse > b.fullNameReverse ? 1 : -1).map((artist) => (
                 <ListItemButton key={artist.id} value={artist.id}
-                    onClick={(e) => {
+                    onClick={() => {
                         setFilterValue(artist);
                     }}>
                     <Stack direction="row" alignItems="center" spacing={2}>
@@ -60,4 +61,11 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
             ))}
         </Select>
     );
+};
+
+
+ArtistFilterMenu.propTypes = {
+    filterValue: PropTypes.object,
+    setFilterValue: PropTypes.func,
+    artists: PropTypes.arrayOf(PropTypes.obj)
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import { SchoolIcon, CheckIcon } from "../../IconImports";
+import PropTypes from "prop-types";
 
 export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
     return (
@@ -29,7 +30,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
             placeholder="All courses"
         >
             <ListItemButton key={""} value={""}
-                onClick={(e) => {
+                onClick={() => {
                     setFilterValue(null);
                 }}>
                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -42,7 +43,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
             <Divider sx={{padding: "4px"}} />
             {courses.sort((a, b) => (new Date(b.date_start)).getTime() - (new Date(a.date_start)).getTime()).map((course) => (
                 <ListItemButton key={course.id} value={course.id}
-                    onClick={(e) => {
+                    onClick={() => {
                         setFilterValue(course);
                     }}>
                     <Stack direction="row" alignItems="center" spacing={2}>
@@ -60,4 +61,11 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
             ))}
         </Select>
     );
+};
+
+
+CourseFilterMenu.propTypes = {
+    filterValue: PropTypes.object,
+    setFilterValue: PropTypes.func,
+    courses: PropTypes.arrayOf(PropTypes.obj)
 };
