@@ -15,6 +15,7 @@ import {
     PhotoCameraBackIcon,
     LogoutIcon
 } from "../IconImports";
+import PropTypes from "prop-types";
 
 
 const NavBarUserMenu = () => {
@@ -93,7 +94,7 @@ const NavBarUserMenu = () => {
 };
 
 
-const NavBarButton = ({ color, href, text }) => {
+const NavBarButton = ({ href, text }) => {
   
     const navigate = useNavigate();
     const theme = useTheme();
@@ -101,10 +102,10 @@ const NavBarButton = ({ color, href, text }) => {
     const isPageActive = document.location.pathname == href;
 
     return (
-        <Button spacing={1} color={color ?? "secondary"} sx={{
+        <Button spacing={1} color="secondary" sx={{
             height: "64px",
             minWidth: "120px",
-            borderBottom: isPageActive ? `5px solid ${theme.palette[color ?? "secondary"].main}` : "5px solid rgba(0, 0, 0, 0)",
+            borderBottom: isPageActive ? `5px solid ${theme.palette.secondary.main}` : "5px solid rgba(0, 0, 0, 0)",
             textTransform: "unset"
         }} onClick={() => navigate(href)}>
             <Typography variant="h6" color="white">{text}</Typography>
@@ -112,8 +113,13 @@ const NavBarButton = ({ color, href, text }) => {
     );
 };
 
+NavBarButton.propTypes = {
+    href: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+};
 
-export default function NavBar() {
+
+const NavBar = () => {
   
     const [appUser] = useAppUser();
     const navigate = useNavigate();
@@ -157,4 +163,6 @@ export default function NavBar() {
             </Stack>
         </AppBar>
     );
-}
+};
+
+export default NavBar;
