@@ -11,7 +11,7 @@ import CourseManagement from "./Admin/CourseManagement";
 import MyExhibitions from "./MyExhibitions";
 import ExhibitionManagement from "./Admin/ExhibitionManagement";
 import { useAppUser } from "../App/AppUser";
-import { LockIcon } from "../IconImports";
+import { AccessTimeIcon, LockIcon } from "../IconImports";
 
 
 const AccountNavContext = createContext();
@@ -19,11 +19,13 @@ const AccountNavContext = createContext();
 
 const Account = () => {
 
-    const [appUser] = useAppUser();
+    const [appUser, , , appUserIsLoaded] = useAppUser();
 
     const [selectedNavItem, setSelectedNavItem] = useState("");
 
-    return appUser && (
+    return !appUserIsLoaded && (
+        <Unauthorized Icon={AccessTimeIcon} message="Loading" />
+    ) || appUserIsLoaded && appUser && (
         <AccountNavContext.Provider value={{selectedNavItem, setSelectedNavItem}}>
 
             <Box sx={{
@@ -59,7 +61,7 @@ const Account = () => {
       
             </Box>
         </AccountNavContext.Provider>
-    ) || !appUser && (
+    ) || appUserIsLoaded && !appUser && (
         <Unauthorized Icon={LockIcon} message="Unauthorized" buttonDestination="/login" buttonText="Return to Login" />
     );
 };
