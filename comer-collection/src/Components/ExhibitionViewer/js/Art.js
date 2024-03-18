@@ -78,8 +78,6 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
 
     const artPositionsByImageId = {};
 
-    let images_placed = 0;
-        
     // create a place to store all of the art in gallery
     const all_arts_group = new THREE.Group();
     scene.add(all_arts_group);
@@ -392,14 +390,10 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             // scene.add(spotlight);
             all_arts_group.add(spotlight);
 
-            images_placed++;
-
             renderer.render(scene, camera);
 
         }, null, () => {
             console.log("error placing image", data);
-
-            images_placed++;
 
         }); // convert image into texture
     });
