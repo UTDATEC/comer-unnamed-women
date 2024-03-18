@@ -672,7 +672,7 @@ const ImageManagement = () => {
                         <EditIcon />
                     </IconButton>
                     <IconButton
-                        disabled={image.Exhibitions.length}
+                        disabled={image.Exhibitions.length > 0}
                         onClick={() => {
                             setDeleteDialogImage(image);
                             setDeleteDialogIsOpen(true);
@@ -913,7 +913,7 @@ const ImageManagement = () => {
                         <Typography variant="body1">Refresh</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                        disabled={searchQuery}>
+                        disabled={searchQuery == ""}>
                         <Typography variant="body1">Clear Filters</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<SellIcon />}
