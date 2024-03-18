@@ -1,5 +1,5 @@
 const { Artist, Image, } = require("../sequelize.js");
-const { updateItem, deleteItem, listItems, createItem, getItem } = require('./items.js');
+const { updateItem, deleteItem, listItems, createItem, getItem } = require("./items.js");
 
 
 
@@ -21,6 +21,6 @@ const updateArtist = async (req, res, next) => {
 
 const deleteArtist = async (req, res, next) => {
     await deleteItem(req, res, next, Artist, req.params.artistId);
-}
+};
 
-module.exports = { listArtists, createArtist, getArtist, updateArtist, deleteArtist }
+module.exports = { listArtists, createArtist, getArtist, updateArtist, deleteArtist };

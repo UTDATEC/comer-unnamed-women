@@ -1,8 +1,8 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const createError = require('http-errors');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const createError = require("http-errors");
 const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
-const { deleteItem, updateItem, createItem, listItems, getItem } = require('./items.js');
+const { deleteItem, updateItem, createItem, listItems, getItem } = require("./items.js");
 
 
 
@@ -12,18 +12,18 @@ const getSignedTokenForUser = async (user) => {
         id: user.id,
         pw_updated: user.pw_updated
     };
-    return jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '10d' });
-}
+    return jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: "10d" });
+};
 
 const doesPasswordMatchHash = async (password, hash) => {
     return Boolean(password) && Boolean(hash) &&
         bcrypt.compareSync(password, hash);
-}
+};
 
 
 const canUserCreateExhibition = (userJSON) => {
     return Boolean(userJSON.is_admin || userJSON.Courses?.filter((c) => c.status == "Active").length && userJSON.exhibition_quota > userJSON.Exhibitions.length);
-}
+};
 
 
 const userItemFunctions = {
@@ -38,54 +38,54 @@ const listUsers = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
     await createItem(req, res, next, User, [
-        'email', 'given_name', 'family_name', 'exhibition_quota'
+        "email", "given_name", "family_name", "exhibition_quota"
     ]);
 };
 
 const updateUser = async (req, res, next) => {
     await updateItem(req, res, next, User, req.params.userId, [
-        'email', 'family_name', 'given_name', 'exhibition_quota'
+        "email", "family_name", "given_name", "exhibition_quota"
     ]);
 };
 
 const deactivateUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(403, { debugMessage: "Admin cannot deactivate self" }))
+        next(createError(403, { debugMessage: "Admin cannot deactivate self" }));
     }
     req.body = { is_active: false };
-    await updateItem(req, res, next, User, req.params.userId, ['is_active'])
+    await updateItem(req, res, next, User, req.params.userId, ["is_active"]);
 };
 
 const activateUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(403, { debugMessage: "Admin cannot activate self" }))
+        next(createError(403, { debugMessage: "Admin cannot activate self" }));
     }
     req.body = { is_active: true };
-    await updateItem(req, res, next, User, req.params.userId, ['is_active'])
+    await updateItem(req, res, next, User, req.params.userId, ["is_active"]);
 };
 
 const promoteUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(403, { debugMessage: "Admin cannot promote self" }))
+        next(createError(403, { debugMessage: "Admin cannot promote self" }));
     }
     req.body = { is_admin: true };
-    await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
-}
+    await updateItem(req, res, next, User, req.params.userId, ["is_admin"]);
+};
 
 const demoteUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(403, { debugMessage: "Admin cannot demote self" }))
+        next(createError(403, { debugMessage: "Admin cannot demote self" }));
     }
     req.body = { is_admin: false };
-    await updateItem(req, res, next, User, req.params.userId, ['is_admin'])
-}
+    await updateItem(req, res, next, User, req.params.userId, ["is_admin"]);
+};
 
 const deleteUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(401, { debugMessage: "Admin cannot delete self" }))
+        next(createError(401, { debugMessage: "Admin cannot delete self" }));
     }
     await deleteItem(req, res, next, User, req.params.userId);
-}
+};
 
 
 const getUser = async (req, res, next) => {
@@ -94,15 +94,15 @@ const getUser = async (req, res, next) => {
 
 const getCurrentUser = async (req, res, next) => {
     await getItem(req, res, next, User, [Course, Exhibition], req.app_user.id, userItemFunctions);
-}
+};
 
 
 const resetUserPassword = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
-        next(createError(401, { debugMessage: "Admin cannot reset own password.  Use Change Password instead." }))
+        next(createError(401, { debugMessage: "Admin cannot reset own password.  Use Change Password instead." }));
     }
     else if (!req.body.newPassword) {
-        next(createError(400, { debugMessage: "Password reset request must contain the new password in the request body" }))
+        next(createError(400, { debugMessage: "Password reset request must contain the new password in the request body" }));
     }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.newPassword, salt);
@@ -111,9 +111,9 @@ const resetUserPassword = async (req, res, next) => {
         pw_change_required: true,
         pw_updated: Date.now()
     };
-    await updateItem(req, res, next, User, req.params.userId, ['pw_hash', 'pw_change_required', 'pw_updated']);
+    await updateItem(req, res, next, User, req.params.userId, ["pw_hash", "pw_change_required", "pw_updated"]);
 
-}
+};
 
 
 const signIn = async (req, res, next) => {
@@ -125,8 +125,9 @@ const signIn = async (req, res, next) => {
                     email: email
                 },
                 attributes: {
-                    include: ['pw_hash']
-                }
+                    include: ["pw_hash"]
+                },
+                transaction: t
             });
 
             if (!user) {
@@ -142,11 +143,11 @@ const signIn = async (req, res, next) => {
                 throw new Error("password is incorrect");
             }
 
-        })
+        });
     } catch (e) {
-        await next(createError(401, { debugMessage: e.message + "\n" + e.stack }))
+        await next(createError(401, { debugMessage: e.message + "\n" + e.stack }));
     }
-}
+};
 
 
 const changePassword = async (req, res, next) => {
@@ -154,7 +155,7 @@ const changePassword = async (req, res, next) => {
         await sequelize.transaction(async (t) => {
             const user = await User.findByPk(req.app_user.id, {
                 attributes: {
-                    include: ['pw_hash']
+                    include: ["pw_hash"]
                 }
             }, { transaction: t });
             const { oldPassword, newPassword } = req.body;
@@ -176,11 +177,11 @@ const changePassword = async (req, res, next) => {
 
             const token = await getSignedTokenForUser(user);
             res.status(200).json({ token });
-        })
+        });
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
-}
+};
 
 
 module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword };

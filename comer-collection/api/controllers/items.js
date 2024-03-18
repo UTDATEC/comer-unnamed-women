@@ -1,4 +1,4 @@
-const createError = require('http-errors');
+const createError = require("http-errors");
 const { sequelize } = require("../sequelize.js");
 
 
@@ -7,7 +7,7 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
         }
-        const item = await model.findByPk(itemId, { include })
+        const item = await model.findByPk(itemId, { include });
         if (!item) {
             next(createError(404));
         }
@@ -19,7 +19,7 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
-}
+};
 
 
 const listItems = async (req, res, next, model, include, where, itemFunctions = {}) => {
@@ -30,12 +30,12 @@ const listItems = async (req, res, next, model, include, where, itemFunctions = 
                 i[f] = itemFunctions[f](i);
             }
             return i;
-        })
+        });
         res.status(200).json({ data: items });
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
-}
+};
 
 
 const createItem = async (req, res, next, model, restrictFields = null) => {
@@ -59,7 +59,7 @@ const createItem = async (req, res, next, model, restrictFields = null) => {
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
-}
+};
 
 
 const updateItem = async (req, res, next, model, itemId, restrictFields = null) => {
@@ -107,6 +107,6 @@ const deleteItem = async (req, res, next, model, itemId) => {
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
-}
+};
 
-module.exports = { getItem, listItems, updateItem, deleteItem, createItem }
+module.exports = { getItem, listItems, updateItem, deleteItem, createItem };

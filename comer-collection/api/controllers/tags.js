@@ -1,5 +1,5 @@
 const { Tag, Image } = require("../sequelize.js");
-const { deleteItem, updateItem, createItem, getItem, listItems } = require('./items.js');
+const { deleteItem, updateItem, createItem, getItem, listItems } = require("./items.js");
 
 
 
@@ -8,7 +8,7 @@ const listTags = async (req, res, next) => {
 };
 
 const getTag = async (req, res, next) => {
-    await getItem(req, res, next, Tag, [Image], req.params.tagId)
+    await getItem(req, res, next, Tag, [Image], req.params.tagId);
 };
 
 const createTag = async (req, res, next) => {
@@ -23,4 +23,4 @@ const deleteTag = async (req, res, next) => {
     await deleteItem(req, res, next, Tag, req.params.tagId);
 };
 
-module.exports = { getTag, listTags, createTag, updateTag, deleteTag }
+module.exports = { getTag, listTags, createTag, updateTag, deleteTag };
