@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../../IconImports";
 import { useSnackbar } from "../../../App/AppSnackbar";
+import PropTypes from "prop-types";
 
 
 const randomPassword = () => {
@@ -136,4 +137,11 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
             </DialogActions>
         </Dialog>
     );
+};
+
+UserResetPasswordDialog.propTypes = {
+    dialogUser: PropTypes.object,
+    dialogIsOpen: PropTypes.bool,
+    setDialogIsOpen: PropTypes.func,
+    handleResetPassword: PropTypes.func
 };

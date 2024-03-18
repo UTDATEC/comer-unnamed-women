@@ -1,10 +1,9 @@
 import React from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { SearchIcon, ClearIcon } from "../../IconImports";
+import PropTypes from "prop-types";
 
-const SearchBox = (props) => {
-    const { searchQuery, setSearchQuery, width, placeholder } = props;
-
+const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
     return (
         <TextField variant="outlined" placeholder={placeholder ?? "Search"} value={searchQuery} sx={{width}}
             onChange={(e) => {
@@ -32,6 +31,13 @@ const SearchBox = (props) => {
                 )
             }}></TextField>
     );
+};
+
+SearchBox.propTypes = {
+    searchQuery: PropTypes.string,
+    setSearchQuery: PropTypes.func,
+    width: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 export default SearchBox;

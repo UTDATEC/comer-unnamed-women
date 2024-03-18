@@ -8,6 +8,7 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { DeleteIcon } from "../../../IconImports";
+import PropTypes from "prop-types";
 
 export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, entity, dialogTitle, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
 
@@ -57,4 +58,14 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, entity, dialo
             </DialogActions>
         </Dialog>
     );
+};
+
+ItemSingleDeleteDialog.propTypes = {
+    requireTypedConfirmation: PropTypes.bool,
+    entity: PropTypes.string,
+    dialogTitle: PropTypes.string,
+    deleteDialogItem: PropTypes.object,
+    deleteDialogIsOpen: PropTypes.bool,
+    setDeleteDialogIsOpen: PropTypes.func,
+    handleDelete: PropTypes.func
 };

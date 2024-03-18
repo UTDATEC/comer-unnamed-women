@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { DeleteIcon } from "../../../IconImports";
 import { getBlankItemFields } from "../HelperMethods/fields";
+import PropTypes from "prop-types";
 
 export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate }) => {
 
@@ -160,4 +161,14 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             </DialogActions>
         </Dialog>
     );
+};
+
+ItemMultiCreateDialog.propTypes = {
+    entity: PropTypes.string,
+    dialogTitle: PropTypes.string,
+    dialogInstructions: PropTypes.string,
+    createDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
+    dialogIsOpen: PropTypes.bool,
+    setDialogIsOpen: PropTypes.func,
+    handleItemsCreate: PropTypes.func
 };

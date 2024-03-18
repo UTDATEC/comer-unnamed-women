@@ -8,6 +8,7 @@ import {
     Typography, DialogContentText, TextField, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../../IconImports";
+import PropTypes from "prop-types";
 
 export const exhibitionAccessOptions = (adminMode) => [
     {
@@ -113,3 +114,16 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
     );
 };
 
+ExhibitionSettingsDialog.propTypes = {
+    editMode: PropTypes.bool,
+    adminMode: PropTypes.bool,
+    dialogIsOpen: PropTypes.bool,
+    setDialogIsOpen: PropTypes.func,
+    dialogExhibitionId: PropTypes.number,
+    dialogExhibitionTitle: PropTypes.string,
+    dialogExhibitionAccess: PropTypes.string,
+    setDialogExhibitionTitle: PropTypes.func,
+    setDialogExhibitionAccess: PropTypes.func,
+    handleExhibitionCreate: PropTypes.func,
+    handleExhibitionEdit: PropTypes.func
+};

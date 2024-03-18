@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { SaveIcon } from "../../../IconImports";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString";
+import PropTypes from "prop-types";
 
 export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, handleItemEdit }) => {
 
@@ -61,7 +62,7 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
                 }
                 handleItemEdit(editDialogItem.id, editDialogFieldData).then(() => {
                     editDialogFieldRefs.current = [];
-                }).catch((e) => {
+                }).catch(() => {
                     console.log("Error within handleItemEdit subroutine");
                 });
             }}
@@ -92,4 +93,15 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
             </DialogActions>
         </Dialog>
     );
+};
+
+ItemSingleEditDialog.propTypes = {
+    entity: PropTypes.string,
+    dialogTitle: PropTypes.string,
+    dialogInstructions: PropTypes.string,
+    editDialogItem: PropTypes.object,
+    editDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
+    editDialogIsOpen: PropTypes.bool,
+    setEditDialogIsOpen: PropTypes.func,
+    handleItemEdit: PropTypes.func
 };

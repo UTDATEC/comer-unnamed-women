@@ -8,8 +8,9 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { DeleteIcon } from "../../../IconImports";
+import PropTypes from "prop-types";
 
-export const ItemMultiDeleteDialog = ({ entitySingular, entityPlural, deleteDialogItems, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
+export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
 
     const [confirmText, setConfirmText] = useState("");
   
@@ -57,4 +58,12 @@ export const ItemMultiDeleteDialog = ({ entitySingular, entityPlural, deleteDial
             </DialogActions>
         </Dialog>
     );
+};
+
+ItemMultiDeleteDialog.propTypes = {
+    entityPlural: PropTypes.string,
+    deleteDialogItems: PropTypes.arrayOf(PropTypes.object),
+    deleteDialogIsOpen: PropTypes.bool,
+    setDeleteDialogIsOpen: PropTypes.func,
+    handleDelete: PropTypes.func
 };
