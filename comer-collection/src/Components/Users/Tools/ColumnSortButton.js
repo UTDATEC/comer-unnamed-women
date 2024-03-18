@@ -1,10 +1,9 @@
 import React from "react";
 import { IconButton } from "@mui/material";
 import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../IconImports";
+import PropTypes from "prop-types";
 
-export const ColumnSortButton = (props) => {
-
-    const { columnName, sortColumn, setSortColumn, sortAscending, setSortAscending } = props;
+export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {
 
     return (
         <IconButton color={sortColumn == columnName ? "primary" : "grey"} size="medium" onClick={() => {
@@ -20,4 +19,12 @@ export const ColumnSortButton = (props) => {
             ) : (<SwapVertIcon fontSize="medium" />)} 
         </IconButton>
     );
+};
+
+ColumnSortButton.propTypes = {
+    columnName: PropTypes.string,
+    sortColumn: PropTypes.string,
+    setSortColumn: PropTypes.func,
+    sortAscending: PropTypes.bool,
+    setSortAscending: PropTypes.func
 };
