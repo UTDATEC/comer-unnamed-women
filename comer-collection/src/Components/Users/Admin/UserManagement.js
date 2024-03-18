@@ -1,23 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Stack,
   Button,
   Typography,
   Switch, Box, IconButton, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, ContentCopyIcon, LockAddIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports";
 import Unauthorized from "../../ErrorPages/Unauthorized";
 import SearchBox from "../Tools/SearchBox";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
 import { DataTable } from "../Tools/DataTable";
-import { doesItemMatchSearchQuery, searchItems } from "../Tools/SearchUtilities";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
 import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
 import { SelectionSummary } from "../Tools/SelectionSummary";
-import { createUserDialogReducer } from "../Tools/HelperMethods/reducers";
 import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
 import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
@@ -68,7 +67,7 @@ const UserManagement = (props) => {
 
 
   const { setSelectedNavItem } = props;
-  const [appUser, setAppUser, initializeAppUser] = useAppUser();
+  const [appUser, , initializeAppUser] = useAppUser();
   const showSnackbar = useSnackbar();
   const navigate = useNavigate();
   const setTitleText = useTitle();
