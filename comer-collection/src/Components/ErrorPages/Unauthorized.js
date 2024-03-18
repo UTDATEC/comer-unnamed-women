@@ -2,12 +2,11 @@ import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { LockIcon } from "../IconImports";
 import React from "react";
 import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
 
-const Unauthorized = (props) => {
+const Unauthorized = ({ message, buttonText, buttonDestination, customIcon }) => {
 
     const navigate = useNavigate();
-
-    const { message, buttonText, buttonDestination, customIcon } = props;
     const Icon = customIcon ?? LockIcon;
 
     return (
@@ -23,6 +22,13 @@ const Unauthorized = (props) => {
             </Stack>
         </Box>
     );
+};
+
+Unauthorized.propTypes = {
+    message: PropTypes.string,
+    buttonText: PropTypes.string,
+    buttonDestination: PropTypes.string,
+    customIcon: PropTypes.elementType
 };
 
 
