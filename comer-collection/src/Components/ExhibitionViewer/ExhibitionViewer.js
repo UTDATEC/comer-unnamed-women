@@ -10,6 +10,7 @@ import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, D
 import { PointerLockControls } from "three-stdlib";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports";
 import { useAppUser } from "../App/AppUser";
+import PropTypes from "prop-types";
 
 
 
@@ -31,7 +32,7 @@ const getAmbientLightIntensity = (moodiness) => {
 
 const get_canvas_dimensions = (boundingBoxElement) => {
     if(boundingBoxElement) {
-        const { height: canvas_height, width: canvas_width } = boundingBoxElement?.getBoundingClientRect();
+        const { height: canvas_height, width: canvas_width } = boundingBoxElement.getBoundingClientRect();
         return [canvas_height, canvas_width];
     }
     return [0, 0];
@@ -485,6 +486,16 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 };
 
 
+ExhibitionViewer.propTypes = {
+    exhibitionState: PropTypes.object.isRequired,
+    exhibitionMetadata: PropTypes.object.isRequired,
+    exhibitionIsLoaded: PropTypes.bool.isRequired,
+    exhibitionIsEditable: PropTypes.bool.isRequired,
+    globalImageCatalog: PropTypes.arrayOf(PropTypes.object),
+    editModeActive: PropTypes.bool.isRequired,
+    setEditModeActive: PropTypes.func.isRequired
+};
+
 const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
     const infoFromCatalog = globalImageCatalog.find((i) => i.id == image_id);
     const infoFromExhibition = exhibitionState.images.find((i) => i.image_id == image_id);
@@ -531,6 +542,12 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
 };
 
 
+ArtInfoPopup.propTypes = {
+    globalImageCatalog: PropTypes.arrayOf(PropTypes.object).isRequired,
+    image_id: PropTypes.number.isRequired,
+    exhibitionState: PropTypes.object.isRequired
+};
+
 const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen}) => {
 
     return (
@@ -546,9 +563,9 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
                     )}
                         
                     <Stack sx={{opacity: 0.5}} alignItems="center">
-                        <Typography>Controls are paused while you're in this menu.</Typography>
-                        <Typography>This menu will reappear whenever you press 'Escape.'</Typography>
-                        <Typography>Explore the gallery using the 'W A S D' or arrow keys on your keyboard.</Typography>
+                        <Typography>Controls are paused while this menu is open.</Typography>
+                        <Typography>This menu will reappear whenever you press ESCAPE.</Typography>
+                        <Typography>Explore the gallery using the W-A-S-D or arrow keys on your keyboard.</Typography>
                         <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
                     </Stack>
                     <Button variant="contained" color="grey" size="large" id="play_button" 
@@ -570,6 +587,13 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
             </DialogActions>
         </Dialog>
     );
+};
+
+ExhibitionIntro.propTypes = {
+    exhibitionMetadata: PropTypes.object.isRequired,
+    controls: PropTypes.object.isRequired,
+    dialogIsOpen: PropTypes.bool.isRequired,
+    setDialogIsOpen: PropTypes.func.isRequired
 };
 
 export default ExhibitionViewer;
