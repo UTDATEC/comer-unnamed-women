@@ -7,16 +7,6 @@ const { deleteItem, updateItem, createItem, listItems, getItem } = require('./it
 
 
 // the user parameter is a sequelize User instance
-const generateTokenDataFromUserInstance = (user) => {
-    return {
-        id: user.id,
-        // email: user.email,
-        // is_admin: user.is_admin,
-        // pw_type: user.pw_type,
-        pw_updated: user.pw_updated
-    };
-};
-
 const getSignedTokenForUser = async(user) => {
     const tokenData = {
         id: user.id,
@@ -193,4 +183,4 @@ const changePassword = async(req, res, next) => {
 }
 
 
-module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword, generateTokenDataFromUserInstance };
+module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword };
