@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 let defaultSuffix = "Comer Collection";
 const TitleContext = createContext();
@@ -6,7 +6,7 @@ const TitleContext = createContext();
 export const TitleProvider = ({ children }) => {
 
     const [titleText, setTitleText] = useState(null);
-    if(!Boolean(titleText)) {
+    if(!titleText) {
         document.title = defaultSuffix;
     } else {
         document.title = `${titleText} - ${defaultSuffix}`;
@@ -16,11 +16,11 @@ export const TitleProvider = ({ children }) => {
         <TitleContext.Provider value={setTitleText}>
             {children}
         </TitleContext.Provider>
-    )
+    );
     
-}
+};
 
 export const useTitle = () => {
     const setTitleText = useContext(TitleContext);
     return setTitleText;
-}
+};
