@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./ColumnSortButton";
-
+import PropTypes from "prop-types";
 
 
 const DataTableCell = ({tf, itemAsString}) => {
@@ -199,4 +199,22 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
             )}
         </TableContainer>
     );
+};
+
+
+DataTable.propTypes = {
+    nonEmptyHeight: PropTypes.string,
+    tableFields: PropTypes.arrayOf(PropTypes.string),
+    items: PropTypes.arrayOf(PropTypes.object),
+    rowSelectionEnabled: PropTypes.bool,
+    selectedItems: PropTypes.arrayOf(PropTypes.object),
+    setSelectedItems: PropTypes.func,
+    visibleItems: PropTypes.arrayOf(PropTypes.object),
+    defaultSortColumn: PropTypes.string,
+    defaultSortAscending: PropTypes.bool,
+    emptyMinHeight: PropTypes.string,
+    NoContentIcon: PropTypes.elementType,
+    noContentMessage: PropTypes.string,
+    noContentButtonAction: PropTypes.func,
+    noContentButtonText: PropTypes.string,
 };
