@@ -185,12 +185,12 @@ AssociationManagementDialog.propTypes = {
     tableTitleAll: PropTypes.string.isRequired,
     tableTitleAssigned: PropTypes.string.isRequired,
     dialogTitle: PropTypes.string.isRequired,
-    dialogInstructions: PropTypes.string.isRequired,
+    dialogInstructions: PropTypes.string,
     dialogButtonForSecondaryManagement: PropTypes.element.isRequired,
     dialogIsOpen: PropTypes.bool.isRequired,
     setDialogIsOpen: PropTypes.func.isRequired,
     secondarySearchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     secondarySearchBoxPlaceholder: PropTypes.string,
-    defaultSortAscending: PropTypes.bool.isRequired,
-    defaultSortColumn: PropTypes.string.isRequired
+    defaultSortAscending: PropTypes.bool,
+    defaultSortColumn: PropTypes.string
 };
