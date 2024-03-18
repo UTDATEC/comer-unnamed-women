@@ -1,9 +1,6 @@
 const createError = require('http-errors');
 const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
-const { adminOperation, userOperation } = require('../security.js');
 const { canUserCreateExhibition } = require('./users.js');
-const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
-const { Op } = require('sequelize');
 const { listItems, getItem, createItem, updateItem, deleteItem } = require('./items.js');
 
 

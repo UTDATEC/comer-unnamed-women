@@ -1,6 +1,4 @@
-const createError = require('http-errors');
 const { User, Course } = require("../sequelize.js");
-const { adminOperation, userOperation } = require("../security.js");
 const { deleteItem, updateItem, createItem, listItems, getItem } = require('./items.js');
 
 

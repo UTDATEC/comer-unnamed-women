@@ -1,8 +1,5 @@
 const createError = require('http-errors');
 const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
-const { adminOperation } = require("../security.js");
-const { convertEmptyFieldsToNullFields } = require('../helper_methods.js');
-const { Op } = require('sequelize');
 const path = require('path');
 const { deleteItem, updateItem, listItems, getItem, createItem } = require('./items.js');
 
