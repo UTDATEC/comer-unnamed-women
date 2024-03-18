@@ -8,6 +8,7 @@ import {
     Typography, DialogContentText, Checkbox
 } from "@mui/material";
 import { SecurityIcon, ArrowDownwardIcon } from "../../../IconImports";
+import PropTypes from "prop-types";
 
 export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen, handlePromote, handleDemote }) => {
 
@@ -86,4 +87,12 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
             </DialogActions>
         </Dialog>
     );
+};
+
+UserChangePrivilegesDialog.propTypes = {
+    dialogUser: PropTypes.object,
+    dialogIsOpen: PropTypes.bool,
+    setDialogIsOpen: PropTypes.func,
+    handleDemote: PropTypes.func,
+    handlePromote: PropTypes.func
 };
