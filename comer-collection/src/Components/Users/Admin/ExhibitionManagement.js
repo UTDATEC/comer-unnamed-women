@@ -61,10 +61,10 @@ const ExhibitionManagement = (props) => {
   useEffect(() => {
     setSelectedNavItem("Exhibition Management");
     setTitleText("Exhibition Management");
-    if(appUser.is_admin) {
+    if (appUser.is_admin) {
       fetchData();
     }
-  }, []); 
+  }, []);
 
 
   const fetchData = async () => {
@@ -106,41 +106,41 @@ const ExhibitionManagement = (props) => {
   }), [exhibitions, searchQuery, userCourseIdFilter]);
 
 
-const handleExhibitionEditByAdmin = async(exhibitionId, title, privacy) => {
-  try {
-    await sendAuthenticatedRequest("PUT", `/api/admin/exhibitions/${exhibitionId}`, {title, privacy});
-    setEditDialogIsOpen(false);
-    setEditDialogExhibitionId(null);
-    setEditDialogExhibitionTitle("");
-    setEditDialogExhibitionAccess(null);
-    showSnackbar(`Exhibition updated`, "success");
-  } catch(e) {
-    console.log(`Error updating exhibition: ${e.message}`)
-    showSnackbar(`Error updating exhibition`, "error");
+  const handleExhibitionEditByAdmin = async (exhibitionId, title, privacy) => {
+    try {
+      await sendAuthenticatedRequest("PUT", `/api/admin/exhibitions/${exhibitionId}`, { title, privacy });
+      setEditDialogIsOpen(false);
+      setEditDialogExhibitionId(null);
+      setEditDialogExhibitionTitle("");
+      setEditDialogExhibitionAccess(null);
+      showSnackbar(`Exhibition updated`, "success");
+    } catch (e) {
+      console.log(`Error updating exhibition: ${e.message}`)
+      showSnackbar(`Error updating exhibition`, "error");
+    }
+    fetchData();
   }
-  fetchData();
-}
 
 
 
-const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
-  try {
-    await sendAuthenticatedRequest("DELETE", `/api/admin/exhibitions/${exhibitionId}`);
-    setDeleteDialogIsOpen(false);
-    setDeleteDialogExhibition(null);
-    showSnackbar(`Exhibition deleted`, "success");
-  } catch(e) {
-    console.log(`Error deleting exhibition: ${e.message}`)
-    showSnackbar(`Error deleting exhibition`, "error");
+  const handleExhibitionDeleteByAdmin = async (exhibitionId) => {
+    try {
+      await sendAuthenticatedRequest("DELETE", `/api/admin/exhibitions/${exhibitionId}`);
+      setDeleteDialogIsOpen(false);
+      setDeleteDialogExhibition(null);
+      showSnackbar(`Exhibition deleted`, "success");
+    } catch (e) {
+      console.log(`Error deleting exhibition: ${e.message}`)
+      showSnackbar(`Error deleting exhibition`, "error");
+    }
+    fetchData();
   }
-  fetchData();
-}
 
 
   const handleCopyToClipboard = useCallback((exhibition, fieldName) => {
     try {
       navigator.clipboard.writeText(exhibition[fieldName]);
-      if(fieldName == "email") {
+      if (fieldName == "email") {
         showSnackbar(`Email address for exhibition ${exhibition.id} copied to clipboard`, "success");
       } else {
         showSnackbar(`Text copied to clipboard`, "success");
@@ -169,7 +169,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
         exhibition.title ? (
           <Typography variant="body1">{exhibition.title}</Typography>
         ) : (
-          <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
+          <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
         )
       ),
       generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
@@ -179,7 +179,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
       generateTableCell: (exhibition) => (
         <Stack direction="column" paddingTop={1} paddingBottom={1}>
           <Typography variant="body1">{exhibition.User.full_name_reverse}</Typography>
-          <Typography variant="body1" sx={{opacity: 0.5}}>{exhibition.User.email}</Typography>
+          <Typography variant="body1" sx={{ opacity: 0.5 }}>{exhibition.User.email}</Typography>
         </Stack>
       ),
       generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
@@ -187,14 +187,14 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
     {
       columnDescription: "Created",
       generateTableCell: (exhibition) => (
-        <Typography variant="body1">{new Date (exhibition.date_created).toLocaleString()}</Typography>
+        <Typography variant="body1">{new Date(exhibition.date_created).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_created)
     },
     {
       columnDescription: "Modified",
       generateTableCell: (exhibition) => (
-        <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
+        <Typography variant="body1">{new Date(exhibition.date_modified).toLocaleString()}</Typography>
       ),
       generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
     },
@@ -203,19 +203,19 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
       generateTableCell: (exhibition) => (
         <Stack direction="row" spacing={1} alignItems="center">
           {exhibition.privacy == "PRIVATE" && (
-              <LockIcon />
-            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-              <VpnLockIcon />
-            ) || exhibition.privacy == "PUBLIC" && (
-              <PublicIcon />
-            )}
-            <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
-              "Private"
-            ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-              "Public Anonymous"
-            ) || exhibition.privacy == "PUBLIC" && (
-              "Public"
-            )}</Typography>
+            <LockIcon />
+          ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+            <VpnLockIcon />
+          ) || exhibition.privacy == "PUBLIC" && (
+            <PublicIcon />
+          )}
+          <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
+            "Private"
+          ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+            "Public Anonymous"
+          ) || exhibition.privacy == "PUBLIC" && (
+            "Public"
+          )}</Typography>
         </Stack>
       )
     },
@@ -226,7 +226,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
           <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
             <Typography variant="body1">Open</Typography>
           </Button>
-          <IconButton 
+          <IconButton
             onClick={() => {
               setEditDialogExhibitionId(exhibition.id);
               setEditDialogExhibitionAccess(exhibition.privacy);
@@ -236,7 +236,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
           >
             <SettingsIcon />
           </IconButton>
-          <IconButton 
+          <IconButton
             onClick={() => {
               setDeleteDialogExhibition(exhibition);
               setDeleteDialogIsOpen(true);
@@ -255,26 +255,26 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.pw_change_required && (
-    <Navigate to="/Account/ChangePassword" />
-  ) ||
-  appUser.is_admin && (
-    <Box component={Paper} square sx={{
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: '80px calc(100vh - 224px) 80px',
-      gridTemplateAreas: `
+    appUser.pw_change_required && (
+      <Navigate to="/Account/ChangePassword" />
+    ) ||
+    appUser.is_admin && (
+      <Box component={Paper} square sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '80px calc(100vh - 224px) 80px',
+        gridTemplateAreas: `
         "top"
         "table"
         "bottom"
       `
-    }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by user name or email" width="30%" />
-          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{courses}} />
+      }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+          <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
+          <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
 
           <Stack direction="row" spacing={2}>
-            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
               setRefreshInProgress(true);
               fetchData();
             }}
@@ -283,7 +283,7 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
             </Button>
             <Button color="primary" variant={
               visibleExhibitions.length > 0 ? "outlined" : "contained"
-            } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery || userCourseIdFilter)
               }>
@@ -291,13 +291,13 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
             </Button>
           </Stack>
         </Stack>
-        <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields} 
+        <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
           rowSelectionEnabled={true}
           selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
           defaultSortColumn="Modified"
           defaultSortAscending={false}
-          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
-          sx={{gridArea: "table"}}
+          {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
+          sx={{ gridArea: "table" }}
           emptyMinHeight="300px"
           {...visibleExhibitions.length == exhibitions.length && {
             noContentMessage: "No exhibitions yet",
@@ -309,8 +309,8 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
             NoContentIcon: SearchIcon
           }}
         />
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
-          <SelectionSummary 
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+          <SelectionSummary
             items={exhibitions}
             selectedItems={selectedExhibitions}
             setSelectedItems={setSelectedExhibitions}
@@ -321,32 +321,32 @@ const handleExhibitionDeleteByAdmin = async(exhibitionId) => {
         </Stack>
 
 
-      <ExhibitionSettingsDialog
-        editMode={true}
-        adminMode={true}
-        dialogExhibitionAccess={editDialogExhibitionAccess}
-        setDialogExhibitionAccess={setEditDialogExhibitionAccess}
-        dialogExhibitionId={editDialogExhibitionId}
-        dialogExhibitionTitle={editDialogExhibitionTitle}
-        setDialogExhibitionTitle={setEditDialogExhibitionTitle}
-        dialogIsOpen={editDialogIsOpen}
-        setDialogIsOpen={setEditDialogIsOpen}
-        handleExhibitionEdit={handleExhibitionEditByAdmin}
+        <ExhibitionSettingsDialog
+          editMode={true}
+          adminMode={true}
+          dialogExhibitionAccess={editDialogExhibitionAccess}
+          setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+          dialogExhibitionId={editDialogExhibitionId}
+          dialogExhibitionTitle={editDialogExhibitionTitle}
+          setDialogExhibitionTitle={setEditDialogExhibitionTitle}
+          dialogIsOpen={editDialogIsOpen}
+          setDialogIsOpen={setEditDialogIsOpen}
+          handleExhibitionEdit={handleExhibitionEditByAdmin}
         />
 
-      <ItemSingleDeleteDialog
-        deleteDialogIsOpen={deleteDialogIsOpen}
-        deleteDialogItem={deleteDialogExhibition}
-        dialogTitle="Delete Exhibition"
-        requireTypedConfirmation={true}
-        entity="exhibition"
-        setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-        handleDelete={handleExhibitionDeleteByAdmin}
-      />
+        <ItemSingleDeleteDialog
+          deleteDialogIsOpen={deleteDialogIsOpen}
+          deleteDialogItem={deleteDialogExhibition}
+          dialogTitle="Delete Exhibition"
+          requireTypedConfirmation={true}
+          entity="exhibition"
+          setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+          handleDelete={handleExhibitionDeleteByAdmin}
+        />
 
 
-    </Box>
-  );
+      </Box>
+    );
 }
 
 
