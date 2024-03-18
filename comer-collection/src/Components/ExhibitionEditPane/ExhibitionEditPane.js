@@ -15,14 +15,18 @@ import {
     SecurityIcon,
 } from "../IconImports";
 import { useAppUser } from "../App/AppUser";
+import PropTypes from "prop-types";
 
 const ColorInput = ({value, onChange, disabled}) => {
     return (
-        <input type="color" sx={{width: "100%"}} 
-            value={value ?? ""}
-            {...{onChange, disabled}} 
-        />
+        <input type="color" value={value ?? ""} {...{onChange, disabled}} />
     );
+};
+
+ColorInput.propTypes = {
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool
 };
 
 const AccordionSubHeading = ({text}) => {
@@ -33,6 +37,10 @@ const AccordionSubHeading = ({text}) => {
             <Typography variant="h6" align="center" color={theme.palette.grey.main}>{text}</Typography>
         </>
     );
+};
+
+AccordionSubHeading.propTypes = {
+    text: PropTypes.string
 };
 
 const moodinessOptions = [
@@ -106,9 +114,7 @@ const textureOptions = [
     }
 ];
 
-
 const ExhibitionOption = ({description, children, vertical}) => {
-    const theme = useTheme();
     return (
         <Stack direction={vertical ? "column" : "row"} alignItems={vertical ? "" : "center"} spacing={1} 
             justifyContent="space-between"
@@ -117,6 +123,13 @@ const ExhibitionOption = ({description, children, vertical}) => {
             {children}
         </Stack>
     );
+};
+
+
+ExhibitionOption.propTypes = {
+    description: PropTypes.string.isRequired,
+    children: PropTypes.node,
+    vertical: PropTypes.bool.isRequired
 };
 
 
@@ -161,6 +174,14 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
     );
 };
 
+ExhibitionOptionGroup.propTypes = {
+    id: PropTypes.string.isRequired,
+    expandedSection: PropTypes.string,
+    setExpandedSection: PropTypes.func,
+    children: PropTypes.node,
+    description: PropTypes.string.isRequired
+};
+
 
 const getSwappedImageArray = (images, imageIdA, imageIdB) => {
     const imageA = images.find((image) => image.image_id == imageIdA);
@@ -179,6 +200,8 @@ const getSwappedImageArray = (images, imageIdA, imageIdB) => {
         }
     });
 };
+
+
 
 
 
@@ -287,6 +310,13 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
     );
 };
 
+ImageRearrangeDialog.propTypes = {
+    imageRearrangerIsOpen: PropTypes.bool.isRequired,
+    setImageRearrangerIsOpen: PropTypes.func.isRequired,
+    exhibitionState: PropTypes.object.isRequired,
+    exhibitionEditDispatch: PropTypes.func.isRequired,
+    globalImageCatalog: PropTypes.arrayOf(PropTypes.object)
+};
 
 export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch}) => {
     
@@ -330,8 +360,15 @@ export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, e
     );
 };
 
+ImageChooserDialog.propTypes = {
+    imageChooserIsOpen: PropTypes.bool.isRequired,
+    setImageChooserIsOpen: PropTypes.func.isRequired,
+    exhibitionState: PropTypes.object.isRequired,
+    setSelectedImageId: PropTypes.func.isRequired,
+    exhibitionEditDispatch: PropTypes.func.isRequired
+};
 
-export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, exhibitionIsLoaded, saveExhibition}) => {
+export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition}) => {
     
     const [expandedSection, setExpandedSection] = useState(null);
 
@@ -883,4 +920,13 @@ export const ExhibitionEditPane = ({exhibitionId, exhibitionMetadata, exhibition
 
         </Box>
     );
+};
+
+
+ExhibitionEditPane.propTypes = {
+    exhibitionMetadata: PropTypes.object.isRequired,
+    exhibitionState: PropTypes.object.isRequired,
+    exhibitionEditDispatch: PropTypes.func.isRequired,
+    globalImageCatalog: PropTypes.arrayOf(PropTypes.object).isRequired,
+    saveExhibition: PropTypes.func.isRequired
 };
