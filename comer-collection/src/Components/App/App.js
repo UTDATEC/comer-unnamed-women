@@ -26,7 +26,7 @@ const App = () => {
     const secondaryColor = orange;
 
     const cache = createCache({
-        key: "comer-app",
+        key: "comer-emotion-nonce-cache",
         nonce: Math.random().toString(36).slice(2)
     });
 
@@ -72,10 +72,10 @@ const App = () => {
 
 
     return (
-        <CacheProvider cache={cache} value={cache}>
+        <CacheProvider value={cache}>
             <Helmet>
                 <meta httpEquiv='Content-Security-Policy' 
-                    content={`default-src 'self' script-src 'self' 'nonce-${cache.nonce}' connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
+                    content={`default-src 'none' script-src 'self' 'nonce-${cache.nonce}' connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
             </Helmet>
             <AppUserProvider>
                 <ThemeProvider theme={theme}>
