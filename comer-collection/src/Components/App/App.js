@@ -91,7 +91,7 @@ const App = () => {
           
                                             <Route index element={<Navigate to="/login" />} />
           
-                                            <Route path="/BrowseCollection" element={<CollectionBrowser />} />
+                                            <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
                                             <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
                                             <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
 
