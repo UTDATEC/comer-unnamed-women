@@ -29,11 +29,11 @@ module.exports = (db) => {
             type: DataTypes.VIRTUAL,
             get() {
                 const now = Date.now();
-                if(this.date_end < now)
+                if (this.date_end < now)
                     return "Expired"
-                else if(this.date_start > now)
+                else if (this.date_start > now)
                     return "Upcoming"
-                else if(this.date_start <= now && this.date_end >= now)
+                else if (this.date_start <= now && this.date_end >= now)
                     return "Active"
                 return "Invalid status"
             }
@@ -55,7 +55,7 @@ module.exports = (db) => {
         tableName: "comer_courses",
         validate: {
             dateRange() {
-                if(this.date_start > this.date_end)
+                if (this.date_start > this.date_end)
                     throw new Error("Course end time must be after course start time")
             }
         }
