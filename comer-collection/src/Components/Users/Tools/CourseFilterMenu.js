@@ -67,5 +67,5 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
 CourseFilterMenu.propTypes = {
     filterValue: PropTypes.object,
     setFilterValue: PropTypes.func,
-    courses: PropTypes.arrayOf(PropTypes.obj)
+    courses: PropTypes.arrayOf(PropTypes.object)
 };

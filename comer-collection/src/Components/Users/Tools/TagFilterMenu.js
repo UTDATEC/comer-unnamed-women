@@ -67,5 +67,5 @@ export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {
 TagFilterMenu.propTypes = {
     filterValue: PropTypes.object,
     setFilterValue: PropTypes.func,
-    tags: PropTypes.arrayOf(PropTypes.obj)
+    tags: PropTypes.arrayOf(PropTypes.object)
 };

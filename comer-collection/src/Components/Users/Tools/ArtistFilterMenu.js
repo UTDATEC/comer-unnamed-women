@@ -67,5 +67,5 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
 ArtistFilterMenu.propTypes = {
     filterValue: PropTypes.object,
     setFilterValue: PropTypes.func,
-    artists: PropTypes.arrayOf(PropTypes.obj)
+    artists: PropTypes.arrayOf(PropTypes.object)
 };
