@@ -913,9 +913,7 @@ const ImageManagement = () => {
                         <Typography variant="body1">Refresh</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                        disabled={
-                            !Boolean(searchQuery)
-                        }>
+                        disabled={searchQuery}>
                         <Typography variant="body1">Clear Filters</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<SellIcon />}
