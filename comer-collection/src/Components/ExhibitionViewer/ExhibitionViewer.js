@@ -544,7 +544,7 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
 
 ArtInfoPopup.propTypes = {
     globalImageCatalog: PropTypes.arrayOf(PropTypes.object).isRequired,
-    image_id: PropTypes.number.isRequired,
+    image_id: PropTypes.number,
     exhibitionState: PropTypes.object.isRequired
 };
 
@@ -591,7 +591,7 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
 
 ExhibitionIntro.propTypes = {
     exhibitionMetadata: PropTypes.object.isRequired,
-    controls: PropTypes.object.isRequired,
+    controls: PropTypes.object,
     dialogIsOpen: PropTypes.bool.isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
 };
