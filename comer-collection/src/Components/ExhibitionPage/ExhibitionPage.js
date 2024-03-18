@@ -9,7 +9,7 @@ import { useAppUser } from "../App/AppUser";
 import Unauthorized from "../ErrorPages/Unauthorized";
 import { useSnackbar } from "../App/AppSnackbar";
 import { useTitle } from "../App/AppTitle";
-import { AccessTimeIcon } from "../IconImports";
+import { AccessTimeIcon, InfoIcon, LockIcon } from "../IconImports";
 
 
 export const ExhibitionPage = () => {
@@ -158,10 +158,10 @@ export const ExhibitionPage = () => {
 
 
     return !appUserIsLoaded && (
-        <Unauthorized message="Loading exhibition..." customIcon={AccessTimeIcon} />
+        <Unauthorized message="Loading exhibition..." customIcon={AccessTimeIcon} Icon={LockIcon} />
     ) || appUserIsLoaded && !isPermissionGranted && (
         <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
-            buttonDestination="/Exhibitions" />
+            buttonDestination="/Exhibitions" Icon={InfoIcon} />
     ) || appUserIsLoaded && isPermissionGranted && (
         <Box 
             sx={{
