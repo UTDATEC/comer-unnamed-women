@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Stack,
     Button,
@@ -15,7 +15,6 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary";
 import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields";
-import { createCourseDialogReducer } from "../Tools/HelperMethods/reducers";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
 import { useSnackbar } from "../../App/AppSnackbar";
 import { useAppUser } from "../../App/AppUser";
@@ -58,7 +57,6 @@ const CourseManagement = (props) => {
     const createDialogFieldDefinitions = courseFieldDefinitions;
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [createDialogCourses, createDialogDispatch] = useReducer(createCourseDialogReducer, []);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -147,10 +145,6 @@ const CourseManagement = (props) => {
 
         if (coursesCreated == newCourseArray.length) {
             setDialogIsOpen(false);
-            createDialogDispatch({
-                type: "set",
-                newArray: []
-            });
 
             showSnackbar(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "success");
 
@@ -163,12 +157,6 @@ const CourseManagement = (props) => {
                 showSnackbar(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "error");
             }
 
-            createDialogDispatch({
-                type: "set",
-                newArray: newCourseArray.filter((u, i) => {
-                    return courseIndicesWithErrors.includes(i);
-                })
-            });
         }
 
         return courseIndicesWithErrors;
@@ -535,9 +523,8 @@ const CourseManagement = (props) => {
             <ItemMultiCreateDialog entity="course"
                 dialogTitle={"Create Courses"}
                 dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-                createDialogItems={createDialogCourses}
                 handleItemsCreate={handleCoursesCreate}
-                {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
+                {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
                 entity="course"
