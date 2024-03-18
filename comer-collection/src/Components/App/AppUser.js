@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 export const AppUserContext = createContext();
 
@@ -44,6 +45,12 @@ export const AppUserProvider = ({ children }) => {
         </AppUserContext.Provider>
     );
 };
+
+
+AppUserProvider.propTypes = {
+    children: PropTypes.node
+};
+
 
 export const useAppUser = () => {
     const { appUser, setAppUser, initializeAppUser, appUserIsLoaded } = useContext(AppUserContext);

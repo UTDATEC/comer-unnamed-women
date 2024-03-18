@@ -1,6 +1,7 @@
 import { Snackbar, Alert, Stack, Typography } from "@mui/material";
 import React, { useCallback, useContext, useState } from "react";
 import { createContext } from "react";
+import PropTypes from "prop-types";
 
 
 const SnackbarContext = createContext();
@@ -40,6 +41,10 @@ export const SnackbarProvider = ({ children }) => {
             </Snackbar>
         </SnackbarContext.Provider>
     );
+};
+
+SnackbarProvider.propTypes = {
+    children: PropTypes.node
 };
 
 
