@@ -7,6 +7,7 @@ import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
 import SearchBox from "../Users/Tools/SearchBox";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";
 import { useTitle } from "../App/AppTitle";
+import PropTypes from "prop-types";
 
 
 
@@ -72,7 +73,7 @@ const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelect
 
 
 
-export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, disabledImages}) => {
+export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, disabledImages=[]}) => {
     
     const [images, setImages] = useState([]);
     const [artists, setArtists] = useState([]);
@@ -180,4 +181,11 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
             </Stack>
         </Box>
     );
+};
+
+CollectionBrowser.propTypes = {
+    isDialogMode: PropTypes.bool.isRequired,
+    selectedItem: PropTypes.string,
+    setSelectedItem: PropTypes.func,
+    disabledImages: PropTypes.arrayOf(PropTypes.object)
 };
