@@ -165,7 +165,7 @@ const UserManagement = (props) => {
         users: userIds,
         courses: [courseId]
       });
-      showSnackbar(`Successfully enrolled`, "success")
+      showSnackbar(`Successfully unenrolled`, "success")
 
     } catch (error) {
       showSnackbar(`Failed to enroll`, "error")
