@@ -1,29 +1,29 @@
-require('dotenv').config()
-require('express-async-errors');
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+require("dotenv").config();
+require("express-async-errors");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const toobusy = require("toobusy-js");
-const { rateLimit } = require("express-rate-limit")
-const jwt = require('jsonwebtoken')
+const { rateLimit } = require("express-rate-limit");
+const jwt = require("jsonwebtoken");
 
 
-const apiRouter = require('./router');
-const apiRouterPublic = require('./router_public.js');
-const apiRouterUserTempPw = require('./router_user_temp_pw.js');
-const apiRouterUser = require('./router_user.js');
-const apiRouterAdmin = require('./router_admin.js');
+const apiRouter = require("./router");
+const apiRouterPublic = require("./router_public.js");
+const apiRouterUserTempPw = require("./router_user_temp_pw.js");
+const apiRouterUser = require("./router_user.js");
+const apiRouterAdmin = require("./router_admin.js");
 
 global.__basedir = __dirname;
 
 const { User, sequelize, Course, Exhibition } = require("./sequelize.js");
 sequelize.sync({ alter: false }).then(() => {
-    console.log(`Database & tables created! (unless table already existed)`);
+    console.log("Database & tables created! (unless table already existed)");
 });
 
 var app = express();
@@ -35,7 +35,7 @@ const limiter = rateLimit({
     statusCode: 429,
     standardHeaders: false,
     legacyHeaders: false
-})
+});
 
 app.use(limiter);
 
@@ -46,19 +46,19 @@ app.use((req, res, next) => {
     } else {
         next();
     }
-})
+});
 
 
 
 // view engine setup
 app.use(cors());
 app.use(hpp());
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // This line allows the public files to be read from/rendered by path in the front end
-app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use("/static", express.static(path.join(__dirname, "static")));
 app.use(helmet());
 
 
@@ -77,7 +77,7 @@ app.use(helmet.frameguard({
 
 const requireAuthenticatedUser = async (req, res, next) => {
     try {
-        const header = req.get("Authorization")
+        const header = req.get("Authorization");
         if (header == undefined || header == null)
             throw new Error("Authorization header not present");
         else if (!header.startsWith("Bearer "))
@@ -100,13 +100,13 @@ const requireAuthenticatedUser = async (req, res, next) => {
             throw new Error("Token password update time does not match the latest password update time");
 
         req.app_user = user;
-        console.log("authorized successfully and User instance attached to request object")
+        console.log("authorized successfully and User instance attached to request object");
         next();
 
     } catch (e) {
         next(createError(401, { debugMessage: e.message }));
     }
-}
+};
 
 const requireAdmin = async (req, res, next) => {
     const { app_user } = req;
@@ -115,7 +115,7 @@ const requireAdmin = async (req, res, next) => {
     } else {
         next(createError(403, { debugMessage: "Action requires admin privileges" }));
     }
-}
+};
 
 
 const requirePermanentPassword = async (req, res, next) => {
@@ -125,7 +125,7 @@ const requirePermanentPassword = async (req, res, next) => {
     } else {
         next(createError(401, { debugMessage: "Please change your password and try again" }));
     }
-}
+};
 
 
 // Routes for querying data
@@ -143,6 +143,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use(function (err, req, res, next) {
     const res_status = err.status || 500;
     res.status(res_status);
@@ -150,16 +151,16 @@ app.use(function (err, req, res, next) {
         error: {
             status: res_status,
             message: err.message,
-            debugMessage: req.app.get('env') === 'development' ? (err.debugMessage + "\n" + err.stack) : ""
+            debugMessage: req.app.get("env") === "development" ? (err.debugMessage + "\n" + err.stack) : ""
         }
-    })
+    });
 });
 
 
 
 // module.exports = app;
-app.set('port', process.env.PORT || 9000);
+app.set("port", process.env.PORT || 9000);
 
-var server = app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + server.address().port);
+var server = app.listen(app.get("port"), function () {
+    console.log("Express server listening on port " + server.address().port);
 });
