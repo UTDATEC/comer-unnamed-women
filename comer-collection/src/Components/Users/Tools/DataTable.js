@@ -204,7 +204,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
 
 DataTable.propTypes = {
     nonEmptyHeight: PropTypes.string,
-    tableFields: PropTypes.arrayOf(PropTypes.string),
+    tableFields: PropTypes.arrayOf(PropTypes.object),
     items: PropTypes.arrayOf(PropTypes.object),
     rowSelectionEnabled: PropTypes.bool,
     selectedItems: PropTypes.arrayOf(PropTypes.object),
