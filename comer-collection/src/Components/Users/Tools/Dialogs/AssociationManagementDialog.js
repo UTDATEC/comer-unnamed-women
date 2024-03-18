@@ -11,6 +11,7 @@ import { InfoIcon, SearchIcon } from "../../../IconImports";
 import { DataTable } from "../DataTable";
 import SearchBox from "../SearchBox";
 import { searchItems } from "../SearchUtilities";
+import PropTypes from "prop-types";
 
 const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, primaryItems) => {
     if (primaryItems?.length == 0)
@@ -25,8 +26,7 @@ const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, 
 };
 
 export const AssociationManagementDialog = ({
-    primaryEntity, secondaryEntity,
-    primaryItems, setPrimaryItems,
+    primaryItems, 
     secondaryItemsAll, secondariesByPrimary,
     secondaryTableFieldsAll, secondaryTableFieldsAssignedOnly,
     tableTitleAssigned, tableTitleAll,
@@ -174,4 +174,23 @@ export const AssociationManagementDialog = ({
             </DialogActions>
         </Dialog>
     );
+};
+
+AssociationManagementDialog.propTypes = {
+    primaryItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+    secondaryItemsAll: PropTypes.arrayOf(PropTypes.object).isRequired,
+    secondariesByPrimary: PropTypes.object.isRequired,
+    secondaryTableFieldsAll: PropTypes.arrayOf(PropTypes.object).isRequired,
+    secondaryTableFieldsAssignedOnly: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tableTitleAll: PropTypes.string.isRequired,
+    tableTitleAssigned: PropTypes.string.isRequired,
+    dialogTitle: PropTypes.string.isRequired,
+    dialogInstructions: PropTypes.string.isRequired,
+    dialogButtonForSecondaryManagement: PropTypes.element.isRequired,
+    dialogIsOpen: PropTypes.bool.isRequired,
+    setDialogIsOpen: PropTypes.func.isRequired,
+    secondarySearchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+    secondarySearchBoxPlaceholder: PropTypes.string,
+    defaultSortAscending: PropTypes.bool.isRequired,
+    defaultSortColumn: PropTypes.string.isRequired
 };
