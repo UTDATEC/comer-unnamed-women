@@ -27,7 +27,7 @@ const listPublicExhibitions = async (req, res, next) => {
 }
 
 const createExhibition = async (req, res, next) => {
-    if(!canUserCreateExhibition(req.app_user)) {
+    if (!canUserCreateExhibition(req.app_user)) {
         return next(createError(403));
     }
     const now = Date.now();
@@ -38,8 +38,8 @@ const createExhibition = async (req, res, next) => {
         exhibition_owner: req.app_user.id
     }
     await createItem(req, res, next, Exhibition, [
-        'title', 'privacy', 
-        'date_created', 'date_modified', 
+        'title', 'privacy',
+        'date_created', 'date_modified',
         'exhibition_owner'
     ])
 }
@@ -52,7 +52,7 @@ const getExhibition = async (req, res, next) => {
 }
 
 const ownerEditExhibitionSettings = async (req, res, next) => {
-    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+    if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
         return next(createError(403));
     }
     await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
@@ -61,7 +61,7 @@ const ownerEditExhibitionSettings = async (req, res, next) => {
 }
 
 const ownerDeleteExhibition = async (req, res, next) => {
-    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+    if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
         return next(createError(403));
     }
     await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
@@ -79,15 +79,15 @@ const adminDeleteExhibition = async (req, res, next) => {
 }
 
 const loadExhibitionOwner = async (req, res, next) => {
-    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+    if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
         return next(createError(403));
     }
     try {
         const exhibition = await Exhibition.scope([
-            'with_data', 
+            'with_data',
             'with_public_curators'
         ]).findByPk(req.params.exhibitionId);
-        if(!exhibition) {
+        if (!exhibition) {
             next(createError(404));
         } else {
             res.status(200).json({
@@ -97,18 +97,18 @@ const loadExhibitionOwner = async (req, res, next) => {
                 }
             })
         }
-    } catch(e) {
-        next(createError(400), {debugMessage: e.message});
+    } catch (e) {
+        next(createError(400), { debugMessage: e.message });
     }
 }
 
-const loadExhibitionAdmin = async(req, res, next) => {
+const loadExhibitionAdmin = async (req, res, next) => {
     try {
         const exhibition = await Exhibition.scope([
-            'with_data', 
+            'with_data',
             'with_public_curators'
         ]).findByPk(req.params.exhibitionId);
-        if(!exhibition) {
+        if (!exhibition) {
             next(createError(404));
         } else {
             res.status(200).json({
@@ -118,15 +118,15 @@ const loadExhibitionAdmin = async(req, res, next) => {
                 }
             })
         }
-    } catch(e) {
-        next(createError(400), {debugMessage: e.message});
+    } catch (e) {
+        next(createError(400), { debugMessage: e.message });
     }
 }
 
-const loadExhibitionPublic = async(req, res, next) => {
+const loadExhibitionPublic = async (req, res, next) => {
     try {
         const exhibition = await Exhibition.scope([
-            'with_data', 
+            'with_data',
             'with_public_curators'
         ]).findOne({
             where: {
@@ -134,9 +134,9 @@ const loadExhibitionPublic = async(req, res, next) => {
                 privacy: ["PUBLIC", "PUBLIC_ANONYMOUS"]
             }
         });
-        if(!exhibition) {
+        if (!exhibition) {
             next(createError(401));
-        } 
+        }
         else {
             res.status(200).json({
                 data: {
@@ -145,19 +145,19 @@ const loadExhibitionPublic = async(req, res, next) => {
                 }
             })
         }
-    } catch(e) {
-        next(createError(400), {debugMessage: e.message});
+    } catch (e) {
+        next(createError(400), { debugMessage: e.message });
     }
 }
 
 
 const saveExhibition = async (req, res, next) => {
     try {
-        await sequelize.transaction(async(t) => {
+        await sequelize.transaction(async (t) => {
             const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
                 transaction: t
             });
-            if(!exhibition)
+            if (!exhibition)
                 next(createError(404));
             else {
                 await exhibition.update({
@@ -170,14 +170,14 @@ const saveExhibition = async (req, res, next) => {
             }
             res.sendStatus(204);
         })
-    } catch(e) {
-        next(createError(400), {debugMessage: e.message + "\n" + e.stack});
+    } catch (e) {
+        next(createError(400), { debugMessage: e.message + "\n" + e.stack });
     }
 }
 
 
 const saveExhibitionOwner = async (req, res, next) => {
-    if(!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
+    if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
         return next(createError(403));
     }
     await saveExhibition(req, res, next);

@@ -5,9 +5,9 @@ const { Op } = require('sequelize');
 
 const manageManyToManyAssociation = async (req, res, next, model, association, action, primaryIds, secondaryIds) => {
     try {
-        if(!Array.isArray(primaryIds)) {
+        if (!Array.isArray(primaryIds)) {
             throw "primaryIds must be an array"
-        } else if(!Array.isArray(secondaryIds)) {
+        } else if (!Array.isArray(secondaryIds)) {
             throw "secondaryIds must be an array"
         }
         await sequelize.transaction(async (t) => {
@@ -20,7 +20,7 @@ const manageManyToManyAssociation = async (req, res, next, model, association, a
                 transaction: t
             }));
             const { set, addMultiple, removeMultiple } = association.accessors;
-            for(let p of primaries) {
+            for (let p of primaries) {
                 switch (action) {
                     case 'set':
                         await p[set](secondaryIds);
@@ -37,7 +37,7 @@ const manageManyToManyAssociation = async (req, res, next, model, association, a
             }
         });
         res.sendStatus(204);
-    } catch(e) {
+    } catch (e) {
         next(createError(400, { debugMessage: e.message + "\n" + e.stack }));
     }
 }

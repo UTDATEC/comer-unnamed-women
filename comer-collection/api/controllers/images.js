@@ -26,16 +26,16 @@ const getImagePublic = async (req, res, next) => {
     ], req.params.imageId);
 };
 
-const downloadImagePublic = async(req, res, next) => {
+const downloadImagePublic = async (req, res, next) => {
     try {
         const image = await Image.findByPk(req.params.imageId, {
             attributes: {
                 include: ['url']
             }
         })
-        if(!image)
+        if (!image)
             throw new Error("Image metadata could not be retrieved from the database")
-        else if(image.url ?? image.thumbnailUrl) {
+        else if (image.url ?? image.thumbnailUrl) {
             const downloadedImage = await fetch(image.url ?? image.thumbnailUrl)
             const imageData = await downloadedImage.blob();
             const imageBuffer = await imageData.arrayBuffer();
@@ -45,8 +45,8 @@ const downloadImagePublic = async(req, res, next) => {
         }
         else
             res.status(200).sendFile(path.join(__dirname, '../static', 'utd.jpg'));
-    } catch(e) {
-        next(createError(500, {debugMessage: e.message}))
+    } catch (e) {
+        next(createError(500, { debugMessage: e.message }))
     }
 }
 

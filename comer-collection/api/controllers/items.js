@@ -8,14 +8,14 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
         }
         const item = await model.findByPk(itemId, { include })
-        if(!item) {
+        if (!item) {
             next(createError(404));
         }
         let i = item.toJSON();
-        for(let f in itemFunctions) {
+        for (let f in itemFunctions) {
             i[f] = itemFunctions[f](i);
         }
-        res.status(200).json({data: i});
+        res.status(200).json({ data: i });
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
@@ -26,12 +26,12 @@ const listItems = async (req, res, next, model, include, where, itemFunctions = 
     try {
         const items = Array.from(await model.findAll({ include, where })).map((i) => {
             i = i.toJSON();
-            for(let f in itemFunctions) {
+            for (let f in itemFunctions) {
                 i[f] = itemFunctions[f](i);
             }
             return i;
         })
-        res.status(200).json({data: items});
+        res.status(200).json({ data: items });
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
@@ -43,9 +43,9 @@ const createItem = async (req, res, next, model, restrictFields = null) => {
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
         }
-        else if(restrictFields) {
-            for(let f in req.body) {
-                if(restrictFields.indexOf(f) < 0) {
+        else if (restrictFields) {
+            for (let f in req.body) {
+                if (restrictFields.indexOf(f) < 0) {
                     throw new Error(`Request body contains field ${f} which is not in restrictFields`);
                 }
             }
@@ -55,7 +55,7 @@ const createItem = async (req, res, next, model, restrictFields = null) => {
                 transaction: t
             });
         });
-        res.status(201).json({data: newItem.toJSON()});
+        res.status(201).json({ data: newItem.toJSON() });
     } catch (e) {
         next(createError(400, { debugMessage: e.message }));
     }
@@ -67,9 +67,9 @@ const updateItem = async (req, res, next, model, itemId, restrictFields = null) 
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
         }
-        else if(restrictFields) {
-            for(let f in req.body) {
-                if(restrictFields.indexOf(f) < 0) {
+        else if (restrictFields) {
+            for (let f in req.body) {
+                if (restrictFields.indexOf(f) < 0) {
                     throw new Error(`Request body contains field ${f} which is not in restrictFields`);
                 }
             }
