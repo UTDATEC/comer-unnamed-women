@@ -1,11 +1,11 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_length, ceiling_height, ceiling_color, renderer, camera, renderWhenFinished) => {
 
     const ceiling_group = new THREE.Group();
     scene.add(ceiling_group);
 
-    texture_loader.load('/images/textures/wall.jpg', (ceiling_texture) => {
+    texture_loader.load("/images/textures/wall.jpg", (ceiling_texture) => {
 
         ceiling_texture.wrapS = THREE.RepeatWrapping;                   // horizontal wrap
         ceiling_texture.wrapT = THREE.RepeatWrapping;                   // vertical wrap

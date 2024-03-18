@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export function createMatte(matte_width, matte_height, matte_color) {
 
@@ -8,7 +8,7 @@ export function createMatte(matte_width, matte_height, matte_color) {
         new THREE.MeshLambertMaterial({ color: matte_color, 
             side: THREE.DoubleSide,
         }),
-    )
+    );
 
     return matte;
 }

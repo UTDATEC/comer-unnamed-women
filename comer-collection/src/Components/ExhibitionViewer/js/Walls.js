@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color, renderer, camera, renderWhenFinished) => {
     // create a group for walls for bounding box and adding to scene
@@ -15,7 +15,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
     // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
 
     // front and back wall texture set up
-    texture_loader.load(`/images/textures/wall.jpg`, (wall_texture_frontback) => {
+    texture_loader.load("/images/textures/wall.jpg", (wall_texture_frontback) => {
 
         wall_texture_frontback.wrapS = THREE.RepeatWrapping; // horizontal wrap
         wall_texture_frontback.wrapT = THREE.RepeatWrapping; // vertical wrap
@@ -58,7 +58,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
 
     // return walls so that BoundingBox.js can use them
     return wall_group;
-}
+};
 
 
 export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, side_color, renderer, camera, renderWhenFinished) => {
@@ -77,7 +77,7 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
     // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
 
     // left and right wall texture set up
-    texture_loader.load(`/images/textures/wall.jpg`, (wall_texture_leftright) => {
+    texture_loader.load("/images/textures/wall.jpg", (wall_texture_leftright) => {
 
         wall_texture_leftright.wrapS = THREE.RepeatWrapping; // horizontal wrap
         wall_texture_leftright.wrapT = THREE.RepeatWrapping; // vertical wrap
@@ -125,5 +125,5 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
 
     // return walls so that BoundingBox.js can use them
     return wall_group;
-}
+};
 

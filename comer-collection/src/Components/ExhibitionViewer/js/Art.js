@@ -1,8 +1,8 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import { createFrame } from './Frames.js';
-import { createMatte } from './Matte.js';
-import { createSpotlight } from './Lighting.js';
+import { createFrame } from "./Frames.js";
+import { createMatte } from "./Matte.js";
+import { createSpotlight } from "./Lighting.js";
 
 export function generateArtData(primary_json, globalImageCatalog) {
 
@@ -19,7 +19,7 @@ export function generateArtData(primary_json, globalImageCatalog) {
 
             image_id: image.image_id,
 
-            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? '/images/image_coming_soon.png',
+            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? "/images/image_coming_soon.png",
 
             position: {
                 custom_x: image.position.custom_x,
@@ -286,8 +286,8 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
                 // custom position check
                 if (data.position.custom_position == true) {
                     art_group.position.set(((gallery_width / 2) - wall_offset), // set x - x does not change, this is distance from wall
-                                       data.position.custom_y,                  // set y
-                                       data.position.custom_x);                 // set z (left right adjustment)
+                        data.position.custom_y,                  // set y
+                        data.position.custom_x);                 // set z (left right adjustment)
                 }
     
                 // default position
@@ -330,15 +330,15 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
                 // custom position check
                 if (data.position.custom_position == true) {
                     art_group.position.set(-((gallery_width / 2) - wall_offset), // set x - x does not change, this is distance from wall
-                    data.position.custom_y,                                     // set y
-                    -data.position.custom_x);                                    // set z
+                        data.position.custom_y,                                     // set y
+                        -data.position.custom_x);                                    // set z
                 }
     
                 // default position
                 else {
                     art_group.position.set(-((gallery_width / 2) - wall_offset),                        // set x - x does not change, this is distance from wall
-                    0,                                                                                  // set y - set at eyelevel
-                    -((photos_placed_4 / (photos_on_4 + 1)) * gallery_length - (gallery_length / 2)));  // set z - sets each photo evenly spaced from by photographic midpoint
+                        0,                                                                                  // set y - set at eyelevel
+                        -((photos_placed_4 / (photos_on_4 + 1)) * gallery_length - (gallery_length / 2)));  // set z - sets each photo evenly spaced from by photographic midpoint
                 }
     
                 photos_placed_4++; // add one to counter, even if this photo is using custom position, it is required for defaults
@@ -348,7 +348,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             // important information for other functionalities
             art_group.user_data = {
                 image_id: data.image_id,
-                type: 'photograph',
+                type: "photograph",
                 info: data.metadata,
                 width: data.size.width,
                 height: data.size.height
@@ -408,4 +408,4 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         renderer.render(scene, camera);
 
     return {all_arts_group, artPositionsByImageId};
-};
+}

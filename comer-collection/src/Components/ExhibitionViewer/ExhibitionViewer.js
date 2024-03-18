@@ -1,33 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import React, { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
-import { setupMainWalls, setupSideWalls } from './js/Walls';
-import { setupFloor } from './js/Floor';
-import { setupCeiling } from './js/Ceiling';
-import { createArt } from './js/Art';
-import { createBoundingBoxes } from './js/BoundingBox';
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from '@mui/material';
-import { PointerLockControls } from 'three-stdlib';
-import { EditIcon, SecurityIcon, VisibilityIcon } from '../IconImports';
-import { useAppUser } from '../App/AppUser';
+import { setupMainWalls, setupSideWalls } from "./js/Walls";
+import { setupFloor } from "./js/Floor";
+import { setupCeiling } from "./js/Ceiling";
+import { createArt } from "./js/Art";
+import { createBoundingBoxes } from "./js/BoundingBox";
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
+import { PointerLockControls } from "three-stdlib";
+import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports";
+import { useAppUser } from "../App/AppUser";
 
 
 
 const getAmbientLightIntensity = (moodiness) => {
     switch (moodiness) {
-        case "dark":
-            return 0.5;
-        case "moody dark":
-            return 1.5;
-        case "moody bright":
-            return 2.5;
-        case "bright":
-            return 3.5;
-        default:
-            return 1.5;
+    case "dark":
+        return 0.5;
+    case "moody dark":
+        return 1.5;
+    case "moody bright":
+        return 2.5;
+    case "bright":
+        return 3.5;
+    default:
+        return 1.5;
     }
 
-}
+};
 
 const get_canvas_dimensions = (boundingBoxElement) => {
     if(boundingBoxElement) {
@@ -35,7 +35,7 @@ const get_canvas_dimensions = (boundingBoxElement) => {
         return [canvas_height, canvas_width];
     }
     return [0, 0];
-}
+};
 
 
 const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive}) => {
@@ -69,7 +69,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     const [canvasDimensions, setCanvasDimensions] = useState({
         width: null,
         height: null
-    })
+    });
 
 
     const [appUser] = useAppUser();
@@ -79,7 +79,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
     const restoreMenu = () => {
         setDialogIsOpen(true);
-    }
+    };
 
     const handleWindowResize = () => {
         if(containerRef.current) {
@@ -87,23 +87,23 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             setCanvasDimensions({
                 width: canvas_width,
                 height: canvas_height
-            })
+            });
         }
-    }
+    };
 
     const handleKeydown = (e) => {
         const keyPressed = e.key.toLowerCase();
         if(keyPressed in keysPressed) {
-            setKeysPressed({...keysPressed, [keyPressed]: true})
+            setKeysPressed({...keysPressed, [keyPressed]: true});
         }
-    }
+    };
 
     const handleKeyup = (e) => {
         const keyPressed = e.key.toLowerCase();
         if(keyPressed in keysPressed) {
-            setKeysPressed({...keysPressed, [keyPressed]: false})
+            setKeysPressed({...keysPressed, [keyPressed]: false});
         }
-    }
+    };
 
 
     useEffect(() => {
@@ -150,7 +150,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             scene.add(controls.getObject());
         
             // resize window when window is resized
-            window.addEventListener('resize', handleWindowResize);
+            window.addEventListener("resize", handleWindowResize);
             
             const clock = new THREE.Clock();
             clock.getDelta();
@@ -163,25 +163,25 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             setMyClock(clock);
 
     
-            controls.addEventListener('unlock', restoreMenu);
+            controls.addEventListener("unlock", restoreMenu);
 
-            window.addEventListener('keydown', handleKeydown);
-            window.addEventListener('keyup', handleKeyup);
+            window.addEventListener("keydown", handleKeydown);
+            window.addEventListener("keyup", handleKeyup);
     
             const texture_loader = new THREE.TextureLoader();
             setMyTextureLoader(texture_loader);
     
     
             return () => {
-                controls.removeEventListener('unlock', restoreMenu);
-                window.removeEventListener('keydown', handleKeydown);
-                window.removeEventListener('keyup', handleKeyup);
+                controls.removeEventListener("unlock", restoreMenu);
+                window.removeEventListener("keydown", handleKeydown);
+                window.removeEventListener("keyup", handleKeyup);
                 setMyRenderer(null);
                 setMyCamera(null);
                 setMyScene(null);
                 setMyControls(null);  
     
-            }
+            };
             
         }
 
@@ -201,29 +201,29 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             let speed;
             if(delta > 0.05) {
                 delta = myClock.getDelta();
-                speed = 0.05
+                speed = 0.05;
             } else {
                 speed = delta;
             }
             switch (true) {
-                case keysPressed.d:
-                case keysPressed.arrowright:
-                    myControls.moveRight(factor * speed);
-                    break;
-                case keysPressed.a:
-                case keysPressed.arrowleft:
-                    myControls.moveRight(-factor * speed);
-                    break;
-                case keysPressed.w:
-                case keysPressed.arrowup:
-                    myControls.moveForward(factor * speed);
-                    break;
-                case keysPressed.s:
-                case keysPressed.arrowdown:
-                    myControls.moveForward(-factor * speed);
-                    break;
-                default:
-                    break;
+            case keysPressed.d:
+            case keysPressed.arrowright:
+                myControls.moveRight(factor * speed);
+                break;
+            case keysPressed.a:
+            case keysPressed.arrowleft:
+                myControls.moveRight(-factor * speed);
+                break;
+            case keysPressed.w:
+            case keysPressed.arrowup:
+                myControls.moveForward(factor * speed);
+                break;
+            case keysPressed.s:
+            case keysPressed.arrowdown:
+                myControls.moveForward(-factor * speed);
+                break;
+            default:
+                break;
             }
         }
 
@@ -235,24 +235,24 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         const maxX = primary_json.size.width_ft / 2 - minDistanceFromWalls;
         if(myCamera && myRenderer) {
             switch (true) {
-                case myCamera.position.z < minZ:
-                    myCamera.position.z = minZ;
-                    break;
-                case myCamera.position.z > maxZ:
-                    myCamera.position.z = maxZ;
-                    break;
-                default:
-                    break;
+            case myCamera.position.z < minZ:
+                myCamera.position.z = minZ;
+                break;
+            case myCamera.position.z > maxZ:
+                myCamera.position.z = maxZ;
+                break;
+            default:
+                break;
             }
             switch (true) {
-                case myCamera.position.x < minX:
-                    myCamera.position.x = minX;
-                    break;
-                case myCamera.position.x > maxX:
-                    myCamera.position.x = maxX;
-                    break;
-                default:
-                    break;
+            case myCamera.position.x < minX:
+                myCamera.position.x = minX;
+                break;
+            case myCamera.position.x > maxX:
+                myCamera.position.x = maxX;
+                break;
+            default:
+                break;
             }
             myCamera.updateProjectionMatrix();
             myRenderer.render(myScene, myCamera);
@@ -266,7 +266,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 closeImage = image_id;
             }
         }
-        setInfoMenuImageId(closeImage)
+        setInfoMenuImageId(closeImage);
 
 
     }, [keysPressed, myCamera?.position.x, myCamera?.position.z, primary_json.size, primary_json.images]);
@@ -275,7 +275,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
     useEffect(() => {
         handleWindowResize();
-    }, [editModeActive])
+    }, [editModeActive]);
 
 
 
@@ -286,7 +286,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             myRenderer.setSize(canvasDimensions.width, canvasDimensions.height);
             myRenderer.render(myScene, myCamera);
         }
-    }, [canvasDimensions])
+    }, [canvasDimensions]);
 
 
     // function to re-render scene when camera is rotated
@@ -301,18 +301,18 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         if(canvasRef.current && myScene) {
             
             canvasRef.current.appendChild(myRenderer.domElement);
-            canvasRef.current.addEventListener('click', () => {
+            canvasRef.current.addEventListener("click", () => {
                 myControls.lock();
-            })
-            myControls.addEventListener('change', handleControlsChange);
+            });
+            myControls.addEventListener("change", handleControlsChange);
 
             return () => {
-                myControls.removeEventListener('change', handleControlsChange);
+                myControls.removeEventListener("change", handleControlsChange);
                 if(canvasRef.current)
                     canvasRef.current.removeChild(myRenderer.domElement);
-            } 
+            }; 
         }
-    }, [myControls, myScene, myRenderer]) 
+    }, [myControls, myScene, myRenderer]); 
 
 
     useEffect(() => {
@@ -321,26 +321,26 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
                 
             let photos_on_1 = 0,
-            photos_on_2 = 0,
-            photos_on_3 = 0,
-            photos_on_4 = 0;
+                photos_on_2 = 0,
+                photos_on_3 = 0,
+                photos_on_4 = 0;
         
             // count photos on walls
             primary_json.images.forEach((image) => {
-            if (image.metadata.direction == 1) { photos_on_1++; }
-            else if (image.metadata.direction == 2) { photos_on_2++; }
-            else if (image.metadata.direction == 3) { photos_on_3++; }
-            else if (image.metadata.direction == 4) { photos_on_4++; }
-            })
+                if (image.metadata.direction == 1) { photos_on_1++; }
+                else if (image.metadata.direction == 2) { photos_on_2++; }
+                else if (image.metadata.direction == 3) { photos_on_3++; }
+                else if (image.metadata.direction == 4) { photos_on_4++; }
+            });
         
         
             // kind of a last minute add, but scene needs to be here for lighting, even though
             // art is not added to the scene here
             // ambient_light_intensity is added for safety in light creation
             const {all_arts_group, artPositionsByImageId} = createArt(myTextureLoader, 
-            photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
-            primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
-            getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
+                photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
+                getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
         
             setMyArtPositionsByImageId(artPositionsByImageId);
         
@@ -350,14 +350,14 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
             return () => {
                 myScene.remove(all_arts_group);
-            }
+            };
         
         }
 
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.images,
         primary_json.size
-    ])
+    ]);
 
 
 
@@ -371,12 +371,12 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
             return () => {
                 myScene.remove(mainWalls);
-            }
+            };
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.appearance.main_wall_color,
         primary_json.size
-    ])
+    ]);
 
     // Update side wall color
     useEffect(() => {
@@ -388,12 +388,12 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
             return () => {
                 myScene.remove(sideWalls);
-            }
+            };
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.appearance.side_wall_color,
         primary_json.size
-    ])
+    ]);
 
     // Update floor
     useEffect(() => {
@@ -404,13 +404,13 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             
             return () => {
                 myScene.remove(floor);
-            }
+            };
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.appearance.floor_color,
         primary_json.appearance.floor_texture,
         primary_json.size
-    ])
+    ]);
 
     // Update ceiling
     useEffect(() => {
@@ -421,12 +421,12 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             
             return () => {
                 myScene.remove(ceiling);
-            }
+            };
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.appearance.ceiling_color,
         primary_json.size
-    ])
+    ]);
 
 
 
@@ -438,11 +438,11 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
             return () => {
                 myScene.remove(ambient_light); 
-            }
+            };
             
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness])
+        primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness]);
 
 
 
@@ -481,8 +481,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             <ArtInfoPopup {...{globalImageCatalog}} exhibitionState={primary_json} image_id={infoMenuImageId} />
             
         </Box>
-    )
-}
+    );
+};
 
 
 const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
@@ -527,8 +527,8 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
                 </Stack>
             </CardContent>
         </Card>
-    )
-}
+    );
+};
 
 
 const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen}) => {
@@ -569,7 +569,7 @@ const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogI
 
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ExhibitionViewer;
