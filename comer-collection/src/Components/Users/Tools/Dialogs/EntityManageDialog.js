@@ -14,20 +14,21 @@ import SearchBox from "../SearchBox";
 import { searchItems } from "../SearchUtilities";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog";
+import PropTypes from "prop-types";
 
 export const EntityManageDialog = ({ entitySingular, entityPlural,
     dialogTitle, dialogInstructionsTable, dialogInstructionsForm,
-    dialogItems, setDialogItems,
+    dialogItems, 
     dialogFieldDefinitions, dialogTableFields,
     dialogIsOpen, setDialogIsOpen,
     handleItemCreate, handleItemEdit, handleItemDelete,
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
 
     internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen,
-    internalDeleteDialogItem, setInternalDeleteDialogItem,
+    internalDeleteDialogItem, 
 
     internalEditDialogIsOpen, setInternalEditDialogIsOpen,
-    internalEditDialogItem, setInternalEditDialogItem,
+    internalEditDialogItem, 
 
     onClose
 }) => {
@@ -175,4 +176,32 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
 
         </>
     );
+};
+
+
+EntityManageDialog.propTypes = {
+    entitySingular: PropTypes.string,
+    entityPlural: PropTypes.string,
+    dialogTitle: PropTypes.string,
+    dialogInstructionsTable: PropTypes.string,
+    dialogInstructionsForm: PropTypes.string,
+    dialogItems: PropTypes.arrayOf(PropTypes.object),
+    dialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
+    dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
+    dialogIsOpen: PropTypes.bool,
+    setDialogIsOpen: PropTypes.func,
+    handleItemCreate: PropTypes.func,
+    handleItemEdit: PropTypes.func,
+    handleItemDelete: PropTypes.func,
+    searchBoxFields: PropTypes.arrayOf(PropTypes.string),
+    searchBoxPlaceholder: PropTypes.string,
+    itemSearchQuery: PropTypes.string,
+    setItemSearchQuery: PropTypes.func,
+    internalDeleteDialogIsOpen: PropTypes.bool,
+    setInternalDeleteDialogIsOpen: PropTypes.func,
+    internalDeleteDialogItem: PropTypes.object,
+    internalEditDialogIsOpen: PropTypes.bool,
+    setInternalEditDialogIsOpen: PropTypes.func,
+    internalEditDialogItem: PropTypes.object,
+    onClose: PropTypes.func
 };
