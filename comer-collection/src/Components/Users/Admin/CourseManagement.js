@@ -77,15 +77,15 @@ const CourseManagement = (props) => {
   const [appUser, setAppUser] = useAppUser();
   const navigate = useNavigate();
   const setTitleText = useTitle();
-  
+
 
   useEffect(() => {
     setSelectedNavItem("Course Management");
     setTitleText("Course Management");
-    if(appUser.is_admin) {
+    if (appUser.is_admin) {
       fetchData();
     }
-  }, []); 
+  }, []);
 
 
   const courseFilterFunction = useCallback((course) => {
@@ -112,10 +112,10 @@ const CourseManagement = (props) => {
 
 
       const usersByCourseDraft = {}
-      for(const c of courseData.data) {
+      for (const c of courseData.data) {
         usersByCourseDraft[c.id] = c.Users;
       }
-      setUsersByCourse({...usersByCourseDraft});
+      setUsersByCourse({ ...usersByCourseDraft });
 
 
     } catch (error) {
@@ -129,16 +129,16 @@ const CourseManagement = (props) => {
   }), [courses, searchQuery]);
 
 
-  const handleCoursesCreate = async(newCourseArray) => {
+  const handleCoursesCreate = async (newCourseArray) => {
     let coursesCreated = 0;
     let courseIndicesWithErrors = []
-    for(const [i, newCourseData] of newCourseArray.entries()) {
+    for (const [i, newCourseData] of newCourseArray.entries()) {
       try {
         let filteredCourse = filterItemFields(courseFieldDefinitions, newCourseData)
         await sendAuthenticatedRequest("POST", '/api/admin/courses', filteredCourse);
 
         coursesCreated++;
-  
+
       } catch (error) {
         console.error(`Error creating course ${JSON.stringify(newCourseData)}: ${error}`);
         courseIndicesWithErrors.push(i);
@@ -146,7 +146,7 @@ const CourseManagement = (props) => {
     }
     fetchData();
 
-    if(coursesCreated == newCourseArray.length) {
+    if (coursesCreated == newCourseArray.length) {
       setDialogIsOpen(false);
       createDialogDispatch({
         type: "set",
@@ -155,9 +155,9 @@ const CourseManagement = (props) => {
 
       showSnackbar(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "success");
 
-    } else if(coursesCreated < newCourseArray.length) {
+    } else if (coursesCreated < newCourseArray.length) {
 
-      if(coursesCreated > 0) {
+      if (coursesCreated > 0) {
         showSnackbar(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "warning");
       }
       else {
@@ -178,39 +178,39 @@ const CourseManagement = (props) => {
   }
 
 
-  const handleAssignCoursesToUser = useCallback(async(userId, courseIds) => {
+  const handleAssignCoursesToUser = useCallback(async (userId, courseIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/assign`, {
         courses: courseIds,
         users: [userId]
       });
       showSnackbar(`Successfully enrolled`, "success");
-      
+
     } catch (error) {
       showSnackbar(`Failed to enroll`, "error");
     }
     await fetchData();
   }, [showSnackbar]);
 
-  
-  
-  const handleUnassignCoursesFromUser = useCallback(async(userId, courseIds) => {
+
+
+  const handleUnassignCoursesFromUser = useCallback(async (userId, courseIds) => {
     try {
       await sendAuthenticatedRequest("PUT", `/api/admin/enrollments/unassign`, {
         courses: courseIds,
         users: [userId]
       });
       showSnackbar(`Successfully unenrolled`, "success");
-      
+
     } catch (error) {
       showSnackbar(`Failed to unenroll`, "error");
     }
     await fetchData();
   }, [showSnackbar]);
-  
 
-  
-  const handleCourseEdit = async(courseId, updateFields) => {
+
+
+  const handleCourseEdit = async (courseId, updateFields) => {
     try {
       const filteredCourse = filterItemFields(courseFieldDefinitions, updateFields);
       await sendAuthenticatedRequest("PUT", `/api/admin/courses/${courseId}`, filteredCourse);
@@ -269,14 +269,14 @@ const CourseManagement = (props) => {
       generateTableCell: (course) => (
         <Stack direction="column" padding={0}>
           <Typography variant="body1">
-            {new Date (course.date_start).toLocaleDateString([], {
+            {new Date(course.date_start).toLocaleDateString([], {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
               weekday: 'short'
             })}
           </Typography>
-          <Typography variant="body1">{new Date (course.date_start).toLocaleTimeString([], {
+          <Typography variant="body1">{new Date(course.date_start).toLocaleTimeString([], {
             hour: 'numeric',
             minute: '2-digit'
           })}</Typography>
@@ -289,14 +289,14 @@ const CourseManagement = (props) => {
       generateTableCell: (course) => (
         <Stack direction="column" padding={0}>
           <Typography variant="body1">
-            {new Date (course.date_end).toLocaleDateString([], {
+            {new Date(course.date_end).toLocaleDateString([], {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
               weekday: 'short'
             })}
           </Typography>
-          <Typography variant="body1">{new Date (course.date_end).toLocaleTimeString([], {
+          <Typography variant="body1">{new Date(course.date_end).toLocaleTimeString([], {
             hour: 'numeric',
             minute: '2-digit'
           })}</Typography>
@@ -335,7 +335,7 @@ const CourseManagement = (props) => {
       columnDescription: "Options",
       generateTableCell: (course) => (
         <>
-          <IconButton 
+          <IconButton
             onClick={() => {
               setEditDialogCourse(course);
               setEditDialogIsOpen(true)
@@ -343,8 +343,8 @@ const CourseManagement = (props) => {
           >
             <EditIcon />
           </IconButton>
-          <IconButton 
-            disabled={course.Users.length > 0} 
+          <IconButton
+            disabled={course.Users.length > 0}
             onClick={() => {
               setDeleteDialogCourse(course);
               setDeleteDialogIsOpen(true);
@@ -398,28 +398,28 @@ const CourseManagement = (props) => {
                 {quantity == 2 ? `Enrolled in both` : `Enrolled in all ${quantity}`}
               </Typography>
             )}
-          </Button>) || 
-          quantity == 0 && (
-            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
-            }}>
-              {assignUserDialogCourses.length == 1 ? (
-                <Typography variant="body1">Enroll</Typography>
-                ) : (
-                <Typography variant="body1">Enroll in {assignUserDialogCourses.length}</Typography>
-              )}
-            </Button>
-          ) || 
-          quantity > 0 && quantity < assignUserDialogCourses.length && (
-            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-              handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
-            }}>
-              <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
-            </Button>
-          )
+          </Button>) ||
+        quantity == 0 && (
+          <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
+          }}>
+            {assignUserDialogCourses.length == 1 ? (
+              <Typography variant="body1">Enroll</Typography>
+            ) : (
+              <Typography variant="body1">Enroll in {assignUserDialogCourses.length}</Typography>
+            )}
+          </Button>
+        ) ||
+        quantity > 0 && quantity < assignUserDialogCourses.length && (
+          <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
+            handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
+          }}>
+            <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
+          </Button>
         )
-      }
-    }]
+      )
+    }
+  }]
 
   const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
     columnDescription: "",
@@ -432,11 +432,11 @@ const CourseManagement = (props) => {
           }}>
             {assignUserDialogCourses.length == 1 ? (
               <Typography variant="body1">Unenroll</Typography>
-              ) : (
+            ) : (
               <Typography variant="body1">Unenroll from {quantity}</Typography>
             )}
           </Button>
-        ) || 
+        ) ||
         quantity > 0 && quantity < assignUserDialogCourses.length && (
           <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
             handleUnassignCoursesFromUser(user.id, assignUserDialogCourses.map((c) => c.id));
@@ -453,24 +453,24 @@ const CourseManagement = (props) => {
   return !appUser.is_admin && (
     <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
   ) ||
-  appUser.pw_change_required && (
-    <Navigate to="/Account/ChangePassword" />
-  ) ||
-  appUser.is_admin && (
-    <Box component={Paper} square sx={{
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: '80px calc(100vh - 224px) 80px',
-      gridTemplateAreas: `
+    appUser.pw_change_required && (
+      <Navigate to="/Account/ChangePassword" />
+    ) ||
+    appUser.is_admin && (
+      <Box component={Paper} square sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '80px calc(100vh - 224px) 80px',
+        gridTemplateAreas: `
         "top"
         "table"
         "bottom"
       `
-    }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "top"}}>
-          <SearchBox {...{searchQuery, setSearchQuery}} placeholder="Search by course name or notes" width="50%" />
+      }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+          <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by course name or notes" width="50%" />
           <Stack direction="row" spacing={2}>
-            <Button color="primary" variant="outlined" startIcon={<RefreshIcon/>} onClick={() => {
+            <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
               setRefreshInProgress(true);
               fetchData();
             }}
@@ -479,13 +479,13 @@ const CourseManagement = (props) => {
             </Button>
             <Button color="primary" variant={
               visibleCourses.length > 0 ? "outlined" : "contained"
-            } startIcon={<FilterAltOffOutlinedIcon/>} onClick={clearFilters}
+            } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
               disabled={
                 !Boolean(searchQuery)
               }>
               <Typography variant="body1">Clear Filters</Typography>
             </Button>
-            <Button color="primary" variant="contained" startIcon={<AddIcon/>}
+            <Button color="primary" variant="contained" startIcon={<AddIcon />}
               onClick={() => {
                 setDialogIsOpen(true);
               }}
@@ -496,12 +496,12 @@ const CourseManagement = (props) => {
         </Stack>
         <DataTable items={courses} visibleItems={visibleCourses} tableFields={courseTableFields} rowSelectionEnabled={true}
           selectedItems={selectedCourses} setSelectedItems={setSelectedCourses}
-          {...{sortColumn, setSortColumn, sortAscending, setSortAscending}}
-          sx={{gridArea: "table"}}
+          {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
+          sx={{ gridArea: "table" }}
           emptyMinHeight="300px"
           {...visibleCourses.length == courses.length && {
             noContentMessage: "No courses yet",
-            noContentButtonAction: () => {setDialogIsOpen(true)},
+            noContentButtonAction: () => { setDialogIsOpen(true) },
             noContentButtonText: "Create a course",
             NoContentIcon: InfoIcon
           } || visibleCourses.length < courses.length && {
@@ -511,8 +511,8 @@ const CourseManagement = (props) => {
             NoContentIcon: SearchIcon
           }}
         />
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{gridArea: "bottom"}}>
-          <SelectionSummary 
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+          <SelectionSummary
             items={courses}
             selectedItems={selectedCourses}
             setSelectedItems={setSelectedCourses}
@@ -520,78 +520,78 @@ const CourseManagement = (props) => {
             entitySingular="course"
             entityPlural="courses"
           />
-         <Stack direction="row" spacing={2} >
+          <Stack direction="row" spacing={2} >
             <Button variant="outlined"
               disabled={selectedCourses.length == 0}
               startIcon={<GroupAddIcon />}
               onClick={() => {
-              setAssignUserDialogCourses([...selectedCourses])
-              setAssignUserDialogIsOpen(true);
-            }}>
+                setAssignUserDialogCourses([...selectedCourses])
+                setAssignUserDialogIsOpen(true);
+              }}>
               <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length == 1 ? "course" : "courses"}</Typography>
             </Button>
           </Stack>
         </Stack>
 
-      <ItemMultiCreateDialog entity="course" 
-        dialogTitle={"Create Courses"}
-        dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-        createDialogItems={createDialogCourses}
-        handleItemsCreate={handleCoursesCreate}
-        {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
+        <ItemMultiCreateDialog entity="course"
+          dialogTitle={"Create Courses"}
+          dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
+          createDialogItems={createDialogCourses}
+          handleItemsCreate={handleCoursesCreate}
+          {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, createDialogDispatch }} />
 
-      <ItemSingleEditDialog 
-        entity="course"
-        dialogTitle={"Edit Course"}
-        dialogInstructions={"Edit the course fields, then click 'Save'."}
-        editDialogItem={editDialogCourse}
-        handleItemEdit={handleCourseEdit}
-        {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+        <ItemSingleEditDialog
+          entity="course"
+          dialogTitle={"Edit Course"}
+          dialogInstructions={"Edit the course fields, then click 'Save'."}
+          editDialogItem={editDialogCourse}
+          handleItemEdit={handleCourseEdit}
+          {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
-      <ItemSingleDeleteDialog 
-        entity="course"
-        dialogTitle="Delete Course"
-        deleteDialogItem={deleteDialogCourse}
-        {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+        <ItemSingleDeleteDialog
+          entity="course"
+          dialogTitle="Delete Course"
+          deleteDialogItem={deleteDialogCourse}
+          {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
 
 
-      <AssociationManagementDialog
-        primaryEntity="course"
-        secondaryEntity="user"
-        primaryItems={assignUserDialogCourses}
-        secondaryItemsAll={users}
-        secondariesByPrimary={usersByCourse}
-        dialogTitle={
-          assignUserDialogCourses.length == 1 ?
-            `Manage Enrollment for ${assignUserDialogCourses[0].safe_display_name}` :
-            `Manage Enrollment for ${assignUserDialogCourses.length} Selected Courses`
-        }
-        dialogButtonForSecondaryManagement={<>
-          <Button variant="outlined" onClick={() => {
-            navigate('/Account/UserManagement')
-          }}>
-            <Typography>Go to user management</Typography>
-          </Button>
-        </>}
-        dialogIsOpen={assignUserDialogIsOpen}
-        tableTitleAssigned={
-          assignUserDialogCourses.length == 1 ?
-            `Current Users in ${assignUserDialogCourses[0].safe_display_name}` :
-            `Current Users in Selected Courses`
-        }
-        tableTitleAll={`All Users`}
-        setDialogIsOpen={setAssignUserDialogIsOpen}
-        secondaryFieldInPrimary="Users"
-        secondaryTableFieldsAll={userTableFieldsForDialogAll}
-        secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
-        secondarySearchFields={['given_name']}
-        secondarySearchBoxPlaceholder={"Search users by name or email"}
-        defaultSortAscending={true}
-        defaultSortColumn="Name"
-      />
+        <AssociationManagementDialog
+          primaryEntity="course"
+          secondaryEntity="user"
+          primaryItems={assignUserDialogCourses}
+          secondaryItemsAll={users}
+          secondariesByPrimary={usersByCourse}
+          dialogTitle={
+            assignUserDialogCourses.length == 1 ?
+              `Manage Enrollment for ${assignUserDialogCourses[0].safe_display_name}` :
+              `Manage Enrollment for ${assignUserDialogCourses.length} Selected Courses`
+          }
+          dialogButtonForSecondaryManagement={<>
+            <Button variant="outlined" onClick={() => {
+              navigate('/Account/UserManagement')
+            }}>
+              <Typography>Go to user management</Typography>
+            </Button>
+          </>}
+          dialogIsOpen={assignUserDialogIsOpen}
+          tableTitleAssigned={
+            assignUserDialogCourses.length == 1 ?
+              `Current Users in ${assignUserDialogCourses[0].safe_display_name}` :
+              `Current Users in Selected Courses`
+          }
+          tableTitleAll={`All Users`}
+          setDialogIsOpen={setAssignUserDialogIsOpen}
+          secondaryFieldInPrimary="Users"
+          secondaryTableFieldsAll={userTableFieldsForDialogAll}
+          secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
+          secondarySearchFields={['given_name']}
+          secondarySearchBoxPlaceholder={"Search users by name or email"}
+          defaultSortAscending={true}
+          defaultSortColumn="Name"
+        />
 
-    </Box>
-  );
+      </Box>
+    );
 }
 
 
