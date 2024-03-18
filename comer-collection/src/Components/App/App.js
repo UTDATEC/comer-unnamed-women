@@ -14,6 +14,9 @@ import { AppUserProvider } from "./AppUser";
 import { TitleProvider } from "./AppTitle";
 import { Helmet } from "react-helmet";
 
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+
 
 const App = () => {
 
@@ -21,6 +24,11 @@ const App = () => {
 
     const primaryColor = green;
     const secondaryColor = orange;
+
+    const cache = createCache({
+        key: "comer-app",
+        nonce: Math.random().toString(36).slice(2)
+    });
 
     const theme = createTheme({
         typography: {
@@ -64,10 +72,10 @@ const App = () => {
 
 
     return (
-        <>
+        <CacheProvider cache={cache} value={cache}>
             <Helmet>
                 <meta httpEquiv='Content-Security-Policy' 
-                    content={`default-src 'self' script-src 'unsafe-inline' connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
+                    content={`default-src 'self' script-src 'self' 'nonce-${cache.nonce}' connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
             </Helmet>
             <AppUserProvider>
                 <ThemeProvider theme={theme}>
@@ -113,7 +121,7 @@ const App = () => {
 
                 </ThemeProvider>
             </AppUserProvider>
-        </>
+        </CacheProvider>
     );
 };
 
