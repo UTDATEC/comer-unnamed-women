@@ -1,3 +1,3 @@
-This is the server that communicates with the database. 
+This is the server that communicates with the database.
 
-It requires a separate 'yarn install' to work
+Start it with `npm run start:backend`, or start both the frontend and backend with `npm start`.
