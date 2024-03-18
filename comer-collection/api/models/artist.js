@@ -11,12 +11,12 @@ module.exports = (db) => {
             field: "artist_id"
         },
         familyName: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             allowNull: false,
             field: "artist_familyname"
         },
         givenName: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             allowNull: false,
             field: "artist_givenname"
         },
@@ -33,23 +33,23 @@ module.exports = (db) => {
             }
         },
         website: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "artist_website",
             set(value) {
-                this.setDataValue('website', Boolean(value) ? value : null);
+                this.setDataValue("website", value ? value : null);
             }
         },
         notes: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "artist_notes",
             set(value) {
-                this.setDataValue('notes', Boolean(value) ? value : null);
+                this.setDataValue("notes", value ? value : null);
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return (this.familyName || this.givenName) ? `${this.fullName}` : `Artist ${this.id}`
+                return (this.familyName || this.givenName) ? `${this.fullName}` : `Artist ${this.id}`;
             }
         }
     }, {

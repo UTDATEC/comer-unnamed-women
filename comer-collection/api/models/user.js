@@ -19,39 +19,39 @@ module.exports = (db) => {
         email_without_domain: {
             type: DataTypes.VIRTUAL,
             get() {
-                return `${this.email?.substr(0, this.email?.lastIndexOf("@"))}`
+                return `${this.email?.substr(0, this.email?.lastIndexOf("@"))}`;
             }
         },
         family_name: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "user_family_name"
         },
         given_name: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "user_given_name"
         },
         full_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return `${this.given_name} ${this.family_name}`
+                return `${this.given_name} ${this.family_name}`;
             }
         },
         full_name_reverse: {
             type: DataTypes.VIRTUAL,
             get() {
-                return `${this.family_name}, ${this.given_name}`
+                return `${this.family_name}, ${this.given_name}`;
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return this.has_name ? `${this.full_name}` : `${this.email}`
+                return this.has_name ? `${this.full_name}` : `${this.email}`;
             }
         },
         has_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return Boolean(this.family_name || this.given_name)
+                return Boolean(this.family_name || this.given_name);
             }
         },
         exhibition_quota: {
@@ -64,14 +64,14 @@ module.exports = (db) => {
             field: "user_exhibition_quota"
         },
         pw_hash: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "user_pw_hash",
             defaultValue: null
         },
         has_password: {
             type: DataTypes.VIRTUAL,
             get() {
-                return Boolean(this.pw_updated)
+                return Boolean(this.pw_updated);
             }
         },
         pw_change_required: {
@@ -101,10 +101,10 @@ module.exports = (db) => {
         tableName: "comer_users",
         defaultScope: {
             attributes: {
-                exclude: ['pw_hash']
+                exclude: ["pw_hash"]
             }
         }
     });
 
     return User;
-}
+};

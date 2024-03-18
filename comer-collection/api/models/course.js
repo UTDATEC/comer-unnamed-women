@@ -11,7 +11,7 @@ module.exports = (db) => {
             field: "course_id"
         },
         name: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             allowNull: false,
             field: "course_name"
         },
@@ -30,25 +30,25 @@ module.exports = (db) => {
             get() {
                 const now = Date.now();
                 if (this.date_end < now)
-                    return "Expired"
+                    return "Expired";
                 else if (this.date_start > now)
-                    return "Upcoming"
+                    return "Upcoming";
                 else if (this.date_start <= now && this.date_end >= now)
-                    return "Active"
-                return "Invalid status"
+                    return "Active";
+                return "Invalid status";
             }
         },
         notes: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "course_notes",
             set(value) {
-                this.setDataValue('course_notes', Boolean(value) ? value : null);
+                this.setDataValue("course_notes", value ? value : null);
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return this.name ? this.name : `Course ${this.id}`
+                return this.name ? this.name : `Course ${this.id}`;
             }
         }
     }, {
@@ -56,10 +56,10 @@ module.exports = (db) => {
         validate: {
             dateRange() {
                 if (this.date_start > this.date_end)
-                    throw new Error("Course end time must be after course start time")
+                    throw new Error("Course end time must be after course start time");
             }
         }
     });
 
     return Course;
-}
+};

@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-const { User } = require("../sequelize.js")
 
 module.exports = (db) => {
     const { sequelize, Sequelize } = db;
@@ -13,7 +12,7 @@ module.exports = (db) => {
             FROM comer_users AS user
             WHERE
                 user.user_id = exhibition.exhibition_owner
-        )`), 'curator'
+        )`), "curator"
     ];
 
 
@@ -26,16 +25,16 @@ module.exports = (db) => {
             field: "exhibition_id"
         },
         title: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             allowNull: false,
             field: "exhibition_title"
         },
         data: {
-            type: Sequelize.BLOB('medium'),
+            type: Sequelize.BLOB("medium"),
             field: "exhibition_data",
             allowNull: true,
             get() {
-                return this.getDataValue('data')?.toString('utf-8');
+                return this.getDataValue("data")?.toString("utf-8");
             }
         },
         date_created: {
@@ -66,7 +65,7 @@ module.exports = (db) => {
     }, {
         defaultScope: {
             attributes: {
-                exclude: ['data'],
+                exclude: ["data"],
             }
         },
         scopes: {
@@ -83,4 +82,4 @@ module.exports = (db) => {
     });
 
     return Exhibition;
-}
+};

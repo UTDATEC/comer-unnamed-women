@@ -11,18 +11,18 @@ module.exports = (db) => {
             field: "tag_id"
         },
         data: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             allowNull: false,
             field: "tag_data"
         },
         notes: {
-            type: Sequelize.TEXT('tiny'),
+            type: Sequelize.TEXT("tiny"),
             field: "tag_notes"
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
             get() {
-                return (this.data != "" ? this.data : `Tag ${this.id}`)
+                return (this.data != "" ? this.data : `Tag ${this.id}`);
             }
         }
     }, {
@@ -30,4 +30,4 @@ module.exports = (db) => {
     });
 
     return Tag;
-}
+};
