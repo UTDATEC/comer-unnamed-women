@@ -50,7 +50,6 @@ export const AssociationManagementDialog = ({
 
 
     const secondaryItemsAssigned = useMemo(() => {
-        console.log("Runnign secondaryItemsAssigned");
         return computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems);
     }, [secondaryItemsAll, secondariesByPrimary, primaryItems]);
 

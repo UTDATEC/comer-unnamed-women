@@ -13,7 +13,6 @@ export const SnackbarProvider = ({ children }) => {
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
     const showSnackbar = useCallback((message, severity = "info") => {
-        console.log("called showSnackbar");
         setSnackbarText(message);
         setSnackbarSeverity(severity);
         setSnackbarOpen(true);
