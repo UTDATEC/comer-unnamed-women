@@ -79,10 +79,6 @@ export const createUsers = async (newUserArray, { showSnackbar, setDialogIsOpen,
 
     if (usersCreated == newUserArray.length) {
         setDialogIsOpen(false);
-        // createDialogDispatch({
-        //   type: "set",
-        //   newArray: []
-        // })
 
         showSnackbar(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`, "success");
 
@@ -94,13 +90,6 @@ export const createUsers = async (newUserArray, { showSnackbar, setDialogIsOpen,
         else {
             showSnackbar(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure each user has a unique email address.`, "error");
         }
-
-        // createDialogDispatch({
-        //   type: "set",
-        //   newArray: newUserArray.filter((u, i) => {
-        //     return userIndicesWithErrors.includes(i);
-        //   })
-        // })
     }
 
     return userIndicesWithErrors;
