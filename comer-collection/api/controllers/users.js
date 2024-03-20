@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
@@ -17,7 +17,7 @@ const getSignedTokenForUser = async (user) => {
 
 const doesPasswordMatchHash = async (password, hash) => {
     return Boolean(password) && Boolean(hash) &&
-        bcrypt.compareSync(password, hash);
+        await argon2.verify(hash, password);
 };
 
 
@@ -104,8 +104,7 @@ const resetUserPassword = async (req, res, next) => {
     else if (!req.body.newPassword) {
         next(createError(400, { debugMessage: "Password reset request must contain the new password in the request body" }));
     }
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.newPassword, salt);
+    const hash = await argon2.hash(req.body.newPassword);
     req.body = {
         pw_hash: hash,
         pw_change_required: true,
@@ -167,8 +166,7 @@ const changePassword = async (req, res, next) => {
             else if (!doesPasswordMatchHash(oldPassword, user.pw_hash)) {
                 throw new Error("oldPassword is incorrect");
             }
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(newPassword, salt);
+            const hash = await argon2.hash(newPassword);
             await user.update({
                 pw_hash: hash,
                 pw_change_required: false,
