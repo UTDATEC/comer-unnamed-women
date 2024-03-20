@@ -12,7 +12,7 @@ import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser";
 import { SnackbarProvider } from "./AppSnackbar";
 import { AppUserProvider } from "./AppUser";
 import { TitleProvider } from "./AppTitle";
-import { HelmetProvider } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
@@ -74,8 +74,10 @@ const App = () => {
     return (
         <CacheProvider value={cache}>
             <HelmetProvider>
-                <meta httpEquiv='Content-Security-Policy' 
-                    content={`default-src 'self' script-src 'self' 'nonce-${cache.nonce}' connect-src ${process.env.REACT_APP_API_HOST}`} />
+                <Helmet>
+                    <meta httpEquiv='Content-Security-Policy' 
+                        content={`default-src 'self'; script-src 'none'; style-src 'nonce-${cache.nonce}'; connect-src ${process.env.REACT_APP_API_HOST}`} />
+                </Helmet>
             </HelmetProvider>
             <AppUserProvider>
                 <ThemeProvider theme={theme}>
