@@ -76,7 +76,7 @@ const App = () => {
             <HelmetProvider>
                 <Helmet>
                     <meta httpEquiv='Content-Security-Policy' 
-                        content={`default-src 'none'; script-src 'none'; style-src 'nonce-${cache.nonce}'; img-src ${process.env.REACT_APP_API_HOST}; connect-src ${process.env.REACT_APP_API_HOST}`} />
+                        content={`default-src 'none'; script-src 'none'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src ${process.env.REACT_APP_API_HOST}`} />
                 </Helmet>
             </HelmetProvider>
             <AppUserProvider>
