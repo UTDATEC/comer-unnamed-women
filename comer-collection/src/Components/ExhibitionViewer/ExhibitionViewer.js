@@ -5,7 +5,7 @@ import { setupMainWalls, setupSideWalls } from "./js/Walls";
 import { setupFloor } from "./js/Floor";
 import { setupCeiling } from "./js/Ceiling";
 import { createArt } from "./js/Art";
-import { createBoundingBoxes } from "./js/BoundingBox";
+// import { createBoundingBoxes } from "./js/BoundingBox";
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three-stdlib";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports";
@@ -362,71 +362,73 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
 
 
+
+    // Update all walls on resize
+    useEffect(() => {
+        if(myScene) { 
+            Promise.all([
+                setupMainWalls(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color),
+                setupSideWalls(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color),
+                setupFloor(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, 5, primary_json.appearance.floor_color, primary_json.appearance.floor_texture),
+                setupCeiling(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, primary_json.appearance.ceiling_color)
+            ]).then(() => {
+                myRenderer.render(myScene, myCamera);
+            });
+        }
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer, primary_json.size]);
+
+
+
+
     // Update main wall color
     useEffect(() => {
         if(myScene) { 
-            const mainWalls = setupMainWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color, myRenderer, myCamera, true);
-
-            createBoundingBoxes(mainWalls);
-
-            return () => {
-                myScene.remove(mainWalls);
-            };
+            setupMainWalls(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color).then(() => {
+                myRenderer.render(myScene, myCamera);
+            });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.main_wall_color,
-        primary_json.size
+        primary_json.appearance.main_wall_color
     ]);
 
     // Update side wall color
     useEffect(() => {
         if(myScene) { 
-            const sideWalls = setupSideWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color, myRenderer, myCamera, true);
-    
-            createBoundingBoxes(sideWalls);
-
-            return () => {
-                myScene.remove(sideWalls);
-            };
+            setupSideWalls(myScene, myTextureLoader, 
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color).then(() => {
+                myRenderer.render(myScene, myCamera);
+            });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.side_wall_color,
-        primary_json.size
+        primary_json.appearance.side_wall_color
     ]);
 
     // Update floor
     useEffect(() => {
         if(myScene) {
-            const floor = setupFloor(myScene, myTextureLoader, 
+            setupFloor(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture, myRenderer, myCamera, true);
-            
-            return () => {
-                myScene.remove(floor);
-            };
+                primary_json.appearance.floor_color, primary_json.appearance.floor_texture).then(() => {
+                myRenderer.render(myScene, myCamera);
+            });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
         primary_json.appearance.floor_color,
-        primary_json.appearance.floor_texture,
-        primary_json.size
+        primary_json.appearance.floor_texture
     ]);
 
     // Update ceiling
     useEffect(() => {
         if(myScene) {
-            const ceiling = setupCeiling(myScene, myTextureLoader, 
+            setupCeiling(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
-                primary_json.appearance.ceiling_color, myRenderer, myCamera, true);
-            
-            return () => {
-                myScene.remove(ceiling);
-            };
+                primary_json.appearance.ceiling_color).then(() => {
+                myRenderer.render(myScene, myCamera);
+            });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.ceiling_color,
-        primary_json.size
+        primary_json.appearance.ceiling_color
     ]);
 
 
