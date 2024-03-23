@@ -127,9 +127,9 @@ const ExhibitionOption = ({description, children, vertical}) => {
 
 
 ExhibitionOption.propTypes = {
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     children: PropTypes.node,
-    vertical: PropTypes.bool.isRequired
+    vertical: PropTypes.bool
 };
 
 
