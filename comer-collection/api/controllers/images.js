@@ -34,9 +34,7 @@ const downloadImagePublic = async (req, res, next) => {
                 include: ["url", "thumbnailUrl"]
             }
         });
-        if (!image)
-            throw new Error("Image metadata could not be retrieved from the database");
-        else if (image.url ?? image.thumbnailUrl) {
+        if (image?.url ?? image?.thumbnailUrl) {
             const downloadedImage = await fetch(image.url ?? image.thumbnailUrl);
             const imageData = await downloadedImage.blob();
             const imageBuffer = await imageData.arrayBuffer();
