@@ -145,7 +145,7 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
         }
 
         catch(e) {
-            reject();
+            reject(e);
         }
 
     

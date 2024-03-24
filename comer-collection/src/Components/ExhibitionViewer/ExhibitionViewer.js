@@ -5,7 +5,6 @@ import { setupMainWalls, setupSideWalls } from "./js/Walls";
 import { setupFloor } from "./js/Floor";
 import { setupCeiling } from "./js/Ceiling";
 import { createArt } from "./js/Art";
-// import { createBoundingBoxes } from "./js/BoundingBox";
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three-stdlib";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports";
@@ -373,6 +372,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 setupCeiling(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, primary_json.appearance.ceiling_color)
             ]).then(() => {
                 myRenderer.render(myScene, myCamera);
+            }).catch((e) => {
+                console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer, primary_json.size]);
@@ -384,8 +385,11 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
     useEffect(() => {
         if(myScene) { 
             setupMainWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color).then(() => {
+                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color
+            ).then(() => {
                 myRenderer.render(myScene, myCamera);
+            }).catch((e) => {
+                console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
@@ -398,6 +402,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             setupSideWalls(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color).then(() => {
                 myRenderer.render(myScene, myCamera);
+            }).catch((e) => {
+                console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
@@ -409,8 +415,11 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         if(myScene) {
             setupFloor(myScene, myTextureLoader, 
                 primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture).then(() => {
+                primary_json.appearance.floor_color, primary_json.appearance.floor_texture
+            ).then(() => {
                 myRenderer.render(myScene, myCamera);
+            }).catch((e) => {
+                console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
@@ -425,6 +434,8 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
                 primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
                 primary_json.appearance.ceiling_color).then(() => {
                 myRenderer.render(myScene, myCamera);
+            }).catch((e) => {
+                console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,

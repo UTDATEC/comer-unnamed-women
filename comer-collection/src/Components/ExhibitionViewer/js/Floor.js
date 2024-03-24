@@ -43,7 +43,7 @@ export const setupFloor = (scene, texture_loader, floor_width, floor_length, flo
             
 
         } catch(e) {
-            reject();
+            reject(e);
         }
 
     });

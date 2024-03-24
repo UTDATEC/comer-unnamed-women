@@ -41,7 +41,7 @@ export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_lengt
             }); 
         
         } catch(e) {
-            reject();
+            reject(e);
         }
         
     });
