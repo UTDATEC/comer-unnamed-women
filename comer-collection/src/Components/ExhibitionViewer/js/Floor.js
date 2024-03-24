@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createBoundingBoxes } from "./BoundingBox";
 
 export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name) => {
     
@@ -36,6 +37,7 @@ export const setupFloor = (scene, texture_loader, floor_width, floor_length, flo
                 floor_plane.position.y = -floor_depth;  // lower floor so eye level can stay at 0
             
                 floor_group.add(floor_plane);
+                createBoundingBoxes(floor_group);
         
                 resolve(floor_group);
         

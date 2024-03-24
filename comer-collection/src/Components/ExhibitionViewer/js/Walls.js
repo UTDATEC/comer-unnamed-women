@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createBoundingBoxes } from "./BoundingBox";
 
 export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color) => {
 
@@ -58,6 +59,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
             
                 // add walls to the group
                 wall_group.add(front_wall, back_wall);
+                createBoundingBoxes(wall_group);
         
                 // return walls so that BoundingBox.js can use them
                 resolve(wall_group);
@@ -139,6 +141,7 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
                 // add walls to the group
                 wall_group.add(left_wall, right_wall);
         
+                createBoundingBoxes(wall_group);
                 // return walls so that BoundingBox.js can use them
                 resolve(wall_group);
             });
