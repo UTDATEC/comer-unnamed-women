@@ -20,10 +20,7 @@ const apiRouterAdmin = require("./router_admin.js");
 
 global.__basedir = __dirname;
 
-const { User, sequelize, Course, Exhibition } = require("./sequelize.js");
-// sequelize.sync({ alter: false }).then(() => {
-//     console.log("Database & tables created! (unless table already existed)");
-// });
+const { User, Course, Exhibition } = require("./sequelize.js");
 
 var app = express();
 
