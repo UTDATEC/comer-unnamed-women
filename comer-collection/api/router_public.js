@@ -1,16 +1,15 @@
-const createError = require('http-errors');
 const express = require("express");
 const router = express.Router();
 
 const { listArtists, getArtist } = require("./controllers/artists.js");
-const { listTags, getTag } = require('./controllers/tags.js');
-const { listImagesPublic, getImagePublic, downloadImagePublic } = require('./controllers/images.js');
-const { listPublicExhibitions, loadExhibitionPublic } = require('./controllers/exhibitions.js');
-const { signIn } = require('./controllers/users.js');
+const { listTags, getTag } = require("./controllers/tags.js");
+const { listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
+const { listPublicExhibitions, loadExhibitionPublic } = require("./controllers/exhibitions.js");
+const { signIn } = require("./controllers/users.js");
 
 
 // Authentication
-router.put("/signin", signIn)
+router.put("/signin", signIn);
 
 
 // Read images
