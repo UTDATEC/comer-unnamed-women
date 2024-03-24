@@ -16,7 +16,7 @@ const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelect
     const thumbnailBox = useMemo(() => (
         <Box width="200px" height="150px"
             sx={{
-                backgroundImage: `url(${`http://localhost:9000/api/collection/images/${image.id}/download`})`,
+                backgroundImage: `url(${`http://localhost:9000/api/public/images/${image.id}/download`})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "contain",
                 backgroundPositionX: "center",

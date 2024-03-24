@@ -19,7 +19,7 @@ export function generateArtData(primary_json, globalImageCatalog) {
 
             image_id: image.image_id,
 
-            img_src: `${process.env.REACT_APP_API_HOST}/api/collection/images/${image.image_id}/download` ?? "/images/image_coming_soon.png",
+            img_src: `${process.env.REACT_APP_API_HOST}/api/public/images/${image.image_id}/download` ?? "/images/image_coming_soon.png",
 
             position: {
                 custom_x: image.position.custom_x,

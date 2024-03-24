@@ -13,7 +13,6 @@ const { rateLimit } = require("express-rate-limit");
 const jwt = require("jsonwebtoken");
 
 
-const apiRouter = require("./router");
 const apiRouterPublic = require("./router_public.js");
 const apiRouterUserTempPw = require("./router_user_temp_pw.js");
 const apiRouterUser = require("./router_user.js");
@@ -129,7 +128,6 @@ const requirePermanentPassword = async (req, res, next) => {
 
 
 // Routes for querying data
-app.use("/api", apiRouter);
 app.use("/api/public", apiRouterPublic);
 app.use("/api/user", requireAuthenticatedUser, apiRouterUserTempPw);
 app.use("/api/user", requirePermanentPassword, apiRouterUser);

@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const { Image, Artist, Tag, Exhibition } = require("../sequelize.js");
 const path = require("path");
 const { deleteItem, updateItem, listItems, getItem, createItem } = require("./items.js");
+// const errorImage = require("../../public/images/image_coming_soon.jpg");
 
 
 const listImagesPublic = async (req, res, next) => {
@@ -30,7 +31,7 @@ const downloadImagePublic = async (req, res, next) => {
     try {
         const image = await Image.findByPk(req.params.imageId, {
             attributes: {
-                include: ["url"]
+                include: ["url", "thumbnailUrl"]
             }
         });
         if (!image)
@@ -43,8 +44,11 @@ const downloadImagePublic = async (req, res, next) => {
             res.setHeader("Cross-Origin-Resource-Policy", "same-site");
             res.status(200).send(Buffer.from(imageBuffer));
         }
-        else
-            res.status(200).sendFile(path.join(__dirname, "../static", "utd.jpg"));
+        else {
+            res.setHeader("Content-Type", "image/png");
+            res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+            res.status(200).sendFile(path.join(__dirname, "../../public/images", "image_coming_soon.jpg"));
+        }
     } catch (e) {
         next(createError(500, { debugMessage: e.message }));
     }

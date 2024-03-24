@@ -566,7 +566,7 @@ const ImageManagement = () => {
                                 setPreviewerOpen(true);
                             }}
                         >
-                            <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/collection/images/${image.id}/download`} loading="lazy" />
+                            <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`} loading="lazy" />
                         </Button>
                     ) || image.url && (
                         <Button variant="outlined" color="primary"
