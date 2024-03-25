@@ -189,7 +189,7 @@ export const CollectionBrowser = ({isDialogMode, selectedItem, setSelectedItem, 
 
 CollectionBrowser.propTypes = {
     isDialogMode: PropTypes.bool.isRequired,
-    selectedItem: PropTypes.string,
+    selectedItem: PropTypes.object,
     setSelectedItem: PropTypes.func,
     disabledImages: PropTypes.arrayOf(PropTypes.object)
 };
