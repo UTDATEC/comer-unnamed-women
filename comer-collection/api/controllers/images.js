@@ -1,10 +1,12 @@
 import createError from "http-errors";
 import db from "../sequelize.js";
-const { Image, Artist, Tag, Exhibition } = db;
 import { join } from "path";
 import { deleteItem, updateItem, listItems, getItem, createItem } from "./items.js";
+const { Image, Artist, Tag, Exhibition } = db;
 // const errorImage = require("../../public/images/image_coming_soon.jpg");
 import imageType from "image-type";
+import path from "path";
+import url from "url";
 
 
 const listImagesPublic = async (req, res, next) => {
@@ -36,21 +38,27 @@ const downloadImagePublic = async (req, res, next) => {
                 include: ["url", "thumbnailUrl"]
             }
         });
-        if (image?.url ?? image?.thumbnailUrl) {
+        try {
+            if(!image?.url && !image?.thumbnailUrl) {
+                throw "No URL";
+            }
             const downloadedImage = await fetch(image.url ?? image.thumbnailUrl);
             const imageData = await downloadedImage.blob();
             const imageBuffer = await imageData.arrayBuffer();
             const type = await imageType(imageBuffer);
-            console.log(type);
-            res.setHeader("Content-Type", "image/png");
+            if(type && type.mime.startsWith("image/")) {
+                res.setHeader("Content-Type", type.mime);
+                res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+                res.status(200).send(Buffer.from(imageBuffer));
+            } else {
+                throw "Not an image";
+            }
+        } catch(e) {
+            res.setHeader("Content-Type", "image/jpg");
             res.setHeader("Cross-Origin-Resource-Policy", "same-site");
-            res.status(200).send(Buffer.from(imageBuffer));
+            res.status(200).sendFile(join(path.dirname(url.fileURLToPath(import.meta.url)), "../../public/images", "image_coming_soon.jpg"));
         }
-        else {
-            res.setHeader("Content-Type", "image/png");
-            res.setHeader("Cross-Origin-Resource-Policy", "same-site");
-            res.status(200).sendFile(join(__dirname, "../../public/images", "image_coming_soon.jpg"));
-        }
+
     } catch (e) {
         next(createError(500, { debugMessage: e.message }));
     }
