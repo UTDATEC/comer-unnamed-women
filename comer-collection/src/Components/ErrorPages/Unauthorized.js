@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-const Unauthorized = ({ message, buttonText, buttonDestination, Icon }) => {
+const Unauthorized = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
 
     const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const Unauthorized = ({ message, buttonText, buttonDestination, Icon }) => {
                 <Icon sx={{fontSize: "150pt", opacity: 0.5}} />
                 <Typography variant="h4">{message}</Typography>
                 {(buttonDestination || buttonText) && (
-                    <Button variant="contained" onClick={() => navigate(buttonDestination ?? "/login")}>
+                    <Button variant="contained" onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/login"))}>
                         <Typography variant="body1">{buttonText ?? "Return to Login Page"}</Typography>
                     </Button>
                 )}
@@ -26,6 +26,7 @@ Unauthorized.propTypes = {
     message: PropTypes.string.isRequired,
     buttonText: PropTypes.string,
     buttonDestination: PropTypes.string,
+    buttonAction: PropTypes.func,
     Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
 
