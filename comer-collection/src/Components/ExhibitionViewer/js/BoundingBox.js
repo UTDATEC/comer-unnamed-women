@@ -1,4 +1,4 @@
-import { Box3 } from "three/src/math/Box3.js";
+import * as THREE from "three";
 
 export const createBoundingBoxes = (objects) => {
 
@@ -9,7 +9,7 @@ export const createBoundingBoxes = (objects) => {
 
     // create a bounding box with Three.js from these objects (walls)
     objects.forEach((object) => {
-        object.BoundingBox = new Box3();
+        object.BoundingBox = new THREE.Box3();
         object.BoundingBox.setFromObject(object);
     });
 };
