@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow } from "@mui/material";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Skeleton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./ColumnSortButton.js";
 import PropTypes from "prop-types";
+import { InView } from "react-intersection-observer";
 
 
 const DataTableCell = ({tf, itemAsString}) => {
@@ -24,6 +25,19 @@ const DataTableFieldCells = ({tableFields, item: itemAsString}) => {
             );
         }
         );}, [itemAsString]);
+};
+
+
+const TableRowPlaceholder = memo(function TableContainer({ colSpan }) {
+    return (
+        <TableCell colSpan={colSpan} >
+            <Skeleton variant="text" height="20px" width="100%" />
+        </TableCell>
+    );
+});
+
+TableRowPlaceholder.propTypes = {
+    colSpan: PropTypes.number.isRequired
 };
 
 
@@ -77,29 +91,37 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
                 const sortableValues = sortableValuesByRow[item.id];
         
                 const renderedTableRow = (
-                    <TableRow key={item.id} sx={{
-                        ["&:hover"]: {
-                            backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
+                    <InView key={item.id} triggerOnce={true}>
+                        {({ inView, ref }) => (
+                            <TableRow ref={ref} sx={{
+                                ["&:hover"]: {
+                                    backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent,
               
-                        },
-                        ["&:not(:hover)"]: {
-                            backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
-                        },
-                    }}>
-                        {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-                            <Checkbox checked={isSelected}
-                                color={themeColor}
-                                onChange={(e) => {
-                                    if(e.target.checked) {
-                                        setSelectedItems([...selectedItems, item]);
-                                    } else {
-                                        setSelectedItems(selectedItems.filter((si) => si.id != item.id));
-                                    }
-                                }}
-                                size="large" />
-                        </TableCell>)}
-                        <DataTableFieldCells item={JSON.stringify(item)} {...{tableFields}} />
-                    </TableRow>
+                                },
+                                ["&:not(:hover)"]: {
+                                    backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
+                                },
+                            }}>
+                                {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
+                                    <Checkbox checked={isSelected}
+                                        color={themeColor}
+                                        onChange={(e) => {
+                                            if(e.target.checked) {
+                                                setSelectedItems([...selectedItems, item]);
+                                            } else {
+                                                setSelectedItems(selectedItems.filter((si) => si.id != item.id));
+                                            }
+                                        }}
+                                        size="large" />
+                                </TableCell>)}
+                                {inView && <React.Fragment>
+                                    <DataTableFieldCells item={JSON.stringify(item)} {...{tableFields}} />
+                                </React.Fragment> || !inView && (
+                                    <TableRowPlaceholder colSpan={tableFields.length} />
+                                )}
+                            </TableRow>
+                        )}
+                    </InView>
                 );
   
                 return [item, sortableValues, renderedTableRow];
