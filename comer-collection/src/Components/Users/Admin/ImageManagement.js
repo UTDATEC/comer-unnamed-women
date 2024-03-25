@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
@@ -35,6 +35,7 @@ const ImageManagement = () => {
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogImage, setDeleteDialogImage] = useState(null);
@@ -91,13 +92,7 @@ const ImageManagement = () => {
         setSelectedNavItem("Image Management");
         setTitleText("Image Management");
         if (appUser.is_admin) {
-            Promise.all([
-                fetchImages(),
-                fetchArtists(),
-                fetchTags()
-            ]).then(() => {
-                setIsLoaded(true);
-            });
+            fetchData();
         }
     }, []);
 
@@ -107,51 +102,51 @@ const ImageManagement = () => {
         );
     }, [searchQuery]);
 
+    const fetchData = async() => {
+        setIsError(false);
+        Promise.all([
+            fetchImages(),
+            fetchArtists(),
+            fetchTags()
+        ]).then(() => {
+            setIsLoaded(true);
+        }).catch(() => {
+            setIsError(true);
+        });
+
+    };
 
     const fetchImages = async () => {
-        try {
-            const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
-            setImages(imageData.data);
+        const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
+        setImages(imageData.data);
 
-            setTimeout(() => {
-                setRefreshInProgress(false);
-            }, 1000);
+        setTimeout(() => {
+            setRefreshInProgress(false);
+        }, 1000);
 
-            const artistsByImageDraft = {};
-            for (const i of imageData.data) {
-                artistsByImageDraft[i.id] = i.Artists;
-            }
-            setArtistsByImage({ ...artistsByImageDraft });
-
-            const tagsByImageDraft = {};
-            for (const i of imageData.data) {
-                tagsByImageDraft[i.id] = i.Tags;
-            }
-            setTagsByImage({ ...tagsByImageDraft });
-
-        } catch (error) {
-            return;
+        const artistsByImageDraft = {};
+        for (const i of imageData.data) {
+            artistsByImageDraft[i.id] = i.Artists;
         }
+        setArtistsByImage({ ...artistsByImageDraft });
+
+        const tagsByImageDraft = {};
+        for (const i of imageData.data) {
+            tagsByImageDraft[i.id] = i.Tags;
+        }
+        setTagsByImage({ ...tagsByImageDraft });
     };
 
 
     const fetchArtists = async () => {
-        try {
-            const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
-            setArtists(artistData.data);
-        } catch (error) {
-            return;
-        }
+        const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
+        setArtists(artistData.data);
     };
 
 
     const fetchTags = async () => {
-        try {
-            const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
-            setTags(tagData.data);
-        } catch (error) {
-            return;
-        }
+        const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
+        setTags(tagData.data);
     };
 
 
@@ -893,11 +888,13 @@ const ImageManagement = () => {
 
     return !appUser.is_admin && (
         <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) ||
-    appUser.pw_change_required && (
+    ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
-    ) ||
-    appUser.is_admin && (
+    ) || isError && (
+        <Unauthorized message="Error loading images" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+    ) || !isLoaded && (
+        <Unauthorized message="Loading images..." Icon={AccessTimeIcon} />
+    ) || (
         <Box component={Paper} square={true} sx={{
             display: "grid",
             gridTemplateColumns: "1fr",

@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon } from "../../IconImports.js";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../Tools/DataTable.js";
 import { Navigate } from "react-router";
@@ -21,10 +21,12 @@ import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
 
 const ExhibitionManagement = () => {
-    const [, setUsers] = useState([]);
     const [courses, setCourses] = useState([]);
     const [exhibitions, setExhibitions] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
@@ -68,6 +70,7 @@ const ExhibitionManagement = () => {
 
     const fetchData = async () => {
         try {
+            setIsError(false);
             const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
             setExhibitions(exhibitionData.data);
 
@@ -75,20 +78,26 @@ const ExhibitionManagement = () => {
                 exhibitionData.data.map((u) => u.id).includes(parseInt(su.id))
             )));
 
+            const coursesById = {};
+            for(let ex of exhibitionData.data) {
+                for(let c of ex.User.Courses) {
+                    coursesById[c.id] = c;
+                }
+            }
+            setCourses(Object.values(coursesById));
 
-            const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
-            setUsers(userData.data);
-
-            const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
-            setCourses(courseData.data);
+            // const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
+            // setCourses(courseData.data);
 
             setTimeout(() => {
                 setRefreshInProgress(false);
             }, 1000);
 
+            setIsLoaded(true);
+
 
         } catch (error) {
-            console.error("Error fetching data:", error);
+            setIsError(true);
         }
     };
 
@@ -240,11 +249,13 @@ const ExhibitionManagement = () => {
 
     return !appUser.is_admin && (
         <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) ||
-    appUser.pw_change_required && (
+    ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
-    ) ||
-    appUser.is_admin && (
+    ) || isError && (
+        <Unauthorized message="Error loading exhibitions" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+    ) || !isLoaded && (
+        <Unauthorized message="Loading exhibitions..." Icon={AccessTimeIcon} />
+    ) || (
         <Box component={Paper} square sx={{
             display: "grid",
             gridTemplateColumns: "1fr",

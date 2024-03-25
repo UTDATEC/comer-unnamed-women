@@ -5,7 +5,7 @@ import {
     Typography,
     Switch, Box, IconButton, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
 import Unauthorized from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -31,6 +31,8 @@ import { useAccountNav } from "../Account.js";
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [courses, setCourses] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [privilegesDialogIsOpen, setPrivilegesDialogIsOpen] = useState(false);
@@ -84,25 +86,28 @@ const UserManagement = () => {
 
     const fetchData = async () => {
         try {
+            setIsError(false);
             const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
             setUsers(userData.data);
-
+    
             const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
             setCourses(courseData.data);
-
+    
             setTimeout(() => {
                 setRefreshInProgress(false);
             }, 1000);
-
-
+    
+    
             const coursesByUserDraft = {};
             for (const c of userData.data) {
                 coursesByUserDraft[c.id] = c.Courses;
             }
             setCoursesByUser({ ...coursesByUserDraft });
-
-
-        } catch (error) { /* empty */ }
+            setIsLoaded(true);
+        }
+        catch(e) {
+            setIsError(true);
+        }
     };
 
 
@@ -556,189 +561,191 @@ const UserManagement = () => {
 
     return !appUser.is_admin && (
         <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) ||
-        appUser.pw_change_required && (
-            <Navigate to="/Account/ChangePassword" />
-        ) ||
-        appUser.is_admin && (
-            <Box component={Paper} square sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr",
-                gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                gridTemplateAreas: `
+    ) || appUser.pw_change_required && (
+        <Navigate to="/Account/ChangePassword" />
+    ) || isError && (
+        <Unauthorized message="Error loading users" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+    ) || !isLoaded && (
+        <Unauthorized message="Loading users..." Icon={AccessTimeIcon} />
+    ) || (
+        <Box component={Paper} square sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: "80px calc(100vh - 224px) 80px",
+            gridTemplateAreas: `
         "top"
         "table"
         "bottom"
       `
-            }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
-                    <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
-                    <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
-                    <Stack direction="row" spacing={2}>
-                        <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
-                            setRefreshInProgress(true);
-                            fetchData();
-                        }}
-                        disabled={refreshInProgress}>
-                            <Typography variant="body1">Refresh</Typography>
-                        </Button>
-                        <Button color="primary" variant={
-                            visibleUsers.length > 0 ? "outlined" : "contained"
-                        } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                        disabled={
-                            !(searchQuery || userCourseIdFilter)
-                        }>
-                            <Typography variant="body1">Clear Filters</Typography>
-                        </Button>
-                        <Button color="primary" variant="contained" startIcon={<GroupAddIcon />}
-                            onClick={() => {
-                                setDialogIsOpen(true);
-                            }}
-                        >
-                            <Typography variant="body1">Create Users</Typography>
-                        </Button>
-                    </Stack>
-                </Stack>
-                <DataTable items={users} tableFields={userTableFields}
-                    rowSelectionEnabled={true}
-                    selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
-                    visibleItems={visibleUsers}
-                    sx={{ gridArea: "table" }}
-                    emptyMinHeight="300px"
-                    {...visibleUsers.length == users.length && {
-                        noContentMessage: "No users yet",
-                        noContentButtonAction: () => { setDialogIsOpen(true); },
-                        noContentButtonText: "Create a user",
-                        NoContentIcon: InfoIcon
-                    } || visibleUsers.length < users.length && {
-                        noContentMessage: "No results",
-                        noContentButtonAction: clearFilters,
-                        noContentButtonText: "Clear Filters",
-                        NoContentIcon: SearchIcon
+        }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+                <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
+                <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
+                <Stack direction="row" spacing={2}>
+                    <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
+                        setRefreshInProgress(true);
+                        fetchData();
                     }}
-                />
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
-                    <SelectionSummary
-                        items={users}
-                        selectedItems={selectedUsers}
-                        setSelectedItems={setSelectedUsers}
-                        visibleItems={visibleUsers}
-                        entitySingular="user"
-                        entityPlural="users"
-                    />
-                    <Stack direction="row" spacing={2} >
-                        {(() => {
-                            const selectedDeletableUsers = selectedUsers.filter((u) => u.is_deletable);
-                            return (
-                                <Button variant="outlined"
-                                    sx={{
-                                        display: selectedDeletableUsers.length == 0 ? "none" : ""
-                                    }}
-                                    startIcon={<DeleteIcon />}
-                                    onClick={() => {
-                                        if (selectedDeletableUsers.length == 1) {
-                                            setDeleteDialogUser(selectedDeletableUsers[0]);
-                                            setDeleteDialogIsOpen(true);
-                                        } else {
-                                            setMultiDeleteDialogIsOpen(true);
-                                        }
-                                    }}>
-                                    <Typography variant="body1">{selectedDeletableUsers.length}</Typography>
-                                </Button>
-                            );
-                        })()}
-                        <Button variant="outlined"
-                            sx={{
-                                display: selectedUsers.length == 0 ? "none" : ""
-                            }}
-                            startIcon={<SchoolIcon />}
-                            onClick={() => {
-                                setAssignCourseDialogUsers([...selectedUsers]);
-                                setAssignCourseDialogIsOpen(true);
-                            }}>
-                            <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"}</Typography>
-                        </Button>
-                    </Stack>
+                    disabled={refreshInProgress}>
+                        <Typography variant="body1">Refresh</Typography>
+                    </Button>
+                    <Button color="primary" variant={
+                        visibleUsers.length > 0 ? "outlined" : "contained"
+                    } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
+                    disabled={
+                        !(searchQuery || userCourseIdFilter)
+                    }>
+                        <Typography variant="body1">Clear Filters</Typography>
+                    </Button>
+                    <Button color="primary" variant="contained" startIcon={<GroupAddIcon />}
+                        onClick={() => {
+                            setDialogIsOpen(true);
+                        }}
+                    >
+                        <Typography variant="body1">Create Users</Typography>
+                    </Button>
                 </Stack>
-
-                <ItemMultiCreateDialog entity="user"
-                    dialogTitle={"Create Users"}
-                    dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-                    handleItemsCreate={handleUsersCreate}
-                    {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
-
-                <ItemSingleEditDialog
-                    entity="user"
-                    dialogTitle={"Edit User"}
-                    dialogInstructions={"Edit the user fields, then click 'Save'."}
-                    editDialogItem={editDialogUser}
-                    handleItemEdit={handleUserEdit}
-                    {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
-
-                <ItemSingleDeleteDialog
-                    entity="user"
-                    dialogTitle="Delete User"
-                    deleteDialogItem={deleteDialogUser}
-                    {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
-
-                <ItemMultiDeleteDialog
+            </Stack>
+            <DataTable items={users} tableFields={userTableFields}
+                rowSelectionEnabled={true}
+                selectedItems={selectedUsers} setSelectedItems={setSelectedUsers}
+                visibleItems={visibleUsers}
+                sx={{ gridArea: "table" }}
+                emptyMinHeight="300px"
+                {...visibleUsers.length == users.length && {
+                    noContentMessage: "No users yet",
+                    noContentButtonAction: () => { setDialogIsOpen(true); },
+                    noContentButtonText: "Create a user",
+                    NoContentIcon: InfoIcon
+                } || visibleUsers.length < users.length && {
+                    noContentMessage: "No results",
+                    noContentButtonAction: clearFilters,
+                    noContentButtonText: "Clear Filters",
+                    NoContentIcon: SearchIcon
+                }}
+            />
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+                <SelectionSummary
+                    items={users}
+                    selectedItems={selectedUsers}
+                    setSelectedItems={setSelectedUsers}
+                    visibleItems={visibleUsers}
                     entitySingular="user"
                     entityPlural="users"
-                    deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
-                    deleteDialogIsOpen={multiDeleteDialogIsOpen}
-                    setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
-                    handleDelete={handleDeleteMultiple}
                 />
-
-                <AssociationManagementDialog
-                    primaryEntity="user"
-                    secondaryEntity="course"
-                    primaryItems={assignCourseDialogUsers}
-                    secondaryItemsAll={courses}
-                    secondariesByPrimary={coursesByUser}
-                    dialogTitle={
-                        assignCourseDialogUsers.length == 1 ?
-                            `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
-                            `Manage Course Enrollments for ${assignCourseDialogUsers.length} Selected Users`
-                    }
-                    dialogButtonForSecondaryManagement={<>
-                        <Button variant="outlined" onClick={() => {
-                            navigate("/Account/CourseManagement");
+                <Stack direction="row" spacing={2} >
+                    {(() => {
+                        const selectedDeletableUsers = selectedUsers.filter((u) => u.is_deletable);
+                        return (
+                            <Button variant="outlined"
+                                sx={{
+                                    display: selectedDeletableUsers.length == 0 ? "none" : ""
+                                }}
+                                startIcon={<DeleteIcon />}
+                                onClick={() => {
+                                    if (selectedDeletableUsers.length == 1) {
+                                        setDeleteDialogUser(selectedDeletableUsers[0]);
+                                        setDeleteDialogIsOpen(true);
+                                    } else {
+                                        setMultiDeleteDialogIsOpen(true);
+                                    }
+                                }}>
+                                <Typography variant="body1">{selectedDeletableUsers.length}</Typography>
+                            </Button>
+                        );
+                    })()}
+                    <Button variant="outlined"
+                        sx={{
+                            display: selectedUsers.length == 0 ? "none" : ""
+                        }}
+                        startIcon={<SchoolIcon />}
+                        onClick={() => {
+                            setAssignCourseDialogUsers([...selectedUsers]);
+                            setAssignCourseDialogIsOpen(true);
                         }}>
-                            <Typography>Go to course management</Typography>
-                        </Button>
-                    </>}
-                    dialogIsOpen={assignCourseDialogIsOpen}
-                    tableTitleAssigned={
-                        assignCourseDialogUsers.length == 1 ?
-                            `Current Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
-                            "Current Courses with Selected Users"
-                    }
-                    tableTitleAll={"All Courses"}
-                    setDialogIsOpen={setAssignCourseDialogIsOpen}
-                    secondaryTableFieldsAll={courseTableFieldsForDialogAll}
-                    secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
-                    secondarySearchFields={["name"]}
-                    secondarySearchBoxPlaceholder="Search courses by name"
-                />
+                        <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"}</Typography>
+                    </Button>
+                </Stack>
+            </Stack>
 
-                <UserChangePrivilegesDialog
-                    dialogUser={privilegesDialogUser}
-                    dialogIsOpen={privilegesDialogIsOpen}
-                    setDialogIsOpen={setPrivilegesDialogIsOpen}
-                    handlePromote={handleUserPromote}
-                    handleDemote={handleUserDemote}
-                />
+            <ItemMultiCreateDialog entity="user"
+                dialogTitle={"Create Users"}
+                dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
+                handleItemsCreate={handleUsersCreate}
+                {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
-                <UserResetPasswordDialog
-                    dialogIsOpen={resetPasswordDialogIsOpen}
-                    dialogUser={resetPasswordDialogUser}
-                    setDialogIsOpen={setResetPasswordDialogIsOpen}
-                    handleResetPassword={handleResetPassword}
-                />
+            <ItemSingleEditDialog
+                entity="user"
+                dialogTitle={"Edit User"}
+                dialogInstructions={"Edit the user fields, then click 'Save'."}
+                editDialogItem={editDialogUser}
+                handleItemEdit={handleUserEdit}
+                {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
-            </Box>
-        );
+            <ItemSingleDeleteDialog
+                entity="user"
+                dialogTitle="Delete User"
+                deleteDialogItem={deleteDialogUser}
+                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+
+            <ItemMultiDeleteDialog
+                entitySingular="user"
+                entityPlural="users"
+                deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
+                deleteDialogIsOpen={multiDeleteDialogIsOpen}
+                setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
+                handleDelete={handleDeleteMultiple}
+            />
+
+            <AssociationManagementDialog
+                primaryEntity="user"
+                secondaryEntity="course"
+                primaryItems={assignCourseDialogUsers}
+                secondaryItemsAll={courses}
+                secondariesByPrimary={coursesByUser}
+                dialogTitle={
+                    assignCourseDialogUsers.length == 1 ?
+                        `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
+                        `Manage Course Enrollments for ${assignCourseDialogUsers.length} Selected Users`
+                }
+                dialogButtonForSecondaryManagement={<>
+                    <Button variant="outlined" onClick={() => {
+                        navigate("/Account/CourseManagement");
+                    }}>
+                        <Typography>Go to course management</Typography>
+                    </Button>
+                </>}
+                dialogIsOpen={assignCourseDialogIsOpen}
+                tableTitleAssigned={
+                    assignCourseDialogUsers.length == 1 ?
+                        `Current Courses for ${assignCourseDialogUsers[0].safe_display_name}` :
+                        "Current Courses with Selected Users"
+                }
+                tableTitleAll={"All Courses"}
+                setDialogIsOpen={setAssignCourseDialogIsOpen}
+                secondaryTableFieldsAll={courseTableFieldsForDialogAll}
+                secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
+                secondarySearchFields={["name"]}
+                secondarySearchBoxPlaceholder="Search courses by name"
+            />
+
+            <UserChangePrivilegesDialog
+                dialogUser={privilegesDialogUser}
+                dialogIsOpen={privilegesDialogIsOpen}
+                setDialogIsOpen={setPrivilegesDialogIsOpen}
+                handlePromote={handleUserPromote}
+                handleDemote={handleUserDemote}
+            />
+
+            <UserResetPasswordDialog
+                dialogIsOpen={resetPasswordDialogIsOpen}
+                dialogUser={resetPasswordDialogUser}
+                setDialogIsOpen={setResetPasswordDialogIsOpen}
+                handleResetPassword={handleResetPassword}
+            />
+
+        </Box>
+    );
 };
 
 

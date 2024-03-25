@@ -31,7 +31,9 @@ import {
     CheckIcon,
     GroupAddIcon,
     SecurityIcon,
-    InfoIcon
+    InfoIcon,
+    AccessTimeIcon,
+    WarningIcon
 } from "../../IconImports.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
@@ -40,6 +42,8 @@ import { useAccountNav } from "../Account.js";
 const CourseManagement = () => {
     const [courses, setCourses] = useState([]);
     const [users, setUsers] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -93,6 +97,7 @@ const CourseManagement = () => {
 
     const fetchData = async () => {
         try {
+            setIsError(false);
             const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
             setCourses(courseData.data);
 
@@ -114,10 +119,10 @@ const CourseManagement = () => {
                 usersByCourseDraft[c.id] = c.Users;
             }
             setUsersByCourse({ ...usersByCourseDraft });
-
+            setIsLoaded(true);
 
         } catch (error) {
-            console.error("Error fetching data:", error);
+            setIsError(true);
         }
     };
 
@@ -440,11 +445,13 @@ const CourseManagement = () => {
 
     return !appUser.is_admin && (
         <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) ||
-    appUser.pw_change_required && (
+    ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
-    ) ||
-    appUser.is_admin && (
+    ) || isError && (
+        <Unauthorized message="Error loading courses" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+    ) || !isLoaded && (
+        <Unauthorized message="Loading courses..." Icon={AccessTimeIcon} />
+    ) || (
         <Box component={Paper} square sx={{
             display: "grid",
             gridTemplateColumns: "1fr",
