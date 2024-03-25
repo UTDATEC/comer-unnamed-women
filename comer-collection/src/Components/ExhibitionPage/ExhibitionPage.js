@@ -9,7 +9,7 @@ import { useAppUser } from "../App/AppUser.js";
 import Unauthorized from "../ErrorPages/Unauthorized.js";
 import { useSnackbar } from "../App/AppSnackbar.js";
 import { useTitle } from "../App/AppTitle.js";
-import { InfoIcon, LockIcon } from "../IconImports.js";
+import { AccessTimeIcon, InfoIcon } from "../IconImports.js";
 
 
 export const ExhibitionPage = () => {
@@ -158,7 +158,7 @@ export const ExhibitionPage = () => {
 
 
     return !appUserIsLoaded && (
-        <Unauthorized message="Loading exhibition..." Icon={LockIcon} />
+        <Unauthorized message="Loading exhibition..." Icon={AccessTimeIcon} />
     ) || appUserIsLoaded && !isPermissionGranted && (
         <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
             buttonDestination="/Exhibitions" Icon={InfoIcon} />
