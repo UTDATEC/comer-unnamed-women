@@ -12,7 +12,7 @@ import { useTitle } from "../App/AppTitle.js";
 import { AccessTimeIcon, InfoIcon } from "../IconImports.js";
 
 
-export const ExhibitionPage = () => {
+const ExhibitionPage = () => {
     
     const onUnload = async() => {
         await saveExhibition();
@@ -192,3 +192,5 @@ export const ExhibitionPage = () => {
         </Box>
     );
 };
+
+export default ExhibitionPage;

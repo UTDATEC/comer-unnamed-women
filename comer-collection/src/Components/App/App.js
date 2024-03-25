@@ -1,13 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "../Login/Login.js";
 import NavBar from "../NavBar/NavBar.js";
-import React, { useState } from "react";
-import Account from "../Users/Account.js";
+import React, { Suspense, lazy, useState } from "react";
 
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
-import { ExhibitionPage } from "../ExhibitionPage/ExhibitionPage.js";
 import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser.js";
 import { SnackbarProvider } from "./AppSnackbar.js";
 import { AppUserProvider } from "./AppUser.js";
@@ -16,6 +14,24 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
+import Unauthorized from "../ErrorPages/Unauthorized.js";
+import { AccessTimeIcon } from "../IconImports.js";
+
+
+const ExhibitionPage = lazy(() => import("../ExhibitionPage/ExhibitionPage.js"));
+const ExhibitionPageWrapper = () => (
+    <Suspense fallback={<Unauthorized message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
+        <ExhibitionPage />
+    </Suspense>
+);
+
+
+const Account = lazy(() => import("../Users/Account.js"));
+const AccountWrapper = () => (
+    <Suspense fallback={<Unauthorized message="Loading account..." Icon={AccessTimeIcon} />}>
+        <Account />
+    </Suspense>
+);
 
 
 const App = () => {
@@ -76,7 +92,7 @@ const App = () => {
             <HelmetProvider>
                 <Helmet>
                     <meta httpEquiv='Content-Security-Policy' 
-                        content={`default-src 'none'; script-src 'none'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src ${process.env.REACT_APP_API_HOST}`} />
+                        content={`default-src 'none'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src ${process.env.REACT_APP_API_HOST}`} />
                 </Helmet>
             </HelmetProvider>
             <AppUserProvider>
@@ -103,9 +119,9 @@ const App = () => {
           
                                             <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
                                             <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
-                                            <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPage />} />
+                                            <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPageWrapper />} />
 
-                                            <Route path="/Account/*" element={<Account />} />
+                                            <Route path="/Account/*" element={<AccountWrapper />} />
 
                                             <Route path="/login" element={<Login />} />
 
