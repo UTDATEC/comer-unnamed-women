@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
 import { setupMainWalls, setupSideWalls } from "./js/Walls.js";
 import { setupFloor } from "./js/Floor.js";
@@ -10,13 +11,6 @@ import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports.js";
 import { useAppUser } from "../App/AppUser.js";
 import PropTypes from "prop-types";
 
-import { AmbientLight } from "three/src/lights/AmbientLight.js";
-import { Scene } from "three/src/scenes/Scene.js";
-import { PerspectiveCamera } from "three/src/cameras/PerspectiveCamera.js";
-import { WebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
-import { LinearSRGBColorSpace } from "three/src/constants.js";
-import { Clock } from "three/src/core/Clock.js";
-import { TextureLoader } from "three/src/loaders/TextureLoader.js";
 
 
 const getAmbientLightIntensity = (moodiness) => {
@@ -116,7 +110,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
         if(exhibitionIsLoaded) {
 
-            const scene = new Scene();
+            const scene = new THREE.Scene();
     
             if(!containerRef || !containerRef.current){
                 return;
@@ -125,7 +119,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             let [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
     
             // camera set up
-            let camera = new PerspectiveCamera(
+            let camera = new THREE.PerspectiveCamera(
                 60, // field of view: 60-90 is normal for viewing on a monitor
                 canvas_width / canvas_height, // aspect ratio: assumption that ar should be the current window size
                 0.1,  // near setting for camera frustum
@@ -139,7 +133,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             camera.updateProjectionMatrix();
         
             // enable antialiasing
-            let renderer = new WebGLRenderer({
+            let renderer = new THREE.WebGLRenderer({
                 antialias: true
             });
         
@@ -149,7 +143,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
         
             // render options
         
-            renderer.outputColorSpace = LinearSRGBColorSpace;
+            renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
         
             // add mouse controls
             let controls = new PointerLockControls(camera, renderer.domElement);
@@ -158,7 +152,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             // resize window when window is resized
             window.addEventListener("resize", handleWindowResize);
             
-            const clock = new Clock();
+            const clock = new THREE.Clock();
             clock.getDelta();
 
 
@@ -174,7 +168,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
             window.addEventListener("keydown", handleKeydown);
             window.addEventListener("keyup", handleKeyup);
     
-            const texture_loader = new TextureLoader();
+            const texture_loader = new THREE.TextureLoader();
             setMyTextureLoader(texture_loader);
     
     
@@ -452,7 +446,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 
     useEffect(() => {
         if(myScene) {
-            const ambient_light = new AmbientLight(primary_json.appearance.ambient_light_color, getAmbientLightIntensity(primary_json.appearance.moodiness));
+            const ambient_light = new THREE.AmbientLight(primary_json.appearance.ambient_light_color, getAmbientLightIntensity(primary_json.appearance.moodiness));
             myScene.add(ambient_light); 
             myRenderer.render(myScene, myCamera);
 

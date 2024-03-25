@@ -1,9 +1,4 @@
-import { Group } from "three/src/objects/Group.js";
-import { RepeatWrapping } from "three/src/constants.js";
-import { BoxGeometry } from "three/src/geometries/BoxGeometry.js";
-import { MeshLambertMaterial } from "three/src/materials/MeshLambertMaterial.js";
-import { Mesh } from "three/src/objects/Mesh.js";
-
+import * as THREE from "three";
 import { createBoundingBoxes } from "./BoundingBox.js";
 
 export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color) => {
@@ -15,7 +10,7 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
             // clean up any existing main walls
             scene.children = scene.children.filter((c) => c.name != "group_main_walls");
             // create a group for walls for bounding box and adding to scene
-            let wall_group = new Group();
+            let wall_group = new THREE.Group();
             wall_group.name = "group_main_walls";
             scene.add(wall_group);
         
@@ -31,22 +26,22 @@ export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, g
             // front and back wall texture set up
             texture_loader.load("/images/textures/wall.jpg", (wall_texture_frontback) => {
         
-                wall_texture_frontback.wrapS = RepeatWrapping; // horizontal wrap
-                wall_texture_frontback.wrapT = RepeatWrapping; // vertical wrap
+                wall_texture_frontback.wrapS = THREE.RepeatWrapping; // horizontal wrap
+                wall_texture_frontback.wrapT = THREE.RepeatWrapping; // vertical wrap
                 wall_texture_frontback.repeat.set(wall_width, wall_height); // repeat texture (width, height)
             
                 // front and back wall construction
-                const front_wall = new Mesh(
-                    new BoxGeometry(wall_width, wall_height, wall_thick),
-                    new MeshLambertMaterial({
+                const front_wall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
+                    new THREE.MeshLambertMaterial({
                         map: wall_texture_frontback,
                         color: main_color,
                     }),
                 );
             
-                const back_wall = new Mesh(
-                    new BoxGeometry(wall_width, wall_height, wall_thick),
-                    new MeshLambertMaterial({
+                const back_wall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
+                    new THREE.MeshLambertMaterial({
                         map: wall_texture_frontback,
                         color: main_color,
                     }),
@@ -90,7 +85,7 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
             // clean up any existing side walls
             scene.children = scene.children.filter((c) => c.name != "group_side_walls");
             // create a group for walls for bounding box and adding to scene
-            let wall_group = new Group();
+            let wall_group = new THREE.Group();
             wall_group.name = "group_side_walls";
             scene.add(wall_group); 
         
@@ -106,22 +101,22 @@ export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, g
             // left and right wall texture set up
             texture_loader.load("/images/textures/wall.jpg", (wall_texture_leftright) => {
         
-                wall_texture_leftright.wrapS = RepeatWrapping; // horizontal wrap
-                wall_texture_leftright.wrapT = RepeatWrapping; // vertical wrap
+                wall_texture_leftright.wrapS = THREE.RepeatWrapping; // horizontal wrap
+                wall_texture_leftright.wrapT = THREE.RepeatWrapping; // vertical wrap
                 wall_texture_leftright.repeat.set(wall_length, wall_height); // repeat texture (width, height)
             
                 // left and right wall construction
-                const left_wall = new Mesh(
-                    new BoxGeometry(wall_length, wall_height, wall_thick),
-                    new MeshLambertMaterial({
+                const left_wall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wall_length, wall_height, wall_thick),
+                    new THREE.MeshLambertMaterial({
                         map: wall_texture_leftright,
                         color: side_color,
                     }),
                 );
             
-                const right_wall = new Mesh(
-                    new BoxGeometry(wall_length, wall_height, wall_thick),
-                    new MeshLambertMaterial({
+                const right_wall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wall_length, wall_height, wall_thick),
+                    new THREE.MeshLambertMaterial({
                         map: wall_texture_leftright,
                         color: side_color,
                     }),
