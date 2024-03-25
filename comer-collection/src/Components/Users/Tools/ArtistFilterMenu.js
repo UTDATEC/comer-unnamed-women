@@ -1,65 +1,31 @@
 import React from "react";
-import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import { BrushIcon, CheckIcon } from "../../IconImports.js";
+import { BrushIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
+import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
+import { Typography } from "@mui/material";
+
+const artistSortFunction = (a, b) => {
+    return a.fullNameReverse > b.fullNameReverse;
+};
+
+const artistDisplayFunction = (artist) => {
+    return (
+        <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
+            {artist.fullNameReverse}
+        </Typography>
+    );
+};
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
     return (
-        <Select displayEmpty value={filterValue?.id ?? ""}
-            variant="outlined"
-            sx={{
-                wordWrap: "break-word", 
-                width: "300px"
-            }}
-            MenuProps={{
-                sx: {
-                    zIndex: 50000
-                }
-            }}
-            renderValue={(selected) => {
-                return (
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        <BrushIcon />
-                        {artists.find((c) => c.id == selected) && (
-                            <Typography variant="body1" sx={{ minWidth: "120px" }}>
-                                {artists.find((c) => c.id == selected)?.safe_display_name}
-                            </Typography>
-                        ) ||
-              <Typography variant="body1" sx={{ minWidth: "120px", opacity: 0.5 }}>
-                Filter images by artist
-              </Typography>}
-                    </Stack>
-                );
-
-            }}
-            placeholder="All artists"
-        >
-            <ListItemButton key={""} value={""}
-                onClick={() => {
-                    setFilterValue(null);
-                }}>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                    <CheckIcon sx={{ visibility: filterValue ? "hidden" : "" }} />
-                    <Typography variant="body1" sx={{ minWidth: "120px" }}>
-            Do not filter by artist
-                    </Typography>
-                </Stack>
-            </ListItemButton>
-            <Divider sx={{padding: "4px"}} />
-            {artists.sort((a, b) => a.fullNameReverse > b.fullNameReverse ? 1 : -1).map((artist) => (
-                <ListItemButton key={artist.id} value={artist.id}
-                    onClick={() => {
-                        setFilterValue(artist);
-                    }}>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        <BrushIcon sx={{ visibility: filterValue?.id == artist.id ? "" : "hidden" }} />
-                        <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
-                            {artist.fullNameReverse}
-                        </Typography>
-                    </Stack>
-                </ListItemButton>
-            ))}
-        </Select>
+        <SecondaryFilterMenu SecondaryIcon={BrushIcon} displayFunction={artistDisplayFunction} 
+            helpMessage="Filter images by artist" 
+            emptyMessage="No artist filters available" 
+            nullMessage="Do not filter by artist"
+            sortFunction={artistSortFunction}
+            secondaries={artists}
+            {...{filterValue, setFilterValue}}
+        />
     );
 };
 

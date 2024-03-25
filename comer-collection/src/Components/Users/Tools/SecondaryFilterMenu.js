@@ -37,7 +37,7 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
                     </Stack>
                 </ListItemButton>
             ) || secondaries.length && (
-                <>
+                <div>
                     <ListItemButton key={""} value={""}
                         onClick={() => {
                             setFilterValue(null);
@@ -56,18 +56,12 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
                             <Stack direction="row" alignItems="center" spacing={2}>
                                 <CheckIcon sx={{ visibility: filterValue?.id == secondary.id ? "" : "hidden" }} />
                                 <Stack direction="column" alignItems="left" spacing={0} sx={{}}>
-                                    <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
-                                        {secondary.name}
-                                    </Typography>
-                                    <Typography sx={{opacity: 0.5}}>
-                                        {/* {} */}
-                                        {displayFunction(secondary)}
-                                    </Typography>
+                                    {displayFunction(secondary)}
                                 </Stack>
                             </Stack>
                         </ListItemButton>
                     ))}
-                </>
+                </div>
             )}
         </Select>
     );

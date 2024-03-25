@@ -2,13 +2,25 @@ import React from "react";
 import { SchoolIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
+import { Typography } from "@mui/material";
 
 const courseSortFunction = (a, b) => {
     return (new Date(b.date_start)).getTime() - (new Date(a.date_start)).getTime();
 };
 
 const courseDisplayFunction = (c) => {
-    return (new Date(c.date_start)).toLocaleDateString() + "-" + (new Date(c.date_end)).toLocaleDateString();
+    return (
+        <>
+            <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
+                {c.name}
+            </Typography>
+            <Typography sx={{opacity: 0.5}}>
+                {/* {} */}
+                {(new Date(c.date_start)).toLocaleDateString() + "-" + (new Date(c.date_end)).toLocaleDateString()}
+            </Typography>
+
+        </>
+    );
 };
 
 export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
