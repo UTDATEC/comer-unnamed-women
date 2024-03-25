@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import Unauthorized from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
@@ -33,6 +33,8 @@ const ImageManagement = () => {
     const [artists, setArtists] = useState([]);
     const [tags, setTags] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
+
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogImage, setDeleteDialogImage] = useState(null);
@@ -89,9 +91,13 @@ const ImageManagement = () => {
         setSelectedNavItem("Image Management");
         setTitleText("Image Management");
         if (appUser.is_admin) {
-            fetchImages();
-            fetchArtists();
-            fetchTags();
+            Promise.all([
+                fetchImages(),
+                fetchArtists(),
+                fetchTags()
+            ]).then(() => {
+                setIsLoaded(true);
+            });
         }
     }, []);
 
@@ -940,7 +946,9 @@ const ImageManagement = () => {
                 </Stack>
             </Stack>
 
-            <DataTable items={images} visibleItems={visibleImages}
+            {!isLoaded && (
+                <Unauthorized message="Loading images..." Icon={AccessTimeIcon} />
+            ) || isLoaded && <DataTable items={images} visibleItems={visibleImages}
                 tableFields={imageTableFields}
                 rowSelectionEnabled={true}
                 selectedItems={selectedImages}
@@ -957,7 +965,7 @@ const ImageManagement = () => {
                     noContentButtonText: "Clear Filters",
                     NoContentIcon: SearchIcon
                 }}
-            />
+            />}
 
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                 <SelectionSummary
