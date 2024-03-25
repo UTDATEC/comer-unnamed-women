@@ -8,21 +8,25 @@ import SearchBox from "../Users/Tools/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities.js";
 import { useTitle } from "../App/AppTitle.js";
 import PropTypes from "prop-types";
-
+import { InView } from "react-intersection-observer";
 
 
 const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelectedItem, isDisabled}) => {
 
     const thumbnailBox = useMemo(() => (
-        <Box width="200px" height="150px"
-            sx={{
-                backgroundImage: `url(${`http://localhost:9000/api/public/images/${image.id}/download`})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-                backgroundPositionX: "center",
-                backgroundPositionY: "top"
-            }}
-        />
+        <InView>
+            {({ inView, ref }) => (
+                <Box width="200px" height="150px" ref={ref}
+                    sx={{
+                        backgroundImage: inView ? `url(${`http://localhost:9000/api/public/images/${image.id}/download`})` : "none",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "contain",
+                        backgroundPositionX: "center",
+                        backgroundPositionY: "top"
+                    }}
+                />
+            )}
+        </InView>
     ), [image]);
 
     const infoStack = useMemo(() =>(
