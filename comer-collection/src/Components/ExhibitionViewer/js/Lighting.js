@@ -1,13 +1,14 @@
-import * as THREE from "three";
+import { AmbientLight } from "three/src/lights/AmbientLight.js";
+import { SpotLight } from "three/src/lights/SpotLight.js";
 
 export function createAmbientLight(color, intensity) {
-    const ambient_light = new THREE.AmbientLight(color, intensity);
+    const ambient_light = new AmbientLight(color, intensity);
     return ambient_light;
 }
 
 
 export function createSpotlight(intensity, color, art_position, gallery_height, scene, direction) {
-    const spotlight = new THREE.SpotLight(color, intensity);
+    const spotlight = new SpotLight(color, intensity);
     
     // set the light 5 feet away from the art
     const light_offset = 5; // modify this if you want to change how far lights are away from the photos

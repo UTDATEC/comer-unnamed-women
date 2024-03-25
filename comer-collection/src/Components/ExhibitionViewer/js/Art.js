@@ -1,4 +1,8 @@
-import * as THREE from "three";
+import { Group } from "three/src/objects/Group.js";
+import { Mesh } from "three/src/objects/Mesh.js";
+import { MeshLambertMaterial } from "three/src/materials/MeshLambertMaterial.js";
+import { PlaneGeometry } from "three/src/geometries/PlaneGeometry.js";
+import { Object3D } from "three/src/core/Object3D.js";
 
 import { createFrame } from "./Frames.js";
 import { createMatte } from "./Matte.js";
@@ -79,7 +83,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
     const artPositionsByImageId = {};
 
     // create a place to store all of the art in gallery
-    const all_arts_group = new THREE.Group();
+    const all_arts_group = new Group();
     scene.add(all_arts_group);
 
     // counters for placing photos in default positions
@@ -106,11 +110,11 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
         // grab the texture and apply that texture to a material (lambert has lighting effects applied to it)
         texture_loader.load(data.img_src, (texture) => {
 
-            const material = new THREE.MeshLambertMaterial({ map: texture }); // map texture to a material
+            const material = new MeshLambertMaterial({ map: texture }); // map texture to a material
     
             // convert material into mesh with proper dimensions
-            const art = new THREE.Mesh(
-                new THREE.PlaneGeometry((data.size.width / 12), (data.size.height / 12)),
+            const art = new Mesh(
+                new PlaneGeometry((data.size.width / 12), (data.size.height / 12)),
                 material
             );
 
@@ -121,7 +125,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             }
     
             // create frame
-            let frame = new THREE.Object3D;
+            let frame = new Object3D;
     
             // if there is something wrong/there is no value, use a default generation method
             if (data.frame.width == 0 || data.frame.width == null ||
@@ -249,7 +253,7 @@ export function createArt(texture_loader, photos_on_1, photos_on_2, photos_on_3,
             const matte = createMatte(data.frame.width, data.frame.height, data.matte.color);
     
             // create a group for photo, matte, and frame
-            let art_group = new THREE.Group();
+            let art_group = new Group();
     
             // add photo, matte, and frame to the group
             art_group.add(art);

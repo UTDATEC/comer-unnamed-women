@@ -1,10 +1,15 @@
-import * as THREE from "three";
+import { PlaneGeometry } from "three/src/geometries/PlaneGeometry.js";
+import { MeshLambertMaterial } from "three/src/materials/MeshLambertMaterial.js";
+import { Mesh } from "three/src/objects/Mesh.js";
+import { Group } from "three/src/objects/Group.js";
+import { DoubleSide } from "three/src/constants.js";
+
 
 export function createFrame(frame_width, frame_height, frame_color, frame_secondary){
     
     // create frame as a group so that we can add all the planes as one 'object' that
     // is appended to the art in Art.js
-    let frame_group = new THREE.Group();
+    let frame_group = new Group();
 
     // possibly remove, makes frames slighly larger to accommodate
     frame_width = frame_width + 2;
@@ -24,43 +29,43 @@ export function createFrame(frame_width, frame_height, frame_color, frame_second
      */
 
     // all front facing panels of frame
-    const front_bottom = new THREE.Mesh(
-        new THREE.PlaneGeometry(frame_width / 12, 1 / 12),
-        new THREE.MeshLambertMaterial({ color: frame_color,
-            side: THREE.DoubleSide}),
+    const front_bottom = new Mesh(
+        new PlaneGeometry(frame_width / 12, 1 / 12),
+        new MeshLambertMaterial({ color: frame_color,
+            side: DoubleSide}),
     );
 
-    const front_top = new THREE.Mesh(
-        new THREE.PlaneGeometry(frame_width / 12, 1 / 12),
-        new THREE.MeshLambertMaterial({ color: frame_color, 
-            side: THREE.DoubleSide}),
+    const front_top = new Mesh(
+        new PlaneGeometry(frame_width / 12, 1 / 12),
+        new MeshLambertMaterial({ color: frame_color, 
+            side: DoubleSide}),
     );
 
     front_top.position.set(0, (frame_height - 1) / 12, 0);
 
-    const front_left = new THREE.Mesh(
-        new THREE.PlaneGeometry(1 / 12, (frame_height - 2) / 12),
-        new THREE.MeshLambertMaterial({ color: frame_color,
-            side: THREE.DoubleSide}),
+    const front_left = new Mesh(
+        new PlaneGeometry(1 / 12, (frame_height - 2) / 12),
+        new MeshLambertMaterial({ color: frame_color,
+            side: DoubleSide}),
     );
 
     front_left.position.set((-(frame_width - 1) / 2) / 12,
         ((frame_height - 1) / 2) / 12);
 
-    const front_right = new THREE.Mesh(
-        new THREE.PlaneGeometry(1 / 12, (frame_height - 2) / 12),
-        new THREE.MeshLambertMaterial({ color: frame_color,
-            side: THREE.DoubleSide}),
+    const front_right = new Mesh(
+        new PlaneGeometry(1 / 12, (frame_height - 2) / 12),
+        new MeshLambertMaterial({ color: frame_color,
+            side: DoubleSide}),
     );
 
     front_right.position.set(((frame_width - 1) / 2) / 12, 
         ((frame_height - 1) / 2) / 12);
 
     // all outer facing panels of frame
-    const outer_right = new THREE.Mesh(
-        new THREE.PlaneGeometry(1 / 12, frame_height / 12),
-        new THREE.MeshLambertMaterial({ color: frame_secondary,
-            side: THREE.DoubleSide}),
+    const outer_right = new Mesh(
+        new PlaneGeometry(1 / 12, frame_height / 12),
+        new MeshLambertMaterial({ color: frame_secondary,
+            side: DoubleSide}),
     );
 
     outer_right.position.set((frame_width / 2) / 12, 
@@ -68,10 +73,10 @@ export function createFrame(frame_width, frame_height, frame_color, frame_second
         -0.5 / 12);
     outer_right.rotation.y = -Math.PI / 2;
 
-    const outer_left = new THREE.Mesh(
-        new THREE.PlaneGeometry(1 / 12, frame_height / 12),
-        new THREE.MeshLambertMaterial({ color: frame_secondary, 
-            side: THREE.DoubleSide}),
+    const outer_left = new Mesh(
+        new PlaneGeometry(1 / 12, frame_height / 12),
+        new MeshLambertMaterial({ color: frame_secondary, 
+            side: DoubleSide}),
     );
 
     outer_left.position.set(-(frame_width / 2) / 12, 
@@ -79,19 +84,19 @@ export function createFrame(frame_width, frame_height, frame_color, frame_second
         -0.5 / 12);
     outer_left.rotation.y = -Math.PI / 2;
 
-    const outer_bottom = new THREE.Mesh(
-        new THREE.PlaneGeometry(frame_width / 12, 1 / 12),
-        new THREE.MeshLambertMaterial({ color: frame_secondary, 
-            side: THREE.DoubleSide}),
+    const outer_bottom = new Mesh(
+        new PlaneGeometry(frame_width / 12, 1 / 12),
+        new MeshLambertMaterial({ color: frame_secondary, 
+            side: DoubleSide}),
     );
 
     outer_bottom.position.set(0, -0.5 / 12, -0.5 / 12);
     outer_bottom.rotation.x = Math.PI / 2;
 
-    const outer_top = new THREE.Mesh(
-        new THREE.PlaneGeometry(frame_width / 12, 1 / 12),
-        new THREE.MeshLambertMaterial({ color: frame_secondary, 
-            side: THREE.DoubleSide}),
+    const outer_top = new Mesh(
+        new PlaneGeometry(frame_width / 12, 1 / 12),
+        new MeshLambertMaterial({ color: frame_secondary, 
+            side: DoubleSide}),
     );
 
     outer_top.position.set(0, (frame_height - 0.5) / 12, -0.5 / 12);
@@ -99,38 +104,38 @@ export function createFrame(frame_width, frame_height, frame_color, frame_second
 
     // inner facing panels (the small areas on the inside of frames)
     // they are 1/4 of an inch which covers any problem of being able to see through the frames
-    const inner_bottom = new THREE.Mesh(
-        new THREE.PlaneGeometry((frame_width - 2) / 12, 1 / 48),
-        new THREE.MeshLambertMaterial({ color: frame_secondary,
-            side: THREE.DoubleSide}),
+    const inner_bottom = new Mesh(
+        new PlaneGeometry((frame_width - 2) / 12, 1 / 48),
+        new MeshLambertMaterial({ color: frame_secondary,
+            side: DoubleSide}),
     );
 
     inner_bottom.position.set(0, 0.5 / 12, -1 / 96);
     inner_bottom.rotation.x = Math.PI / 2;
 
-    const inner_top = new THREE.Mesh(
-        new THREE.PlaneGeometry((frame_width - 2) / 12, 1 / 48),
-        new THREE.MeshLambertMaterial({ color: frame_secondary,
-            side: THREE.DoubleSide}), 
+    const inner_top = new Mesh(
+        new PlaneGeometry((frame_width - 2) / 12, 1 / 48),
+        new MeshLambertMaterial({ color: frame_secondary,
+            side: DoubleSide}), 
     );
 
     inner_top.position.set(0, (frame_height - 1.5) / 12, -1 / 96);
     inner_top.rotation.x = Math.PI / 2;
 
-    const inner_right = new THREE.Mesh(
-        new THREE.PlaneGeometry((frame_height - 2) / 12, 1 / 48),
-        new THREE.MeshLambertMaterial({ color: frame_secondary,
-            side: THREE.DoubleSide}),
+    const inner_right = new Mesh(
+        new PlaneGeometry((frame_height - 2) / 12, 1 / 48),
+        new MeshLambertMaterial({ color: frame_secondary,
+            side: DoubleSide}),
     );
 
     inner_right.position.set(((frame_width - 2) / 2) / 12, ((frame_height - 1) / 2) / 12, -1 / 96);
     inner_right.rotation.x = Math.PI / 2;
     inner_right.rotation.y = Math.PI / 2;
 
-    const inner_left = new THREE.Mesh(
-        new THREE.PlaneGeometry((frame_height - 2) / 12, 1 / 48),
-        new THREE.MeshLambertMaterial({ color: frame_secondary,
-            side: THREE.DoubleSide}),
+    const inner_left = new Mesh(
+        new PlaneGeometry((frame_height - 2) / 12, 1 / 48),
+        new MeshLambertMaterial({ color: frame_secondary,
+            side: DoubleSide}),
     );
 
     inner_left.position.set(-((frame_width - 2) / 2) / 12, ((frame_height - 1) / 2) / 12, -1 / 96);
