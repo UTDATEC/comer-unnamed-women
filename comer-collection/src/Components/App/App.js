@@ -124,6 +124,7 @@ const App = () => {
                                             <Route path="/Account/*" element={<AccountWrapper />} />
 
                                             <Route path="/login" element={<Login />} />
+                                            <Route path="*" element={<Navigate to="/login" />} replace />
 
               
                                         </Routes>
