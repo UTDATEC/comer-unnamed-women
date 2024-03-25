@@ -1,10 +1,10 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
-import { DataTable } from "../Users/Tools/DataTable";
-import { OpenInNewIcon, PhotoCameraBackIcon } from "../IconImports";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
+import { DataTable } from "../Users/Tools/DataTable.js";
+import { OpenInNewIcon, PhotoCameraBackIcon } from "../IconImports.js";
 import { useNavigate } from "react-router";
-import { useTitle } from "../App/AppTitle";
+import { useTitle } from "../App/AppTitle.js";
 
   
 export const ExhibitionBrowser = () => {

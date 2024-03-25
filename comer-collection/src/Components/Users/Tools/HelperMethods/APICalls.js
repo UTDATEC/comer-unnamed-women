@@ -1,5 +1,5 @@
 import axios from "axios";
-import { filterItemFields, userFieldDefinitions } from "./fields";
+import { filterItemFields, userFieldDefinitions } from "./fields.js";
 
 const apiLocation = process.env.REACT_APP_API_HOST;
 

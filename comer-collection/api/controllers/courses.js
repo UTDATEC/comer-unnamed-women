@@ -1,5 +1,6 @@
-const { User, Course } = require("../sequelize.js");
-const { deleteItem, updateItem, createItem, listItems, getItem } = require("./items.js");
+import db from "../sequelize.js";
+const { User, Course } = db;
+import { deleteItem, updateItem, createItem, listItems, getItem } from "./items.js";
 
 
 const listCourses = async (req, res, next) => {
@@ -23,4 +24,4 @@ const deleteCourse = async (req, res, next) => {
 };
 
 
-module.exports = { createCourse, getCourse, listCourses, deleteCourse, updateCourse };
+export { createCourse, getCourse, listCourses, deleteCourse, updateCourse };

@@ -1,6 +1,6 @@
 import React from "react";
 import { IconButton } from "@mui/material";
-import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../IconImports";
+import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {

@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { ColumnSortButton } from "./ColumnSortButton";
+import { ColumnSortButton } from "./ColumnSortButton.js";
 import PropTypes from "prop-types";
 
 

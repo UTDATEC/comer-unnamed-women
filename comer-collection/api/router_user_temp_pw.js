@@ -1,8 +1,7 @@
-const createError = require('http-errors');
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const { getCurrentUser, changePassword } = require("./controllers/users.js");
+import { getCurrentUser, changePassword } from "./controllers/users.js";
 
 
 // Get current user
@@ -10,4 +9,4 @@ router.get("/profile", getCurrentUser);
 router.put("/changepassword", changePassword);
 
 
-module.exports = router;
+export default router;

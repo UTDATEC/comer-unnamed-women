@@ -6,12 +6,12 @@ import {
     Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "./Tools/DataTable";
-import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon } from "../IconImports";
-import { useAppUser } from "../App/AppUser";
-import { useSnackbar } from "../App/AppSnackbar";
-import { useTitle } from "../App/AppTitle";
-import { useAccountNav } from "./Account";
+import { DataTable } from "./Tools/DataTable.js";
+import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon } from "../IconImports.js";
+import { useAppUser } from "../App/AppUser.js";
+import { useSnackbar } from "../App/AppSnackbar.js";
+import { useTitle } from "../App/AppTitle.js";
+import { useAccountNav } from "./Account.js";
 
 const Profile = () => {
 

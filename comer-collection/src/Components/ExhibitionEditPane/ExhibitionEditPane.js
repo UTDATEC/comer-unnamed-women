@@ -1,8 +1,8 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer";
-import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
+import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer.js";
+import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
 import {
     ExpandMoreIcon,
     CloudUploadIcon,
@@ -13,8 +13,8 @@ import {
     ArrowBackIcon,
     ArrowForwardIcon,
     SecurityIcon,
-} from "../IconImports";
-import { useAppUser } from "../App/AppUser";
+} from "../IconImports.js";
+import { useAppUser } from "../App/AppUser.js";
 import PropTypes from "prop-types";
 
 const ColorInput = ({value, onChange, disabled}) => {

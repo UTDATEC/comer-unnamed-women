@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import { SellIcon, CheckIcon } from "../../IconImports";
+import { SellIcon, CheckIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {

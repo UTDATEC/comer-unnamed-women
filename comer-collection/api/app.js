@@ -1,26 +1,27 @@
-require("dotenv").config();
-require("express-async-errors");
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const cors = require("cors");
-const helmet = require("helmet");
-const hpp = require("hpp");
-const toobusy = require("toobusy-js");
-const { rateLimit } = require("express-rate-limit");
-const jwt = require("jsonwebtoken");
+// require("dotenv").config();
+import "dotenv/config.js";
+import "express-async-errors";
+import createError from "http-errors";
+import express, { json, urlencoded } from "express";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import cors from "cors";
+import helmet, { contentSecurityPolicy, frameguard } from "helmet";
+import hpp from "hpp";
+import toobusy from "toobusy-js";
+import { rateLimit } from "express-rate-limit";
+import jwt from "jsonwebtoken";
 
 
-const apiRouterPublic = require("./router_public.js");
-const apiRouterUserTempPw = require("./router_user_temp_pw.js");
-const apiRouterUser = require("./router_user.js");
-const apiRouterAdmin = require("./router_admin.js");
+import apiRouterPublic from "./router_public.js";
+import apiRouterUserTempPw from "./router_user_temp_pw.js";
+import apiRouterUser from "./router_user.js";
+import apiRouterAdmin from "./router_admin.js";
 
-global.__basedir = __dirname;
+// global.__basedir = __dirname;
 
-const { User, Course, Exhibition } = require("./sequelize.js");
+import db from "./sequelize.js";
+const { User, Course, Exhibition } = db;
 
 var app = express();
 
@@ -50,22 +51,22 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(hpp());
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(json());
+app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 // This line allows the public files to be read from/rendered by path in the front end
-app.use("/static", express.static(path.join(__dirname, "static")));
+// app.use("/static", static(join(__dirname, "static")));
 app.use(helmet());
 
 
-app.use(helmet.contentSecurityPolicy({
+app.use(contentSecurityPolicy({
     useDefaults: false,
     directives: {
         "default-src": "none"
     }
 }));
 
-app.use(helmet.frameguard({
+app.use(frameguard({
     action: "deny"
 }));
 

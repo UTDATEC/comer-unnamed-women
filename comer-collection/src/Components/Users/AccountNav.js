@@ -2,26 +2,26 @@ import React from "react";
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports";
-import { useAppUser } from "../App/AppUser";
-import { useAccountNav } from "./Account";
+import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports.js";
+import { useAppUser } from "../App/AppUser.js";
+import { useAccountNav } from "./Account.js";
 
 const navLinks = [
     {
         title: "Profile",
-        icon: <AccountCircleIcon fontSize="large"/>,
+        Icon: AccountCircleIcon,
         link: "/Account/Profile",
         requirePermanentPassword: true
     },
     {
         title: "My Exhibitions",
-        icon: <PhotoCameraBackIcon fontSize="large"/>,
+        Icon: PhotoCameraBackIcon,
         link: "/Account/MyExhibitions",
         requirePermanentPassword: true
     },
     {
         title: "Change Password",
-        icon: <LockIcon fontSize="large"/>,
+        Icon: LockIcon,
         link: "/Account/ChangePassword"
     },
 ];
@@ -29,25 +29,25 @@ const navLinks = [
 const adminNavLinks = [
     {
         title: "User Management",
-        icon: <GroupsIcon fontSize="large"/>,
+        Icon: GroupsIcon,
         link: "/Account/UserManagement",
         requirePermanentPassword: true
     },
     {
         title: "Exhibition Management",
-        icon: <PhotoCameraBackIcon fontSize="large"/>,
+        Icon: PhotoCameraBackIcon,
         link: "/Account/ExhibitionManagement",
         requirePermanentPassword: true
     },
     {
         title: "Image Management",
-        icon: <ImageIcon fontSize="large"/>,
+        Icon: ImageIcon,
         link: "/Account/ImageManagement",
         requirePermanentPassword: true
     },
     {
         title: "Course Management",
-        icon: <SchoolIcon fontSize="large"/>,
+        Icon: SchoolIcon,
         link: "/Account/CourseManagement",
         requirePermanentPassword: true
     }
@@ -89,7 +89,9 @@ const AccountNav = () => {
                             },
                         }}
                     >
-                        <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+                        <ListItemIcon sx={{ color: "white" }}>
+                            <item.Icon fontSize="large"/>
+                        </ListItemIcon>
                         <ListItemText
                             primary={item.title}
                             sx={{
@@ -125,7 +127,9 @@ const AccountNav = () => {
                                     },
                                 }}
                             >
-                                <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+                                <ListItemIcon sx={{ color: "white" }}>
+                                    <item.Icon fontSize="large"/>
+                                </ListItemIcon>
                                 <ListItemText
                                     primary={item.title}
                                     sx={{

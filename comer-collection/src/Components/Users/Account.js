@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
-import AdminNav from "./AccountNav";
-import UserManagement from "./Admin/UserManagement";
-import ImageManagement from "./Admin/ImageManagement";
-import Profile from "./Profile";
+import AdminNav from "./AccountNav.js";
+import UserManagement from "./Admin/UserManagement.js";
+import ImageManagement from "./Admin/ImageManagement.js";
+import Profile from "./Profile.js";
 import { Box } from "@mui/material";
-import Unauthorized from "../ErrorPages/Unauthorized";
-import ChangePassword from "./ChangePassword";
-import CourseManagement from "./Admin/CourseManagement";
-import MyExhibitions from "./MyExhibitions";
-import ExhibitionManagement from "./Admin/ExhibitionManagement";
-import { useAppUser } from "../App/AppUser";
-import { AccessTimeIcon, LockIcon } from "../IconImports";
+import Unauthorized from "../ErrorPages/Unauthorized.js";
+import ChangePassword from "./ChangePassword.js";
+import CourseManagement from "./Admin/CourseManagement.js";
+import MyExhibitions from "./MyExhibitions.js";
+import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
+import { useAppUser } from "../App/AppUser.js";
+import { AccessTimeIcon, LockIcon } from "../IconImports.js";
 
 
 const AccountNavContext = createContext();

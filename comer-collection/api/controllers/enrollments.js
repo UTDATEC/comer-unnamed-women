@@ -1,5 +1,6 @@
-const { User } = require("../sequelize.js");
-const { manageManyToManyAssociation } = require("./associations.js");
+import db from "../sequelize.js";
+const { User } = db;
+import { manageManyToManyAssociation } from "./associations.js";
 
 const assignUserCourses = async (req, res, next) => {
     const { users, courses } = req.body;
@@ -10,4 +11,4 @@ const unassignUserCourses = async (req, res, next) => {
     await manageManyToManyAssociation(req, res, next, User, User.associations.Courses, "unassign", users, courses);
 };
 
-module.exports = { assignUserCourses, unassignUserCourses };
+export { assignUserCourses, unassignUserCourses };

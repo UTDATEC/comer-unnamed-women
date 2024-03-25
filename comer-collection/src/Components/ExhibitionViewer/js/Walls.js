@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createBoundingBoxes } from "./BoundingBox";
+import { createBoundingBoxes } from "./BoundingBox.js";
 
 export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color) => {
 

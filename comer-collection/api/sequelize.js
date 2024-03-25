@@ -1,5 +1,5 @@
 // Initialize sequelize
-const Sequelize = require("sequelize");
+import Sequelize from "sequelize";
 
 const { DB_HOST, DB_PORT, DB_SCHEMA, DB_USER, DB_PASSWORD } = process.env;
 
@@ -31,12 +31,19 @@ const db = {
     sequelize: sequelize
 };
 
-db.Artist = require("./models/artist.js")(db);
-db.Image = require("./models/image.js")(db);
-db.Tag = require("./models/tag.js")(db);
-db.User = require("./models/user.js")(db);
-db.Course = require("./models/course.js")(db);
-db.Exhibition = require("./models/exhibition.js")(db);
+import ArtistModel from "./models/artist.js";
+import ImageModel from "./models/image.js";
+import TagModel from "./models/tag.js";
+import UserModel from "./models/user.js";
+import CourseModel from "./models/course.js";
+import ExhibitionModel from "./models/exhibition.js";
+
+db.Artist = ArtistModel(db);
+db.Image = ImageModel(db);
+db.Tag = TagModel(db);
+db.User = UserModel(db);
+db.Course = CourseModel(db);
+db.Exhibition = ExhibitionModel(db);
 
 // Images with artists can be deleted, but artists with images cannot be deleted
 db.Artist.belongsToMany(db.Image, { through: "comer_image_credits", foreignKey: "artist_id", onDelete: "RESTRICT" });
@@ -59,4 +66,4 @@ db.Exhibition.belongsToMany(db.Image, { through: "comer_image_appearances", fore
 db.Image.belongsToMany(db.Exhibition, { through: "comer_image_appearances", foreignKey: "image_id", onDelete: "RESTRICT" });
 
 
-module.exports = db;
+export default db;

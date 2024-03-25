@@ -7,8 +7,8 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { ContentCopyIcon, SyncIcon } from "../../../IconImports";
-import { useSnackbar } from "../../../App/AppSnackbar";
+import { ContentCopyIcon, SyncIcon } from "../../../IconImports.js";
+import { useSnackbar } from "../../../App/AppSnackbar.js";
 import PropTypes from "prop-types";
 
 

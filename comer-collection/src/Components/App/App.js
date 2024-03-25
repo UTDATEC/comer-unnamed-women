@@ -1,17 +1,17 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Login from "../Login/Login";
-import NavBar from "../NavBar/NavBar";
+import Login from "../Login/Login.js";
+import NavBar from "../NavBar/NavBar.js";
 import React, { useState } from "react";
-import Account from "../Users/Account";
+import Account from "../Users/Account.js";
 
 import { Box, ThemeProvider, createTheme } from "@mui/material";
-import { green, grey, orange } from "@mui/material/colors";
-import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser";
-import { ExhibitionPage } from "../ExhibitionPage/ExhibitionPage";
-import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser";
-import { SnackbarProvider } from "./AppSnackbar";
-import { AppUserProvider } from "./AppUser";
-import { TitleProvider } from "./AppTitle";
+import { green, grey, orange } from "@mui/material/colors/index.js";
+import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
+import { ExhibitionPage } from "../ExhibitionPage/ExhibitionPage.js";
+import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser.js";
+import { SnackbarProvider } from "./AppSnackbar.js";
+import { AppUserProvider } from "./AppUser.js";
+import { TitleProvider } from "./AppTitle.js";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";

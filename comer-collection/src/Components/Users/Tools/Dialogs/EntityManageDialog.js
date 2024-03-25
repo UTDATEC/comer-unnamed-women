@@ -7,13 +7,13 @@ import {
     Button,
     Typography, DialogContentText, Divider, TextField, Box
 } from "@mui/material";
-import { AddIcon } from "../../../IconImports";
-import { getBlankItemFields } from "../HelperMethods/fields";
-import { DataTable } from "../DataTable";
-import SearchBox from "../SearchBox";
-import { searchItems } from "../SearchUtilities";
-import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog";
-import { ItemSingleEditDialog } from "./ItemSingleEditDialog";
+import { AddIcon } from "../../../IconImports.js";
+import { getBlankItemFields } from "../HelperMethods/fields.js";
+import { DataTable } from "../DataTable.js";
+import SearchBox from "../SearchBox.js";
+import { searchItems } from "../SearchUtilities.js";
+import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
+import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 
 export const EntityManageDialog = ({ entitySingular, entityPlural,

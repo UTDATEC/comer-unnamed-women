@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
-import { setupMainWalls, setupSideWalls } from "./js/Walls";
-import { setupFloor } from "./js/Floor";
-import { setupCeiling } from "./js/Ceiling";
-import { createArt } from "./js/Art";
+import { setupMainWalls, setupSideWalls } from "./js/Walls.js";
+import { setupFloor } from "./js/Floor.js";
+import { setupCeiling } from "./js/Ceiling.js";
+import { createArt } from "./js/Art.js";
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three-stdlib";
-import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports";
-import { useAppUser } from "../App/AppUser";
+import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports.js";
+import { useAppUser } from "../App/AppUser.js";
 import PropTypes from "prop-types";
 
 

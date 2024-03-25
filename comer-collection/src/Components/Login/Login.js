@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
-import { useAppUser } from "../App/AppUser";
-import { useTitle } from "../App/AppTitle";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
+import { useAppUser } from "../App/AppUser.js";
+import { useTitle } from "../App/AppTitle.js";
 
 
 const Login = () => {

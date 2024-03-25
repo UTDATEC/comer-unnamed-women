@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
-import { SearchIcon, ClearIcon } from "../../IconImports";
+import { SearchIcon, ClearIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 
 const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {

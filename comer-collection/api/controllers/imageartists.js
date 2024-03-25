@@ -1,5 +1,6 @@
-const { Image } = require("../sequelize.js");
-const { manageManyToManyAssociation } = require("./associations.js");
+import db from "../sequelize.js";
+const { Image } = db;
+import { manageManyToManyAssociation } from "./associations.js";
 
 const assignImageArtists = async (req, res, next) => {
     const { images, artists } = req.body;
@@ -10,4 +11,4 @@ const unassignImageArtists = async (req, res, next) => {
     await manageManyToManyAssociation(req, res, next, Image, Image.associations.Artists, "unassign", images, artists);
 };
 
-module.exports = { assignImageArtists, unassignImageArtists };
+export { assignImageArtists, unassignImageArtists };
