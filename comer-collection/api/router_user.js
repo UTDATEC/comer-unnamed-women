@@ -7,10 +7,10 @@ import { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, l
 
 // Handle exhibitions
 router.post("/exhibitions", createExhibition);
-router.put("/exhibitions/:exhibitionId", ownerEditExhibitionSettings);
-router.delete("/exhibitions/:exhibitionId", ownerDeleteExhibition);
-router.get("/exhibitions/:exhibitionId/load", loadExhibitionOwner);
-router.put("/exhibitions/:exhibitionId/save", saveExhibitionOwner);
+router.put("/exhibitions/:exhibitionId(\\d+)", ownerEditExhibitionSettings);
+router.delete("/exhibitions/:exhibitionId(\\d+)", ownerDeleteExhibition);
+router.get("/exhibitions/:exhibitionId(\\d+)/load", loadExhibitionOwner);
+router.put("/exhibitions/:exhibitionId(\\d+)/save", saveExhibitionOwner);
 
 
 export default router;

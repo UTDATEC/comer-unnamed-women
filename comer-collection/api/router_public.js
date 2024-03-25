@@ -14,24 +14,24 @@ router.put("/signin", signIn);
 
 // Read images
 router.get("/images", listImagesPublic);
-router.get("/images/:imageId", getImagePublic);
+router.get("/images/:imageId(\\d+)", getImagePublic);
 // Download images
 router.get("/images/:imageId/download", downloadImagePublic);
 
 
 // Read artists
 router.get("/artists", listArtists);
-router.get("/artists/:artistId", getArtist);
+router.get("/artists/:artistId(\\d+)", getArtist);
 
 
 // Read tags
 router.get("/tags", listTags);
-router.get("/tags/:tagId", getTag);
+router.get("/tags/:tagId(\\d+)", getTag);
 
 
 // Read exhibitions
 router.get("/exhibitions", listPublicExhibitions);
-router.get("/exhibitions/:exhibitionId/load", loadExhibitionPublic);
+router.get("/exhibitions/:exhibitionId(\\d+)/load", loadExhibitionPublic);
 
 
 export default router;

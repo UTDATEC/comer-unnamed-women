@@ -14,50 +14,50 @@ import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDelet
 
 // Handle artists
 router.get("/artists", listArtists);
-router.get("/artists/:artistId", getArtist);
+router.get("/artists/:artistId(\\d+)", getArtist);
 router.post("/artists", createArtist);
-router.put("/artists/:artistId", updateArtist);
-router.delete("/artists/:artistId", deleteArtist);
+router.put("/artists/:artistId(\\d+)", updateArtist);
+router.delete("/artists/:artistId(\\d+)", deleteArtist);
 
 
 // Handle users
-router.get("/users/:userId", getUser);
+router.get("/users/:userId(\\d+)", getUser);
 router.get("/users", listUsers);
 router.post("/users", createUser);
-router.put("/users/:userId", updateUser);
-router.delete("/users/:userId", deleteUser);
+router.put("/users/:userId(\\d+)", updateUser);
+router.delete("/users/:userId(\\d+)", deleteUser);
 
-router.put("/users/:userId/deactivate", deactivateUser);
-router.put("/users/:userId/activate", activateUser);
+router.put("/users/:userId(\\d+)/deactivate", deactivateUser);
+router.put("/users/:userId(\\d+)/activate", activateUser);
 
-router.put("/users/:userId/promote", promoteUser);
-router.put("/users/:userId/demote", demoteUser);
+router.put("/users/:userId(\\d+)/promote", promoteUser);
+router.put("/users/:userId(\\d+)/demote", demoteUser);
 
-router.put("/users/:userId/resetpassword", resetUserPassword);
+router.put("/users/:userId(\\d+)/resetpassword", resetUserPassword);
 
 
 // Handle courses
 router.get("/courses", listCourses);
-router.get("/courses/:courseId", getCourse);
+router.get("/courses/:courseId(\\d+)", getCourse);
 router.post("/courses", createCourse);
-router.put("/courses/:courseId", updateCourse);
-router.delete("/courses/:courseId", deleteCourse);
+router.put("/courses/:courseId(\\d+)", updateCourse);
+router.delete("/courses/:courseId(\\d+)", deleteCourse);
 
 
 // Handle images
 router.get("/images", listImages);
-router.get("/images/:imageId", getImage);
+router.get("/images/:imageId(\\d+)", getImage);
 router.post("/images", createImage);
-router.put("/images/:imageId", updateImage);
-router.delete("/images/:imageId", deleteImage);
+router.put("/images/:imageId(\\d+)", updateImage);
+router.delete("/images/:imageId(\\d+)", deleteImage);
 
 
 // Handle tags
 router.get("/tags", listTags);
-router.get("/tags/:tagId", getTag);
+router.get("/tags/:tagId(\\d+)", getTag);
 router.post("/tags", createTag);
-router.put("/tags/:tagId", updateTag);
-router.delete("/tags/:tagId", deleteTag);
+router.put("/tags/:tagId(\\d+)", updateTag);
+router.delete("/tags/:tagId(\\d+)", deleteTag);
 
 
 // Handle image/tag assignments
@@ -77,12 +77,12 @@ router.put("/enrollments/unassign", unassignUserCourses);
 
 // Handle exhibitions
 router.get("/exhibitions", listExhibitions);
-router.get("/exhibitions/:exhibitionId", getExhibition);
-router.put("/exhibitions/:exhibitionId", adminEditExhibitionSettings);
-router.delete("/exhibitions/:exhibitionId", adminDeleteExhibition);
+router.get("/exhibitions/:exhibitionId(\\d+)", getExhibition);
+router.put("/exhibitions/:exhibitionId(\\d+)", adminEditExhibitionSettings);
+router.delete("/exhibitions/:exhibitionId(\\d+)", adminDeleteExhibition);
 
-router.get("/exhibitions/:exhibitionId/load", loadExhibitionAdmin);
-router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
+router.get("/exhibitions/:exhibitionId(\\d+)/load", loadExhibitionAdmin);
+router.put("/exhibitions/:exhibitionId(\\d+)/save", saveExhibitionAdmin);
 
 
 
