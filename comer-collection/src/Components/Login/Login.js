@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { useAppUser } from "../App/AppUser.js";
@@ -49,11 +49,9 @@ const Login = () => {
         setTitleText("Log In");
     });
 
-    if(appUser) {
-        navigate("/Account");
-    }
-
-    return (
+    return appUser && 
+        <Navigate to="/Account" replace />
+    || !appUser && (
         <Box component={Paper} square sx={{height: "100%"}}>
             <Box component="form" sx={{height: "100%"}} onSubmit={handleLogin}>
                 <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 

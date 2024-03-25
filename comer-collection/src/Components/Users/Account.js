@@ -54,6 +54,7 @@ const Account = () => {
                         <Route path="ExhibitionManagement" element={<ExhibitionManagement />} />
                         <Route path="ImageManagement" element={<ImageManagement />} />
                         <Route path="CourseManagement" element={<CourseManagement />} />
+                        <Route path="*" element={<Navigate to="Profile" />} replace />
 
                     </Routes>
 
