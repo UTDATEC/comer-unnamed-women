@@ -18,8 +18,6 @@ import apiRouterUserTempPw from "./router_user_temp_pw.js";
 import apiRouterUser from "./router_user.js";
 import apiRouterAdmin from "./router_admin.js";
 
-// global.__basedir = __dirname;
-
 import db from "./sequelize.js";
 const { User, Course, Exhibition } = db;
 
