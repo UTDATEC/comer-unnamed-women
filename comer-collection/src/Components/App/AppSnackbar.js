@@ -31,6 +31,9 @@ export const SnackbarProvider = ({ children }) => {
                 onClose={() => {
                     setSnackbarOpen(false);
                 } }
+                sx={{
+                    zIndex: 10000000
+                }}
             >
                 <Alert severity={snackbarSeverity} variant="standard" sx={{ width: "100%" }}>
                     <Stack direction="row" spacing={2}>
