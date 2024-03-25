@@ -61,7 +61,7 @@ app.use(frameguard({
 }));
 
 
-
+app.set("json replacer", (k, v) => (v === null ? undefined : v));
 
 // Routes for querying data
 app.use("/api", apiRouterMain);
