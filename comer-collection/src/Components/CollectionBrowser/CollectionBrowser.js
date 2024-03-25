@@ -14,7 +14,7 @@ import { InView } from "react-intersection-observer";
 const CollectionBrowserImageContainer = ({image, viewMode, isSelected, setSelectedItem, isDisabled}) => {
 
     const thumbnailBox = useMemo(() => (
-        <InView>
+        <InView triggerOnce={true}>
             {({ inView, ref }) => (
                 <Box width="200px" height="150px" ref={ref}
                     sx={{
