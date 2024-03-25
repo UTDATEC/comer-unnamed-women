@@ -1,12 +1,12 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
-import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu";
-import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../IconImports";
-import { TagFilterMenu } from "../Users/Tools/TagFilterMenu";
-import SearchBox from "../Users/Tools/SearchBox";
-import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities";
-import { useTitle } from "../App/AppTitle";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
+import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu.js";
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../IconImports.js";
+import { TagFilterMenu } from "../Users/Tools/TagFilterMenu.js";
+import SearchBox from "../Users/Tools/SearchBox.js";
+import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities.js";
+import { useTitle } from "../App/AppTitle.js";
 import PropTypes from "prop-types";
 
 

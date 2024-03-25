@@ -5,27 +5,27 @@ import {
     Typography,
     Switch, Box, IconButton, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports";
-import Unauthorized from "../../ErrorPages/Unauthorized";
-import SearchBox from "../Tools/SearchBox";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
-import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
-import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
-import { DataTable } from "../Tools/DataTable";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
-import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon } from "../../IconImports.js";
+import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import SearchBox from "../Tools/SearchBox.js";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
+import { DataTable } from "../Tools/DataTable.js";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
-import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog";
-import { SelectionSummary } from "../Tools/SelectionSummary";
-import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields";
-import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
-import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog";
-import { useSnackbar } from "../../App/AppSnackbar";
-import { useAppUser } from "../../App/AppUser";
-import { useTitle } from "../../App/AppTitle";
-import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog";
-import { useAccountNav } from "../Account";
+import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog.js";
+import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields.js";
+import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
+import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog.js";
+import { useSnackbar } from "../../App/AppSnackbar.js";
+import { useAppUser } from "../../App/AppUser.js";
+import { useTitle } from "../../App/AppTitle.js";
+import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog.js";
+import { useAccountNav } from "../Account.js";
 
 
 const UserManagement = () => {

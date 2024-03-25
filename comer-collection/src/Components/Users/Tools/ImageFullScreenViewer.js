@@ -1,6 +1,6 @@
 import { Dialog, Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material";
 import React from "react";
-import { PersonIcon } from "../../IconImports";
+import { PersonIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {

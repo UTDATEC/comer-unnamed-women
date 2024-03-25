@@ -7,8 +7,8 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { SaveIcon } from "../../../IconImports";
-import { getLocalISOString } from "../HelperMethods/getLocalISOString";
+import { SaveIcon } from "../../../IconImports.js";
+import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
 
 export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, handleItemEdit }) => {

@@ -1,11 +1,11 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const { listArtists, getArtist } = require("./controllers/artists.js");
-const { listTags, getTag } = require("./controllers/tags.js");
-const { listImagesPublic, getImagePublic, downloadImagePublic } = require("./controllers/images.js");
-const { listPublicExhibitions, loadExhibitionPublic } = require("./controllers/exhibitions.js");
-const { signIn } = require("./controllers/users.js");
+import { listArtists, getArtist } from "./controllers/artists.js";
+import { listTags, getTag } from "./controllers/tags.js";
+import { listImagesPublic, getImagePublic, downloadImagePublic } from "./controllers/images.js";
+import { listPublicExhibitions, loadExhibitionPublic } from "./controllers/exhibitions.js";
+import { signIn } from "./controllers/users.js";
 
 
 // Authentication
@@ -34,4 +34,4 @@ router.get("/exhibitions", listPublicExhibitions);
 router.get("/exhibitions/:exhibitionId/load", loadExhibitionPublic);
 
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createBoundingBoxes } from "./BoundingBox";
+import { createBoundingBoxes } from "./BoundingBox.js";
 
 export const setupFloor = (scene, texture_loader, floor_width, floor_length, floor_depth, floor_color, floor_texture_name) => {
     

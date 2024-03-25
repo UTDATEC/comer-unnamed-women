@@ -1,8 +1,9 @@
-const argon2 = require("argon2");
-const jwt = require("jsonwebtoken");
-const createError = require("http-errors");
-const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
-const { deleteItem, updateItem, createItem, listItems, getItem } = require("./items.js");
+import { verify, hash as _hash } from "argon2";
+import jwt from "jsonwebtoken";
+import createError from "http-errors";
+import db from "../sequelize.js";
+const { User, Course, Exhibition, sequelize } = db;
+import { deleteItem, updateItem, createItem, listItems, getItem } from "./items.js";
 
 
 
@@ -17,7 +18,7 @@ const getSignedTokenForUser = async (user) => {
 
 const doesPasswordMatchHash = async (password, hash) => {
     return Boolean(password) && Boolean(hash) &&
-        await argon2.verify(hash, password);
+        await verify(hash, password);
 };
 
 
@@ -104,7 +105,7 @@ const resetUserPassword = async (req, res, next) => {
     else if (!req.body.newPassword) {
         next(createError(400, { debugMessage: "Password reset request must contain the new password in the request body" }));
     }
-    const hash = await argon2.hash(req.body.newPassword);
+    const hash = await _hash(req.body.newPassword);
     req.body = {
         pw_hash: hash,
         pw_change_required: true,
@@ -166,7 +167,7 @@ const changePassword = async (req, res, next) => {
             else if (!doesPasswordMatchHash(oldPassword, user.pw_hash)) {
                 throw new Error("oldPassword is incorrect");
             }
-            const hash = await argon2.hash(newPassword);
+            const hash = await _hash(newPassword);
             await user.update({
                 pw_hash: hash,
                 pw_change_required: false,
@@ -182,4 +183,4 @@ const changePassword = async (req, res, next) => {
 };
 
 
-module.exports = { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword };
+export { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword };

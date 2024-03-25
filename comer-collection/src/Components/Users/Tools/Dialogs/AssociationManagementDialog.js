@@ -7,10 +7,10 @@ import {
     Button,
     Typography, DialogContentText, Divider, Box
 } from "@mui/material";
-import { InfoIcon, SearchIcon } from "../../../IconImports";
-import { DataTable } from "../DataTable";
-import SearchBox from "../SearchBox";
-import { searchItems } from "../SearchUtilities";
+import { InfoIcon, SearchIcon } from "../../../IconImports.js";
+import { DataTable } from "../DataTable.js";
+import SearchBox from "../SearchBox.js";
+import { searchItems } from "../SearchUtilities.js";
 import PropTypes from "prop-types";
 
 const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, primaryItems) => {

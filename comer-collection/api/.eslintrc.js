@@ -1,7 +1,6 @@
 module.exports = {
     "env": {
-        "node": true,
-        "commonjs": true,
+        "browser": true,
         "es2021": true
     },
     "extends": "eslint:recommended",
@@ -19,7 +18,8 @@ module.exports = {
         }
     ],
     "parserOptions": {
-        "ecmaVersion": "latest"
+        "ecmaVersion": "latest",
+        "sourceType": "module"
     },
     "rules": {
         "indent": [

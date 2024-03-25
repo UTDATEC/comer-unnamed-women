@@ -1,15 +1,15 @@
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
-import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane";
+import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane.js";
 import React, { useEffect, useReducer, useState } from "react";
-import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer";
-import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls";
-import { useAppUser } from "../App/AppUser";
-import Unauthorized from "../ErrorPages/Unauthorized";
-import { useSnackbar } from "../App/AppSnackbar";
-import { useTitle } from "../App/AppTitle";
-import { AccessTimeIcon, InfoIcon, LockIcon } from "../IconImports";
+import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer.js";
+import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer.js";
+import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
+import { useAppUser } from "../App/AppUser.js";
+import Unauthorized from "../ErrorPages/Unauthorized.js";
+import { useSnackbar } from "../App/AppSnackbar.js";
+import { useTitle } from "../App/AppTitle.js";
+import { InfoIcon, LockIcon } from "../IconImports.js";
 
 
 export const ExhibitionPage = () => {
@@ -158,7 +158,7 @@ export const ExhibitionPage = () => {
 
 
     return !appUserIsLoaded && (
-        <Unauthorized message="Loading exhibition..." customIcon={AccessTimeIcon} Icon={LockIcon} />
+        <Unauthorized message="Loading exhibition..." Icon={LockIcon} />
     ) || appUserIsLoaded && !isPermissionGranted && (
         <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
             buttonDestination="/Exhibitions" Icon={InfoIcon} />

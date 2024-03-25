@@ -1,5 +1,6 @@
-const createError = require("http-errors");
-const { sequelize } = require("../sequelize.js");
+import createError from "http-errors";
+import db from "../sequelize.js";
+const { sequelize } = db;
 
 
 const getItem = async (req, res, next, model, include, itemId, itemFunctions = {}) => {
@@ -109,4 +110,4 @@ const deleteItem = async (req, res, next, model, itemId) => {
     }
 };
 
-module.exports = { getItem, listItems, updateItem, deleteItem, createItem };
+export { getItem, listItems, updateItem, deleteItem, createItem };

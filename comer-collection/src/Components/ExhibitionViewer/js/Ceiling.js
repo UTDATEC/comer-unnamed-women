@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createBoundingBoxes } from "./BoundingBox";
+import { createBoundingBoxes } from "./BoundingBox.js";
 
 export const setupCeiling = (scene, texture_loader, ceiling_width, ceiling_length, ceiling_height, ceiling_color) => {
 

@@ -1,8 +1,7 @@
-const createError = require('http-errors');
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, loadExhibitionOwner, saveExhibitionOwner } = require('./controllers/exhibitions.js');
+import { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, loadExhibitionOwner, saveExhibitionOwner } from "./controllers/exhibitions.js";
 
 
 
@@ -14,4 +13,4 @@ router.get("/exhibitions/:exhibitionId/load", loadExhibitionOwner);
 router.put("/exhibitions/:exhibitionId/save", saveExhibitionOwner);
 
 
-module.exports = router;
+export default router;

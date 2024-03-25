@@ -7,7 +7,7 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { DeleteIcon } from "../../../IconImports";
+import { DeleteIcon } from "../../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, entity, dialogTitle, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {

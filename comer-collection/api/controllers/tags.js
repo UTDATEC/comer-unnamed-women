@@ -1,5 +1,6 @@
-const { Tag, Image } = require("../sequelize.js");
-const { deleteItem, updateItem, createItem, getItem, listItems } = require("./items.js");
+import db from "../sequelize.js";
+const { Tag, Image } = db;
+import { deleteItem, updateItem, createItem, getItem, listItems } from "./items.js";
 
 
 
@@ -23,4 +24,4 @@ const deleteTag = async (req, res, next) => {
     await deleteItem(req, res, next, Tag, req.params.tagId);
 };
 
-module.exports = { getTag, listTags, createTag, updateTag, deleteTag };
+export { getTag, listTags, createTag, updateTag, deleteTag };

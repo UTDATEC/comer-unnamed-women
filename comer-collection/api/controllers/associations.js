@@ -1,6 +1,7 @@
-const createError = require("http-errors");
-const { sequelize } = require("../sequelize.js");
-const { Op } = require("sequelize");
+import createError from "http-errors";
+import db from "../sequelize.js";
+const { sequelize } = db;
+import { Op } from "sequelize";
 
 
 const manageManyToManyAssociation = async (req, res, next, model, association, action, primaryIds, secondaryIds) => {
@@ -43,4 +44,4 @@ const manageManyToManyAssociation = async (req, res, next, model, association, a
 };
 
 
-module.exports = { manageManyToManyAssociation };
+export { manageManyToManyAssociation };

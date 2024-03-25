@@ -3,15 +3,15 @@ import {
     Typography, Stack, Paper, Box, Button, IconButton
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "./Tools/DataTable";
-import { PhotoCameraBackIcon, LockIcon, PublicIcon, VpnLockIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../IconImports";
-import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls";
-import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog";
-import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog";
-import { useSnackbar } from "../App/AppSnackbar";
-import { useAppUser } from "../App/AppUser";
-import { useTitle } from "../App/AppTitle";
-import { useAccountNav } from "./Account";
+import { DataTable } from "./Tools/DataTable.js";
+import { PhotoCameraBackIcon, LockIcon, PublicIcon, VpnLockIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../IconImports.js";
+import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
+import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog.js";
+import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { useSnackbar } from "../App/AppSnackbar.js";
+import { useAppUser } from "../App/AppUser.js";
+import { useTitle } from "../App/AppTitle.js";
+import { useAccountNav } from "./Account.js";
 
 
 const MyExhibitions = () => {

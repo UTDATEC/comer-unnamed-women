@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import { BrushIcon, CheckIcon } from "../../IconImports";
+import { BrushIcon, CheckIcon } from "../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {

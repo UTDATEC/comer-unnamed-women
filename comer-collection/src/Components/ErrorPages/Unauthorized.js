@@ -26,7 +26,7 @@ Unauthorized.propTypes = {
     message: PropTypes.string.isRequired,
     buttonText: PropTypes.string,
     buttonDestination: PropTypes.string,
-    Icon: PropTypes.elementType.isRequired
+    Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
 
 

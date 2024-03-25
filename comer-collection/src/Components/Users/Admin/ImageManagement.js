@@ -4,28 +4,28 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized";
-import SearchBox from "../Tools/SearchBox";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon } from "../../IconImports";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
-import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
-import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
-import { DataTable } from "../Tools/DataTable";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
+import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import SearchBox from "../Tools/SearchBox.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon } from "../../IconImports.js";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
+import { DataTable } from "../Tools/DataTable.js";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { Navigate } from "react-router";
-import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer";
-import { tagFieldDefinitions } from "../Tools/HelperMethods/fields";
-import { filterItemFields } from "../Tools/HelperMethods/fields";
-import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog";
-import { imageFieldDefinitions } from "../Tools/HelperMethods/fields";
-import { artistFieldDefinitions } from "../Tools/HelperMethods/fields";
-import { SelectionSummary } from "../Tools/SelectionSummary";
-import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import { useSnackbar } from "../../App/AppSnackbar";
-import { useAppUser } from "../../App/AppUser";
-import { useTitle } from "../../App/AppTitle";
-import { useAccountNav } from "../Account";
+import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer.js";
+import { tagFieldDefinitions } from "../Tools/HelperMethods/fields.js";
+import { filterItemFields } from "../Tools/HelperMethods/fields.js";
+import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog.js";
+import { imageFieldDefinitions } from "../Tools/HelperMethods/fields.js";
+import { artistFieldDefinitions } from "../Tools/HelperMethods/fields.js";
+import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog.js";
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { useSnackbar } from "../../App/AppSnackbar.js";
+import { useAppUser } from "../../App/AppUser.js";
+import { useTitle } from "../../App/AppTitle.js";
+import { useAccountNav } from "../Account.js";
 
 
 const ImageManagement = () => {

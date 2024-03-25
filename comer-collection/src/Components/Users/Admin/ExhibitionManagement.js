@@ -4,21 +4,21 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized";
-import SearchBox from "../Tools/SearchBox";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon } from "../../IconImports";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
-import { DataTable } from "../Tools/DataTable";
+import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import SearchBox from "../Tools/SearchBox.js";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon } from "../../IconImports.js";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { DataTable } from "../Tools/DataTable.js";
 import { Navigate } from "react-router";
-import { SelectionSummary } from "../Tools/SelectionSummary";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog";
-import { useSnackbar } from "../../App/AppSnackbar";
-import { useAppUser } from "../../App/AppUser";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
-import { CourseFilterMenu } from "../Tools/CourseFilterMenu";
-import { useTitle } from "../../App/AppTitle";
-import { useAccountNav } from "../Account";
+import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog.js";
+import { useSnackbar } from "../../App/AppSnackbar.js";
+import { useAppUser } from "../../App/AppUser.js";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
+import { useTitle } from "../../App/AppTitle.js";
+import { useAccountNav } from "../Account.js";
 
 const ExhibitionManagement = () => {
     const [, setUsers] = useState([]);

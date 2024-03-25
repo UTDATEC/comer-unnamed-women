@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { useAppUser } from "../App/AppUser";
+import { useAppUser } from "../App/AppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
-} from "../IconImports";
+} from "../IconImports.js";
 import PropTypes from "prop-types";
 
 

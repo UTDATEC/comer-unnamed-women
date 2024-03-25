@@ -1,16 +1,15 @@
-const createError = require('http-errors');
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const { listArtists, createArtist, updateArtist, deleteArtist, getArtist } = require('./controllers/artists.js');
-const { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, promoteUser, demoteUser, getUser, resetUserPassword } = require('./controllers/users.js');
-const { deleteCourse, updateCourse, createCourse, listCourses, getCourse } = require('./controllers/courses.js');
-const { deleteImage, updateImage, listImages, getImage, createImage } = require('./controllers/images.js');
-const { deleteTag, listTags, getTag, createTag, updateTag } = require('./controllers/tags.js');
-const { assignImageTags, unassignImageTags } = require('./controllers/imagetags.js');
-const { assignImageArtists, unassignImageArtists } = require('./controllers/imageartists.js');
-const { assignUserCourses, unassignUserCourses } = require('./controllers/enrollments.js');
-const { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } = require('./controllers/exhibitions.js');
+import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "./controllers/artists.js";
+import { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, promoteUser, demoteUser, getUser, resetUserPassword } from "./controllers/users.js";
+import { deleteCourse, updateCourse, createCourse, listCourses, getCourse } from "./controllers/courses.js";
+import { deleteImage, updateImage, listImages, getImage, createImage } from "./controllers/images.js";
+import { deleteTag, listTags, getTag, createTag, updateTag } from "./controllers/tags.js";
+import { assignImageTags, unassignImageTags } from "./controllers/imagetags.js";
+import { assignImageArtists, unassignImageArtists } from "./controllers/imageartists.js";
+import { assignUserCourses, unassignUserCourses } from "./controllers/enrollments.js";
+import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } from "./controllers/exhibitions.js";
 
 
 // Handle artists
@@ -47,7 +46,7 @@ router.delete("/courses/:courseId", deleteCourse);
 
 // Handle images
 router.get("/images", listImages);
-router.get("/images/:imageId", getImage)
+router.get("/images/:imageId", getImage);
 router.post("/images", createImage);
 router.put("/images/:imageId", updateImage);
 router.delete("/images/:imageId", deleteImage);
@@ -77,8 +76,8 @@ router.put("/enrollments/unassign", unassignUserCourses);
 
 
 // Handle exhibitions
-router.get("/exhibitions", listExhibitions)
-router.get("/exhibitions/:exhibitionId", getExhibition)
+router.get("/exhibitions", listExhibitions);
+router.get("/exhibitions/:exhibitionId", getExhibition);
 router.put("/exhibitions/:exhibitionId", adminEditExhibitionSettings);
 router.delete("/exhibitions/:exhibitionId", adminDeleteExhibition);
 
@@ -87,4 +86,4 @@ router.put("/exhibitions/:exhibitionId/save", saveExhibitionAdmin);
 
 
 
-module.exports = router;
+export default router;

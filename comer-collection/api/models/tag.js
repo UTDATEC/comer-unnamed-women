@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
+import { DataTypes } from "sequelize";
 
-module.exports = (db) => {
+export default (db) => {
     const { sequelize, Sequelize } = db;
     const Tag = sequelize.define("Tag", {
         id: {

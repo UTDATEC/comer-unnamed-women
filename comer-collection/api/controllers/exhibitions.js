@@ -1,7 +1,8 @@
-const createError = require("http-errors");
-const { User, Course, Exhibition, sequelize } = require("../sequelize.js");
-const { canUserCreateExhibition } = require("./users.js");
-const { listItems, getItem, createItem, updateItem, deleteItem } = require("./items.js");
+import createError from "http-errors";
+import db from "../sequelize.js";
+const { User, Course, Exhibition, sequelize } = db;
+import { canUserCreateExhibition } from "./users.js";
+import { listItems, getItem, createItem, updateItem, deleteItem } from "./items.js";
 
 
 const isAppUserExhibitionOwner = (app_user, exhibition_id) => {
@@ -188,4 +189,4 @@ const saveExhibitionAdmin = async (req, res, next) => {
     await saveExhibition(req, res, next);
 };
 
-module.exports = { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibitionOwner, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionOwner, saveExhibitionAdmin };
+export { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibitionOwner, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionOwner, saveExhibitionAdmin };

@@ -4,20 +4,20 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized";
-import SearchBox from "../Tools/SearchBox";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog";
-import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog";
-import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog";
-import { DataTable } from "../Tools/DataTable";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities";
-import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog";
+import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import SearchBox from "../Tools/SearchBox.js";
+import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
+import { DataTable } from "../Tools/DataTable.js";
+import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
-import { SelectionSummary } from "../Tools/SelectionSummary";
-import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls";
-import { useSnackbar } from "../../App/AppSnackbar";
-import { useAppUser } from "../../App/AppUser";
+import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields.js";
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { useSnackbar } from "../../App/AppSnackbar.js";
+import { useAppUser } from "../../App/AppUser.js";
 import {
     FilterAltOffOutlinedIcon,
     AddIcon,
@@ -32,9 +32,9 @@ import {
     GroupAddIcon,
     SecurityIcon,
     InfoIcon
-} from "../../IconImports";
-import { useTitle } from "../../App/AppTitle";
-import { useAccountNav } from "../Account";
+} from "../../IconImports.js";
+import { useTitle } from "../../App/AppTitle.js";
+import { useAccountNav } from "../Account.js";
 
 
 const CourseManagement = () => {
