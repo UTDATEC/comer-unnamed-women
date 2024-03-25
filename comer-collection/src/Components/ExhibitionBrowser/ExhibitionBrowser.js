@@ -2,7 +2,7 @@ import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { DataTable } from "../Users/Tools/DataTable.js";
-import { OpenInNewIcon, PhotoCameraBackIcon } from "../IconImports.js";
+import { PhotoCameraBackIcon } from "../IconImports.js";
 import { useNavigate } from "react-router";
 import { useTitle } from "../App/AppTitle.js";
 
@@ -60,7 +60,9 @@ export const ExhibitionBrowser = () => {
             columnDescription: "Open",
             columnHeaderLabel: "",
             generateTableCell: (exhibition) => (
-                <Button variant="outlined" endIcon={<OpenInNewIcon />} component="a" href={`/Exhibitions/${exhibition.id}`} target="_blank">
+                <Button variant="outlined" onClick={() => {
+                    navigate(`/Exhibitions/${exhibition.id}`);
+                }}>
                     <Typography variant="body1">Open</Typography>
                 </Button>
             )
