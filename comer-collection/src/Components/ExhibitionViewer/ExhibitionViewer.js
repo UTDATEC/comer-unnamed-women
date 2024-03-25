@@ -6,7 +6,7 @@ import { setupFloor } from "./js/Floor.js";
 import { setupCeiling } from "./js/Ceiling.js";
 import { createArt } from "./js/Art.js";
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
-import { PointerLockControls } from "three-stdlib";
+import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../IconImports.js";
 import { useAppUser } from "../App/AppUser.js";
 import PropTypes from "prop-types";
