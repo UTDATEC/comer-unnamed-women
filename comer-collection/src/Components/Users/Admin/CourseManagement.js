@@ -133,45 +133,6 @@ const CourseManagement = () => {
     }), [courses, searchQuery]);
 
 
-    const handleCoursesCreate = async (newCourseArray) => {
-        let coursesCreated = 0;
-        let courseIndicesWithErrors = [];
-        for (const [i, newCourseData] of newCourseArray.entries()) {
-            try {
-                let filteredCourse = filterItemFields(courseFieldDefinitions, newCourseData);
-                await sendAuthenticatedRequest("POST", "/api/admin/courses", filteredCourse);
-
-                coursesCreated++;
-
-            } catch (error) {
-                console.error(`Error creating course ${JSON.stringify(newCourseData)}: ${error}`);
-                courseIndicesWithErrors.push(i);
-            }
-        }
-        fetchData();
-
-        if (coursesCreated == newCourseArray.length) {
-            setDialogIsOpen(false);
-
-            showSnackbar(`Successfully created ${newCourseArray.length} ${newCourseArray.length == 1 ? "course" : "courses"}`, "success");
-
-        } else if (coursesCreated < newCourseArray.length) {
-
-            if (coursesCreated > 0) {
-                showSnackbar(`Created ${coursesCreated} of ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "warning");
-            }
-            else {
-                showSnackbar(`Failed to create ${newCourseArray.length} ${newCourseArray.length == 1 ? "course." : "courses."}  Make sure each end time is after the start time.`, "error");
-            }
-
-        }
-
-        return courseIndicesWithErrors;
-
-
-    };
-
-
     const handleAssignCoursesToUser = useCallback(async (userId, courseIds) => {
         try {
             await sendAuthenticatedRequest("PUT", "/api/admin/enrollments/assign", {
@@ -510,10 +471,10 @@ const CourseManagement = () => {
                 </Stack>
             </Stack>
 
-            <ItemMultiCreateDialog entity="course"
-                dialogTitle={"Create Courses"}
+            <ItemMultiCreateDialog
+                Entity={Course}
+                refreshAllItems={fetchData}
                 dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-                handleItemsCreate={handleCoursesCreate}
                 {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog

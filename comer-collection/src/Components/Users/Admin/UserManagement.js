@@ -18,7 +18,7 @@ import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields.js";
-import { createUsers, sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
 import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog.js";
 import { useSnackbar } from "../../App/AppSnackbar.js";
@@ -120,11 +120,6 @@ const UserManagement = () => {
             doesItemMatchSearchQuery(searchQuery, user, ["full_name", "full_name_reverse", "email_without_domain"])
         );
     }, [userCourseIdFilter, searchQuery]);
-
-
-    const handleUsersCreate = async (newUserArray) => {
-        return await createUsers(newUserArray, { showSnackbar, setDialogIsOpen, fetchData });
-    };
 
 
     const handleUserEdit = async (userId, updateFields) => {
@@ -652,11 +647,13 @@ const UserManagement = () => {
                 </Stack>
             </Stack>
 
-            <ItemMultiCreateDialog entity="user"
-                dialogTitle={"Create Users"}
+            <ItemMultiCreateDialog
+                Entity={User}
+                allItems={users}
+                refreshAllItems={fetchData}
                 dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-                handleItemsCreate={handleUsersCreate}
-                {...{ createDialogFieldDefinitions: userFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
+                createDialogFieldDefinitions={userFieldDefinitions}
+                {...{ dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
                 entity="user"

@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -10,8 +10,9 @@ import {
 import { DeleteIcon } from "../../../IconImports.js";
 import { getBlankItemFields } from "../HelperMethods/fields.js";
 import PropTypes from "prop-types";
+import { useSnackbar } from "../../../App/AppSnackbar.js";
 
-export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen, handleItemsCreate }) => {
+export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }) => {
 
 
     const createDialogReducer = useCallback((createDialogItems, action) => {
@@ -43,7 +44,18 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
 
 
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
+    const [submitEnabled, setSubmitEnabled] = useState(true);
 
+    const showSnackbar = useSnackbar();
+    
+
+    useEffect(() => {
+        if(dialogIsOpen)
+            setSubmitEnabled(true);
+    }, [dialogIsOpen]);
+
+
+    const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
 
     return (
@@ -56,17 +68,33 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             }}
             onSubmit={(e) => {
                 e.preventDefault();
-                handleItemsCreate([...createDialogItems]).then(indicesWithErrors => {
+                setSubmitEnabled(false);
+                Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
+                    const itemsWithErrors = createDialogItems.filter((u, i) => {
+                        return itemPromises[i].status !== "fulfilled";
+                    });
                     createDialogDispatch({
                         type: "set",
-                        newArray: createDialogItems.filter((u, i) => {
-                            return indicesWithErrors.includes(i);
-                        })
+                        newArray: itemsWithErrors
                     });
+                    if(itemsWithErrors.length > 0) {
+                        setSubmitEnabled(true);
+                        if(itemsWithErrors.length == createDialogItems.length) {
+                            showSnackbar(`Could not create ${createDialogItems.length == 1 ? Entity.singular : Entity.plural}`, "error");
+                        }
+                        else if(itemsWithErrors.length < createDialogItems.length) {
+                            showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
+                        }
+                    } else {
+                        refreshAllItems();
+                        setDialogIsOpen(false);
+                        showSnackbar(`${createDialogItems.length} ${createDialogItems.length == 1 ? Entity.singular : Entity.plural} created`, "success");
+                    }
+
                 });
             }}
         >
-            <DialogTitle textAlign="center" variant="h4">{dialogTitle}</DialogTitle>
+            <DialogTitle textAlign="center" variant="h4">Create {pluralCapitalized}</DialogTitle>
             <DialogContent>
                 <Stack spacing={2}>
                     <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
@@ -131,7 +159,7 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
             </DialogContent>
             <DialogActions>
                 <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    <Button color="primary" variant="outlined" size="large" onClick={() => {
+                    <Button color="primary" variant="outlined" size="large" disabled={!submitEnabled} onClick={() => {
                         setDialogIsOpen(false);
                         createDialogDispatch({
                             type: "set",
@@ -143,17 +171,17 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
                         </Typography>
                     </Button>
                     <Stack direction="row" spacing={1} sx={{ width: "50%" }}>
-                        <Button color="primary"
+                        <Button color="primary" disabled={!submitEnabled}
                             variant={createDialogItems.length ? "outlined" : "contained"}
                             size="large" sx={{ width: "100%" }} onClick={() => {
                                 createDialogDispatch({
                                     type: "add"
                                 });
                             }}>
-                            <Typography variant="body1">{createDialogItems.length ? `Add another ${entity}` : `Add ${entity}`}</Typography>
+                            <Typography variant="body1">{createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}</Typography>
                         </Button>
                         <Button type="submit" color="primary" variant="contained" size="large" sx={{ width: "100%" }}
-                            disabled={createDialogItems.length == 0}>
+                            disabled={!submitEnabled || createDialogItems.length == 0}>
                             <Typography variant="body1">{createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}</Typography>
                         </Button>
                     </Stack>
@@ -164,11 +192,10 @@ export const ItemMultiCreateDialog = ({ entity, dialogTitle, dialogInstructions,
 };
 
 ItemMultiCreateDialog.propTypes = {
-    entity: PropTypes.string,
-    dialogTitle: PropTypes.string,
+    Entity: PropTypes.any,
     dialogInstructions: PropTypes.string,
     createDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     dialogIsOpen: PropTypes.bool,
     setDialogIsOpen: PropTypes.func,
-    handleItemsCreate: PropTypes.func
+    refreshAllItems: PropTypes.func
 };

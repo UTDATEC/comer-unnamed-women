@@ -1,5 +1,4 @@
 import axios from "axios";
-import { filterItemFields, userFieldDefinitions } from "./fields.js";
 
 const apiLocation = process.env.REACT_APP_API_HOST;
 
@@ -56,42 +55,5 @@ export const sendAuthenticatedRequest = async (method, url, payload) => {
     }
 
 
-
-};
-
-
-export const createUsers = async (newUserArray, { showSnackbar, setDialogIsOpen, fetchData }) => {
-    let usersCreated = 0;
-    let userIndicesWithErrors = [];
-    for (const [i, newUserData] of newUserArray.entries()) {
-        try {
-            let filteredUser = filterItemFields(userFieldDefinitions, newUserData);
-            await sendAuthenticatedRequest("POST", "/api/admin/users", filteredUser);
-
-            usersCreated++;
-
-        } catch (error) {
-            console.error(`Error creating user ${JSON.stringify(newUserData)}: ${error}`);
-            userIndicesWithErrors.push(i);
-        }
-    }
-    fetchData();
-
-    if (usersCreated == newUserArray.length) {
-        setDialogIsOpen(false);
-
-        showSnackbar(`Successfully created ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}`, "success");
-
-    } else if (usersCreated < newUserArray.length) {
-
-        if (usersCreated > 0) {
-            showSnackbar(`Created ${usersCreated} of ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure each user has a unique email address.`, "warning");
-        }
-        else {
-            showSnackbar(`Failed to create ${newUserArray.length} ${newUserArray.length == 1 ? "user" : "users"}.  Make sure each user has a unique email address.`, "error");
-        }
-    }
-
-    return userIndicesWithErrors;
 
 };

@@ -153,45 +153,6 @@ const ImageManagement = () => {
     };
 
 
-
-    const handleImagesCreate = async (newImageArray) => {
-        let imagesCreated = 0;
-        let imageIndicesWithErrors = [];
-        for (const [i, newImageData] of newImageArray.entries()) {
-            try {
-                let filteredImage = filterItemFields(imageFieldDefinitions, newImageData);
-                await sendAuthenticatedRequest("POST", "/api/admin/images", filteredImage);
-
-                imagesCreated++;
-
-            } catch (error) {
-                imageIndicesWithErrors.push(i);
-            }
-        }
-        await fetchImages();
-
-        if (imagesCreated == newImageArray.length) {
-            setDialogIsOpen(false);
-            showSnackbar(`Successfully created ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "success");
-
-        } else if (imagesCreated < newImageArray.length) {
-
-            if (imagesCreated > 0) {
-                showSnackbar(`Created ${imagesCreated} of ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "warning");
-            }
-            else {
-                showSnackbar(`Failed to create ${newImageArray.length} ${newImageArray.length == 1 ? "image" : "images"}`, "error");
-            }
-
-        }
-
-        return imageIndicesWithErrors;
-
-
-    };
-
-
-
     const handleImageEdit = async (imageId, updateFields) => {
         try {
             let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
@@ -979,10 +940,11 @@ const ImageManagement = () => {
                 </Stack>
             </Stack>
 
-            <ItemMultiCreateDialog entity="image"
-                dialogTitle={"Create Images"}
+            <ItemMultiCreateDialog
+                Entity={Image}
                 dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
-                handleItemsCreate={handleImagesCreate}
+                allItems={images}
+                refreshAllItems={fetchImages}
                 {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
