@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
@@ -33,7 +33,8 @@ import {
     SecurityIcon,
     InfoIcon,
     AccessTimeIcon,
-    WarningIcon
+    WarningIcon,
+    LockIcon
 } from "../../IconImports.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
@@ -387,7 +388,7 @@ const CourseManagement = () => {
 
 
     return !appUser.is_admin && (
-        <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (

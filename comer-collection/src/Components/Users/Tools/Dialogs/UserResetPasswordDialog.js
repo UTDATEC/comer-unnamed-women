@@ -25,6 +25,8 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
     const [hasCopied, setHasCopied] = useState(false);
 
     const showSnackbar = useSnackbar();
+    const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
+    
 
     return (
         <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
@@ -64,7 +66,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         </DialogContentText>
                     )}
                     <Stack direction="row" spacing={2}>
-                        <TextField label="New Password" disabled={!editMode} type="password" color={dialogUser?.is_admin ? "secondary" : "primary"}
+                        <TextField label="New Password" disabled={!editMode} type="password" color={themeColor}
                             sx={{width: "80%"}}
                             onChange={(e) => {
                                 setNewPassword(e.target.value);
@@ -74,7 +76,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         {editMode && (
                             <Button variant={newPassword ? "outlined" : "contained"} 
                                 startIcon={<SyncIcon />}
-                                color={dialogUser?.is_admin ? "secondary" : "primary"}
+                                color={themeColor}
                                 onClick={() => {
                                     setNewPassword(randomPassword());
                                 }}
@@ -84,7 +86,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         ) || !editMode && (
                             <Button variant={hasCopied ? "outlined" : "contained"}
                                 startIcon={<ContentCopyIcon />}
-                                color={dialogUser?.is_admin ? "secondary" : "primary"}
+                                color={themeColor}
                                 onClick={() => {
                                     try {
                                         navigator.clipboard.writeText(newPassword);
@@ -106,7 +108,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                     {editMode && (
                         <>
                             <Button sx={{ width: "100%" }}
-                                color={dialogUser?.is_admin ? "secondary" : "primary"} variant="outlined"  onClick={() => {
+                                color={themeColor} variant="outlined"  onClick={() => {
                                     setDialogIsOpen(false);
                                     setEditMode(true);
                                     setHasCopied(false);
@@ -114,14 +116,14 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                                 }}>
                                 <Typography variant="body1">Cancel</Typography>
                             </Button>
-                            <Button color={dialogUser?.is_admin ? "secondary" : "primary"} variant="contained" size="large" type="submit" 
+                            <Button color={themeColor} variant="contained" size="large" type="submit" 
                                 disabled={!newPassword}
                                 sx={{ width: "100%" }}>
                                 <Typography variant="body1">{dialogUser?.has_password ? "Reset Password" : "Set Password"}</Typography>
                             </Button>
                         </>
                     ) || !editMode && (
-                        <Button color={dialogUser?.is_admin ? "secondary" : "primary"} variant="contained" size="large"
+                        <Button color={themeColor} variant="contained" size="large"
                             disabled={!hasCopied}
                             sx={{ width: "100%" }}
                             onClick={() => {

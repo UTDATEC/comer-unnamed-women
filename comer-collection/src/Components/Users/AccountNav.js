@@ -109,7 +109,7 @@ const AccountNav = () => {
                     </ListItemButton>
                 ))}
             </List>
-            {appUser.is_admin && (
+            {appUser.is_admin_or_collection_manager && (
                 <>
                     <Divider />
                     <Typography variant="h5" alignSelf="center" paddingTop="10px">Collection</Typography>

@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-const Unauthorized = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
+export const Unauthorized = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
 
     const navigate = useNavigate();
 
@@ -23,12 +23,9 @@ const Unauthorized = ({ message, buttonText, buttonDestination, Icon, buttonActi
 };
 
 Unauthorized.propTypes = {
-    message: PropTypes.string.isRequired,
+    message: PropTypes.string,
     buttonText: PropTypes.string,
     buttonDestination: PropTypes.string,
     buttonAction: PropTypes.func,
     Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
-
-
-export default Unauthorized;

@@ -4,9 +4,9 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
@@ -94,7 +94,7 @@ const ImageManagement = () => {
     useEffect(() => {
         setSelectedNavItem("Image Management");
         setTitleText("Image Management");
-        if (appUser.is_admin) {
+        if (appUser.is_admin_or_collection_manager) {
             fetchData();
         }
     }, []);
@@ -831,8 +831,8 @@ const ImageManagement = () => {
     }), [images, searchQuery]);
 
 
-    return !appUser.is_admin && (
-        <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+    return !appUser.is_admin_or_collection_manager && (
+        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (

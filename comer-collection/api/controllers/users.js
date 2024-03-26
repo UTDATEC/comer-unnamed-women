@@ -65,21 +65,13 @@ const activateUser = async (req, res, next) => {
     await updateItem(req, res, next, User, req.params.userId, ["is_active"]);
 };
 
-const promoteUser = async (req, res, next) => {
+const changeUserAccess = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
         next(createError(403, { debugMessage: "Admin cannot promote self" }));
     }
-    req.body = { is_admin: true };
-    await updateItem(req, res, next, User, req.params.userId, ["is_admin"]);
+    await updateItem(req, res, next, User, req.params.userId, ["access_level"]);
 };
 
-const demoteUser = async (req, res, next) => {
-    if (req.params.userId == req.app_user.id) {
-        next(createError(403, { debugMessage: "Admin cannot demote self" }));
-    }
-    req.body = { is_admin: false };
-    await updateItem(req, res, next, User, req.params.userId, ["is_admin"]);
-};
 
 const deleteUser = async (req, res, next) => {
     if (req.params.userId == req.app_user.id) {
@@ -183,4 +175,4 @@ const changePassword = async (req, res, next) => {
 };
 
 
-export { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, promoteUser, demoteUser, signIn, changePassword };
+export { canUserCreateExhibition, listUsers, createUser, updateUser, deleteUser, getUser, getCurrentUser, resetUserPassword, deactivateUser, activateUser, changeUserAccess, signIn, changePassword };

@@ -6,7 +6,7 @@ import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditRedu
 import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer.js";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { useAppUser } from "../App/AppUser.js";
-import Unauthorized from "../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../ErrorPages/Unauthorized.js";
 import { useSnackbar } from "../App/AppSnackbar.js";
 import { useTitle } from "../App/AppTitle.js";
 import { AccessTimeIcon, InfoIcon } from "../IconImports.js";

@@ -18,6 +18,7 @@ export { default as CheckIcon } from "@mui/icons-material/esm/Check.js";
 export { default as ClearIcon } from "@mui/icons-material/esm/Clear.js";
 export { default as CloudUploadIcon } from "@mui/icons-material/esm/CloudUpload.js";
 export { default as CollectionsIcon } from "@mui/icons-material/esm/Collections.js";
+export { default as CollectionManagerIcon } from "@mui/icons-material/esm/Build.js";
 export { default as ContentCopyIcon } from "@mui/icons-material/esm/ContentCopy.js";
 export { default as DeleteIcon } from "@mui/icons-material/esm/Delete.js";
 export { default as DeselectIcon } from "@mui/icons-material/esm/Deselect.js";

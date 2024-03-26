@@ -86,7 +86,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
             (items ?? []).map((item) => {
 
                 const isSelected = Boolean(selectedItems?.map((si) => si.id).includes(item.id));
-                const themeColor = item.is_admin ? "secondary" : "primary";
+                const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
   
                 const sortableValues = sortableValuesByRow[item.id];
         

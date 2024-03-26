@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import apiRouterPublic from "./router_public.js";
 import apiRouterUserTempPw from "./router_user_temp_pw.js";
 import apiRouterUser from "./router_user.js";
+import apiRouterCollectionManager from "./router_collection_manager.js";
 import apiRouterAdmin from "./router_admin.js";
 
 import db from "./sequelize.js";
@@ -46,6 +47,15 @@ const requireAuthenticatedUser = async (req, res, next) => {
     }
 };
 
+const requireAtLeastCollectionManager = async (req, res, next) => {
+    const { app_user } = req;
+    if (app_user?.is_collection_manager || app_user?.is_admin) {
+        next();
+    } else {
+        next(createError(403, { debugMessage: "Action requires at least collection manager privileges" }));
+    }
+};
+
 const requireAdmin = async (req, res, next) => {
     const { app_user } = req;
     if (app_user?.is_admin) {
@@ -70,7 +80,8 @@ const requirePermanentPassword = async (req, res, next) => {
 router.use("/public", apiRouterPublic);
 router.use("/user", requireAuthenticatedUser, apiRouterUserTempPw);
 router.use("/user", requirePermanentPassword, apiRouterUser);
-router.use("/admin", requireAuthenticatedUser, requirePermanentPassword, requireAdmin, apiRouterAdmin);
+router.use("/admin", requireAuthenticatedUser, requirePermanentPassword, requireAtLeastCollectionManager, apiRouterCollectionManager);
+router.use("/admin", requireAdmin, apiRouterAdmin);
 
 
 

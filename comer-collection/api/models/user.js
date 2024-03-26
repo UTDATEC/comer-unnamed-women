@@ -63,6 +63,15 @@ export default (db) => {
             },
             field: "user_exhibition_quota"
         },
+        access_level: {
+            type: DataTypes.STRING(20),
+            field: "user_access_level",
+            allowNull: false,
+            validate: {
+                isIn: [["CURATOR", "COLLECTION_MANAGER", "ADMINISTRATOR"]]
+            },
+            defaultValue: "CURATOR"
+        },
         pw_hash: {
             type: Sequelize.TEXT("tiny"),
             field: "user_pw_hash",
@@ -92,10 +101,22 @@ export default (db) => {
             defaultValue: true
         },
         is_admin: {
-            type: Sequelize.BOOLEAN,
-            field: "user_is_admin",
-            allowNull: false,
-            defaultValue: false
+            type: DataTypes.VIRTUAL,
+            get() {
+                return Boolean(this.access_level == "ADMINISTRATOR");
+            }
+        },
+        is_collection_manager: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return Boolean(this.access_level == "COLLECTION_MANAGER");
+            }
+        },
+        is_admin_or_collection_manager: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return Boolean(this.is_admin || this.is_collection_manager);
+            }
         }
     }, {
         tableName: "comer_users",

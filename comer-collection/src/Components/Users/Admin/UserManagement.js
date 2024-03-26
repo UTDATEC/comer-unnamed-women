@@ -5,8 +5,8 @@ import {
     Typography,
     Switch, Box, IconButton, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
-import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon, CollectionManagerIcon } from "../../IconImports.js";
+import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
@@ -191,34 +191,6 @@ const UserManagement = () => {
     };
 
 
-    const handleChangeUserPrivileges = async (userId, verifyPassword, isPromotion) => {
-        try {
-            await sendAuthenticatedRequest("PUT", (isPromotion ?
-                `/api/admin/users/${userId}/promote` :
-                `/api/admin/users/${userId}/demote`
-            ), { verifyPassword });
-            fetchData();
-
-            setPrivilegesDialogIsOpen(false);
-
-            showSnackbar(`User ${userId} is ${isPromotion ? "now" : "no longer"} an administrator.`, "success");
-
-
-        } catch (error) {
-
-            showSnackbar(`Error changing privileges for user ${userId}`, "error");
-        }
-    };
-
-    const handleUserPromote = async (userId, verifyPassword) => {
-        await handleChangeUserPrivileges(userId, verifyPassword, true);
-    };
-
-    const handleUserDemote = async (userId, verifyPassword) => {
-        await handleChangeUserPrivileges(userId, verifyPassword, false);
-    };
-
-
 
     const handleResetPassword = async (userId, newPassword) => {
         try {
@@ -324,7 +296,7 @@ const UserManagement = () => {
             generateTableCell: (user) => (
                 <>
                     {appUser.id == user.id ? (
-                        <Button startIcon={<OpenInNewIcon />} color={user.is_admin ? "secondary" : "primary"}
+                        <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                             variant="outlined"
                             onClick={() => {
                                 navigate("/Account/ChangePassword");
@@ -334,7 +306,7 @@ const UserManagement = () => {
                     ) : (
                         <Button
                             startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
-                            color={user.is_admin ? "secondary" : "primary"}
+                            color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                             itemID={user.id}
                             variant={user.has_password ? "outlined" : "contained"}
                             onClick={() => {
@@ -354,7 +326,7 @@ const UserManagement = () => {
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="text"
-                        color={user.is_admin ? "secondary" : "primary"}
+                        color="lightgrey"
                         startIcon={<SchoolIcon />}
                         onClick={() => {
                             setAssignCourseDialogUsers([user]);
@@ -371,7 +343,7 @@ const UserManagement = () => {
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
-                        color={user.is_admin ? "secondary" : "primary"}
+                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                         disabled startIcon={<PhotoCameraBackIcon />}
                         onClick={() => {
                             // setAssignCourseDialogUser(user);
@@ -387,17 +359,19 @@ const UserManagement = () => {
         {
             columnDescription: "User Type",
             generateTableCell: (user) => (
-                <Button color="grey" sx={{ textTransform: "unset" }}
+                <Button color="lightgrey" sx={{ textTransform: "unset" }}
                     disabled={user.id == appUser.id}
                     onClick={() => {
                         setPrivilegesDialogUser(user);
                         setPrivilegesDialogIsOpen(true);
                     }}
+                    startIcon={
+                        user.is_admin && (<SecurityIcon color="secondary" />) || 
+                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />) || 
+                        (<PersonIcon color="primary" />)
+                    }
                 >
-                    <Stack direction="row" spacing={1}>
-                        <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-                        {user.is_admin && (<SecurityIcon color="secondary" />)}
-                    </Stack>
+                    <Typography variant="body1" align="left" width={90} >{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
                 </Button>
             )
         },
@@ -408,7 +382,7 @@ const UserManagement = () => {
                     itemID={user.id}
                     checked={user.is_active && user.has_password}
                     disabled={user.id == appUser.id || !user.has_password}
-                    color={user.is_admin ? "secondary" : "primary"}
+                    color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                     onClick={(e) => {
                         handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked);
                     }}
@@ -418,7 +392,7 @@ const UserManagement = () => {
         {
             columnDescription: "Options",
             generateTableCell: (user) => (
-                <>
+                <Stack direction="row">
                     <IconButton
                         onClick={() => {
                             setEditDialogUser(user);
@@ -436,7 +410,7 @@ const UserManagement = () => {
                     >
                         <DeleteIcon />
                     </IconButton>
-                </>
+                </Stack>
             )
         }
     ];
@@ -539,7 +513,7 @@ const UserManagement = () => {
 
 
     return !appUser.is_admin && (
-        <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (
@@ -715,8 +689,7 @@ const UserManagement = () => {
                 dialogUser={privilegesDialogUser}
                 dialogIsOpen={privilegesDialogIsOpen}
                 setDialogIsOpen={setPrivilegesDialogIsOpen}
-                handlePromote={handleUserPromote}
-                handleDemote={handleUserDemote}
+                refreshAllItems={fetchData}
             />
 
             <UserResetPasswordDialog

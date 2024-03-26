@@ -14,7 +14,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import Unauthorized from "../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../ErrorPages/Unauthorized.js";
 import { AccessTimeIcon } from "../IconImports.js";
 
 
@@ -81,6 +81,9 @@ const App = () => {
                 contrastText: "white",
                 translucent: appDarkTheme ? grey["800"] : "#CCC",
                 veryTranslucent: appDarkTheme ? "#333" : "#EEE",
+            },
+            lightgrey: {
+                main: grey["500"]
             }
         }
     });

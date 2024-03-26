@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import Unauthorized from "../../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -232,7 +232,7 @@ const ExhibitionManagement = () => {
 
 
     return !appUser.is_admin && (
-        <Unauthorized message="Insufficient Privileges" buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (

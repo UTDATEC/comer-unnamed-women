@@ -5,7 +5,7 @@ import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Profile.js";
 import { Box } from "@mui/material";
-import Unauthorized from "../ErrorPages/Unauthorized.js";
+import { Unauthorized } from "../ErrorPages/Unauthorized.js";
 import ChangePassword from "./ChangePassword.js";
 import CourseManagement from "./Admin/CourseManagement.js";
 import MyExhibitions from "./MyExhibitions.js";

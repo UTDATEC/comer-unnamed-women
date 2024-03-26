@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable.js";
-import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon } from "../IconImports.js";
+import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../IconImports.js";
 import { useAppUser } from "../App/AppUser.js";
 import { useSnackbar } from "../App/AppSnackbar.js";
 import { useTitle } from "../App/AppTitle.js";
@@ -123,7 +123,7 @@ const Profile = () => {
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={2} alignItems="center">
                     <Typography variant="body1">{new Date(appUser.pw_updated).toLocaleString()}</Typography>
-                    <Button color={user.is_admin ? "secondary" : "primary"}
+                    <Button color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                         variant="outlined"
                         onClick={() => {
                             navigate("/Account/ChangePassword");
@@ -140,8 +140,8 @@ const Profile = () => {
             ),
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={1}>
-                    <Typography variant="body1">{user.is_admin ? "Administrator" : "Curator"}</Typography>
-                    {user.is_admin ? (<SecurityIcon color="secondary" />) : (<PersonIcon color="primary" />)}
+                    <Typography variant="body1">{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
+                    {user.is_admin ? (<SecurityIcon color="secondary" />) : user.is_collection_manager ? (<CollectionManagerIcon color="secondary" />) : (<PersonIcon color="primary" />)}
                 </Stack>
             )
         },
