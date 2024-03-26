@@ -16,12 +16,12 @@ import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 
-export const EntityManageDialog = ({ entitySingular, entityPlural,
+export const EntityManageDialog = ({ Entity,
     dialogTitle, dialogInstructionsTable, dialogInstructionsForm,
-    dialogItems, 
+    dialogItems, setDialogItems,
     dialogFieldDefinitions, dialogTableFields,
     dialogIsOpen, setDialogIsOpen,
-    handleItemCreate, handleItemEdit, handleItemDelete,
+    handleItemCreate, handleItemEdit,
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
 
     internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen,
@@ -127,7 +127,7 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
                                         startIcon={<AddIcon />}
                                         sx={{ minWidth: "200px", height: "100%" }}
                                     >
-                                        <Typography variant="body1">{`Create ${entitySingular}`}</Typography>
+                                        <Typography variant="body1">{`Create ${Entity.singular}`}</Typography>
                                     </Button>
                                 </Stack>
                             </Stack>
@@ -136,7 +136,7 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
                 </DialogContent>
                 <DialogActions>
                     <Stack direction="row" justifyContent="space-between" width="100%">
-                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItems.length} {dialogItems.length == 1 ? entitySingular : entityPlural}</Typography>
+                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItems.length} {dialogItems.length == 1 ? Entity.singular : Entity.plural}</Typography>
                         <Button sx={{
                             width: "30%"
                         }} color="primary" variant="contained" size="large"
@@ -157,8 +157,8 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
                 editDialogIsOpen={internalEditDialogIsOpen}
                 setEditDialogIsOpen={setInternalEditDialogIsOpen}
                 editDialogItem={internalEditDialogItem}
-                entity={entitySingular}
-                dialogTitle={`Edit ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
+                entity={Entity.singular}
+                dialogTitle={`Edit ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
                 dialogInstructions="Update"
                 handleItemEdit={handleItemEdit}
                 editDialogFieldDefinitions={dialogFieldDefinitions}
@@ -166,12 +166,13 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
 
 
             <ItemSingleDeleteDialog
+                allItems={dialogItems}
+                setAllItems={setDialogItems}
                 deleteDialogIsOpen={internalDeleteDialogIsOpen}
                 setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
                 deleteDialogItem={internalDeleteDialogItem}
-                dialogTitle={`Delete ${entitySingular[0].toUpperCase()}${entitySingular.substring(1)}`}
-                entity={entitySingular}
-                handleDelete={handleItemDelete}
+                dialogTitle={`Delete ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
+                {...{Entity}}
             />
 
         </>
@@ -180,19 +181,18 @@ export const EntityManageDialog = ({ entitySingular, entityPlural,
 
 
 EntityManageDialog.propTypes = {
-    entitySingular: PropTypes.string,
-    entityPlural: PropTypes.string,
+    Entity: PropTypes.any,
     dialogTitle: PropTypes.string,
     dialogInstructionsTable: PropTypes.string,
     dialogInstructionsForm: PropTypes.string,
     dialogItems: PropTypes.arrayOf(PropTypes.object),
+    setDialogItems: PropTypes.func,
     dialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
     dialogIsOpen: PropTypes.bool,
     setDialogIsOpen: PropTypes.func,
     handleItemCreate: PropTypes.func,
     handleItemEdit: PropTypes.func,
-    handleItemDelete: PropTypes.func,
     searchBoxFields: PropTypes.arrayOf(PropTypes.string),
     searchBoxPlaceholder: PropTypes.string,
     itemSearchQuery: PropTypes.string,

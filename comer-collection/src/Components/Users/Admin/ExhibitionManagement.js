@@ -19,6 +19,7 @@ import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
+import { Exhibition } from "../Tools/Entities/Exhibition.js";
 
 const ExhibitionManagement = () => {
     const [courses, setCourses] = useState([]);
@@ -128,23 +129,6 @@ const ExhibitionManagement = () => {
         }
         fetchData();
     };
-
-
-
-    const handleExhibitionDeleteByAdmin = async (exhibitionId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/exhibitions/${exhibitionId}`);
-            setDeleteDialogIsOpen(false);
-            setDeleteDialogExhibition(null);
-            showSnackbar("Exhibition deleted", "success");
-        } catch (e) {
-            console.log(`Error deleting exhibition: ${e.message}`);
-            showSnackbar("Error deleting exhibition", "error");
-        }
-        fetchData();
-    };
-
-
 
 
     const exhibitionTableFields = [
@@ -332,13 +316,13 @@ const ExhibitionManagement = () => {
             />
 
             <ItemSingleDeleteDialog
+                Entity={Exhibition}
                 deleteDialogIsOpen={deleteDialogIsOpen}
                 deleteDialogItem={deleteDialogExhibition}
-                dialogTitle="Delete Exhibition"
                 requireTypedConfirmation={true}
-                entity="exhibition"
+                allItems={exhibitions}
+                setAllItems={setExhibitions}
                 setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-                handleDelete={handleExhibitionDeleteByAdmin}
             />
 
 

@@ -12,6 +12,7 @@ import { useSnackbar } from "../App/AppSnackbar.js";
 import { useAppUser } from "../App/AppUser.js";
 import { useTitle } from "../App/AppTitle.js";
 import { useAccountNav } from "./Account.js";
+import { MyExhition } from "./Tools/Entities/Exhibition.js";
 
 
 const MyExhibitions = () => {
@@ -70,20 +71,6 @@ const MyExhibitions = () => {
         } catch(e) {
             console.log(`Error updating exhibition: ${e.message}`);
             showSnackbar("Error updating exhibition", "error");
-        }
-        initializeAppUser();
-    };
-
-  
-    const handleExhibitionDeleteByOwner = async(exhibitionId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/user/exhibitions/${exhibitionId}`);
-            setDeleteDialogIsOpen(false);
-            setDeleteDialogExhibition(null);
-            showSnackbar("Exhibition deleted", "success");
-        } catch(e) {
-            console.log(`Error deleting exhibition: ${e.message}`);
-            showSnackbar("Error deleting exhibition", "error");
         }
         initializeAppUser();
     };
@@ -235,10 +222,12 @@ const MyExhibitions = () => {
             <ItemSingleDeleteDialog 
                 deleteDialogIsOpen={deleteDialogIsOpen}
                 deleteDialogItem={deleteDialogExhibition}
-                dialogTitle="Delete Exhibition"
+                Entity={MyExhition}
                 requireTypedConfirmation={true}
-                entity="exhibition"
-                handleDelete={handleExhibitionDeleteByOwner}
+                allItems={appUser.Exhibitions}
+                setAllItems={() => {
+                    initializeAppUser();
+                }}
                 setDeleteDialogIsOpen={setDeleteDialogIsOpen}
             />
 

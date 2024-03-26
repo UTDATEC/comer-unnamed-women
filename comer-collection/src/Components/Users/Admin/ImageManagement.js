@@ -26,6 +26,9 @@ import { useSnackbar } from "../../App/AppSnackbar.js";
 import { useAppUser } from "../../App/AppUser.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
+import { Image } from "../Tools/Entities/Image.js";
+import { Artist } from "../Tools/Entities/Artist.js";
+import { Tag } from "../Tools/Entities/Tag.js";
 
 
 const ImageManagement = () => {
@@ -205,25 +208,6 @@ const ImageManagement = () => {
             throw "ImageEditError";
         }
     };
-
-
-
-    const handleDelete = async (imageId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/images/${imageId}`);
-            await fetchImages();
-
-            showSnackbar("Image has been deleted", "success");
-
-        } catch (error) {
-
-            showSnackbar("Image could not be deleted", "error");
-        }
-
-        setDeleteDialogIsOpen(false);
-        setDeleteDialogImage(null);
-    };
-
 
 
     const handleCreateArtist = async (newArtist) => {
@@ -460,7 +444,7 @@ const ImageManagement = () => {
                         <EditIcon />
                     </IconButton>
                     <IconButton
-                        disabled={artist.Images.length}
+                        disabled={artist.Images.length > 0}
                         onClick={() => {
                             setArtistDeleteDialogItem(artist);
                             setArtistDeleteDialogIsOpen(true);
@@ -526,7 +510,7 @@ const ImageManagement = () => {
                         <EditIcon />
                     </IconButton>
                     <IconButton
-                        disabled={tag.Images.length}
+                        disabled={tag.Images.length > 0}
                         onClick={() => {
                             setTagDeleteDialogItem(tag);
                             setTagDeleteDialogIsOpen(true);
@@ -1011,13 +995,16 @@ const ImageManagement = () => {
 
             <ItemSingleDeleteDialog
                 entity="image"
+                Entity={Image}
+                allItems={images}
+                setAllItems={setImages}
                 dialogTitle="Delete Image"
                 deleteDialogItem={deleteDialogImage}
-                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
 
 
             <EntityManageDialog
-                entitySingular="artist" entityPlural="artists"
+                Entity={Artist}
                 dialogTitle="Manage Artists"
                 dialogInstructionsTable="Edit or delete existing artists"
                 dialogInstructionsForm="Create a new artist"
@@ -1045,7 +1032,7 @@ const ImageManagement = () => {
             />
 
             <EntityManageDialog
-                entitySingular="tag" entityPlural="tags"
+                Entity={Tag}
                 dialogTitle="Manage Tags"
                 dialogInstructionsTable="Edit or delete existing tags"
                 dialogInstructionsForm="Create a new tag"

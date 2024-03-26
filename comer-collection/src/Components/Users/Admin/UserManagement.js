@@ -26,6 +26,7 @@ import { useAppUser } from "../../App/AppUser.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog.js";
 import { useAccountNav } from "../Account.js";
+import { User } from "../Tools/Entities/User.js";
 
 
 const UserManagement = () => {
@@ -237,23 +238,6 @@ const UserManagement = () => {
 
             throw "Reset Password error";
         }
-    };
-
-
-    const handleDelete = async (userId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/users/${userId}`);
-            fetchData();
-
-            showSnackbar(`User ${userId} has been deleted`, "success");
-
-        } catch (error) {
-
-            showSnackbar(`User ${userId} could not be deleted`, "error");
-        }
-
-        setDeleteDialogIsOpen(false);
-        setDeleteDialogUser(null);
     };
 
 
@@ -683,10 +667,11 @@ const UserManagement = () => {
                 {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
-                entity="user"
-                dialogTitle="Delete User"
+                Entity={User}
+                allItems={users}
+                setAllItems={setUsers}
                 deleteDialogItem={deleteDialogUser}
-                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
 
             <ItemMultiDeleteDialog
                 entitySingular="user"

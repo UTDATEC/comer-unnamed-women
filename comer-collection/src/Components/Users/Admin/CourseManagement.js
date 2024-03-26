@@ -37,6 +37,7 @@ import {
 } from "../../IconImports.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
+import { Course } from "../Tools/Entities/Course.js";
 
 
 const CourseManagement = () => {
@@ -218,25 +219,6 @@ const CourseManagement = () => {
 
             showSnackbar("Error editing course.  Make sure the end time is after the start time.", "error");
         }
-    };
-
-
-
-    const handleDelete = async (courseId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/courses/${courseId}`);
-            fetchData();
-
-            showSnackbar(`Course ${courseId} has been deleted`, "success");
-
-        } catch (error) {
-            console.error("Error handling delete operation:", error);
-
-            showSnackbar(`Course ${courseId} could not be deleted`, "error");
-        }
-
-        setDeleteDialogIsOpen(false);
-        setDeleteDialogCourse(null);
     };
 
 
@@ -543,10 +525,11 @@ const CourseManagement = () => {
                 {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
-                entity="course"
-                dialogTitle="Delete Course"
+                Entity={Course}
+                allItems={courses}
+                setAllItems={setCourses}
                 deleteDialogItem={deleteDialogCourse}
-                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }} />
+                {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
 
 
             <AssociationManagementDialog
