@@ -19,9 +19,9 @@ const tagDisplayFunction = (tag) => {
 export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {
     return (
         <SecondaryFilterMenu SecondaryIcon={SellIcon} displayFunction={tagDisplayFunction} 
-            helpMessage="Filter images by artist" 
-            emptyMessage="No artist filters available" 
-            nullMessage="Do not filter by artist"
+            helpMessage="Filter images by tag" 
+            emptyMessage="No tag filters available" 
+            nullMessage="Do not filter by tag"
             sortFunction={tagSortFunction}
             secondaries={tags}
             {...{filterValue, setFilterValue}}
