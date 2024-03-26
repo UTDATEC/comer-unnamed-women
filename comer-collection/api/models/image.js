@@ -109,17 +109,11 @@ export default (db) => {
         },
         url: {
             type: Sequelize.TEXT("tiny"),
-            field: "image_url",
-            set(value) {
-                this.setDataValue("image_url", value ? value : null);
-            }
+            field: "image_url"
         },
         thumbnailUrl: {
             type: Sequelize.TEXT("tiny"),
-            field: "image_thumbnail_url",
-            set(value) {
-                this.setDataValue("image_thumbnail_url", value ? value : null);
-            }
+            field: "image_thumbnail_url"
         },
         location: {
             type: Sequelize.TEXT("tiny"),
