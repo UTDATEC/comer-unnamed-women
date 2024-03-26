@@ -28,6 +28,12 @@ const navLinks = [
   
 const adminNavLinks = [
     {
+        title: "Image Management",
+        Icon: ImageIcon,
+        link: "/Account/ImageManagement",
+        requirePermanentPassword: true
+    },
+    {
         title: "User Management",
         Icon: GroupsIcon,
         link: "/Account/UserManagement",
@@ -37,12 +43,6 @@ const adminNavLinks = [
         title: "Exhibition Management",
         Icon: PhotoCameraBackIcon,
         link: "/Account/ExhibitionManagement",
-        requirePermanentPassword: true
-    },
-    {
-        title: "Image Management",
-        Icon: ImageIcon,
-        link: "/Account/ImageManagement",
         requirePermanentPassword: true
     },
     {
